@@ -13,7 +13,8 @@ A comprehensive reverse-engineering knowledgebase of **UO Idle** (`https://uoidl
 - **Verification Integrity**: Every UO Idle mechanic, formula, and skill stat in the knowledgebase must cite verbatim `_raw/` extracts from the live game bundle, network state, or official wiki/docs — never guessed.
 - **Structural Parity**: Ninja and Samurai skill lines must use the exact unlock level tiers and active/passive slot progression used by Warrior, Mage, and Ranger in live UO Idle.
 - **Numerical Balance**: Damage output, survivability, resource economy, and utility across level brackets must be mathematically balanced against the live Warrior, Mage, and Ranger formulae.
-- **Repository Privacy**: GitHub repository (`https://github.com/brbrainerd/uoIdle`) must remain private and synced.
+- **Zero Polygonal Icons**: Never use procedural `ImageDraw.polygon` icons; use authentic in-game UO gumps/art or high-detail AI-generated raster art.
+- **Credential Sanitization & GitHub Pages Sync**: Keep `https://github.com/brbrainerd/uoIdle` and live GitHub Pages (`https://brbrainerd.github.io/uoIdle/`) synced with zero credentials committed.
 
 <!-- GSD:project-end -->
 
