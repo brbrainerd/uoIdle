@@ -157,12 +157,12 @@ Plans:
   2. Developer can open self-contained HTML/CSS mockups (`mockups/samurai-skill-tree.html`, `mockups/ninja-skill-tree.html`, `mockups/class-comparison.html`) and inspect high-resolution DevTools screenshots that render the exact skill names, unlock tiers, resource costs, cooldowns, and tooltips from `design/drop-in/{samurai,ninja}.json` inside `https://uoidle.com/beta`'s visual theme (`#0b0d0a`, `Cinzel` + `IBM Plex Sans`).
   3. Final end-to-end verification (`kb.py check`, schema validation, simulator parity check, and git secret audit) exits `0` and all deliverables are synced to the private `brbrainerd/uoIdle` repository.
 
-**Plans**: 2 plans
+**Plans**: 1/2 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 06-01-PLAN.md — Custom dark-fantasy UO Samurai & Ninja class portraits ($256\times 256$ & $64\times 64$), super-sampled Pillow (`13.0.0`) skill/milestone icon generator (`tools/generate_icons.py`), `mockups/assets/icons/contact-sheet.png`, and `mockups/assets/icons/manifest.json` (`VISUAL-01`)
+- [x] 06-01-PLAN.md — Custom dark-fantasy UO Samurai & Ninja class portraits ($256\times 256$ & $64\times 64$), super-sampled Pillow (`13.0.0`) skill/milestone icon generator (`tools/generate_icons.py`), `mockups/assets/icons/contact-sheet.png`, and `mockups/assets/icons/manifest.json` (`VISUAL-01`)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -180,4 +180,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 2/2 | Complete    | 2026-11-07 |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 2/2 | Complete    | 2026-11-06 |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 3/3 | Complete    | 2026-11-07 |
-| 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 0/2 | Not started | - |
+| 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 1/2 | In progress | - |
