@@ -1,115 +1,111 @@
 # UO Idle (`v0.99.0`) — Ninja & Samurai Class Skill Lines & Mechanics Knowledgebase
 
-**Milestone v1.1 Executive Handoff, Interactive Workbench & Live GitHub Pages Portal**
+**Milestone `v1.2` Executive Handoff, Live-Codebase Combat Simulator & Interactive Workbench Portal**
 
-> **Live Interactive Review Portal (GitHub Pages):**  
-> - **Lead Developer Executive Portal:** <https://brbrainerd.github.io/uoIdle/>  
-> - **Samurai (`SM`, ID `114`, `robeHue: 1884`) Interactive Workbench & Paperdoll:** <https://brbrainerd.github.io/uoIdle/mockups/samurai-skill-tree.html>  
-> - **Ninja (`NJ`, ID `115`, `robeHue: 1175`) Interactive Workbench & Paperdoll:** <https://brbrainerd.github.io/uoIdle/mockups/ninja-skill-tree.html>  
-> - **5-Class Progression Matrix, Simulator Visual Telemetry & Tokuno Armaments:** <https://brbrainerd.github.io/uoIdle/mockups/class-comparison.html>
+> **Live GitHub Pages Review Portal:**
+> - **Executive Handoff Portal:** <https://brbrainerd.github.io/uoIdle/>
+> - **Samurai (`Bushido`) Skill Tree & Paperdoll:** <https://brbrainerd.github.io/uoIdle/mockups/samurai-skill-tree.html>
+> - **Ninja (`Ninjitsu`) Skill Tree & Paperdoll:** <https://brbrainerd.github.io/uoIdle/mockups/ninja-skill-tree.html>
+> - **5-Class Parity, Telemetry & Armaments Dashboard:** <https://brbrainerd.github.io/uoIdle/mockups/class-comparison.html>
 
-This repository delivers a **100% source-verified mechanics knowledgebase** (56 claim-verified pages) of **UO Idle** (`https://uoidle.com/beta`, build `v0.99.0`) and **ModernUO** (*Bushido* & *Ninjitsu*), a **deterministic `100ms`-tick 5-class combat simulator** (verified across 9 material tiers `Iron -> Valorite`, 10-wave dungeon endurance runs, and 11 unit test suites), complete **drop-in Samurai (`SM`, `classNumericId: 114`, `robeHue: 1884`) and Ninja (`NJ`, `classNumericId: 115`, `robeHue: 1175`) class, skill, and Tokuno armament definitions** supporting both **Mode A** (zero engine code changes) and **Mode B** (`<20 LOC` native C# server hooks), **140 oil-painted & authentic UO gump icon PNGs + 34 authentic UO item/paperdoll sprites** (zero procedural polygons), and **interactive `uoidle.com/beta` HTML/CSS UI mockups** with mouseover gear paperdolls and visual simulator charts.
-
----
-
-## 1. Quick-Start Integration Guide (`Mode A` vs `Mode B`)
-
-### Mode A — 100% Existing UO Idle `v0.99.0` Engine (Zero Engine Code Changes)
-
-Mode A maps every Samurai and Ninja progression milestone, hotbar skill, weapon ability, spell, and status effect directly onto live `v0.99.0` client/server bundle structures (`_E`/`dx`, `WE`/`hE`, `yE`/`mx`, `FE`, `mE`/`gh`, `gE`, `b`, `qC`/`Cq`/`Eq`, and `i18n`).
-
-1. **Drop-In Class & Ability Payloads:**
-   - [`design/drop-in/samurai.json`](design/drop-in/samurai.json) — **Samurai (`SM`, `classNumericId: 114`, `robeHue: 1884`)**: `STR 50 / DEX 30 / INT 10`, 8 starter skills (`Bushido 50`, `Swordsmanship 50`, `Tactics 50`, `Parrying 50`, `Anatomy 50`, `Healing 50`, `Magic Resist 30`, `Focus 50`), 8-layer Tokuno starter kit (`Katana` `5119` with shieldless `TwoHanded` slot open for Bushido Weapon Parry), 5-slot seeded hotbar, 12 `L1–L60` progression milestones, and 12 normalized catalog abilities.
-   - [`design/drop-in/ninja.json`](design/drop-in/ninja.json) — **Ninja (`NJ`, `classNumericId: 115`, `robeHue: 1175`)**: `STR 30 / DEX 50 / INT 10`, 8 starter skills (`Ninjitsu 50`, `Fencing 50`, `Tactics 50`, `Hiding 50`, `Stealth 50`, `Anatomy 50`, `Magic Resist 30`, `Focus 50`), 9-layer Tokuno starter kit (`Kryss` `5121` with off-hand free for `FocusAttack`, `Shuriken`, and `Fukiya`), 5-slot seeded hotbar, 12 `L1–L60` progression milestones (including dual `L35` unlock of `ninja_smoke_bomb` + `ninja_shuriken`), and 13 normalized catalog abilities.
-   - [`design/drop-in/items-bushido-ninjitsu.json`](design/drop-in/items-bushido-ninjitsu.json) — **Tokuno Armaments, Consumables & Affixes**: 8 iconic Tokuno armaments (*Katana*, *No-Dachi*, *Wakizashi*, *Lajatang*, *Tekagi*, *Kama*, *Fukiya*, *Tessen*), 8 drop-in weapon definitions (*Bokuto*, *Daisho*, *Lajatang*, *No-Dachi*, *Sai*, *Tekagi*, *Tessen*, *Wakizashi*), 4 Ninjitsu consumables (*Smoke Bomb*, *Egg Bomb*, *Fukiya*, *Shuriken*), 9 material tiers (`Iron` `1.00x` through `Valorite` `1.85x`), and 10 equipment affix pools.
-2. **Apply the Client/Server Bundle Patch (`applyDropInClassPatch`):**
-   - Import [`design/drop-in/classes-patch.js`](design/drop-in/classes-patch.js) and invoke `applyDropInClassPatch(bundleTables)` to register class metadata (`_E`), starter skills (`WE`), paperdoll kits (`yE`), legacy template weights (`FE`), seeded hotbars (`mE`), `[Arvore` progression trees (`gE`), catalog abilities (`b`), client combat estimators (`qC`), and bilingual `en` / `pt-BR` localization keys (`i18n`).
-
-### Mode B — Authentic ModernUO Extension (`<20 LOC` C# Server Hooks)
-
-For shards running the ModernUO C# backend that want native reactive parry counters, automatic *Honor/Perfection* target binding, ablative *Mirror Image* clone interception, and 5-swing *Death Strike* detonation in stationary 1D combat:
-
-- **Samurai (`17 LOC` C# in `Projects/UOContent/Items/Weapons/BaseWeapon.cs`):** Documented in [`design/SAMURAI_SPEC.md` §4](design/SAMURAI_SPEC.md). Binds `PerfectionTarget` automatically on hit (`+4%/hit` up to a `+15%` boss cap, restoring `+8` HP/Stam/Mana on kill) and triggers `CounterAttack` free swings and `Confidence` regeneration on successful parries with a `2,000ms` internal cooldown (`NextBushidoParryProc`).
-- **Ninja (`16 LOC` C# in `Projects/UOContent/Items/Weapons/BaseWeapon.cs`):** Documented in [`design/NINJA_SPEC.md` §4](design/NINJA_SPEC.md). Intercepts incoming hits with active `MirrorImage` clones (`70%` ablative mitigation, `1,500ms` ICD via `NextCloneIntercept`), advances `DeathStrike.AddStep(defender)` on every connected Ninja melee swing (`5` swings to detonate), and consumes `CombatStealthUntil` windows for `Backstab` and `SurpriseAttack`.
+### Project Scope at a Glance
+- **Claim-Verified Mechanics Knowledgebase (`34` KB pages, `28/28` mutation self-tests):** Line-verified against verbatim extracts from the live UO Idle `v0.99.0` bundle (`index-CCYN0Dy6.js`), server/client changelogs, and canonical ModernUO C# (*Bushido*, *Ninjitsu*, *BaseWeapon*, *HonorContext*).
+- **Drop-In Samurai & Ninja Class Package (`Mode A` & `Mode B`):** Schema-validated (`Zod` + JSON Schema) `L1–L60` progression trees, starter kits, paperdoll layers, seeded hotbars, Tokuno armaments, and bilingual (`en` / `pt-BR`) strings for **Mode A** (zero engine code changes) and **Mode B** (`<20 LOC` native C# server hooks).
+- **Live-Codebase `100ms`-Tick Combat Simulator (`80` parity scenarios, `16` unit test suites):** Unified single-wave and 10-wave tick kernel enforcing live `v0.99.0` attribute/affix caps, `[huntpostura` postures, `+8%/+12%` material tiers (`Iron..Valorite`), `ro(e)` hotbar auto-triggers, `1H/2H/Shield` parry math, and `2.25s / 2.50s / 3.25s` weapon swing speed archetypes.
+- **Authentic UO Gump/Item Art & Standalone Workbenches (`0` procedural polygons):** `140` oil-painted/gump skill icons + `37` authentic UO item/paperdoll sprites compiled into `5` zero-CORS HTML workbenches and `4` Retina (`2x` DPI) screenshots.
 
 ---
 
-## 2. Visual Beta UI Mockups & Custom Dark-Fantasy UO Iconography (`VISUAL-01`, `VISUAL-02`)
+## 1. Repository Architecture & Maintainability Workflow
 
-All three HTML mockups are 100% self-contained, zero-CORS standalone bundles compiled by [`tools/build_mockups.ts`](tools/build_mockups.ts) that can be opened directly over `file://` in any browser:
-
-| Mockup Deliverable | HTML Workbench (`file://` Ready) | Retina Verification Screenshot ($3200\times 2800$) | Highlights |
+| Directory / Module | Single Source of Truth For | Build / Regenerate Command | Verification Gate |
 |---|---|---|---|
-| **Samurai (`SM`, ID `114`, Hue `1884`) Skill Tree** | [`mockups/samurai-skill-tree.html`](mockups/samurai-skill-tree.html) | [`mockups/screenshots/samurai-skill-tree.png`](mockups/screenshots/samurai-skill-tree.png) | Live `.personagem-arvore` layout, $256\times 256$ Samurai portrait, 8 starter skills, Tokuno paperdoll, 5-slot hotbar, 12 `L1–L60` milestones, 12 catalog cards, interactive `EN`/`PT-BR` & `Mode A`/`Mode B` toggles |
-| **Ninja (`NJ`, ID `115`, Hue `1175`) Skill Tree** | [`mockups/ninja-skill-tree.html`](mockups/ninja-skill-tree.html) | [`mockups/screenshots/ninja-skill-tree.png`](mockups/screenshots/ninja-skill-tree.png) | Live `.personagem-arvore` layout, $256\times 256$ Ninja portrait, 8 starter skills, Tokuno paperdoll, 5-slot hotbar, 12 `L1–L60` milestones + dual `L35` `Smoke Bomb` & `Shuriken` unlock, 13 catalog cards |
-| **5-Class Parity, Telemetry & Armament Dashboard** | [`mockups/class-comparison.html`](mockups/class-comparison.html) | [`mockups/screenshots/class-comparison.png`](mockups/screenshots/class-comparison.png) | Side-by-side 5-class `L1–L60` matrix (`WR`, `MG`, `RG`, `SM`, `NJ`), interactive `L10/L25/L45/L60` × 4-archetype telemetry bars, Tokuno armaments & affixes, `<20 LOC` C# hook inspector |
-| **Custom Iconography Contact Sheet & Manifest** | [`mockups/assets/icons/manifest.json`](mockups/assets/icons/manifest.json) | [`mockups/assets/icons/contact-sheet.png`](mockups/assets/icons/contact-sheet.png) | `140` verified PNG files (`23` Samurai stems + `22` Ninja stems at $64\times 64$ & $48\times 48$ + $256\times 256$ & $64\times 64$ portraits) generated by [`tools/generate_icons.py`](tools/generate_icons.py) |
+| [`mechanics/`](mechanics/INDEX.md) & [`mechanics/tools/kb.py`](mechanics/tools/kb.py) | `34` claim-verified KB pages (`combat/`, `classes/`, `modernuo/`, `systems/`, `topics/`), `_raw/` extracts, and `_evidence/` captures | `npm run build:kb` | `npm run verify:kb` |
+| [`src/schemas/skill.schema.ts`](src/schemas/skill.schema.ts) & [`schemas/*.json`](schemas/class.schema.json) | Canonical `Zod` & JSON Schema contracts for classes, `134` catalog abilities, status effects, and paperdoll layers | — | `npm run verify:skills` |
+| [`design/drop-in/`](design/drop-in/) | Drop-in payloads ([`samurai.json`](design/drop-in/samurai.json), [`ninja.json`](design/drop-in/ninja.json), [`items-bushido-ninjitsu.json`](design/drop-in/items-bushido-ninjitsu.json), [`classes-patch.js`](design/drop-in/classes-patch.js)) | — | `npm run verify:skills` |
+| [`src/sim/`](src/sim/engine.ts) & [`data/sim-baselines/`](data/sim-baselines/) | Unified `100ms`-tick combat kernel ([`engine.ts`](src/sim/engine.ts)), gear/posture/weapon budgets ([`archetypes.ts`](src/sim/archetypes.ts)), and frozen JSON baselines | `npm run build:sim` | `npm run verify:sim` & `npm run test:sim` |
+| [`tools/generate_icons.py`](tools/generate_icons.py) & [`mockups/assets/`](mockups/assets/icons/manifest.json) | `140` multi-res skill icons, class portraits, `37` UO item sprites, and SHA-256 asset manifests | `python3 tools/generate_icons.py` | `npm run verify:icons` |
+| [`tools/build_mockups.ts`](tools/build_mockups.ts) & [`tools/ui_components.ts`](tools/ui_components.ts) | `5` self-contained HTML workbenches (`index.html`, `mockups/*.html`) and `4` headless Chrome Retina screenshots | `npm run build:mockups` | `npm run verify:mockups` |
 
-### Screenshot Previews
+Run the entire 7-gate verification pipeline in `< 5s`:
+```bash
+npm run verify:all
+```
 
-#### Samurai (`SM`, ID `114`, `robeHue: 1884`) — `[Arvore` Progression & Hotbar Workbench
+---
+
+## 2. Quick-Start Integration Guide (`Mode A` vs `Mode B`)
+
+| Class | ID & Badge | Robe Hue | Base Stats (`Sum = 90`) | Starter Skills (`50` each, `Magic Resist 30`) | Starter Weapon & Paperdoll Rule | Protected Combat Niche |
+|---|---|---|---|---|---|---|
+| **Samurai** ([`samurai.json`](design/drop-in/samurai.json), [Spec](design/SAMURAI_SPEC.md)) | `114` (`SM`) | `1884` | `STR 50 / DEX 30 / INT 10` | `Bushido`, `Swords`, `Tactics`, `Parry`, `Anatomy`, `Healing`, `MagicResist (30)`, `Focus` | `Katana` (`5119`), `TwoHanded` slot empty for shieldless Bushido Weapon Parry | Perfection streak ramp, 1H (`48,000`) / 2H (`41,140`) weapon parry-counter, 2-target `Momentum Strike` cleave, `<=35%` HP execute |
+| **Ninja** ([`ninja.json`](design/drop-in/ninja.json), [Spec](design/NINJA_SPEC.md)) | `115` (`NJ`) | `1175` | `STR 30 / DEX 50 / INT 10` | `Ninjitsu`, `Fencing`, `Tactics`, `Hiding`, `Stealth`, `Anatomy`, `MagicResist (30)`, `Focus` | `Kryss` (`5121`), off-hand free for `FocusAttack`, `Shuriken`, and `Fukiya` | Ablative `Mirror Image` clone mitigation, mid-combat `Smoke Bomb` stealth openers, 3rd/5th-swing `Death Strike` / `Twin Shadow` detonation |
+
+### Step 1 — Mode A (100% Existing `v0.99.0` Engine, Zero Server Code Changes)
+Import [`design/drop-in/classes-patch.js`](design/drop-in/classes-patch.js) and call `applyDropInClassPatch(bundleTables)` to register class metadata (`_E`), starter skills (`WE`), paperdoll kits (`yE`), legacy template weights (`FE`), seeded 5-slot hotbars (`mE`), `[Arvore` `L1–L60` progression trees (`gE`), catalog abilities (`b`), client combat estimators (`qC`), and `en` / `pt-BR` localization strings (`i18n`).
+
+### Step 2 — Mode B (Optional `<20 LOC` ModernUO C# Server Hooks)
+For shards running the ModernUO C# backend that want native event-driven triggers in `Projects/UOContent/Items/Weapons/BaseWeapon.cs`:
+- **Samurai (`17 LOC` C# — [`design/SAMURAI_SPEC.md` §4](design/SAMURAI_SPEC.md)):** Auto-binds `PerfectionTarget` on hit (`+4%/hit` up to `+15%` boss cap, restoring `+8` HP/Stam/Mana on kill) and triggers `CounterAttack` / `Iaido` free retaliation swings and `Confidence` heals on parry (`2,000ms` ICD).
+- **Ninja (`16 LOC` C# — [`design/NINJA_SPEC.md` §4](design/NINJA_SPEC.md)):** Intercepts incoming hits with active `MirrorImage` clones (`70%` ablative mitigation, `10.0s` sim / `1.5s` server ICD), advances `DeathStrike` pressure-point steps on connected melee swings, and consumes `CombatStealthUntil` windows on `Backstab` and `SurpriseAttack`.
+
+---
+
+## 3. Simulator Mathematical Fidelity (`v1.2`) & 5-Class Balance Proof
+
+Full derivations and citations are in [`mechanics/topics/simulator-fidelity-audit.md`](mechanics/topics/simulator-fidelity-audit.md) and [`design/BALANCE_REPORT.md`](design/BALANCE_REPORT.md):
+
+| Law | Live UO Idle `v0.99.0` / ModernUO Rule Enforced in [`src/sim/engine.ts`](src/sim/engine.ts) | Source Provenance |
+|---|---|---|
+| **1. Hard Affix Caps** | `SDI <= 50%` (+`INT/10`), `DI <= 100%` (skill flattens `>100`), Gear `SSI <= 60%` + tree `Speed` (`1,000ms` floor), `HCI/DCI <= 45%`, `LMC <= 40%`, `EnhancePotions <= 50%`, `ReflectPhysical` | `i18n-en-abilities.js:2616`, `changelog-server-dev.md:338` |
+| **2. `[huntpostura` Postures** | `agressivo` (`1.20x` dealt / `1.40x` taken), `equilibrado` (`1.00x / 1.00x`), `defensivo` (`0.60x` dealt / `0.80x` taken) | `i18n-en-abilities.js:1574-1579` |
+| **3. Material Tier Ladder** | `9` tiers (`Iron..Valorite`, `step = 0..8`): `+8%` weapon damage (`1.64x` max) & `+12%` armor resist (`1.96x` max) per step | `changelog-server-dev.md:58` |
+| **4. Cleave `splashRatio`** | Primary target takes `100%`; secondary cleave targets (`targetIdx > 0`) scale by `splashRatio` (`0.50`–`0.85`) | `combat-estimators-and-hotbar.js:116-148` |
+| **5. `ro(e)` Auto-Triggers** | Heal potions (`<=50% / 32% / 18%` HP), Bandage (`<=80%` HP), `mage_heal` (`<=50%`), `am` heals (`<=55%`), Mana potions (`<=40% / 28%`), `GE` AoE (`>=3` targets) | `abilities-loader-and-hotbar.js:609-695` |
+| **6. 1H / 2H / Shield Parry** | Shield + Bushido penalty (`(parry - bushido) / 400`), pure Shield (`parry / 400 + 5%` GM), Bushido `1H` (`48,000`) vs `2H` (`41,140`) divisor | `BaseWeapon.cs:1505-1570` |
+| **7. Unified Tick Kernel** | `simulateScenarioDetailed` and `simulateMultiWavePull` share `createUnifiedKernelContext` & `stepKernelCombatActions` | `src/sim/engine.ts:555-960` |
+| **8. Weapon Speed Families** | `fast_1h` (`2.25s`, `0.90x`), `balanced_1h` (`2.50s`, `1.00x`), `heavy_2h` (`3.25s`, `1.30x`) capture `1,000ms` floor clipping, cooldown burst scaling, and `1H/2H` parry coupling | `src/sim/archetypes.ts:194-315` |
+
+### `L60` 5-Class Parity & Weapon Speed Archetype Snapshot (`Mode B`)
+
+| Class | Standard (`2.50s`) Boss DPS | High-Def Boss DPS | Pack DPS | Trash TTK | EHP/sec | `fast_1h` (`2.25s`) Swings / Boss DPS | `heavy_2h` (`3.25s`) Swings / Boss DPS |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `warrior` *(Live)* | 345.15 | 154.99 | 383.58 | 2.89s | 331.99 | `54` sw / `331.19` | `39` sw / `408.03` *(no shield, `322.66` EHP)* |
+| `mage` *(Live)* | 374.52 | 191.26 | 713.23 | 2.99s | 370.67 | `60` sw / `357.11` | `43` sw / `379.40` |
+| `ranger` *(Live)* | 403.59 | 226.54 | 731.67 | 2.72s | 327.00 | `59` sw (`1000ms` floor) / `375.25` | `41` sw / `437.66` |
+| **`samurai`** | **367.22** | **193.60** | **456.84** | **2.81s** | **328.52** | **`57` sw / `361.85`** *(fast Perfection)* | **`44` sw / `416.80`** *(`41,140` 2H parry, `335.62` EHP)* |
+| **`ninja`** | **364.22** | **183.57** | **408.59** | **2.54s** | **336.54** | **`60` sw (`1000ms` floor) / `349.00`** *(fast procs)* | **`43` sw / `408.29`** |
+
+---
+
+## 4. Visual Workbenches & Screenshot Previews
+
+| Surface | Local HTML (`file://` Ready) | Retina Screenshot | Key Interactive Components |
+|---|---|---|---|
+| **Executive Review Portal** | [`index.html`](index.html) / [`mockups/index.html`](mockups/index.html) | [`mockups/screenshots/portal-index.png`](mockups/screenshots/portal-index.png) | Architecture cards, live benchmark strip, direct workbench launcher |
+| **Samurai Workbench** | [`mockups/samurai-skill-tree.html`](mockups/samurai-skill-tree.html) | [`mockups/screenshots/samurai-skill-tree.png`](mockups/screenshots/samurai-skill-tree.png) | Interactive paperdoll tooltips, `Mode A`/`Mode B` & `EN`/`PT-BR` toggles, `L1–L60` tree, telemetry drawer |
+| **Ninja Workbench** | [`mockups/ninja-skill-tree.html`](mockups/ninja-skill-tree.html) | [`mockups/screenshots/ninja-skill-tree.png`](mockups/screenshots/ninja-skill-tree.png) | Interactive paperdoll tooltips, dual `L35` `Smoke Bomb` + `Shuriken` node, 13 ability cards, telemetry drawer |
+| **5-Class Comparison** | [`mockups/class-comparison.html`](mockups/class-comparison.html) | [`mockups/screenshots/class-comparison.png`](mockups/screenshots/class-comparison.png) | 5-class `L1–L60` matrix, `Iron->Valorite` & Tokuno affix charts, 10-wave endurance, `<20 LOC` C# hook viewer |
+| **Icon & Sprite Sheet** | [`mockups/assets/icons/manifest.json`](mockups/assets/icons/manifest.json) | [`mockups/assets/icons/contact-sheet.png`](mockups/assets/icons/contact-sheet.png) | `140` skill/portrait PNGs + `37` authentic UO item sprites ([`items-contact-sheet.png`](mockups/assets/items/items-contact-sheet.png)) |
+
 ![Samurai Skill Tree Mockup](mockups/screenshots/samurai-skill-tree.png)
 
-#### Ninja (`NJ`, ID `115`, `robeHue: 1175`) — `[Arvore` Progression & Hotbar Workbench
 ![Ninja Skill Tree Mockup](mockups/screenshots/ninja-skill-tree.png)
 
-#### 5-Class Structural Parity, Combat Simulation Telemetry & Tokuno Armaments
 ![5-Class Comparison Mockup](mockups/screenshots/class-comparison.png)
 
-#### Custom Dark-Fantasy UO Portraits & Multi-Resolution Skill Icon Contact Sheet
 ![Custom Iconography Contact Sheet](mockups/assets/icons/contact-sheet.png)
 
 ---
 
-## 3. Complete Deliverable & v1.0 Requirement Traceability Index
+## 5. Requirement Traceability Index (`v1.0` – `v1.2`)
 
-Every v1 requirement (`KB-01..04`, `INDEX-01..04`, `SIM-01..03`, `CLASS-01..04`, `VISUAL-01..02`) is verified by automated gates and indexed below:
-
-| Req ID | Requirement Summary | Primary Artifacts & Documentation Links |
-|---|---|---|
-| **`KB-01`** | Private repository (`brbrainerd/uoIdle`) & credential/secret sanitizer | [`mechanics/tools/kb.py`](mechanics/tools/kb.py) (`check_credentials`, `CREDENTIAL_PATTERNS`) |
-| **`KB-02`** | Claim-verification linter (`kb.py build`, `kb.py check`, `--self-test`) & master KB index | [`mechanics/INDEX.md`](mechanics/INDEX.md), [`mechanics/tools/kb.py`](mechanics/tools/kb.py) |
-| **`KB-03`** | Formatted & AST-sliced live UO Idle `v0.99.0` bundle modules & runtime captures | [`tools/bundle_extract.mjs`](tools/bundle_extract.mjs), [`mechanics/_raw/manifest.json`](mechanics/_raw/manifest.json), `mechanics/_raw/bundle/` |
-| **`KB-04`** | Canonical ModernUO C# source snapshots (*Bushido*, *Ninjitsu*, *HonorContext*, *BaseWeapon*) | [`tools/fetch_modernuo.py`](tools/fetch_modernuo.py), `mechanics/_raw/modernuo/` |
-| **`INDEX-01`** | Core UO Idle combat & progression systems KB pages | [`mechanics/combat/tick-and-cooldowns.md`](mechanics/combat/tick-and-cooldowns.md), [`mechanics/combat/damage-and-defense.md`](mechanics/combat/damage-and-defense.md), [`mechanics/combat/resources.md`](mechanics/combat/resources.md), [`mechanics/combat/status-effects.md`](mechanics/combat/status-effects.md), [`mechanics/systems/progression-unlocks.md`](mechanics/systems/progression-unlocks.md), [`mechanics/systems/equipment-affixes.md`](mechanics/systems/equipment-affixes.md) |
-| **`INDEX-02`** | 3-Tier Client / Shared-Config / Server-Authoritative Engine Capability Matrix | [`mechanics/topics/engine-capability-matrix.md`](mechanics/topics/engine-capability-matrix.md) |
-| **`INDEX-03`** | Claim-verified live **Warrior**, **Mage**, and **Ranger** class deep-dive KB pages | [`mechanics/classes/warrior.md`](mechanics/classes/warrior.md), [`mechanics/classes/mage.md`](mechanics/classes/mage.md), [`mechanics/classes/ranger.md`](mechanics/classes/ranger.md) |
-| **`INDEX-04`** | Canonical JSON Schemas, TypeScript `zod` validator, and cross-class structural parity | [`schemas/class.schema.json`](schemas/class.schema.json), [`schemas/skill.schema.json`](schemas/skill.schema.json), [`schemas/effect.schema.json`](schemas/effect.schema.json), [`src/schemas/skill.schema.ts`](src/schemas/skill.schema.ts), [`tools/validate_skills.ts`](tools/validate_skills.ts), [`mechanics/topics/class-structural-parity.md`](mechanics/topics/class-structural-parity.md), [`mechanics/topics/combat-niches.md`](mechanics/topics/combat-niches.md), [`data/live-classes/warrior.json`](data/live-classes/warrior.json), [`data/live-classes/mage.json`](data/live-classes/mage.json), [`data/live-classes/ranger.json`](data/live-classes/ranger.json) |
-| **`SIM-01`** | ModernUO *Bushido* & *Ninjitsu* reference KB pages (17 mechanics) & idle state-machine mapping | [`mechanics/classes/modernuo-bushido.md`](mechanics/classes/modernuo-bushido.md), [`mechanics/classes/modernuo-ninjitsu.md`](mechanics/classes/modernuo-ninjitsu.md), `mechanics/modernuo/*.md`, [`design/MODERNUO_MAPPING.md`](design/MODERNUO_MAPPING.md) |
-| **`SIM-02`** | Deterministic `100ms`-tick combat simulator & live 3-class baseline benchmarks | [`src/sim/engine.ts`](src/sim/engine.ts), [`src/sim/types.ts`](src/sim/types.ts), [`src/sim/archetypes.ts`](src/sim/archetypes.ts), [`tools/sim_balance.ts`](tools/sim_balance.ts), [`data/sim-baselines/baseline-v0.99.0.json`](data/sim-baselines/baseline-v0.99.0.json) |
-| **`SIM-03`** | Automated 5-class Mode A & Mode B parity proof ($\pm 5\text{–}8\%$ envelope across `L10, L25, L45, L60`) | [`design/BALANCE_REPORT.md`](design/BALANCE_REPORT.md), [`data/sim-baselines/parity-5class-v0.99.0.json`](data/sim-baselines/parity-5class-v0.99.0.json) |
-| **`CLASS-01`** | **Samurai (`Bushido`)** formal specification (*Perfection Ramp / Weapon Parry-Counter / Execute*) | [`design/SAMURAI_SPEC.md`](design/SAMURAI_SPEC.md), [`design/drop-in/samurai.json`](design/drop-in/samurai.json) |
-| **`CLASS-02`** | **Ninja (`Ninjitsu`)** formal specification (*Ablative Clone Mitigation / Stealth Opener / 5-Hit Detonation*) | [`design/NINJA_SPEC.md`](design/NINJA_SPEC.md), [`design/drop-in/ninja.json`](design/drop-in/ninja.json) |
-| **`CLASS-03`** | Dual-mode drop-in class/skill payloads (`Mode A` 100% engine-strict & `Mode B` `<20 LOC` C# hooks) | [`design/drop-in/samurai.json`](design/drop-in/samurai.json), [`design/drop-in/ninja.json`](design/drop-in/ninja.json), [`design/drop-in/classes-patch.js`](design/drop-in/classes-patch.js) |
-| **`CLASS-04`** | Tokuno weapons, Ninjitsu projectiles/consumables, material tiers, and equipment affix pools | [`design/drop-in/items-bushido-ninjitsu.json`](design/drop-in/items-bushido-ninjitsu.json) |
-| **`VISUAL-01`** | Custom dark-fantasy UO Samurai & Ninja class portraits and $64\times 64$ / $48\times 48$ skill icon suite | [`tools/generate_icons.py`](tools/generate_icons.py), [`mockups/assets/icons/contact-sheet.png`](mockups/assets/icons/contact-sheet.png), [`mockups/assets/icons/manifest.json`](mockups/assets/icons/manifest.json), `mockups/assets/icons/{samurai,ninja}/` |
-| **`VISUAL-02`** | Self-contained `uoidle.com/beta` HTML/CSS mockups & high-resolution verification screenshots | [`tools/build_mockups.ts`](tools/build_mockups.ts), [`mockups/samurai-skill-tree.html`](mockups/samurai-skill-tree.html), [`mockups/ninja-skill-tree.html`](mockups/ninja-skill-tree.html), [`mockups/class-comparison.html`](mockups/class-comparison.html), `mockups/screenshots/*.png` |
-
----
-
-## 4. Reproducible 7-Command Milestone v1.1 Verification Suite
-
-Run the complete verification suite via `npm run verify:all` or execute each gate individually (completes in `< 5 seconds`):
-
-```bash
-# 1. Verify kb.py claim linter self-tests (28 mutation & 4 unit self-tests)
-python3 mechanics/tools/kb.py --self-test
-
-# 2. Verify all 56 KB pages in mechanics/INDEX.md and scan repository for leaked secrets
-python3 mechanics/tools/kb.py check --root mechanics
-
-# 3. Validate all 5 class JSON payloads (Warrior, Mage, Ranger, Samurai, Ninja) & 134 catalog skills against Zod/JSON Schemas
-npx tsx tools/validate_skills.ts --verify
-
-# 4. Run deterministic 5-class Mode A & Mode B combat simulations across L10/L25/L45/L60 × 4 archetypes + 9 material tiers + 10-wave endurance
-npx tsx tools/sim_balance.ts --verify
-
-# 5. Run 11 deterministic unit test suites for idle state-machine mechanics (Perfection, Parry ICD, Mirror Image, 3-Swing Death Strike, etc.)
-npx tsx tools/test_sim.ts
-
-# 6. Verify all 140 oil-painted/gump icons + 37 item/paperdoll PNGs, zero ImageDraw.polygon usage, and SHA-256 hashes
-python3 tools/generate_icons.py --verify
-
-# 7. Verify all 5 standalone beta HTML mockups/portals, 164 resolved asset links, and 4 high-DPI PNG screenshots
-npx tsx tools/build_mockups.ts --verify
-```
+| Req IDs | Milestone | Scope | Primary Verified Artifacts |
+|---|---:|---|---|
+| **`KB-01..04`** | `v1.0` | Secret sanitizer, `kb.py` engine (`28` mutation tests), AST bundle slicer (`13` slices), ModernUO C# fetcher (`19` files) | [`mechanics/tools/kb.py`](mechanics/tools/kb.py), [`tools/bundle_extract.mjs`](tools/bundle_extract.mjs), [`tools/fetch_modernuo.py`](tools/fetch_modernuo.py), [`mechanics/_raw/manifest.json`](mechanics/_raw/manifest.json) |
+| **`KB-05..06`** | `v1.2` | Multi-source `[verified]` promotion across `34` KB pages + bestiary, hunt-bot, progression-tree & sim-fidelity pages | [`mechanics/INDEX.md`](mechanics/INDEX.md), [`mechanics/systems/bestiary-and-monsters.md`](mechanics/systems/bestiary-and-monsters.md), [`mechanics/systems/hunting-bot-and-dungeons.md`](mechanics/systems/hunting-bot-and-dungeons.md), [`mechanics/systems/progression-and-stats.md`](mechanics/systems/progression-and-stats.md), [`mechanics/topics/simulator-fidelity-audit.md`](mechanics/topics/simulator-fidelity-audit.md) |
+| **`INDEX-01..04`** | `v1.0` | Core combat/progression KB, 3-Tier Engine Capability Matrix, live Warrior/Mage/Ranger KB & Zod schemas | [`src/schemas/skill.schema.ts`](src/schemas/skill.schema.ts), [`tools/validate_skills.ts`](tools/validate_skills.ts), [`mechanics/topics/engine-capability-matrix.md`](mechanics/topics/engine-capability-matrix.md), [`mechanics/topics/class-structural-parity.md`](mechanics/topics/class-structural-parity.md) |
+| **`SIM-01..05`** | `v1.0–v1.1` | ModernUO idle state-machine mapping, `100ms`-tick simulator, 5-class parity, material/affix curves & 10-wave pulls | [`design/MODERNUO_MAPPING.md`](design/MODERNUO_MAPPING.md), [`design/BALANCE_REPORT.md`](design/BALANCE_REPORT.md), [`data/sim-baselines/parity-5class-v0.99.0.json`](data/sim-baselines/parity-5class-v0.99.0.json), [`data/sim-baselines/gear-and-waves-v1.1.json`](data/sim-baselines/gear-and-waves-v1.1.json) |
+| **`SIM-06..09`** | `v1.2` | Live attribute/affix caps, `[huntpostura`, `+8%/+12%` material ladder, `ro(e)` triggers, unified tick kernel, weapon speed archetypes & `16` unit tests | [`src/sim/engine.ts`](src/sim/engine.ts), [`src/sim/archetypes.ts`](src/sim/archetypes.ts), [`src/sim/types.ts`](src/sim/types.ts), [`tools/sim_balance.ts`](tools/sim_balance.ts), [`tools/test_sim.ts`](tools/test_sim.ts) |
+| **`CLASS-01..04`**, **`IDLE-01..02`** | `v1.0–v1.1` | Samurai & Ninja specs, idle-tuned mechanics, bilingual lore blurbs, drop-in JSON/JS patch & Tokuno armaments | [`design/SAMURAI_SPEC.md`](design/SAMURAI_SPEC.md), [`design/NINJA_SPEC.md`](design/NINJA_SPEC.md), [`design/drop-in/samurai.json`](design/drop-in/samurai.json), [`design/drop-in/ninja.json`](design/drop-in/ninja.json), [`design/drop-in/items-bushido-ninjitsu.json`](design/drop-in/items-bushido-ninjitsu.json), [`design/drop-in/classes-patch.js`](design/drop-in/classes-patch.js) |
+| **`VISUAL-01..02`**, **`ART-01..02`**, **`UI-01..04`**, **`PORTAL-01`** | `v1.0–v1.2` | `140` oil-painted/gump icons, `37` UO item sprites (`zeroPolygons: true`), interactive paperdoll/telemetry UI, executive portal & GitHub Pages sync | [`tools/generate_icons.py`](tools/generate_icons.py), [`tools/build_mockups.ts`](tools/build_mockups.ts), [`tools/ui_components.ts`](tools/ui_components.ts), [`index.html`](index.html), `mockups/*.html` |

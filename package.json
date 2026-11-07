@@ -6,10 +6,16 @@
   "scripts": {
     "extract:bundle": "node tools/bundle_extract.mjs",
     "verify:bundle": "node tools/bundle_extract.mjs --verify",
-    "verify:icons": "python3 tools/generate_icons.py --verify",
-    "verify:mockups": "npx tsx tools/build_mockups.ts --verify",
+    "build:kb": "python3 mechanics/tools/kb.py build --root mechanics",
+    "verify:kb": "python3 mechanics/tools/kb.py --self-test && python3 mechanics/tools/kb.py check --root mechanics",
+    "verify:skills": "npx tsx tools/validate_skills.ts --verify",
+    "build:sim": "npx tsx tools/sim_balance.ts --parity --write-parity",
+    "verify:sim": "npx tsx tools/sim_balance.ts --verify",
     "test:sim": "npx tsx tools/test_sim.ts",
-    "verify:all": "python3 mechanics/tools/kb.py --self-test && python3 mechanics/tools/kb.py check --root mechanics && npx tsx tools/validate_skills.ts --verify && npx tsx tools/sim_balance.ts --verify && npx tsx tools/test_sim.ts && python3 tools/generate_icons.py --verify && npx tsx tools/build_mockups.ts --verify"
+    "verify:icons": "python3 tools/generate_icons.py --verify",
+    "build:mockups": "npx tsx tools/build_mockups.ts",
+    "verify:mockups": "npx tsx tools/build_mockups.ts --verify",
+    "verify:all": "npm run verify:kb && npm run verify:skills && npm run verify:sim && npm run test:sim && npm run verify:icons && npm run verify:mockups"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
