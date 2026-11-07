@@ -1,0 +1,739 @@
+{
+  "id": "samurai",
+  "classNumericId": 114,
+  "badge": "SM",
+  "role": "melee",
+  "baseStats": {
+    "str": 50,
+    "dex": 30,
+    "int": 10
+  },
+  "resourceProfile": {
+    "primaryResource": "mana",
+    "startingManaMax": 25,
+    "meditationCap": 100,
+    "consumesReagents": false,
+    "consumesAmmo": false,
+    "chivalryGoldTithe": false
+  },
+  "starterSkills": [
+    { "skillId": 52, "skillKey": "bushido", "initialValue": 50 },
+    { "skillId": 40, "skillKey": "swords", "initialValue": 50 },
+    { "skillId": 27, "skillKey": "tactics", "initialValue": 50 },
+    { "skillId": 5, "skillKey": "parry", "initialValue": 50 },
+    { "skillId": 1, "skillKey": "anatomy", "initialValue": 50 },
+    { "skillId": 17, "skillKey": "healing", "initialValue": 50 },
+    { "skillId": 26, "skillKey": "magicResist", "initialValue": 30 },
+    { "skillId": 50, "skillKey": "focus", "initialValue": 50 }
+  ],
+  "legacyTemplateSkills": [
+    { "skillId": 40, "skillKey": "swords", "weight": 30 },
+    { "skillId": 52, "skillKey": "bushido", "weight": 30 },
+    { "skillId": 27, "skillKey": "tactics", "weight": 20 },
+    { "skillId": 1, "skillKey": "anatomy", "weight": 20 }
+  ],
+  "starterEquipment": {
+    "kitTokens": ["samuraiSet", "katana", "bandages", "potionsMelee", "robeCloak"],
+    "paperdollLayers": [
+      { "layer": "Helm", "graphic": 10102 },
+      { "layer": "InnerTorso", "graphic": 10182 },
+      { "layer": "Arms", "graphic": 10110 },
+      { "layer": "Pants", "graphic": 5067 },
+      { "layer": "Shoes", "graphic": 10134 },
+      { "layer": "OneHanded", "graphic": 5119 },
+      { "layer": "OuterTorso", "graphic": 7939, "softFlag": "softRobe" },
+      { "layer": "Cloak", "graphic": 5397, "softFlag": "softCloak" }
+    ]
+  },
+  "robeHue": 1884,
+  "seededHotbar": [
+    {
+      "slotIndex": 0,
+      "kind": "ability",
+      "abilityId": "lesser_heal_potion",
+      "label": "Lesser Heal",
+      "enabled": true,
+      "graphic": 3852,
+      "conditions": [
+        { "target": "self", "attr": "hp", "op": "<=", "value": 50, "percent": true }
+      ]
+    },
+    {
+      "slotIndex": 1,
+      "kind": "ability",
+      "abilityId": "bandage",
+      "label": "Bandage",
+      "enabled": true,
+      "graphic": 3617,
+      "conditions": [
+        { "target": "self", "attr": "hp", "op": "<=", "value": 80, "percent": true },
+        { "target": "self", "attr": "poisoned", "op": "==", "value": 1, "join": "or" }
+      ]
+    },
+    {
+      "slotIndex": 2,
+      "kind": "ability",
+      "abilityId": "lesser_cure_potion",
+      "label": "Lesser Cure",
+      "enabled": true,
+      "graphic": 3847,
+      "conditions": [
+        { "target": "self", "attr": "poisoned", "op": "==", "value": 1 }
+      ]
+    },
+    {
+      "slotIndex": 3,
+      "kind": "ability",
+      "abilityId": "lesser_mana_potion",
+      "label": "Lesser Mana",
+      "enabled": true,
+      "graphic": 3846,
+      "conditions": [
+        { "target": "self", "attr": "mana", "op": "<=", "value": 30, "percent": true }
+      ]
+    },
+    {
+      "slotIndex": 4,
+      "kind": "ability",
+      "abilityId": "samurai_lightning",
+      "label": "Bolt",
+      "enabled": true,
+      "conditions": []
+    }
+  ],
+  "progression": [
+    {
+      "level": 1,
+      "id": "samurai_way",
+      "nameEn": "Way of the Blade",
+      "namePtBr": "Caminho da Lâmina",
+      "type": "passive",
+      "descEn": "Automatic weapon swing and shieldless Bushido Weapon Parry mastery with Katana, Wakizashi, No-Dachi, and Daisho.",
+      "descPtBr": "Ataque automático da arma e maestria em Aparar de Arma Bushido sem escudo com Katana, Wakizashi, No-Dachi e Daisho.",
+      "inCatalog": true,
+      "catalogId": "samurai_way"
+    },
+    {
+      "level": 5,
+      "id": "samurai_lightning",
+      "nameEn": "Lightning Strike",
+      "namePtBr": "Golpe Relâmpago",
+      "type": "skill",
+      "descEn": "High-accuracy Bushido precision strike (+50 Accuracy) with a critical IgnoreArmor roll and brief stagger.",
+      "descPtBr": "Golpe de precisão Bushido (+50 de Precisão) com chance crítica de ignorar armadura e breve desequilíbrio.",
+      "inCatalog": true,
+      "catalogId": "samurai_lightning"
+    },
+    {
+      "level": 10,
+      "id": "samurai_perfection",
+      "nameEn": "Honor & Perfection",
+      "namePtBr": "Honra e Perfeição",
+      "type": "mechanic",
+      "descEn": "Focuses Bushido honor on the target, building Perfection consecutive-hit damage stacks and restoring vitals on kill.",
+      "descPtBr": "Foca a honra Bushido no alvo, acumulando bônus de dano de Perfeição em golpes consecutivos e restaurando vitais ao abater.",
+      "inCatalog": true,
+      "catalogId": "samurai_perfection"
+    },
+    {
+      "level": 15,
+      "id": "samurai_honorable",
+      "nameEn": "Honorable Execution",
+      "namePtBr": "Execução Honrosa",
+      "type": "skill",
+      "descEn": "Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.",
+      "descPtBr": "Finalizador Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.",
+      "inCatalog": true,
+      "catalogId": "samurai_honorable"
+    },
+    {
+      "level": 20,
+      "id": "samurai_confidence",
+      "nameEn": "Confidence",
+      "namePtBr": "Confiança",
+      "type": "spell",
+      "descEn": "Defensive Bushido stance that restores health on cast and recovers HP and Stamina on every successful weapon parry.",
+      "descPtBr": "Postura defensiva Bushido que restaura vida ao conjurar e recupera Vida e Estamina a cada aparar de arma bem-sucedido.",
+      "inCatalog": true,
+      "catalogId": "samurai_confidence"
+    },
+    {
+      "level": 25,
+      "id": "samurai_counter",
+      "nameEn": "Counter Attack",
+      "namePtBr": "Contra-Ataque",
+      "type": "spell",
+      "descEn": "Reactive Bushido stance that empowers weapon damage (+18%) and unleashes an instant counter-swing upon parrying.",
+      "descPtBr": "Postura reativa Bushido que amplia o dano da arma (+18%) e desfere um contra-golpe imediato ao aparar.",
+      "inCatalog": true,
+      "catalogId": "samurai_counter"
+    },
+    {
+      "level": 30,
+      "id": "samurai_double_strike",
+      "nameEn": "Double Strike",
+      "namePtBr": "Golpe Duplo",
+      "type": "skill",
+      "descEn": "Signature Katana and Daisho technique: delivers two rapid consecutive weapon strikes at 90% damage each.",
+      "descPtBr": "Técnica clássica de Katana e Daisho: executa dois golpes rápidos consecutivos causando 90% de dano cada.",
+      "inCatalog": true,
+      "catalogId": "samurai_double_strike"
+    },
+    {
+      "level": 35,
+      "id": "samurai_evasion",
+      "nameEn": "Evasion",
+      "namePtBr": "Evasão",
+      "type": "spell",
+      "descEn": "Short burst Bushido posture that amplifies weapon parry chance and intercepts incoming direct-damage spells.",
+      "descPtBr": "Postura curta de Bushido que multiplica a chance de aparar com a arma e intercepta magias de dano direto.",
+      "inCatalog": true,
+      "catalogId": "samurai_evasion"
+    },
+    {
+      "level": 40,
+      "id": "samurai_momentum_strike",
+      "nameEn": "Momentum Strike",
+      "namePtBr": "Golpe de Ímpeto",
+      "type": "spell",
+      "descEn": "Two-target Bushido cleave that channels weapon momentum through the primary enemy into a second adjacent foe.",
+      "descPtBr": "Corte Bushido para dois alvos que transfere o ímpeto da lâmina do alvo principal para um segundo inimigo adjacente.",
+      "inCatalog": true,
+      "catalogId": "samurai_momentum_strike"
+    },
+    {
+      "level": 45,
+      "id": "samurai_armor_ignore",
+      "nameEn": "Armor Ignore",
+      "namePtBr": "Ignorar Armadura",
+      "type": "skill",
+      "descEn": "Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses.",
+      "descPtBr": "Maestria secundária de Katana: perfura as defesas do alvo (-18% de defesa por 7s) e desequilibra chefes blindados.",
+      "inCatalog": true,
+      "catalogId": "samurai_armor_ignore"
+    },
+    {
+      "level": 50,
+      "id": "samurai_lightning_r2",
+      "nameEn": "Lightning Strike II",
+      "namePtBr": "Golpe Relâmpago II",
+      "type": "skill",
+      "descEn": "Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash.",
+      "descPtBr": "Golpe de precisão Bushido aprimorado com multiplicador superior, perfuração crítica e arco secundário.",
+      "inCatalog": true,
+      "catalogId": "samurai_lightning_r2"
+    },
+    {
+      "level": 60,
+      "id": "samurai_honorable_r2",
+      "nameEn": "Honorable Execution II",
+      "namePtBr": "Execução Honrosa II",
+      "type": "feature",
+      "descEn": "Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage.",
+      "descPtBr": "Finalizador supremo de Grão-Mestre Bushido: multiplicador 1.95x abaixo de 35% de vida com +12% de velocidade e +8% de dano.",
+      "inCatalog": true,
+      "catalogId": "samurai_honorable_r2"
+    }
+  ],
+  "abilities": [
+    {
+      "id": "samurai_way",
+      "aliasOf": null,
+      "name": "Way of the Blade",
+      "namePtBr": "Caminho da Lâmina",
+      "category": "samurai",
+      "kind": "Passive",
+      "tab": "ability",
+      "cooldownMs": 0,
+      "customCooldownMs": 0,
+      "manaCost": 0,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": null,
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New",
+      "gumpIcon": 21536,
+      "iconKey": "idle_samurai_way",
+      "scalingFormula": {
+        "summary": "100% weapon damage auto-attack loop plus shieldless Bushido Weapon Parry (Parry * Bushido / 48000 1H or 41140 2H)",
+        "stat": "bushido",
+        "minMultiplier": 1.0,
+        "maxMultiplier": 1.0
+      },
+      "unlockLevel": 75,
+      "progressionTreeLevel": 1,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_lightning",
+      "aliasOf": null,
+      "name": "Lightning Strike",
+      "namePtBr": "Golpe Relâmpago",
+      "category": "samurai",
+      "kind": "SpecialMove",
+      "tab": "ability",
+      "cooldownMs": 9000,
+      "customCooldownMs": 0,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "samurai_lightning_stagger",
+        "name": "Lightning Stagger",
+        "effectType": "debuff",
+        "durationMs": 3000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "disarm", "value": 1 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 404,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21540,
+      "iconKey": "gump_21540",
+      "scalingFormula": {
+        "summary": "UO LightningStrike (ref 404): +50 Accuracy precision strike with Bushido^2/72000 IgnoreArmor critical roll",
+        "stat": "bushido",
+        "minMultiplier": 1.1,
+        "maxMultiplier": 1.2
+      },
+      "unlockLevel": 1,
+      "progressionTreeLevel": 5,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_perfection",
+      "aliasOf": null,
+      "name": "Honor & Perfection",
+      "namePtBr": "Honra e Perfeição",
+      "category": "samurai",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 14000,
+      "customCooldownMs": 14000,
+      "manaCost": 8,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "self_buff",
+      "statusEffect": {
+        "id": "samurai_perfection_buff",
+        "name": "Perfection",
+        "effectType": "self_buff",
+        "durationMs": 9000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "perfection_streak_pct", "value": 10 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "Idle",
+      "gumpIcon": 21536,
+      "iconKey": "idle_samurai_perfection",
+      "scalingFormula": {
+        "summary": "ModernUO HonorContext Perfection ramp: grants +10% Perfection streak bonus in Mode A or per-hit streak scaling in Mode B",
+        "stat": "bushido"
+      },
+      "unlockLevel": 10,
+      "progressionTreeLevel": 10,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_honorable",
+      "aliasOf": null,
+      "name": "Honorable Execution",
+      "namePtBr": "Execução Honrosa",
+      "category": "samurai",
+      "kind": "SpecialMove",
+      "tab": "ability",
+      "cooldownMs": 9000,
+      "customCooldownMs": 0,
+      "manaCost": 0,
+      "staminaCost": 10,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "samurai_honorable_haste",
+        "name": "Honorable Haste",
+        "effectType": "self_buff",
+        "durationMs": 9000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "attack_speed_pct", "value": 15 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 400,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21536,
+      "iconKey": "gump_21536",
+      "scalingFormula": {
+        "summary": "UO HonorableExecution (ref 400): 1.35x-1.45x Bushido strike (1.85x execute below 35% HP) granting +15% attack speed",
+        "stat": "bushido",
+        "minMultiplier": 1.35,
+        "maxMultiplier": 1.45,
+        "executeThresholdHpPct": 35,
+        "executeMultiplier": 1.85
+      },
+      "unlockLevel": 10,
+      "progressionTreeLevel": 15,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_confidence",
+      "aliasOf": null,
+      "name": "Confidence",
+      "namePtBr": "Confiança",
+      "category": "samurai",
+      "kind": "Spell",
+      "tab": "spell",
+      "cooldownMs": 18000,
+      "customCooldownMs": 0,
+      "manaCost": 8,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "heal",
+      "statusEffect": null,
+      "weaponAbilityRef": null,
+      "spellId": 401,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21537,
+      "iconKey": "gump_21537",
+      "scalingFormula": {
+        "summary": "UO Confidence (ref 401): emergency Bushido self-recovery (15 + Bushido^2/576 HP) plus on-parry HP/Stamina restore in Mode B",
+        "stat": "bushido",
+        "minMultiplier": 0.02,
+        "maxMultiplier": 0.02
+      },
+      "unlockLevel": 20,
+      "progressionTreeLevel": 20,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_counter",
+      "aliasOf": null,
+      "name": "Counter Attack",
+      "namePtBr": "Contra-Ataque",
+      "category": "samurai",
+      "kind": "Spell",
+      "tab": "spell",
+      "cooldownMs": 7000,
+      "customCooldownMs": 0,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "samurai_counter_stance",
+        "name": "Counter Stance",
+        "effectType": "self_buff",
+        "durationMs": 7000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "damage_dealt_pct", "value": 18 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 403,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21539,
+      "iconKey": "gump_21539",
+      "scalingFormula": {
+        "summary": "UO CounterAttack (ref 403): reactive Bushido counter-strike (1.50x-1.60x) and +18% counter stance damage",
+        "stat": "bushido",
+        "minMultiplier": 1.5,
+        "maxMultiplier": 1.6
+      },
+      "unlockLevel": 5,
+      "progressionTreeLevel": 25,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_double_strike",
+      "aliasOf": "warrior_double_strike",
+      "name": "Double Strike",
+      "namePtBr": "Golpe Duplo",
+      "category": "samurai",
+      "kind": "WeaponAbility",
+      "tab": "ability",
+      "cooldownMs": 9000,
+      "customCooldownMs": 0,
+      "manaCost": 12,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": null,
+      "weaponAbilityRef": 7,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 20998,
+      "iconKey": "gump_20998",
+      "scalingFormula": {
+        "summary": "UO DoubleStrike (ref 7, Katana/Daisho/Wakizashi): rapid twin-blade strike at 0.90x weapon multiplier",
+        "stat": "weapon",
+        "minMultiplier": 0.9,
+        "maxMultiplier": 0.9,
+        "hits": 1
+      },
+      "unlockLevel": 30,
+      "progressionTreeLevel": 30,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_evasion",
+      "aliasOf": null,
+      "name": "Evasion",
+      "namePtBr": "Evasão",
+      "category": "samurai",
+      "kind": "Spell",
+      "tab": "spell",
+      "cooldownMs": 20000,
+      "customCooldownMs": 0,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "self_buff",
+      "statusEffect": {
+        "id": "samurai_evasion_stance",
+        "name": "Evasion Stance",
+        "effectType": "posture",
+        "durationMs": 5000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "defense_pct", "value": 4 }
+        ],
+        "stackingRule": "exclusive_posture",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 402,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21538,
+      "iconKey": "gump_21538",
+      "scalingFormula": {
+        "summary": "UO Evasion (ref 402): 5s defensive Bushido posture (+4% defense in Mode A; 1.16x-1.50x Parry scalar + spell evasion in Mode B)",
+        "stat": "bushido"
+      },
+      "unlockLevel": 35,
+      "progressionTreeLevel": 35,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_momentum_strike",
+      "aliasOf": null,
+      "name": "Momentum Strike",
+      "namePtBr": "Golpe de Ímpeto",
+      "category": "samurai",
+      "kind": "Spell",
+      "tab": "spell",
+      "cooldownMs": 8000,
+      "customCooldownMs": 0,
+      "manaCost": 12,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "samurai_momentum_stagger",
+        "name": "Momentum Stagger",
+        "effectType": "debuff",
+        "durationMs": 3000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "disarm", "value": 1 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 405,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21541,
+      "iconKey": "gump_21541",
+      "scalingFormula": {
+        "summary": "UO MomentumStrike (ref 405): 2-target Bushido cleave transferring 115% weapon momentum to an adjacent enemy",
+        "stat": "bushido",
+        "minMultiplier": 1.0,
+        "maxMultiplier": 1.1,
+        "hits": 1,
+        "splashRatio": 1.15
+      },
+      "unlockLevel": 40,
+      "progressionTreeLevel": 40,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_armor_ignore",
+      "aliasOf": "duelist_armor_ignore",
+      "name": "Armor Ignore",
+      "namePtBr": "Ignorar Armadura",
+      "category": "samurai",
+      "kind": "WeaponAbility",
+      "tab": "ability",
+      "cooldownMs": 14000,
+      "customCooldownMs": 0,
+      "manaCost": 14,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "debuff",
+      "statusEffect": {
+        "id": "samurai_armor_shred",
+        "name": "Armor Shred",
+        "effectType": "debuff",
+        "durationMs": 7000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "defense_pct", "value": -18 },
+          { "stat": "disarm", "value": 1 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": 1,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 20992,
+      "iconKey": "gump_20992",
+      "scalingFormula": {
+        "summary": "UO ArmorIgnore (ref 1, Katana secondary): weakens enemy physical defense (-18% for 7s) and staggers target",
+        "stat": "weapon",
+        "minMultiplier": 1.0,
+        "maxMultiplier": 1.0
+      },
+      "unlockLevel": 45,
+      "progressionTreeLevel": 45,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_lightning_r2",
+      "aliasOf": null,
+      "name": "Lightning Strike II",
+      "namePtBr": "Golpe Relâmpago II",
+      "category": "samurai",
+      "kind": "SpecialMove",
+      "tab": "ability",
+      "cooldownMs": 8000,
+      "customCooldownMs": 0,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "samurai_lightning_r2_stagger",
+        "name": "Lightning Stagger II",
+        "effectType": "debuff",
+        "durationMs": 3000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "disarm", "value": 1 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 404,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21540,
+      "iconKey": "gump_21540",
+      "scalingFormula": {
+        "summary": "Master LightningStrike (ref 404 Rank II): 1.15x-1.25x precision strike with 50% secondary arc splash",
+        "stat": "bushido",
+        "minMultiplier": 1.15,
+        "maxMultiplier": 1.25,
+        "hits": 1,
+        "splashRatio": 0.5
+      },
+      "unlockLevel": 300,
+      "progressionTreeLevel": 50,
+      "inCatalog": true
+    },
+    {
+      "id": "samurai_honorable_r2",
+      "aliasOf": null,
+      "name": "Honorable Execution II",
+      "namePtBr": "Execução Honrosa II",
+      "category": "samurai",
+      "kind": "SpecialMove",
+      "tab": "ability",
+      "cooldownMs": 11000,
+      "customCooldownMs": 0,
+      "manaCost": 0,
+      "staminaCost": 15,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "samurai_honorable_r2_haste",
+        "name": "Honorable Haste II",
+        "effectType": "self_buff",
+        "durationMs": 10000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "attack_speed_pct", "value": 12 },
+          { "stat": "damage_dealt_pct", "value": 8 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
+      "weaponAbilityRef": null,
+      "spellId": 400,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21536,
+      "iconKey": "gump_21536",
+      "scalingFormula": {
+        "summary": "Grandmaster HonorableExecution (ref 400 Rank II): 1.15x-1.25x strike (1.95x below 35% HP) granting +12% haste and +8% damage",
+        "stat": "bushido",
+        "minMultiplier": 1.15,
+        "maxMultiplier": 1.25,
+        "executeThresholdHpPct": 35,
+        "executeMultiplier": 1.95
+      },
+      "unlockLevel": 200,
+      "progressionTreeLevel": 60,
+      "inCatalog": true
+    }
+  ]
+}
