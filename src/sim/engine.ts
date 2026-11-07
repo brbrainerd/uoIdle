@@ -837,9 +837,6 @@ export function simulateScenario(
             }
           }
         }
-        if (mode === 'mode_b' && skill.id.includes('counter')) {
-          state.counterStanceRemainingMs = 8000;
-        }
         if (mode === 'mode_b' && skill.id.includes('mirror')) {
           state.cloneStacks = skill.id.endsWith('_r2') ? 2 : 1;
         }
