@@ -2,8 +2,8 @@
 
 **Phase:** `05-samurai-ninja-skill-line-design-parity-tuning-drop-in-code` (`Plan 05-02`)  
 **Requirements Covered:** `CLASS-02`, `CLASS-03`  
-**Drop-In Payload:** [`design/drop-in/ninja.json`](file:///Users/brbrainerd/dev/uoIdle/design/drop-in/ninja.json)  
-**Schema Contract:** [`src/schemas/skill.schema.ts`](file:///Users/brbrainerd/dev/uoIdle/src/schemas/skill.schema.ts) (`ClassSchema`) / [`schemas/class.schema.json`](file:///Users/brbrainerd/dev/uoIdle/schemas/class.schema.json)  
+**Drop-In Payload:** [`design/drop-in/ninja.json`](drop-in/ninja.json)  
+**Schema Contract:** [`src/schemas/skill.schema.ts`](../src/schemas/skill.schema.ts) (`ClassSchema`) / [`schemas/class.schema.json`](../schemas/class.schema.json)  
 **Knowledge Base Provenance:** `[[modernuo-ninjitsu]]`, `[[ninjitsu-mirror-image]]`, `[[ninjitsu-focus-attack]]`, `[[ninjitsu-backstab]]`, `[[ninjitsu-stealth-hiding]]`, `[[ninjitsu-shadowjump]]`, `[[ninjitsu-surprise-attack]]`, `[[ninjitsu-ki-attack]]`, `[[ninjitsu-death-strike]]`, `[[ninjitsu-animal-form]]`, `[[ninjitsu-items]]`, `[[class-structural-parity]]`, `[[combat-niches]]`, `[[engine-capability-matrix]]`
 
 ---

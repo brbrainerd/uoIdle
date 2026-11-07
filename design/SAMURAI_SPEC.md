@@ -2,8 +2,8 @@
 
 **Phase:** `05-samurai-ninja-skill-line-design-parity-tuning-drop-in-code` (`Plan 05-01`)  
 **Requirements Covered:** `CLASS-01`, `CLASS-03`  
-**Drop-In Payload:** [`design/drop-in/samurai.json`](file:///Users/brbrainerd/dev/uoIdle/design/drop-in/samurai.json)  
-**Schema Contract:** [`src/schemas/skill.schema.ts`](file:///Users/brbrainerd/dev/uoIdle/src/schemas/skill.schema.ts) (`ClassSchema`) / [`schemas/class.schema.json`](file:///Users/brbrainerd/dev/uoIdle/schemas/class.schema.json)  
+**Drop-In Payload:** [`design/drop-in/samurai.json`](drop-in/samurai.json)  
+**Schema Contract:** [`src/schemas/skill.schema.ts`](../src/schemas/skill.schema.ts) (`ClassSchema`) / [`schemas/class.schema.json`](../schemas/class.schema.json)  
 **Knowledge Base Provenance:** `[[modernuo-bushido]]`, `[[bushido-perfection-honor]]`, `[[bushido-honorable-execution]]`, `[[bushido-confidence]]`, `[[bushido-counter-attack]]`, `[[bushido-lightning-strike]]`, `[[bushido-evasion]]`, `[[bushido-momentum-strike]]`, `[[class-structural-parity]]`, `[[combat-niches]]`, `[[engine-capability-matrix]]`
 
 ---

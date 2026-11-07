@@ -17,9 +17,54 @@ const ROOT_DIR = process.cwd();
 const MOCKUPS_DIR = path.join(ROOT_DIR, 'mockups');
 const SCREENSHOTS_DIR = path.join(MOCKUPS_DIR, 'screenshots');
 const ICONS_DIR = path.join(MOCKUPS_DIR, 'assets', 'icons');
-const CHROME_BIN =
-  process.env.CHROME_BIN ??
-  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+
+function resolveChromeBin(): string | null {
+  if (process.env.CHROME_BIN && fs.existsSync(process.env.CHROME_BIN)) {
+    return process.env.CHROME_BIN;
+  }
+  const lookupCmd = process.platform === 'win32' ? 'where' : 'which';
+  const pathCandidates = [
+    'google-chrome',
+    'google-chrome-stable',
+    'chromium',
+    'chromium-browser',
+    'chrome',
+    'msedge',
+  ];
+  for (const bin of pathCandidates) {
+    try {
+      const found = execFileSync(lookupCmd, [bin], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+        .split(/\r?\n/)[0]
+        ?.trim();
+      if (found && fs.existsSync(found)) {
+        return found;
+      }
+    } catch {
+      // continue searching
+    }
+  }
+  const osCandidates: string[] =
+    process.platform === 'darwin'
+      ? [
+          path.join('/', 'Applications', 'Google Chrome.app', 'Contents', 'MacOS', 'Google Chrome'),
+          path.join('/', 'Applications', 'Chromium.app', 'Contents', 'MacOS', 'Chromium'),
+          path.join('/', 'Applications', 'Brave Browser.app', 'Contents', 'MacOS', 'Brave Browser'),
+          path.join('/', 'Applications', 'Microsoft Edge.app', 'Contents', 'MacOS', 'Microsoft Edge'),
+        ]
+      : process.platform === 'win32'
+        ? [
+            path.join(process.env['PROGRAMFILES'] ?? 'C:\\Program Files', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+            path.join(process.env['PROGRAMFILES(X86)'] ?? 'C:\\Program Files (x86)', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+            path.join(process.env['LOCALAPPDATA'] ?? '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+          ]
+        : ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/snap/bin/chromium'];
+  for (const candidate of osCandidates) {
+    if (candidate && fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+  return null;
+}
 
 interface ItemsDataset {
   version: string;
@@ -4291,7 +4336,8 @@ function compileAllMockups(): {
 
 function captureScreenshots(): void {
   fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
-  if (!fs.existsSync(CHROME_BIN)) {
+  const chromeBin = resolveChromeBin();
+  if (!chromeBin) {
     return;
   }
   const targets = [
@@ -4306,7 +4352,7 @@ function captureScreenshots(): void {
     const pngPath = path.join(SCREENSHOTS_DIR, t.png);
     const fileUrl = `file://${htmlPath}`;
     execFileSync(
-      CHROME_BIN,
+      chromeBin,
       [
         '--headless=new',
         '--disable-gpu',

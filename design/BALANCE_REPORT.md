@@ -166,7 +166,7 @@ A primary design risk for Bushido and Ninjitsu in a 24/7 idle RPG is **avoidance
 
 ## Section 5 — Milestone `v1.1` Extended Gear, Affix, Damage-Channel & Multi-Wave Telemetry (`SIM-04`, `SIM-05`)
 
-Committed in [`data/sim-baselines/gear-and-waves-v1.1.json`](file:///Users/brbrainerd/dev/uoIdle/data/sim-baselines/gear-and-waves-v1.1.json) and verified via [`tools/test_sim.ts`](file:///Users/brbrainerd/dev/uoIdle/tools/test_sim.ts) (`npm run test:sim`, 11/11 deterministic unit test suites passing):
+Committed in [`data/sim-baselines/gear-and-waves-v1.1.json`](../data/sim-baselines/gear-and-waves-v1.1.json) and verified via [`tools/test_sim.ts`](../tools/test_sim.ts) (`npm run test:sim`, 11/11 deterministic unit test suites passing):
 
 ### 5.1 `L60` Damage Channel Breakdown (`low_def_boss`, `mode_b`)
 
