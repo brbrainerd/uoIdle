@@ -88,9 +88,13 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
+**Wave 1**
 
-- [ ] 03-01: Claim-verified KB pages for live Warrior, Mage, and Ranger skill lines (`mechanics/classes/{warrior,mage,ranger}.md`) (`INDEX-03`)
-- [ ] 03-02: Cross-class structural parity topic (`mechanics/topics/class-structural-parity.md`) and `zod` / JSON Schema validation contracts (`schemas/{class,skill,effect}.schema.json`) (`INDEX-04`)
+- [ ] 03-01-PLAN.md — Claim-verified KB pages for live Warrior, Mage, and Ranger skill lines (`mechanics/classes/{warrior,mage,ranger}.md`) and cross-class structural parity & combat niches (`mechanics/topics/{class-structural-parity,combat-niches}.md`) (`INDEX-03`, `INDEX-04`)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03-02-PLAN.md — Canonical JSON Schemas (`schemas/{effect,skill,class}.schema.json`), TypeScript `zod` validator (`src/schemas/skill.schema.ts`), extracted live class JSON definitions (`data/live-classes/{warrior,mage,ranger}.json`), and CLI verification (`tools/validate_skills.ts`) (`INDEX-04`)
 
 ### Phase 4: ModernUO Reference KB & Baseline Combat Simulator
 
