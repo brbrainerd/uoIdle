@@ -8,16 +8,15 @@ A comprehensive reverse-engineering knowledgebase of **UO Idle** (`https://uoidl
 
 Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerically balanced (parity-tested against live Warrior, Mage, and Ranger formulae), and implementation-ready Ninja and Samurai skill lines backed by a 100% source-verified UO Idle mechanics knowledgebase.
 
-## Current Milestone: v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal
+## Current Milestone: v1.2 Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit
 
-**Goal:** Upgrade the Samurai & Ninja package with 100% authentic in-game UO gump/item art and high-detail AI raster icons (zero polygonal Pillow art), an interactive visual paperdoll with mouseover gear/affix tooltips, idle-tuned ability mechanics and evocative bilingual lore blurbs, expanded gear-tier/multi-wave simulation & unit tests, CV-audited UI dashboards (`/gsd-ui-phase`), and a live-hosted GitHub Pages developer portal.
+**Goal:** Eliminate every mathematical and behavioral gap between the deterministic combat simulator (`src/sim/`) and the live UO Idle `v0.99.0` codebase + ModernUO reference rules, unify the single-wave and multi-wave tick engines, audit and promote the `mechanics/` knowledgebase to multi-source `verified` rank with zero uncited `_raw/` slices, and synchronize all 5-class parity baselines, specs, and live GitHub Pages workbenches.
 
 **Target features:**
-- Idle-tuned ability mechanics refinements (*Confidence* Inner Calm synergy, *Evasion* Iaido Flash riposte, *Animal Form: Kitsune & Wolf Aspect*, *Smoke Bomb* Vanish & Volley combo) and evocative bilingual (`en` + `pt-BR`) lore blurbs and descriptions across all 25 catalog entries
-- Expanded deterministic simulator & automated unit test suite (`tools/test_sim.ts`, `tools/sim_balance.ts`) covering `Iron..Valorite` material-tier scaling, Tokuno weapon/armor affixes, multi-wave respawn transitions, and edge-case combat assertions
-- 100% authentic in-game UO gump & item sprite extraction from `uoidle.com/packs/{ability-icons,paperdoll,art}` plus high-detail AI-generated raster oil-painted icons for custom capstones/badges (eliminating all procedural `ImageDraw.polygon` icons), verified via CV visual inspection
-- Interactive visual paperdoll with real layered gear sprites and mouseover stat/affix/material-tier tooltips plus rich visual simulator telemetry charts (`/gsd-ui-phase`)
-- Lead Developer onboarding portal (`index.html`) and live GitHub Pages deployment (`https://brbrainerd.github.io/uoIdle/`)
+- **Knowledgebase Audit, Cross-Verification & Coverage Expansion (`KB-05`, `KB-06`)**: Promote multi-source corroborated KB pages (`resources.md`, `damage-and-defense.md`, `tick-and-cooldowns.md`, `equipment-affixes.md`, Bushido/Ninjitsu pages) to `verified`, expand KB coverage across `bestiary-and-wiki.js`, `hunt-and-bot-config.js`, and `progression-tree-ui.js`, and author `mechanics/topics/simulator-fidelity-audit.md`
+- **Live-Codebase Combat Math, Affix Caps, Postures & Hotbar `ro(e)` Parity (`SIM-06`, `SIM-07`)**: Enforce live UO Idle hard caps (`SDI <= 50%`, `DI <= 100%`, skill `>100` flattening, gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, `INT` spell bonus), canonical `[huntpostura` postures (`agressivo` `+20%` dmg / `+40%` taken, `equilibrado` `0%/0%`, `defensivo` `-40%` dmg / `-20%` taken), `+8%` weapon / `+12%` armor material-tier step ladder, secondary-target `splashRatio`, class weapon speeds, 1H (`48,000`) / 2H (`41,140`) / Shield `CheckParry` math, and exact `ro(e)` hotbar trigger thresholds (`hp<=50%/32%/18%`, `mana<=40%`, `zE(3)`)
+- **Unified Tick Kernel Refactor, Recalibrated 5-Class Parity (`±5–8%`) & Expanded Unit Tests (`SIM-08`, `SIM-09`)**: Unify `simulateScenarioDetailed` and `simulateMultiWavePull` onto a single shared tick-step engine, recalibrate Samurai/Ninja tuning & baseline snapshots under the live formulas, and expand `tools/test_sim.ts`
+- **Workbench UI & Documentation Sync, Live GitHub Pages Redeploy (`UI-04`)**: Regenerate all 5 HTML workbenches, Retina screenshots, `BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, and `NINJA_SPEC.md`, and redeploy to GitHub Pages
 
 ## Requirements
 
@@ -53,21 +52,26 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 
 ### Active
 
-(None — Milestones v1.0 and v1.1 complete and shipped)
+- [ ] **KB-05**: Comprehensive Knowledgebase Audit & Multi-Source Rank Promotion (`mechanics/combat/*.md`, `mechanics/systems/*.md`, `mechanics/classes/*.md`, `mechanics/modernuo/*.md`) promoting corroborated claims to `[verified]` and eliminating uncited `_raw/` slices
+- [ ] **KB-06**: Expanded Knowledgebase Coverage for Bestiary/Enemy Archetypes, Hunting Bot `[huntpostura` Rules, Progression Tree `[Arvore` Scaling, and a dedicated Simulator Fidelity Audit topic (`mechanics/topics/simulator-fidelity-audit.md`)
+- [ ] **SIM-06**: Live-Codebase Combat Math & Hard Cap Enforcement in `src/sim/engine.ts` (`SDI <= 50%` + `INT` scaling, `DI <= 100%` + skill `>100` flattening, gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, defender `DCI` in `computeHitChance`, 1H `48,000` / 2H `41,140` / Shield `CheckParry` math, and secondary-target `splashRatio`)
+- [ ] **SIM-07**: Authentic Hunting Bot Postures (`agressivo` `+20%` dmg / `+40%` taken, `equilibrado` `0%/0%`, `defensivo` `-40%` dmg / `-20%` taken), `+8%` weapon / `+12%` armor material-tier step ladder, class-authentic weapon speeds, and exact `ro(e)` hotbar auto-trigger thresholds (`hp<=50%/32%/18%`, `mana<=40%`, `zE(3)`) in `src/sim/archetypes.ts` and `src/sim/engine.ts`
+- [ ] **SIM-08**: Unified Tick-Step Kernel Refactor in `src/sim/engine.ts` eliminating the 340-line loop duplication between `simulateScenarioDetailed` and `simulateMultiWavePull` while recalibrating 5-class Mode A & Mode B parity within $\pm 5\text{–}8\%$ across all scenarios
+- [ ] **SIM-09**: Expanded Automated Unit Test Suite (`tools/test_sim.ts`) verifying all live caps (`SDI`, `DI`, `SSI`, `LMC`), `[huntpostura` incoming/outgoing multipliers, `+8%/+12%` material ladder, `splashRatio`, 1H/2H/Shield parry divisors, `ro(e)` potion/heal/AoE triggers, and single-wave vs. multi-wave kernel equivalence
+- [ ] **UI-04**: Synchronized Workbench UI, Design Specs (`BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, `NINJA_SPEC.md`), Retina Screenshots, and Live GitHub Pages Redeployment (`https://brbrainerd.github.io/uoIdle/`) reflecting `v1.2` simulator telemetry
 
 ### Out of Scope
 
 - Modifying or attacking live production servers — all scraping and auditing is strictly read-only inspection of the authenticated beta client, bundle, and public docs/wiki
-- Procedural geometric `PIL.ImageDraw.polygon` icon placeholders — strictly forbidden in `v1.1`; every icon must be a real in-game UO gump/item sprite or high-detail raster artwork
+- Procedural geometric `PIL.ImageDraw.polygon` icon placeholders — strictly forbidden; every icon must be a real in-game UO gump/item sprite or high-detail raster artwork
 - Tile-distance movement mechanics (*20-tile Ki Attack run*, *5-step enemy walk*, *ground-targeted Shadowjump*) — incompatible with automated 24/7 idle combat; replaced by temporal/combo state machines
 
 ## Context
 
-- **Current State (`v1.0` Shipped 2026-11-07, Starting `v1.1`)**:
-  - **Knowledgebase (`mechanics/`)**: 31 claim-verified markdown pages (`290+` verbatim line-cited claims) backed by 68 SHA-256-verified raw files (`mechanics/_raw/manifest.json`).
-  - **Schemas & Validators (`schemas/`, `src/schemas/`, `tools/validate_skills.ts`)**: Strict Draft 2020-12 JSON Schemas and TypeScript `zod` schemas validating all 5 classes and 134 catalog abilities.
-  - **Live Asset Discovery (`v1.1`)**: Confirmed `uoidle.com/packs/ability-icons/ability-icons.png`, `uoidle.com/packs/art/art.json?v=6`, and `uoidle.com/packs/paperdoll/paperdoll.json?v=3` are publicly reachable (`HTTP 200`) and contain canonical UO gump & item sprites.
-  - **GitHub Pages Enabled (`v1.1`)**: Repository `brbrainerd/uoIdle` switched to public (with `kb.py check` credential sanitization verified) and GitHub Pages enabled (`https://brbrainerd.github.io/uoIdle/`).
+- **Current State (`v1.0` & `v1.1` Shipped 2026-11-07, Starting `v1.2`)**:
+  - **Knowledgebase (`mechanics/`)**: 31 claim-verified markdown pages (`290+` verbatim line-cited claims) backed by 68 SHA-256-verified raw files (`mechanics/_raw/manifest.json`). Audit identified opportunities to promote multi-source corroborated pages to `verified` and cover `bestiary-and-wiki.js`, `hunt-and-bot-config.js`, and `progression-tree-ui.js`.
+  - **Simulator Audit (`src/sim/engine.ts`, `src/sim/archetypes.ts`)**: Identified 7 concrete math/fidelity gaps against live `v0.99.0` bundle/server rules (`SDI`/`DI`/`SSI`/`LMC` caps, `[huntpostura` postures, `+8%/+12%` material steps, `splashRatio`, `ro(e)` hotbar thresholds, 1H/2H/shield `CheckParry`, and `simulateMultiWavePull` loop duplication).
+  - **GitHub Pages Live**: Hosted at `https://brbrainerd.github.io/uoIdle/` with 7/7 verification gates (`npm run verify:all`).
 
 ## Constraints
 
@@ -88,6 +92,7 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 | Switch `brbrainerd/uoIdle` to public & enable GitHub Pages (`v1.1`) | Allows hosting live interactive demos at `https://brbrainerd.github.io/uoIdle/` for immediate review by the UO Idle lead developer | ✓ Good (Deployed via `_site` staging artifact with HTTP 200 across all 5 surfaces) |
 | Extract real UO gump/item sprites from `uoidle.com/packs/` + AI raster art (`v1.1`) | Replaces procedural Pillow polygons with authentic Ultima Online gump/item art and oil-painted dark-fantasy icons | ✓ Good (`zeroPolygons: true`, 140 ability PNGs + 37 item/paperdoll PNGs verified with `stdDev >= 12.0` and SHA-256) |
 | Consolidate UI into v2.1 Component Architecture (`tools/ui_components.ts`) | Eliminates duplicate ability catalogs, adds progressive-disclosure schema drawers, live Mode A/B interactivity, and a 100ms tick combat preview across all breakpoints (`1600px`..`500px`) | ✓ Good (Verified via multi-resolution CV flywheel) |
+| Enforce live `v0.99.0` stat caps, `[huntpostura` postures, `+8%/+12%` material ladder, `splashRatio`, and unified tick kernel (`v1.2`) | Eliminates simulator drift at L45/L60/Valorite tiers and guarantees 1:1 behavioral parity between single-wave and multi-wave simulations | — Pending |
 
 ## Evolution
 
@@ -107,4 +112,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-07 after v1.1 milestone completion*
+*Last updated: 2026-11-07 after v1.2 milestone initialization*
