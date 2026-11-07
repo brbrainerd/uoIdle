@@ -930,6 +930,21 @@ def verify_all_icons() -> int:
     if len(item_files) < 35:
         errors.append(f"Expected >= 35 tracked item/paperdoll files in items/manifest.json, got {len(item_files)}")
 
+    for fname, rec_meta in item_files.items():
+        fp = ITEMS_DIR / fname
+        if not fp.exists():
+            errors.append(f"Missing item/paperdoll file on disk: items/{fname}")
+            continue
+        live_meta = compute_image_metadata(fp)
+        if float(live_meta["stdDev"]) < MIN_STD_DEV:
+            errors.append(
+                f"Blank or low-variance item image items/{fname}: stdDev={live_meta['stdDev']} < {MIN_STD_DEV}"
+            )
+        if live_meta["sha256"] != rec_meta.get("sha256"):
+            errors.append(
+                f"SHA-256 mismatch for items/{fname}: live={live_meta['sha256']} != manifest={rec_meta.get('sha256')}"
+            )
+
     if errors:
         print(json.dumps({"ok": False, "errors": errors}))
         return 1
