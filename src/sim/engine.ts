@@ -6,6 +6,7 @@ import {
   MATERIAL_TIER_SPECS,
   buildAffixLoadoutBudget,
   buildMaterialTierBudget,
+  buildWeaponArchetypeBudget,
   resolveClassStatsForBracket,
   resolvePostureProfile,
 } from './archetypes.js';
@@ -13,6 +14,7 @@ import {
   AFFIX_LOADOUT_IDS,
   ARCHETYPE_IDS,
   BRACKET_IDS,
+  WEAPON_ARCHETYPE_IDS,
   type ActiveStatusInstance,
   type AffixLoadoutPoint,
   type BracketBudget,
@@ -35,6 +37,7 @@ import {
   type SimTelemetry,
   type SkillDefinition,
   type WavePullTelemetryPoint,
+  type WeaponArchetypePoint,
 } from './types.js';
 
 export const TICK_MS = 100;
@@ -2034,6 +2037,7 @@ export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArt
   const damageBreakdowns: DamageChannelBreakdown[] = [];
   const materialTierCurves: MaterialTierPoint[] = [];
   const affixLoadoutCurves: AffixLoadoutPoint[] = [];
+  const weaponArchetypeCurves: WeaponArchetypePoint[] = [];
   const multiWaveRuns: ClassMultiWaveRun[] = [];
   const rotationTimelines: ClassRotationTimeline[] = [];
 
@@ -2100,7 +2104,42 @@ export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArt
       });
     }
 
-    // 4. 10-Wave Consecutive Dungeon Pull at L60
+    // 4. Weapon Speed & Handedness Archetype curves at L60 (`fast_1h` 2.25s, `balanced_1h` 2.50s, `heavy_2h` 3.25s)
+    for (const weaponArchetypeId of WEAPON_ARCHETYPE_IDS) {
+      const { weaponName, spec, budget } = buildWeaponArchetypeBudget(classDef.id, weaponArchetypeId);
+      const stats = resolveClassStatsForBracket(classDef, budget);
+      const effectiveSwingIntervalMs = computeSwingIntervalMs(
+        budget,
+        stats.maxStamina,
+        0,
+        stats.baseWeaponSpeedMs
+      );
+      const lowDefDetailed = simulateScenarioDetailed(classDef, 'L60', 'low_def_boss', 'mode_b', budget);
+      const highDefDetailed = simulateScenarioDetailed(classDef, 'L60', 'high_def_boss', 'mode_b', budget);
+      const multiDetailed = simulateScenarioDetailed(classDef, 'L60', 'multi_target_pack', 'mode_b', budget);
+
+      weaponArchetypeCurves.push({
+        classId: classDef.id,
+        weaponArchetypeId,
+        weaponName,
+        baseWeaponSpeedMs: spec.baseWeaponSpeedMs,
+        effectiveSwingIntervalMs,
+        weaponDamageMultiplier: spec.weaponDamageMultiplier,
+        isTwoHanded: Boolean(stats.isTwoHanded),
+        hasShield: Boolean(stats.hasShield),
+        lowDefBossDps: lowDefDetailed.telemetry.sustainedDps,
+        highDefBossDps: highDefDetailed.telemetry.sustainedDps,
+        multiTargetDps: multiDetailed.telemetry.sustainedDps,
+        autoAttackDps: lowDefDetailed.breakdown.autoAttackDps,
+        procCounterDps: highDefDetailed.breakdown.procCounterDps,
+        executeDps: lowDefDetailed.breakdown.executeDps,
+        totalSwings: lowDefDetailed.telemetry.totalSwings,
+        parryCount: highDefDetailed.telemetry.parryCount,
+        ehpPerSec: highDefDetailed.telemetry.ehpPerSec,
+      });
+    }
+
+    // 5. 10-Wave Consecutive Dungeon Pull at L60
     multiWaveRuns.push(simulateMultiWavePull(classDef, 'L60', 10, 1500));
   }
 
@@ -2111,6 +2150,7 @@ export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArt
     damageBreakdowns,
     materialTierCurves,
     affixLoadoutCurves,
+    weaponArchetypeCurves,
     multiWaveRuns,
     rotationTimelines,
   };

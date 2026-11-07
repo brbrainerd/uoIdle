@@ -1,18 +1,18 @@
 ---
 gsd_state_version: "1.0"
 milestone: v1.2
-status: Ready to plan/execute Phase 11
-stopped_at: Milestone v1.2 initialized — ready for Phase 11
-last_updated: "2026-11-07T16:50:00.000Z"
+status: Complete — Milestone v1.2 Shipped
+stopped_at: Milestone v1.2 complete (Phases 11–14 verified & deployed)
+last_updated: "2026-11-07T17:22:00.000Z"
 last_activity: 2026-11-07
-last_activity_desc: Initialized Milestone v1.2 (Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit)
-state_head: 6ea7a55bc6b1d029cd1f22e9fc67a9f2efbf632b
+last_activity_desc: Completed Milestone v1.2 (Live-Codebase Simulator Fidelity, Weapon Swing Speed Archetypes, Unified Tick Engine & Knowledgebase Verification Audit)
+state_head: 618450a
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 4
   total_plans: 4
-  completed_plans: 0
-  percent: 0
+  completed_plans: 4
+  percent: 100
 milestone_name: Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit
 ---
 
@@ -23,21 +23,21 @@ milestone_name: Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledg
 See: .planning/PROJECT.md (updated 2026-11-07)
 
 **Core value:** Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerically balanced (parity-tested against live Warrior, Mage, and Ranger formulae), and implementation-ready Ninja and Samurai skill lines backed by a 100% source-verified UO Idle mechanics knowledgebase.
-**Current focus:** Milestone v1.2 — Phase 11: Knowledgebase Audit, Claim Cross-Verification & Coverage Expansion
+**Current focus:** Milestone v1.2 Shipped (`Phases 11–14` complete, `7/7` verification gates passing)
 
 ## Current Position
 
-Phase: 11 of 14 (Knowledgebase Audit, Claim Cross-Verification & Coverage Expansion)
-Plan: 11-01
-Status: Ready to execute
-Last activity: 2026-11-07 — Initialized Milestone v1.2 (Phases 11–14)
+Phase: 14 of 14 (Workbench UI & Documentation Sync, Live GitHub Pages Redeploy & Final Audit)
+Plan: 14-01
+Status: Complete
+Last activity: 2026-11-07 — Completed Milestone v1.2 (`Phases 11–14`) and Weapon Swing Speed Archetype Fidelity Analysis
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed (v1.0–v1.1): 18
-- Average duration: 6.9 min
+- Total plans completed (v1.0–v1.2): 22
+- Average duration: 6.5 min
 
 ## Accumulated Context
 

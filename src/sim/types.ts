@@ -78,6 +78,40 @@ export interface BracketBudget {
   enhancePotionsPct?: number;
   /** Reflect Physical Damage item affix (`i18n-en-abilities.js:2616`). */
   reflectPhysicalPct?: number;
+  /** Optional weapon family override (`fast_1h`, `balanced_1h`, `heavy_2h`) for weapon speed/damage/parry trade-off simulation. */
+  weaponArchetypeId?: WeaponArchetypeId;
+  /** Optional explicit two-handed vs one-handed override (`true` = 41,140 Bushido parry divisor; `false` = 48,000). */
+  isTwoHandedOverride?: boolean;
+  /** Optional explicit shield override (`true` = 400 shield parry divisor). */
+  hasShieldOverride?: boolean;
+}
+
+export type WeaponArchetypeId = 'fast_1h' | 'balanced_1h' | 'heavy_2h';
+
+export const WEAPON_ARCHETYPE_IDS: readonly WeaponArchetypeId[] = [
+  'fast_1h',
+  'balanced_1h',
+  'heavy_2h',
+] as const;
+
+export interface WeaponArchetypePoint {
+  classId: string;
+  weaponArchetypeId: WeaponArchetypeId;
+  weaponName: string;
+  baseWeaponSpeedMs: number;
+  effectiveSwingIntervalMs: number;
+  weaponDamageMultiplier: number;
+  isTwoHanded: boolean;
+  hasShield: boolean;
+  lowDefBossDps: number;
+  highDefBossDps: number;
+  multiTargetDps: number;
+  autoAttackDps: number;
+  procCounterDps: number;
+  executeDps: number;
+  totalSwings: number;
+  parryCount: number;
+  ehpPerSec: number;
 }
 
 export interface EnemyArchetype {
@@ -316,6 +350,7 @@ export interface GearAndWavesArtifact {
   damageBreakdowns: DamageChannelBreakdown[];
   materialTierCurves: MaterialTierPoint[];
   affixLoadoutCurves: AffixLoadoutPoint[];
+  weaponArchetypeCurves?: WeaponArchetypePoint[];
   multiWaveRuns: ClassMultiWaveRun[];
   rotationTimelines: ClassRotationTimeline[];
 }

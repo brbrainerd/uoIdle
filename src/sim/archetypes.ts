@@ -10,6 +10,7 @@ import type {
   PostureId,
   PostureProfile,
   ResolvedClassStats,
+  WeaponArchetypeId,
 } from './types.js';
 
 export interface MaterialTierSpec {
@@ -434,6 +435,101 @@ export const ENEMY_ARCHETYPES: Record<EnemyArchetypeId, EnemyArchetype> = {
   },
 };
 
+export interface WeaponArchetypeSpec {
+  weaponArchetypeId: WeaponArchetypeId;
+  nameByClass: Record<string, string>;
+  baseWeaponSpeedMs: number;
+  weaponDamageMultiplier: number;
+  isTwoHanded: boolean;
+  /** Whether a shield-capable class (`warrior`) equips a shield in this weapon archetype. */
+  allowShieldOnParryClasses: boolean;
+}
+
+/**
+ * Canonical UO / ModernUO (`BaseWeapon.cs:1356-1489`) weapon speed & base damage trade-off families:
+ * - `fast_1h` (`2,250ms` ML speed): Kryss / Tekagi / Wakizashi / Shortbow (`0.90x` per-hit damage, highest swing frequency for on-hit procs, Perfection ramp, and 5-step DeathStrike detonation).
+ * - `balanced_1h` (`2,500ms` ML speed): Katana / Scepter / Composite Bow (`1.00x` per-hit damage, standard baseline).
+ * - `heavy_2h` (`3,250ms` ML speed): No-Dachi / Lajatang / Tetsubo / Heavy Crossbow / Halberd (`1.30x` per-hit damage, two-handed `41,140` Bushido parry divisor, no shield on Warrior).
+ */
+export const WEAPON_ARCHETYPE_SPECS: Record<WeaponArchetypeId, WeaponArchetypeSpec> = {
+  fast_1h: {
+    weaponArchetypeId: 'fast_1h',
+    nameByClass: {
+      warrior: 'Broadsword & Heater Shield (2.25s 1H)',
+      mage: 'Spellweaver Wand (2.25s 1H)',
+      ranger: 'Yumi / Repeating Bow (2.25s Fast)',
+      samurai: 'Wakizashi / Kama (2.25s 1H)',
+      ninja: 'Kryss / Tekagi Claws (2.25s 1H)',
+    },
+    baseWeaponSpeedMs: 2250,
+    weaponDamageMultiplier: 0.9,
+    isTwoHanded: false,
+    allowShieldOnParryClasses: true,
+  },
+  balanced_1h: {
+    weaponArchetypeId: 'balanced_1h',
+    nameByClass: {
+      warrior: 'Scepter & Order Shield (2.50s 1H)',
+      mage: 'Gnarled Staff (2.50s 2H)',
+      ranger: 'Composite Bow (2.50s 2H)',
+      samurai: 'Katana / Bokuto (2.50s 1H)',
+      ninja: 'Sai / Kama Pair (2.50s 1H)',
+    },
+    baseWeaponSpeedMs: 2500,
+    weaponDamageMultiplier: 1.0,
+    isTwoHanded: false,
+    allowShieldOnParryClasses: true,
+  },
+  heavy_2h: {
+    weaponArchetypeId: 'heavy_2h',
+    nameByClass: {
+      warrior: 'Halberd / War Hammer (3.25s 2H)',
+      mage: 'Black Staff (3.25s 2H)',
+      ranger: 'Heavy Crossbow (3.25s 2H)',
+      samurai: 'No-Dachi / Lajatang (3.25s 2H)',
+      ninja: 'Fukiya & Heavy Kama (3.25s 2H)',
+    },
+    baseWeaponSpeedMs: 3250,
+    weaponDamageMultiplier: 1.3,
+    isTwoHanded: true,
+    allowShieldOnParryClasses: false,
+  },
+};
+
+export function buildWeaponArchetypeBudget(
+  classId: string,
+  weaponArchetypeId: WeaponArchetypeId,
+  baseBracket: BracketBudget = BRACKET_BUDGETS.L60
+): { weaponName: string; spec: WeaponArchetypeSpec; budget: BracketBudget } {
+  const spec = WEAPON_ARCHETYPE_SPECS[weaponArchetypeId];
+  const defaultProfile = CLASS_WEAPON_PROFILES[classId] ?? {
+    baseWeaponSpeedMs: 2500,
+    hasShield: false,
+    isTwoHanded: false,
+  };
+  const isTwoHanded =
+    weaponArchetypeId === 'heavy_2h'
+      ? true
+      : weaponArchetypeId === 'fast_1h'
+        ? false
+        : defaultProfile.isTwoHanded;
+  const hasShield =
+    spec.allowShieldOnParryClasses && !isTwoHanded ? defaultProfile.hasShield : false;
+
+  return {
+    weaponName: spec.nameByClass[classId] ?? `${weaponArchetypeId} (${spec.baseWeaponSpeedMs}ms)`,
+    spec,
+    budget: {
+      ...baseBracket,
+      baseWeaponSpeedMs: spec.baseWeaponSpeedMs,
+      weaponAvgDmg: Math.round(baseBracket.weaponAvgDmg * spec.weaponDamageMultiplier * 100) / 100,
+      weaponArchetypeId,
+      isTwoHandedOverride: isTwoHanded,
+      hasShieldOverride: hasShield,
+    },
+  };
+}
+
 export const CLASS_WEAPON_PROFILES: Record<
   string,
   { baseWeaponSpeedMs: number; hasShield: boolean; isTwoHanded: boolean }
@@ -503,6 +599,18 @@ export function resolveClassStatsForBracket(
     hasShield: classDef.starterSkills.some((s) => s.skillKey === 'parry'),
     isTwoHanded: false,
   };
+  const resolvedBaseWeaponSpeedMs =
+    bracket.weaponArchetypeId !== undefined || bracket.baseWeaponSpeedMs !== 2500
+      ? bracket.baseWeaponSpeedMs
+      : weaponProfile.baseWeaponSpeedMs;
+  const resolvedIsTwoHanded =
+    bracket.isTwoHandedOverride !== undefined
+      ? bracket.isTwoHandedOverride
+      : weaponProfile.isTwoHanded;
+  const resolvedHasShield =
+    bracket.hasShieldOverride !== undefined
+      ? bracket.hasShieldOverride
+      : weaponProfile.hasShield;
 
   return {
     str,
@@ -513,8 +621,8 @@ export function resolveClassStatsForBracket(
     maxStamina,
     maxMana,
     levelFactor,
-    hasShield: weaponProfile.hasShield,
-    isTwoHanded: weaponProfile.isTwoHanded,
-    baseWeaponSpeedMs: weaponProfile.baseWeaponSpeedMs,
+    hasShield: resolvedHasShield,
+    isTwoHanded: resolvedIsTwoHanded,
+    baseWeaponSpeedMs: resolvedBaseWeaponSpeedMs,
   };
 }

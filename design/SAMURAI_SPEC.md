@@ -85,11 +85,11 @@ To satisfy both **raw catalog provenance** (`unlockLevel` preserved at `1, 5, 10
 | Milestone (`progressionTreeLevel`) | Ability ID (`id` / `catalogId`) | Progression `type` | Raw Catalog Status & `unlockLevel` | `kind` / `tab` | `spellId` / `weaponAbilityRef` | `cooldownMs` / `customCooldownMs` | Cost (`mana` / `stam`) | `effectType` & `statusEffect` Summary |
 |---:|---|---|---|---:|---:|---:|---:|---|
 | **`L1`** | `samurai_way` | `"passive"` | Pre-existing (`unlockLevel: 75`) | `Passive` / `ability` | `null` / `null` | `0` / `0` | `0` / `0` | `direct_damage`, `statusEffect: null` (100% weapon auto-attack + passive Bushido Weapon Parry) |
-| **`L5`** | `samurai_lightning` | `"skill"` | Pre-existing (`unlockLevel: 1`) | `SpecialMove` / `ability` | `404` / `null` | `9000` / `0` | `10` / `0` | `direct_damage` (`1.10x–1.20x`), `samurai_lightning_stagger` (`3000ms`, `disarm: 1`) |
-| **`L10`** | `samurai_perfection` | `"mechanic"` | New (`unlockLevel: 10`) | `Custom` / `ability` | `null` / `null` | `14000` / `14000` | `8` / `0` | `self_buff`, `samurai_perfection_buff` (`9000ms`, `perfection_streak_pct: +10%`) |
+| **`L5`** | `samurai_lightning` | `"skill"` | Pre-existing (`unlockLevel: 1`) | `SpecialMove` / `ability` | `404` / `null` | `9000` / `0` | `10` / `0` | `direct_damage` (`1.15x–1.25x`), `samurai_lightning_stagger` (`3000ms`, `disarm: 1`) |
+| **`L10`** | `samurai_perfection` | `"mechanic"` | New (`unlockLevel: 10`) | `Custom` / `ability` | `null` / `null` | `14000` / `14000` | `8` / `0` | `self_buff`, `samurai_perfection_buff` (`9000ms`, `perfection_streak_pct: +14%`) |
 | **`L15`** | `samurai_honorable` | `"skill"` | Pre-existing (`unlockLevel: 10`) | `SpecialMove` / `ability` | `400` / `null` | `9000` / `0` | `0` / `10` | `direct_damage` (`1.35x–1.45x`, `1.85x` at `hp <= 35%`), `samurai_honorable_haste` (`9000ms`, `attack_speed_pct: +15%`) |
-| **`L20`** | `samurai_confidence` | `"spell"` | New (`unlockLevel: 20`) | `Spell` / `spell` | `401` / `null` | `18000` / `0` | `8` / `0` | `heal` (`0.02x` Bushido emergency heal at `hp <= 65%` in Mode A; on-parry HP/Stam restore in Mode B) |
-| **`L25`** | `samurai_counter` | `"spell"` | Pre-existing (`unlockLevel: 5`) | `Spell` / `spell` | `403` / `null` | `7000` / `0` | `10` / `0` | `direct_damage` (`1.50x–1.60x`), `samurai_counter_stance` (`7000ms`, `damage_dealt_pct: +18%`) |
+| **`L20`** | `samurai_confidence` | `"spell"` | New (`unlockLevel: 20`) | `Spell` / `spell` | `401` / `null` | `18000` / `0` | `8` / `0` | `heal` (`0.02x` Bushido emergency heal at `hp <= 55%` in Mode A; on-parry HP/Stam restore in Mode B) |
+| **`L25`** | `samurai_counter` | `"spell"` | Pre-existing (`unlockLevel: 5`) | `Spell` / `spell` | `403` / `null` | `7000` / `0` | `10` / `0` | `direct_damage` (`1.55x–1.65x`), `samurai_counter_stance` (`7000ms`, `damage_dealt_pct: +18%`) |
 | **`L30`** | `samurai_double_strike` | `"skill"` | Shared alias (`warrior_double_strike`, `unlockLevel: 30`) | `WeaponAbility` / `ability` | `null` / `7` | `9000` / `0` | `12` / `0` | `direct_damage` (`0.90x` weapon strike, `hits: 1`) |
 | **`L35`** | `samurai_evasion` | `"spell"` | New (`unlockLevel: 35`) | `Spell` / `spell` | `402` / `null` | `20000` / `0` | `10` / `0` | `self_buff`, `samurai_evasion_stance` (`posture`, `5000ms`, `defense_pct: +4%`, `exclusive_posture`) |
 | **`L40`** | `samurai_momentum_strike` | `"spell"` | New (`unlockLevel: 40`) | `Spell` / `spell` | `405` / `null` | `8000` / `0` | `12` / `0` | `direct_damage` (`1.00x–1.10x`, `splashRatio: 1.15`), `samurai_momentum_stagger` (`3000ms`, `disarm: 1`) |
@@ -397,23 +397,27 @@ All 12 progression milestones and ability entries in `design/drop-in/samurai.jso
 
 ## Section 6 — Verified Mode A Simulation Parity Summary (`L10`, `L25`, `L45`, `L60`)
 
-Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/samurai.json --json` confirms that `design/drop-in/samurai.json` reproduces the pre-verified Mode A parity curve across all four progression brackets:
+Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/samurai.json --json` confirms that `design/drop-in/samurai.json` reproduces the pre-verified `v1.2` Mode A parity curve across all four progression brackets:
 
 | Bracket | `sustainedBossDps` (`low_def_boss`) | `highDefBossDps` (`high_def_boss`) | `multiTargetDps` (`multi_target_pack`) | `trashTtkSec` (`fast_trash`) | `netManaDeltaPerMin` | `netStaminaDeltaPerMin` | `ehpPerSec` | Live Baseline Band Status |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
-| **`L10`** | **7.26** | **3.42** | **6.62** | **8.57s** | **-9.50** | **+188.40** | **15.67** | **PASS** (Within $\pm 8\%$ of Warrior `7.32` DPS / `15.48` EHP) |
-| **`L25`** | **47.99** | **21.10** | **54.74** | **3.48s** | **-74.00** | **+266.40** | **53.24** | **PASS** (Inside `[45.06, 52.39]` Ranger–Warrior DPS & `[46.88, 54.63]` EHP) |
-| **`L45`** | **178.87** | **83.97** | **196.29** | **3.24s** | **-94.50** | **+352.40** | **146.91** | **PASS** (Inside `[167.35, 179.72]` 3-class DPS & `[143.43, 151.90]` EHP) |
-| **`L60`** | **363.15** | **212.02** | **465.83** | **2.81s** | **0.00** | **+432.00** | **318.30** | **PASS** (Inside `[351.58, 387.85]` 3-class DPS & `+0.2%` vs Warrior `317.63` EHP) |
+| **`L10`** | **6.21** | **2.59** | **6.00** | **8.57s** | **-9.50** | **+188.40** | **16.23** | **PASS** (Within $\pm 8\%$ of Warrior `6.67` DPS & inside `[15.42, 17.24]` EHP) |
+| **`L25`** | **46.07** | **19.38** | **50.45** | **3.44s** | **-57.00** | **+266.40** | **53.46** | **PASS** (Within $\pm 8\%$ of Ranger–Warrior DPS & inside `[46.48, 56.42]` EHP) |
+| **`L45`** | **163.18** | **74.12** | **198.13** | **3.24s** | **-55.50** | **+352.40** | **151.13** | **PASS** (Within $\pm 8\%$ of 3-class DPS & inside `[147.50, 161.38]` EHP) |
+| **`L60`** | **369.04** | **189.75** | **451.17** | **2.81s** | **+51.00** | **+432.00** | **328.04** | **PASS** (Inside `[345.15, 403.59]` 3-class DPS & inside `[327.00, 370.67]` EHP) |
 
 ---
 
-## Section 7 — Milestone `v1.1` Idle-Game Mechanical Refinements & Gear/Wave Telemetry (`IDLE-01`, `SIM-04`)
+## Section 7 — Milestone `v1.1`–`v1.2` Idle-Game Mechanical Refinements, Gear & Weapon Speed Telemetry (`IDLE-01`, `SIM-04`–`SIM-09`)
 
 To ensure every Samurai ability feels impactful in **100ms automated AFK idle combat** without manual cursor or stance toggling:
-1. **`samurai_confidence` (*Confidence* — `L20`):** In addition to an immediate `15% MaxHP` heal (`<65%` HP trigger), applies `samurai_confidence_calm` (*Inner Calm*: `+3%` `evasion_pct` for `8.0s`). In Mode B, every successful parry while *Inner Calm* is active restores `+2` HP and `+2` Stamina.
+1. **`samurai_confidence` (*Confidence* — `L20`):** Restores `15% MaxHP` (`<= 55%` `ro(e)` HP trigger) and applies `samurai_confidence_calm` (*Inner Calm*: `+3%` `evasion_pct` for `8.0s`). In Mode B, every successful parry while *Inner Calm* is active restores `+2` HP and `+2` Stamina.
 2. **`samurai_evasion` (*Evasion* — `L35`):** Grants `samurai_evasion_stance` (`+4%` `defense_pct` and `+6%` `evasion_pct` for `5.0s`, `exclusive_posture`) and in Mode B arms an **Iaido Flash Riposte** (`0.12x` bonus weapon counter-slash on parry when `CounterAttack` is not already active).
 3. **Material Tier (`Iron -> Valorite`) & 10-Wave Dungeon Pull Scaling (`data/sim-baselines/gear-and-waves-v1.1.json`):**
-   - Samurai scales monotonically across all 9 canonical UO metal tiers at `L60` (`Iron` `138.99` DPS / `169.36` EHP/s $\to$ `Valorite` `391.92` DPS / `318.91` EHP/s).
-   - Across a 10-wave consecutive dungeon pull (`1,500ms` inter-wave transition), Samurai clears all 10 waves in `48.20s` (`403.42` average wave DPS, `21` total parries, maintaining `100%` ending stamina and `70.32%` minimum mana).
+   - Samurai scales monotonically across all 9 canonical UO metal tiers (`+8%` weapon / `+12%` armor per step) at `L60` (`Iron` `121.51` DPS / `176.30` EHP/s $\to$ `Valorite` `366.61` DPS / `322.81` EHP/s).
+   - Across a 10-wave consecutive dungeon pull (`1,500ms` inter-wave transition on the unified tick kernel), Samurai clears all 10 waves in `101.60s` (`335.24` average wave DPS, `17` total parries, maintaining `80.88%` minimum HP and `75.48%` minimum mana).
+4. **Weapon Swing Speed Archetypes (`2.25s` Fast 1H vs `2.50s` Balanced 1H vs `3.25s` Heavy 2H):**
+   - `fast_1h` (`Wakizashi / Kama`, `2,250ms` base -> `1,020ms` effective, `57` swings/min) builds `Perfection` streak stacks `~30%` faster (`361.85` Boss DPS, `328.52` EHP/s).
+   - `balanced_1h` (`Katana / Bokuto`, `2,500ms` base -> `1,133ms` effective, `52` swings/min) delivers `367.22` Boss DPS and `328.52` EHP/s.
+   - `heavy_2h` (`No-Dachi / Lajatang`, `3,250ms` base -> `1,473ms` effective, `44` swings/min) switches `CheckParry` to the **`2H` divisor (`41,140`)** (`12 -> 13` parries, `335.62` EHP/s) while scaling `Kensei's Judgment`, `Honorable Execution`, and `Momentum Strike` by `1.30x` (`416.80` Boss DPS, `238.75` High-Def Boss DPS).
 

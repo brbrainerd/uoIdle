@@ -7,8 +7,10 @@ import {
   ENEMY_ARCHETYPES,
   MATERIAL_TIER_SPECS,
   POSTURE_PROFILES,
+  WEAPON_ARCHETYPE_SPECS,
   buildAffixLoadoutBudget,
   buildMaterialTierBudget,
+  buildWeaponArchetypeBudget,
   resolveClassStatsForBracket,
   resolvePostureProfile,
 } from '../src/sim/archetypes.js';
@@ -449,6 +451,48 @@ test('All 5 classes survive 10 consecutive dungeon waves on the unified combat t
     const b = buildMaterialTierBudget(tierSpec);
     assert.ok(b.weaponAvgDmg >= 14 && b.weaponAvgDmg <= 46);
   }
+});
+
+// 16. Weapon swing speed archetypes (2.25s fast_1h vs 2.50s balanced_1h vs 3.25s heavy_2h):
+// cadence, 1,000ms floor clipping, Bushido 1H/2H parry divisor (48,000 vs 41,140), Warrior shield loss, and SpecialMove scaling
+test('Weapon speed archetypes (fast_1h 2.25s, balanced_1h 2.50s, heavy_2h 3.25s) enforce cadence, floor clipping, and handedness coupling', () => {
+  assert.equal(Object.keys(WEAPON_ARCHETYPE_SPECS).length, 3);
+
+  const fastSamuraiBudget = buildWeaponArchetypeBudget('samurai', 'fast_1h').budget;
+  const heavySamuraiBudget = buildWeaponArchetypeBudget('samurai', 'heavy_2h').budget;
+  const fastSamuraiStats = resolveClassStatsForBracket(samurai, fastSamuraiBudget);
+  const heavySamuraiStats = resolveClassStatsForBracket(samurai, heavySamuraiBudget);
+
+  assert.equal(fastSamuraiStats.baseWeaponSpeedMs, 2250);
+  assert.equal(fastSamuraiStats.isTwoHanded, false);
+  assert.equal(heavySamuraiStats.baseWeaponSpeedMs, 3250);
+  assert.equal(heavySamuraiStats.isTwoHanded, true);
+
+  // Samurai 2H (41,140 divisor) yields higher Bushido parry than 1H (48,000 divisor)
+  const parry1H = computeParryAndAvoidanceChance(samurai, fastSamuraiBudget, fastSamuraiStats, 0);
+  const parry2H = computeParryAndAvoidanceChance(samurai, heavySamuraiBudget, heavySamuraiStats, 0);
+  assert.ok(parry2H > parry1H, 'Samurai heavy_2h (41,140 divisor) must have higher parry chance than fast_1h (48,000 divisor)');
+
+  // Warrior loses shield parry when switching from fast_1h/balanced_1h (hasShield: true) to heavy_2h (hasShield: false)
+  const fastWarriorBudget = buildWeaponArchetypeBudget('warrior', 'fast_1h').budget;
+  const heavyWarriorBudget = buildWeaponArchetypeBudget('warrior', 'heavy_2h').budget;
+  const fastWarriorStats = resolveClassStatsForBracket(warrior, fastWarriorBudget);
+  const heavyWarriorStats = resolveClassStatsForBracket(warrior, heavyWarriorBudget);
+  const wParryShield = computeParryAndAvoidanceChance(warrior, fastWarriorBudget, fastWarriorStats, 0);
+  const wParry2H = computeParryAndAvoidanceChance(warrior, heavyWarriorBudget, heavyWarriorStats, 0);
+  assert.ok(wParryShield > wParry2H, 'Warrior 1H+Shield must have higher parry chance than 2H Halberd without shield');
+
+  // Ninja fast_1h (2,250ms) reaches the 1,000ms hard floor at L60 and delivers significantly more swings than heavy_2h (3,250ms)
+  const fastNinjaSim = simulateScenarioDetailed(ninja, 'L60', 'low_def_boss', 'mode_b', buildWeaponArchetypeBudget('ninja', 'fast_1h').budget);
+  const heavyNinjaSim = simulateScenarioDetailed(ninja, 'L60', 'low_def_boss', 'mode_b', buildWeaponArchetypeBudget('ninja', 'heavy_2h').budget);
+  assert.ok(
+    fastNinjaSim.telemetry.totalSwings > heavyNinjaSim.telemetry.totalSwings + 10,
+    'Ninja fast_1h (2.25s) must land >10 more swings in 60s than heavy_2h (3.25s)'
+  );
+  assert.ok(
+    heavyNinjaSim.telemetry.sustainedDps > fastNinjaSim.telemetry.sustainedDps,
+    'Heavy 2H (1.30x weapon damage without 1,000ms haste clipping) must scale fixed-cooldown SpecialMoves higher than clipped fast_1h'
+  );
 });
 
 let passed = 0;

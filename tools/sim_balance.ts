@@ -5,6 +5,7 @@ import { runClassBaselineSuite, runGearAndWaveSuite } from '../src/sim/engine.js
 import {
   BRACKET_IDS,
   MATERIAL_TIER_IDS,
+  WEAPON_ARCHETYPE_IDS,
   type BracketId,
   type ClassBracketSummary,
   type GearAndWavesArtifact,
@@ -513,6 +514,19 @@ function main(): void {
         errors.push(`Multi-wave pull run for ${cls.id} did not complete all 10 waves`);
       } else if (waveRun.minHpPct <= 0) {
         errors.push(`Multi-wave pull run for ${cls.id} died (minHpPct=${waveRun.minHpPct})`);
+      }
+
+      const wepPts = (gearWaves1.weaponArchetypeCurves ?? []).filter((p) => p.classId === cls.id);
+      if (wepPts.length !== WEAPON_ARCHETYPE_IDS.length) {
+        errors.push(`Missing weapon archetype curve points for ${cls.id}`);
+      } else {
+        const fast = wepPts.find((p) => p.weaponArchetypeId === 'fast_1h');
+        const heavy = wepPts.find((p) => p.weaponArchetypeId === 'heavy_2h');
+        if (!fast || !heavy || !(fast.totalSwings > heavy.totalSwings)) {
+          errors.push(
+            `Weapon speed cadence sanity check failed for ${cls.id}: fast_1h swings (${fast?.totalSwings}) <= heavy_2h swings (${heavy?.totalSwings})`
+          );
+        }
       }
     }
 

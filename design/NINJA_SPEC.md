@@ -420,24 +420,28 @@ All 12 progression milestones and all 13 ability entries in `design/drop-in/ninj
 
 ## Section 6 — Deterministic Mode A Parity Verification Summary (`tools/sim_balance.ts`)
 
-Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/ninja.json` confirms that `design/drop-in/ninja.json` reproduces the exact pre-verified Mode A parity curve across all four progression brackets (`L10`, `L25`, `L45`, `L60`):
+Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/ninja.json` confirms that `design/drop-in/ninja.json` reproduces the exact pre-verified `v1.2` Mode A parity curve across all four progression brackets (`L10`, `L25`, `L45`, `L60`):
 
 | Bracket | `sustainedBossDps` (`low_def_boss`) | `highDefBossDps` (`high_def_boss`) | `multiTargetDps` (`multi_target_pack`) | `trashTtkSec` (`fast_trash`) | `netManaDeltaPerMin` | `netStaminaDeltaPerMin` | `ehpPerSec` | Baseline Envelope Status |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
-| **L10** | **7.28** (Warrior `7.32`, `-0.5%`) | **2.99** (Warrior `3.04`, `-1.6%`) | **6.63** (`-7.9%` vs W) | **8.57s** (`0.0%` vs W) | `-11.50` | `+188.40` | **15.55** (Warrior `15.48`, `+0.5%`) | **PASS** |
-| **L25** | **53.81** (Warrior `52.39`, `+2.7%`) | **21.77** (in `[21.49, 25.52]`) | **48.79** (in `[42.18, 65.20]`) | **4.03s** (Warrior `4.07s`, `-1.0%`) | `-2.00` | `+146.40` | **45.90** (Ranger `46.88`, `-2.1%`) | **PASS** |
-| **L45** | **190.26** (Mage `179.72`, `+5.8%`) | **92.90** (Warrior `91.52`, `+1.5%`) | **208.70** (in `[176.44, 258.60]`) | **3.16s** (Mage `3.23s`, `-2.2%`) | `-30.50` | `+302.40` | **149.46** (in `[143.43, 151.90]`) | **PASS** |
-| **L60** | **374.50** (in `[351.58, 387.85]`) | **183.56** (in `[173.45, 213.73]`) | **426.76** (in `[384.42, 710.32]`) | **2.93s** (in `[2.43s, 2.98s]`) | `+26.00` | `+426.00` | **325.83** (in `[317.63, 366.26]`) | **PASS** |
+| **L10** | **6.83** (in `[6.67, 7.93]`) | **2.65** (in `[2.00, 3.09]`) | **6.40** (`-1.1%` vs W) | **8.57s** (`0.0%` vs W) | `-11.50` | `+188.40` | **16.61** (in `[15.42, 17.24]`) | **PASS** |
+| **L25** | **51.38** (Warrior `49.04`, `+4.8%`) | **20.44** (Warrior `20.66`, `-1.1%`) | **47.92** (in `[44.54, 56.86]`) | **3.82s** (in `[1.88s, 4.10s]`) | `+15.00` | `+146.40` | **48.79** (in `[46.48, 56.42]`) | **PASS** |
+| **L45** | **193.08** (Mage `192.37`, `+0.4%`) | **87.10** (in `[79.69, 91.28]`) | **200.54** (in `[183.97, 226.28]`) | **3.14s** (in `[3.10s, 3.28s]`) | `-6.50` | `+302.40` | **156.57** (in `[147.50, 161.38]`) | **PASS** |
+| **L60** | **370.85** (in `[345.15, 403.59]`) | **184.06** (in `[154.99, 226.54]`) | **433.54** (in `[383.58, 731.67]`) | **2.87s** (in `[2.72s, 2.99s]`) | `+70.00` | `+426.00` | **330.45** (in `[327.00, 370.67]`) | **PASS** |
 
 ---
 
-## Section 7 — Milestone `v1.1` Idle-Game Mechanical Refinements & Gear/Wave Telemetry (`IDLE-01`, `SIM-04`)
+## Section 7 — Milestone `v1.1`–`v1.2` Idle-Game Mechanical Refinements, Gear & Weapon Speed Telemetry (`IDLE-01`, `SIM-04`–`SIM-09`)
 
 To ensure every Ninja ability operates as an exciting, zero-micro idle combat loop:
 1. **`ninja_animal_form` (*Animal Form* — `L25`):** Channels the *Kitsune & Wolf Aspect* (`+10%` `attack_speed_pct` and `+3%` `evasion_pct` for `8.0s`) without locking out weapon `SpecialMove` skills, and in Mode B triggers a bonus **Kitsune & Wolf Spirit Claw** slash (`0.12x` weapon damage with `25%` armor ignore) on every 3rd landed auto-attack hit.
 2. **`ninja_smoke_bomb` (*Smoke Bomb* — `L35`):** Enters a `6.0s` mid-combat *Smoke Veil* (`-8%` `damage_taken_pct`, `+6%` `damage_dealt_pct`) without consuming backpack bomb stacks, and in Mode B immediately accelerates `ninja_shuriken` cooldown recovery by `2,500ms` (*Vanish & Volley* combo).
 3. **`ninja_death` & `ninja_twin_shadow` Delayed Detonation Guard (`L20` / `L60`):** In Mode B, the hotbar priority evaluator prevents overwriting an active Death Strike mark (`state.deathStrikeSwingsRemaining > 0`) and triggers the pressure-point detonation on the 3rd connected weapon swing.
 4. **Material Tier (`Iron -> Valorite`) & 10-Wave Dungeon Pull Scaling (`data/sim-baselines/gear-and-waves-v1.1.json`):**
-   - Ninja scales monotonically across all 9 UO metal/craft tiers at `L60` (`Iron` `135.72` DPS / `180.93` EHP/s $\to$ `Valorite` `367.38` DPS / `330.44` EHP/s).
-   - Across a 10-wave consecutive dungeon pull (`1,500ms` inter-wave transition), Ninja clears all 10 waves in `50.80s` (`372.24` average wave DPS, `8` shadow clone interceptions, maintaining `100%` ending stamina and `63.87%` minimum mana).
+   - Ninja scales monotonically across all 9 UO metal/craft tiers (`+8%` weapon / `+12%` armor per step) at `L60` (`Iron` `124.88` DPS / `163.05` EHP/s $\to$ `Valorite` `363.62` DPS / `335.16` EHP/s).
+   - Across a 10-wave consecutive dungeon pull (`1,500ms` inter-wave transition on the unified tick kernel), Ninja clears all 10 waves in `104.30s` (`332.67` average wave DPS, `6` shadow clone interceptions, maintaining `71.39%` minimum HP and `69.68%` minimum mana).
+5. **Weapon Swing Speed Archetypes (`2.25s` Fast 1H vs `2.50s` Balanced 1H vs `3.25s` Heavy 2H):**
+   - `fast_1h` (`Kryss / Tekagi Claws`, `2,250ms` base -> `1,000ms` floor, `60` swings/min) maximizes `Kitsune & Wolf Spirit Claw` (every 3rd swing) and `Death Strike` / `Twin Shadow Mark` detonation cadence (`349.00` Boss DPS, `336.54` EHP/s).
+   - `balanced_1h` (`Sai / Kama Pair`, `2,500ms` base -> `1,061ms` effective, `55` swings/min) delivers `364.22` Boss DPS and `336.54` EHP/s without floor clipping.
+   - `heavy_2h` (`Fukiya & Heavy Kama`, `3,250ms` base -> `1,380ms` effective, `43` swings/min) scales cooldown-gated `Backstab`, `Focus Attack`, `Ki Attack`, and `Twin Shadow` burst by `1.30x` (`408.29` Boss DPS, `475.83` Pack DPS).
 

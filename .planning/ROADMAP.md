@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 UO Idle Samurai & Ninja Class Skill Lines & Mechanics Knowledgebase** — Phases 1–6 (shipped 2026-11-07) — [Archive](milestones/v1.0-ROADMAP.md)
 - ✅ **v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal** — Phases 7–10 (shipped 2026-11-07) — [Archive](milestones/v1.1-ROADMAP.md)
-- 🚧 **v1.2 Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit** — Phases 11–14 (active)
+- ✅ **v1.2 Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit** — Phases 11–14 (shipped 2026-11-07)
 
 ---
 
@@ -32,12 +32,12 @@
 
 </details>
 
-### 🚧 v1.2 Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit (Phases 11–14)
+### ✅ v1.2 Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit (Phases 11–14) — SHIPPED 2026-11-07
 
-- [ ] **Phase 11: Knowledgebase Audit, Claim Cross-Verification & Coverage Expansion** — Audit all `mechanics/` pages, promote multi-source corroborated claims to `[verified]`, add KB pages for `bestiary-and-wiki.js`, `hunt-and-bot-config.js`, and `progression-tree-ui.js`, and author `mechanics/topics/simulator-fidelity-audit.md` (`KB-05`, `KB-06`)
-- [ ] **Phase 12: Live-Codebase Combat Math, Affix Caps, Postures & Hotbar `ro(e)` Parity** — Enforce live `SDI <= 50%` (+`INT` scaling), `DI <= 100%` (+skill `>100` flattening), gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, defender `DCI`, 1H/2H/Shield `CheckParry`, secondary-target `splashRatio`, `[huntpostura` postures (`agressivo`/`equilibrado`/`defensivo`), `+8%/+12%` material-tier steps, class weapon speeds, and `ro(e)` hotbar auto-triggers (`SIM-06`, `SIM-07`)
-- [ ] **Phase 13: Unified Tick Kernel Refactor, Recalibrated 5-Class Parity (`±5–8%`) & Expanded Unit Tests** — Unify `simulateScenarioDetailed` and `simulateMultiWavePull` onto a single tick-step engine, recalibrate Samurai/Ninja tuning & baseline snapshots under the live formulas, and expand `tools/test_sim.ts` (`SIM-08`, `SIM-09`)
-- [ ] **Phase 14: Workbench UI & Documentation Sync, Live GitHub Pages Redeploy & Final Audit** — Regenerate all 5 HTML workbenches, Retina screenshots, `BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, and `NINJA_SPEC.md`, verify `7/7` gates, and redeploy to GitHub Pages (`UI-04`)
+- [x] **Phase 11: Knowledgebase Audit, Claim Cross-Verification & Coverage Expansion** (`1/1` plan) — completed 2026-11-07
+- [x] **Phase 12: Live-Codebase Combat Math, Affix Caps, Postures & Hotbar `ro(e)` Parity** (`1/1` plan) — completed 2026-11-07
+- [x] **Phase 13: Unified Tick Kernel Refactor, Recalibrated 5-Class Parity (`±5–8%`) & Expanded Unit Tests** (`1/1` plan) — completed 2026-11-07
+- [x] **Phase 14: Workbench UI & Documentation Sync, Live GitHub Pages Redeploy & Final Audit** (`1/1` plan) — completed 2026-11-07
 
 ---
 
@@ -102,7 +102,7 @@
 | 8. Authentic UO Gump/Item Art & AI Icons | v1.1 | 1/1 | Complete | 2026-11-07 |
 | 9. Interactive Paperdoll & Sim Telemetry UI | v1.1 | 1/1 | Complete | 2026-11-07 |
 | 10. Developer Portal & Live GitHub Pages | v1.1 | 1/1 | Complete | 2026-11-07 |
-| 11. KB Audit, Cross-Verification & Expansion | v1.2 | 0/1 | Not started | - |
-| 12. Live-Codebase Combat Math & Hotbar Parity | v1.2 | 0/1 | Not started | - |
-| 13. Unified Tick Kernel & 5-Class Recalibration | v1.2 | 0/1 | Not started | - |
-| 14. Workbench Sync & GitHub Pages Redeploy | v1.2 | 0/1 | Not started | - |
+| 11. KB Audit, Cross-Verification & Expansion | v1.2 | 1/1 | Complete | 2026-11-07 |
+| 12. Live-Codebase Combat Math & Hotbar Parity | v1.2 | 1/1 | Complete | 2026-11-07 |
+| 13. Unified Tick Kernel & 5-Class Recalibration | v1.2 | 1/1 | Complete | 2026-11-07 |
+| 14. Workbench Sync & GitHub Pages Redeploy | v1.2 | 1/1 | Complete | 2026-11-07 |
