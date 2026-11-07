@@ -562,6 +562,7 @@ function main(): void {
       baselineScenarios: baseRun1.scenarios.length,
       parityModes: ['mode_a', 'mode_b'],
       materialTiers: MATERIAL_TIER_IDS.length,
+      weaponArchetypes: WEAPON_ARCHETYPE_IDS.length,
       multiWavePulls: gearWaves1.multiWaveRuns.length,
       baselineArtifact: DEFAULT_BASELINE_PATH,
       parityArtifact: DEFAULT_PARITY_PATH,

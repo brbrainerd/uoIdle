@@ -313,6 +313,11 @@ test('resolveHotbarHealTriggerPct and computeSkillBaseOutput enforce ro(e) heal 
   const wwOut = computeSkillBaseOutput(samurai, whirlwind, l60, samStats, 100, 3, 0, 0);
   assert.equal(wwOut.targetsHit, 3);
   assert.equal(wwOut.splashRatio, 0.5, 'Frenzied Whirlwind must carry 0.5 secondary splashRatio');
+
+  const momentum = samurai.abilities.find((s) => s.id === 'samurai_momentum_strike')!;
+  const momOut = computeSkillBaseOutput(samurai, momentum, l60, samStats, 100, 3, 0, 0);
+  assert.equal(momOut.targetsHit, 2);
+  assert.equal(momOut.splashRatio, 1.15, 'Momentum Strike must preserve 1.15 secondary splashRatio');
 });
 
 // 10. Target resistance mitigation, 70% cap, Armor Ignore, and Armor Break / Surprise Attack shred

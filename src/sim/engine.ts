@@ -521,7 +521,7 @@ export function computeSkillBaseOutput(
 
   const configuredSplash = skill.scalingFormula.splashRatio ?? 0;
   const splashRatio =
-    configuredSplash > 0 && configuredSplash <= 1 ? configuredSplash : 1.0;
+    configuredSplash > 0 && configuredSplash <= 1.5 ? configuredSplash : 1.0;
 
   const autoRaw = computeAutoAttackRawDamage(
     bracket,
@@ -1788,7 +1788,8 @@ export function simulateScenarioDetailed(
     0.1,
     0.8
   );
-  const ehpMultiplier = 1 / (1 - avgResistFraction);
+  const postureIncomingMult = resolvePostureProfile(stats.posture).incomingDamageMultiplier;
+  const ehpMultiplier = 1 / ((1 - avgResistFraction) * postureIncomingMult);
   const ehpPerSec = round2(
     (stats.maxHP * ehpMultiplier) / 60 +
       (ctx.totalHpHealedOrRegenerated * ehpMultiplier +
@@ -1912,7 +1913,7 @@ export function simulateMultiWavePull(
   const archetype: EnemyArchetype = {
     archetypeId: 'multi_target_pack',
     name: 'Elite Dungeon Pull (2 targets)',
-    targetCount: 3,
+    targetCount: 2,
     waveCount,
     fightHorizonMs: 180000,
     hpMultiplier: 0.85,

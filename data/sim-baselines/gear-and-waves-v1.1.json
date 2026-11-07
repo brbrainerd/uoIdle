@@ -722,12 +722,12 @@
       "bracketId": "L45",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 101.48,
-      "specialMoveDps": 70.01,
+      "autoAttackDps": 101.34,
+      "specialMoveDps": 71.78,
       "executeDps": 21,
       "dotDps": 0,
       "procCounterDps": 2.7,
-      "totalDps": 195.19
+      "totalDps": 196.81
     },
     {
       "classId": "samurai",
@@ -770,12 +770,12 @@
       "bracketId": "L60",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 220.58,
-      "specialMoveDps": 179.82,
-      "executeDps": 51.96,
+      "autoAttackDps": 220.32,
+      "specialMoveDps": 184.06,
+      "executeDps": 52.13,
       "dotDps": 0,
       "procCounterDps": 4.48,
-      "totalDps": 456.84
+      "totalDps": 460.99
     },
     {
       "classId": "ninja",
@@ -1276,7 +1276,7 @@
       "hue": 0,
       "lowDefBossDps": 121.51,
       "highDefBossDps": 57.31,
-      "multiTargetDps": 165.25,
+      "multiTargetDps": 166.51,
       "ehpPerSec": 176.3
     },
     {
@@ -1287,7 +1287,7 @@
       "hue": 2419,
       "lowDefBossDps": 150.65,
       "highDefBossDps": 75.95,
-      "multiTargetDps": 219.52,
+      "multiTargetDps": 221.59,
       "ehpPerSec": 190.71
     },
     {
@@ -1298,7 +1298,7 @@
       "hue": 2406,
       "lowDefBossDps": 178.11,
       "highDefBossDps": 94.39,
-      "multiTargetDps": 265.99,
+      "multiTargetDps": 269.08,
       "ehpPerSec": 205.8
     },
     {
@@ -1309,7 +1309,7 @@
       "hue": 2413,
       "lowDefBossDps": 206.11,
       "highDefBossDps": 108.77,
-      "multiTargetDps": 277.97,
+      "multiTargetDps": 278.52,
       "ehpPerSec": 219.65
     },
     {
@@ -1320,7 +1320,7 @@
       "hue": 2418,
       "lowDefBossDps": 224.67,
       "highDefBossDps": 120.76,
-      "multiTargetDps": 303.97,
+      "multiTargetDps": 308.22,
       "ehpPerSec": 233.99
     },
     {
@@ -1331,7 +1331,7 @@
       "hue": 2213,
       "lowDefBossDps": 280.17,
       "highDefBossDps": 140.35,
-      "multiTargetDps": 331.89,
+      "multiTargetDps": 336.39,
       "ehpPerSec": 251.55
     },
     {
@@ -1342,7 +1342,7 @@
       "hue": 2425,
       "lowDefBossDps": 297.71,
       "highDefBossDps": 154.81,
-      "multiTargetDps": 372.48,
+      "multiTargetDps": 377.15,
       "ehpPerSec": 266.94
     },
     {
@@ -1353,7 +1353,7 @@
       "hue": 2207,
       "lowDefBossDps": 351.1,
       "highDefBossDps": 176.98,
-      "multiTargetDps": 398.69,
+      "multiTargetDps": 401.88,
       "ehpPerSec": 290.55
     },
     {
@@ -1364,7 +1364,7 @@
       "hue": 2219,
       "lowDefBossDps": 366.61,
       "highDefBossDps": 193.25,
-      "multiTargetDps": 456.74,
+      "multiTargetDps": 460.88,
       "ehpPerSec": 322.81
     },
     {
@@ -1639,7 +1639,7 @@
       "loadoutName": "Un-Affixed Base Gear",
       "lowDefBossDps": 174.13,
       "highDefBossDps": 87.94,
-      "multiTargetDps": 260.43,
+      "multiTargetDps": 263.36,
       "ehpPerSec": 214.19,
       "netManaDeltaPerMin": -150,
       "netStaminaDeltaPerMin": 318
@@ -1650,7 +1650,7 @@
       "loadoutName": "Swift Tempo & Keen Edge (+SSI/+Crit)",
       "lowDefBossDps": 351.54,
       "highDefBossDps": 183.75,
-      "multiTargetDps": 398.98,
+      "multiTargetDps": 402.7,
       "ehpPerSec": 309.92,
       "netManaDeltaPerMin": 56,
       "netStaminaDeltaPerMin": 440
@@ -1661,7 +1661,7 @@
       "loadoutName": "Heavy Execution & Spell Power (+DI/+SDI)",
       "lowDefBossDps": 405.93,
       "highDefBossDps": 212.5,
-      "multiTargetDps": 470.13,
+      "multiTargetDps": 475.96,
       "ehpPerSec": 309.92,
       "netManaDeltaPerMin": 59,
       "netStaminaDeltaPerMin": 440
@@ -1672,7 +1672,7 @@
       "loadoutName": "Tokuno Bastion & Parry (+DCI/+Resist/+Regen)",
       "lowDefBossDps": 312.77,
       "highDefBossDps": 169.04,
-      "multiTargetDps": 380.37,
+      "multiTargetDps": 386.26,
       "ehpPerSec": 416.41,
       "netManaDeltaPerMin": 157,
       "netStaminaDeltaPerMin": 545
@@ -1683,7 +1683,7 @@
       "loadoutName": "Grandmaster Valorite BiS (Full Affix Cap)",
       "lowDefBossDps": 514.6,
       "highDefBossDps": 315,
-      "multiTargetDps": 560.82,
+      "multiTargetDps": 566.49,
       "ehpPerSec": 410.4,
       "netManaDeltaPerMin": 201,
       "netStaminaDeltaPerMin": 518
@@ -1927,7 +1927,7 @@
       "hasShield": false,
       "lowDefBossDps": 361.85,
       "highDefBossDps": 185.84,
-      "multiTargetDps": 414.28,
+      "multiTargetDps": 419.72,
       "autoAttackDps": 236.79,
       "procCounterDps": 5.61,
       "executeDps": 30.33,
@@ -1946,7 +1946,7 @@
       "hasShield": false,
       "lowDefBossDps": 367.22,
       "highDefBossDps": 193.6,
-      "multiTargetDps": 456.84,
+      "multiTargetDps": 460.99,
       "autoAttackDps": 243.01,
       "procCounterDps": 5.64,
       "executeDps": 13.83,
@@ -1965,7 +1965,7 @@
       "hasShield": false,
       "lowDefBossDps": 416.8,
       "highDefBossDps": 238.75,
-      "multiTargetDps": 497.44,
+      "multiTargetDps": 503.72,
       "autoAttackDps": 256.83,
       "procCounterDps": 5.78,
       "executeDps": 24.58,
@@ -2397,8 +2397,8 @@
     },
     {
       "classId": "samurai",
-      "totalClearTimeSec": 101.6,
-      "averageWaveDps": 335.24,
+      "totalClearTimeSec": 101.5,
+      "averageWaveDps": 335.6,
       "minHpPct": 80.88,
       "minManaPct": 75.48,
       "totalParries": 17,
@@ -2505,11 +2505,11 @@
         },
         {
           "waveIndex": 10,
-          "waveClearTimeSec": 8.2,
-          "cumulativeTimeSec": 101.6,
-          "waveDps": 347.01,
+          "waveClearTimeSec": 8.1,
+          "cumulativeTimeSec": 101.5,
+          "waveDps": 350.63,
           "endingHpPct": 94.47,
-          "endingManaPct": 85.16,
+          "endingManaPct": 91.61,
           "endingStaminaPct": 100,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
