@@ -135,10 +135,14 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
+**Wave 1**
 
-- [ ] 05-01: Samurai (Bushido) skill line architecture, drop-in `design/drop-in/samurai.json`, Mode A/B definitions, and `design/SAMURAI_SPEC.md` (`CLASS-01`, `CLASS-03`)
-- [ ] 05-02: Ninja (Ninjitsu) skill line architecture, drop-in `design/drop-in/ninja.json`, Mode A/B definitions, and `design/NINJA_SPEC.md` (`CLASS-02`, `CLASS-03`)
-- [ ] 05-03: Tokuno weapon/equipment affix definitions (`design/drop-in/items-bushido-ninjitsu.json`), 5-class multi-bracket parity tuning, `design/drop-in/classes-patch.js`, and `design/BALANCE_REPORT.md` (`CLASS-04`, `SIM-03`)
+- [ ] 05-01-PLAN.md — Samurai (Bushido) drop-in `design/drop-in/samurai.json`, Mode A/Mode B definitions, and formal specification `design/SAMURAI_SPEC.md` (`CLASS-01`, `CLASS-03`)
+- [ ] 05-02-PLAN.md — Ninja (Ninjitsu) drop-in `design/drop-in/ninja.json`, Mode A/Mode B definitions, and formal specification `design/NINJA_SPEC.md` (`CLASS-02`, `CLASS-03`)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 05-03-PLAN.md — Tokuno weapon/equipment definitions (`design/drop-in/items-bushido-ninjitsu.json`), client/server bundle patch (`design/drop-in/classes-patch.js`), Mode B engine calibration, 5-class `--verify` parity gates, and `design/BALANCE_REPORT.md` (`CLASS-04`, `SIM-03`)
 
 ### Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging
 
