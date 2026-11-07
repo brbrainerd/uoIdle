@@ -137,8 +137,8 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 05-01-PLAN.md — Samurai (Bushido) drop-in `design/drop-in/samurai.json`, Mode A/Mode B definitions, and formal specification `design/SAMURAI_SPEC.md` (`CLASS-01`, `CLASS-03`)
-- [ ] 05-02-PLAN.md — Ninja (Ninjitsu) drop-in `design/drop-in/ninja.json`, Mode A/Mode B definitions, and formal specification `design/NINJA_SPEC.md` (`CLASS-02`, `CLASS-03`)
+- [x] 05-01-PLAN.md — Samurai (Bushido) drop-in `design/drop-in/samurai.json`, Mode A/Mode B definitions, and formal specification `design/SAMURAI_SPEC.md` (`CLASS-01`, `CLASS-03`)
+- [x] 05-02-PLAN.md — Ninja (Ninjitsu) drop-in `design/drop-in/ninja.json`, Mode A/Mode B definitions, and formal specification `design/NINJA_SPEC.md` (`CLASS-02`, `CLASS-03`)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
