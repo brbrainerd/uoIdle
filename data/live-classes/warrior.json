@@ -1,0 +1,599 @@
+{
+  "id": "warrior",
+  "classNumericId": 101,
+  "badge": "WR",
+  "role": "melee",
+  "baseStats": {
+    "str": 60,
+    "dex": 20,
+    "int": 10
+  },
+  "resourceProfile": {
+    "primaryResource": "zero-mana-physical",
+    "startingManaMax": 0,
+    "meditationCap": 0,
+    "consumesReagents": false,
+    "consumesAmmo": false,
+    "chivalryGoldTithe": false
+  },
+  "starterSkills": [
+    { "skillId": 40, "skillKey": "swords", "initialValue": 50 },
+    { "skillId": 41, "skillKey": "macing", "initialValue": 50 },
+    { "skillId": 42, "skillKey": "fencing", "initialValue": 50 },
+    { "skillId": 27, "skillKey": "tactics", "initialValue": 50 },
+    { "skillId": 1, "skillKey": "anatomy", "initialValue": 50 },
+    { "skillId": 5, "skillKey": "parry", "initialValue": 50 },
+    { "skillId": 17, "skillKey": "healing", "initialValue": 50 },
+    { "skillId": 26, "skillKey": "magicResist", "initialValue": 30 },
+    { "skillId": 50, "skillKey": "focus", "initialValue": 50 }
+  ],
+  "legacyTemplateSkills": [
+    { "skillId": 40, "skillKey": "swords", "weight": 40 },
+    { "skillId": 27, "skillKey": "tactics", "weight": 30 },
+    { "skillId": 1, "skillKey": "anatomy", "weight": 20 },
+    { "skillId": 5, "skillKey": "parry", "weight": 10 }
+  ],
+  "starterEquipment": {
+    "kitTokens": ["malha", "longswordShield", "bandages", "potionsMelee", "robeCloak"],
+    "paperdollLayers": [
+      { "layer": "Helm", "graphic": 5051 },
+      { "layer": "InnerTorso", "graphic": 5055 },
+      { "layer": "Pants", "graphic": 5054 },
+      { "layer": "Shoes", "graphic": 5899 },
+      { "layer": "Shirt", "graphic": 7933, "softFlag": "softShirt" },
+      { "layer": "OneHanded", "graphic": 3937 },
+      { "layer": "TwoHanded", "graphic": 7035 },
+      { "layer": "OuterTorso", "graphic": 7939, "softFlag": "softRobe" },
+      { "layer": "Cloak", "graphic": 5397, "softFlag": "softCloak" }
+    ]
+  },
+  "robeHue": 1816,
+  "seededHotbar": [
+    {
+      "slotIndex": 0,
+      "kind": "ability",
+      "abilityId": "lesser_heal_potion",
+      "label": "Lesser Heal",
+      "enabled": true,
+      "graphic": 3852,
+      "conditions": [
+        { "target": "self", "attr": "hp", "op": "<=", "value": 50, "percent": true }
+      ]
+    },
+    {
+      "slotIndex": 1,
+      "kind": "ability",
+      "abilityId": "bandage",
+      "label": "Bandage",
+      "enabled": true,
+      "graphic": 3617,
+      "conditions": [
+        { "target": "self", "attr": "hp", "op": "<=", "value": 80, "percent": true },
+        { "target": "self", "attr": "poisoned", "op": "==", "value": 1, "join": "or" }
+      ]
+    },
+    {
+      "slotIndex": 2,
+      "kind": "ability",
+      "abilityId": "lesser_cure_potion",
+      "label": "Lesser Cure",
+      "enabled": true,
+      "graphic": 3847,
+      "conditions": [
+        { "target": "self", "attr": "poisoned", "op": "==", "value": 1 }
+      ]
+    },
+    {
+      "slotIndex": 3,
+      "kind": "ability",
+      "abilityId": "lesser_mana_potion",
+      "label": "Lesser Mana",
+      "enabled": true,
+      "graphic": 3846,
+      "conditions": [
+        { "target": "self", "attr": "mana", "op": "<=", "value": 30, "percent": true }
+      ]
+    }
+  ],
+  "progression": [
+    {
+      "level": 1,
+      "id": "warrior_slash",
+      "nameEn": "Slash",
+      "namePtBr": "Corte",
+      "type": "passive",
+      "descEn": "Automatic weapon swing — not for the hotbar; you already attack on your own.",
+      "descPtBr": "Ataque automático da arma — não vai na hotbar; o personagem já bate sozinho.",
+      "inCatalog": true,
+      "catalogId": "warrior_slash"
+    },
+    {
+      "level": 5,
+      "id": "warrior_provoke",
+      "nameEn": "Provocar",
+      "namePtBr": "Provocar",
+      "type": "skill",
+      "descEn": "Taunts the target to attack you when an ally holds aggro.",
+      "descPtBr": "Força o alvo a atacar você quando um aliado está com o aggro.",
+      "inCatalog": true,
+      "catalogId": "warrior_provoke"
+    },
+    {
+      "level": 10,
+      "id": "warrior_shield_bash",
+      "nameEn": "Shield Bash",
+      "namePtBr": "Escudada",
+      "type": "skill",
+      "descEn": "Bash with your shield: stun/push the target. Requires a shield.",
+      "descPtBr": "Bate com o escudo: atordoa / empurra o alvo. Exige escudo.",
+      "inCatalog": true,
+      "catalogId": "warrior_shield_bash"
+    },
+    {
+      "level": 15,
+      "id": "warrior_armor_break",
+      "nameEn": "Armor Break",
+      "namePtBr": "Quebra-Armadura",
+      "type": "skill",
+      "descEn": "Strike that weakens the enemy's armor (best with mace).",
+      "descPtBr": "Golpe que enfraquece a armadura do inimigo (melhor com maça).",
+      "inCatalog": true,
+      "catalogId": "warrior_armor_break"
+    },
+    {
+      "level": 20,
+      "id": "warrior_heavy_strike",
+      "nameEn": "Heavy Strike",
+      "namePtBr": "Golpe Pesado",
+      "type": "skill",
+      "descEn": "Heavy weapon strike — high single-target damage.",
+      "descPtBr": "Golpe pesado de arma — alto dano num único alvo.",
+      "inCatalog": true,
+      "catalogId": "warrior_heavy_strike"
+    },
+    {
+      "level": 25,
+      "id": "warrior_whirlwind",
+      "nameEn": "Whirlwind",
+      "namePtBr": "Redemoinho",
+      "type": "skill",
+      "descEn": "Area attack around you — good vs several enemies.",
+      "descPtBr": "Ataque em área à volta de ti — bom com vários inimigos.",
+      "inCatalog": true,
+      "catalogId": "warrior_whirlwind"
+    },
+    {
+      "level": 30,
+      "id": "warrior_brace",
+      "nameEn": "Brace",
+      "namePtBr": "Aparar",
+      "type": "skill",
+      "descEn": "Defensive stance: reduce damage taken for a while.",
+      "descPtBr": "Postura defensiva: reduz dano recebido por um tempo.",
+      "inCatalog": true,
+      "catalogId": "warrior_brace"
+    },
+    {
+      "level": 40,
+      "id": "warrior_disarm",
+      "nameEn": "Disarm",
+      "namePtBr": "Truque Sujo",
+      "type": "skill",
+      "descEn": "Tries to disarm the enemy for a few seconds.",
+      "descPtBr": "Tenta desarmar o inimigo por alguns segundos.",
+      "inCatalog": true,
+      "catalogId": "warrior_disarm"
+    },
+    {
+      "level": 50,
+      "id": "warrior_bulwark",
+      "nameEn": "Bulwark",
+      "namePtBr": "Baluarte",
+      "type": "skill",
+      "descEn": "Fortify yourself with the shield — large damage reduction.",
+      "descPtBr": "Fortifique-se com o escudo — grande redução de dano.",
+      "inCatalog": true,
+      "catalogId": "warrior_bulwark"
+    },
+    {
+      "level": 60,
+      "id": "warrior_execution",
+      "nameEn": "Execution",
+      "namePtBr": "Execução",
+      "type": "feature",
+      "descEn": "Finishing blow on low-HP targets.",
+      "descPtBr": "Golpe final em alvos com pouca vida.",
+      "inCatalog": true,
+      "catalogId": "warrior_execution"
+    }
+  ],
+  "abilities": [
+    {
+      "id": "warrior_slash",
+      "aliasOf": null,
+      "name": "Slash",
+      "namePtBr": "Corte",
+      "category": "warrior",
+      "kind": "Passive",
+      "tab": "ability",
+      "cooldownMs": 0,
+      "customCooldownMs": 0,
+      "manaCost": 0,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": null,
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 20992,
+      "iconKey": "gump_20992",
+      "scalingFormula": {
+        "summary": "100% weapon damage auto-attack loop scaled by STR, Tactics, Anatomy, and server x60 physical level factor",
+        "stat": "weapon",
+        "minMultiplier": 1.0,
+        "maxMultiplier": 1.0
+      },
+      "unlockLevel": 1,
+      "progressionTreeLevel": 1,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_provoke",
+      "aliasOf": null,
+      "name": "Provocar",
+      "namePtBr": "Provocar",
+      "category": "warrior",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 10000,
+      "customCooldownMs": 2000,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "debuff",
+      "statusEffect": {
+        "id": "warrior_provoke_taunt",
+        "name": "Provoke Taunt",
+        "effectType": "debuff",
+        "durationMs": 8000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "taunt", "value": 1 },
+          { "stat": "damage_dealt_pct", "value": -15 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New",
+      "gumpIcon": null,
+      "iconKey": "idle_warrior_provoke",
+      "scalingFormula": {
+        "summary": "Taunts enemy when ally_agro == 1 (0 mana on server)",
+        "stat": "none"
+      },
+      "unlockLevel": 5,
+      "progressionTreeLevel": 5,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_shield_bash",
+      "aliasOf": null,
+      "name": "Shield Bash",
+      "namePtBr": "Escudada",
+      "category": "warrior",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 8000,
+      "customCooldownMs": 2000,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": {
+        "id": "warrior_shield_bash_stun",
+        "name": "Shield Bash Stun",
+        "effectType": "debuff",
+        "durationMs": 2000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "stun", "value": 1 }
+        ],
+        "stackingRule": "replace",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New",
+      "gumpIcon": 21007,
+      "iconKey": "idle_warrior_shield_bash",
+      "scalingFormula": {
+        "summary": "Cq(shield_bash): min = 15 + floor(0.15 * Tactics), max = min + 6 + short stun",
+        "stat": "tactics",
+        "minMultiplier": 0.15,
+        "maxMultiplier": 0.15
+      },
+      "unlockLevel": 5,
+      "progressionTreeLevel": 10,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_armor_break",
+      "aliasOf": null,
+      "name": "Armor Break",
+      "namePtBr": "Quebra-Armadura",
+      "category": "warrior",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 12000,
+      "customCooldownMs": 2000,
+      "manaCost": 15,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "debuff",
+      "statusEffect": {
+        "id": "warrior_armor_break_debuff",
+        "name": "Armor Break",
+        "effectType": "debuff",
+        "durationMs": 8000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "defense_pct", "value": -20, "condition": "Applied once in AOS.Damage" }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New",
+      "gumpIcon": 21014,
+      "iconKey": "idle_warrior_armor_break",
+      "scalingFormula": {
+        "summary": "Weakens target physical defense inside AOS.Damage (single application)",
+        "stat": "weapon"
+      },
+      "unlockLevel": 15,
+      "progressionTreeLevel": 15,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_heavy_strike",
+      "aliasOf": null,
+      "name": "Heavy Strike",
+      "namePtBr": "Golpe Pesado",
+      "category": "warrior",
+      "kind": "WeaponAbility",
+      "tab": "ability",
+      "cooldownMs": 6000,
+      "customCooldownMs": 0,
+      "manaCost": 12,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": null,
+      "weaponAbilityRef": 4,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 20995,
+      "iconKey": "gump_20995",
+      "scalingFormula": {
+        "summary": "Cq(heavy_strike): [8 + floor(0.25 * Tactics), 20 + floor(0.25 * Tactics)] / UO CrushingBlow (ref 4)",
+        "stat": "tactics",
+        "minMultiplier": 0.25,
+        "maxMultiplier": 0.25
+      },
+      "unlockLevel": 20,
+      "progressionTreeLevel": 20,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_whirlwind",
+      "aliasOf": null,
+      "name": "Whirlwind",
+      "namePtBr": "Redemoinho",
+      "category": "warrior",
+      "kind": "WeaponAbility",
+      "tab": "ability",
+      "cooldownMs": 8000,
+      "customCooldownMs": 0,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": null,
+      "weaponAbilityRef": 13,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 21004,
+      "iconKey": "gump_21004",
+      "scalingFormula": {
+        "summary": "UO WhirlwindAttack (ref 13): 100% weapon damage AoE when enemies >= 3",
+        "stat": "weapon",
+        "minMultiplier": 1.0,
+        "maxMultiplier": 1.0
+      },
+      "unlockLevel": 25,
+      "progressionTreeLevel": 25,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_brace",
+      "aliasOf": null,
+      "name": "Brace",
+      "namePtBr": "Aparar",
+      "category": "warrior",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 12000,
+      "customCooldownMs": 2000,
+      "manaCost": 10,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "self_buff",
+      "statusEffect": {
+        "id": "warrior_brace_stance",
+        "name": "Brace Stance",
+        "effectType": "posture",
+        "durationMs": 8000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "damage_taken_pct", "value": -20, "condition": "Applied once in AOS.Damage" }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New/Eth",
+      "gumpIcon": 21008,
+      "iconKey": "idle_warrior_brace",
+      "scalingFormula": {
+        "summary": "Defensive stance reducing incoming damage inside AOS.Damage (single application)",
+        "stat": "none"
+      },
+      "unlockLevel": 30,
+      "progressionTreeLevel": 30,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_disarm",
+      "aliasOf": null,
+      "name": "Dirty Trick",
+      "namePtBr": "Truque Sujo",
+      "category": "warrior",
+      "kind": "WeaponAbility",
+      "tab": "ability",
+      "cooldownMs": 10000,
+      "customCooldownMs": 0,
+      "manaCost": 12,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "debuff",
+      "statusEffect": {
+        "id": "warrior_disarm_debuff",
+        "name": "Disarm",
+        "effectType": "debuff",
+        "durationMs": 5000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "disarm", "value": 1 }
+        ],
+        "stackingRule": "replace",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": 5,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "UO",
+      "gumpIcon": 20996,
+      "iconKey": "gump_20996",
+      "scalingFormula": {
+        "summary": "UO Disarm (ref 5): weapon hit + target disarm debuff",
+        "stat": "weapon",
+        "minMultiplier": 1.0,
+        "maxMultiplier": 1.0
+      },
+      "unlockLevel": 40,
+      "progressionTreeLevel": 40,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_bulwark",
+      "aliasOf": null,
+      "name": "Bulwark",
+      "namePtBr": "Baluarte",
+      "category": "warrior",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 18000,
+      "customCooldownMs": 2000,
+      "manaCost": 20,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "self_buff",
+      "statusEffect": {
+        "id": "warrior_bulwark_stance",
+        "name": "Bulwark Shield Fortification",
+        "effectType": "posture",
+        "durationMs": 10000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "damage_taken_pct", "value": -35, "condition": "Requires shield equipped" }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "server-authoritative"
+      },
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New",
+      "gumpIcon": 21008,
+      "iconKey": "idle_warrior_bulwark",
+      "scalingFormula": {
+        "summary": "Major shield fortification reducing incoming damage",
+        "stat": "none"
+      },
+      "unlockLevel": 50,
+      "progressionTreeLevel": 50,
+      "inCatalog": true
+    },
+    {
+      "id": "warrior_execution",
+      "aliasOf": null,
+      "name": "Execution",
+      "namePtBr": "Execução",
+      "category": "warrior",
+      "kind": "Custom",
+      "tab": "ability",
+      "cooldownMs": 12000,
+      "customCooldownMs": 2000,
+      "manaCost": 25,
+      "staminaCost": 0,
+      "goldCost": 0,
+      "reagentsRequired": false,
+      "effectType": "direct_damage",
+      "statusEffect": null,
+      "weaponAbilityRef": null,
+      "spellId": null,
+      "itemId": null,
+      "mapScope": "New",
+      "gumpIcon": 21000,
+      "iconKey": "idle_warrior_execution",
+      "scalingFormula": {
+        "summary": "Cq(execution): flat floor(0.6 * Tactics) + 20 * rank; bonus execute damage on low-HP targets",
+        "stat": "tactics",
+        "minMultiplier": 0.6,
+        "maxMultiplier": 0.6,
+        "executeThresholdHpPct": 35,
+        "executeMultiplier": 3.0
+      },
+      "unlockLevel": 60,
+      "progressionTreeLevel": 60,
+      "inCatalog": true
+    }
+  ]
+}
