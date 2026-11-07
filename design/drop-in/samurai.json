@@ -503,7 +503,7 @@
         "stat": "weapon",
         "minMultiplier": 0.9,
         "maxMultiplier": 0.9,
-        "hits": 1
+        "hits": 2
       },
       "unlockLevel": 30,
       "progressionTreeLevel": 30,

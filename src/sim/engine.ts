@@ -413,6 +413,8 @@ export function computeSkillBaseOutput(
     } else if (id.includes('multishot') || id.includes('bolt_volley')) {
       const perHitCq = 10 + 5 * rank;
       rawDamagePerHit = autoRaw * 0.55 + perHitCq * stats.levelFactor;
+    } else if (id.includes('double_strike')) {
+      rawDamagePerHit = autoRaw * (avgMult * 0.6);
     } else {
       rawDamagePerHit = autoRaw * Math.max(0.85, avgMult);
     }
