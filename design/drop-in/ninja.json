@@ -131,8 +131,8 @@
       "nameEn": "Mirror Image",
       "namePtBr": "Imagem Espelhada",
       "type": "spell",
-      "descEn": "Summons an illusory Ninjitsu clone that diverts incoming melee attacks and reduces damage taken by 8%.",
-      "descPtBr": "Conjura um clone ilusório de Ninjitsu que desvia ataques corpo a corpo recebidos e reduz o dano sofrido em 8%.",
+      "descEn": "Complete single-rank Ninjitsu shadow clone spell that diverts incoming melee attacks and reduces damage taken by 8%.",
+      "descPtBr": "Feitiço único completo de clone ilusório Ninjitsu que desvia ataques corpo a corpo recebidos e reduz o dano sofrido em 8%.",
       "inCatalog": true,
       "catalogId": "ninja_mirror"
     },
@@ -153,8 +153,8 @@
       "nameEn": "Death Strike",
       "namePtBr": "Golpe Mortal",
       "type": "skill",
-      "descEn": "Strikes vital pressure points and plants a lethal Ninjitsu mark that detonates after 5 combat swings or 4s of internal trauma.",
-      "descPtBr": "Atinge pontos vitais de pressão e planta uma marca letal de Ninjitsu que detona após 5 golpes de combate ou 4s de trauma interno.",
+      "descEn": "Complete single-rank pressure-point strike that plants a lethal Ninjitsu mark detonating after 5 combat swings or 4s of internal trauma.",
+      "descPtBr": "Golpe único completo nos pontos vitais que planta uma marca letal de Ninjitsu detonando após 5 golpes de combate ou 4s de trauma interno.",
       "inCatalog": true,
       "catalogId": "ninja_death"
     },
@@ -215,25 +215,25 @@
     },
     {
       "level": 50,
-      "id": "ninja_mirror_r2",
-      "nameEn": "Mirror Image II",
-      "namePtBr": "Imagem Espelhada II",
+      "id": "ninja_fukiya_barrage",
+      "nameEn": "Fukiya & Egg Bomb Barrage",
+      "namePtBr": "Barragem de Fukiya e Bomba de Ovo",
       "type": "spell",
-      "descEn": "Master Ninjitsu clone technique: deploys coordinated shadow decoys (-10% damage taken and +8% damage dealt for 7s).",
-      "descPtBr": "Técnica mestre de clones Ninjitsu: invoca chamarizes sombrios coordenados (-10% de dano recebido e +8% de dano causado por 7s).",
+      "descEn": "Canonical Tokuno Egg Bomb (itemId: 10249) and Fukiya blowgun (itemId: 10154) ambush: blinds foes in flash-powder (-10% dmg taken) and coats darts (+8% dmg dealt for 7s).",
+      "descPtBr": "Emboscada clássica de Tokuno com Bomba de Ovo (10249) e Zarabatana Fukiya (10154): cega inimigos na fumaça (-10% de dano sofrido) e potencializa dardos (+8% de dano por 7s).",
       "inCatalog": true,
-      "catalogId": "ninja_mirror_r2"
+      "catalogId": "ninja_fukiya_barrage"
     },
     {
       "level": 60,
-      "id": "ninja_death_r2",
-      "nameEn": "Death Strike II",
-      "namePtBr": "Golpe Mortal II",
+      "id": "ninja_twin_shadow",
+      "nameEn": "Kage Bunshin: Twin Shadow Execution",
+      "namePtBr": "Kage Bunshin: Execução das Sombras Gêmeas",
       "type": "feature",
-      "descEn": "Grandmaster Ninjitsu capstone assassination: 1.25x-1.35x strike (1.95x execute below 35% HP) plus a 4-tick lethal detonation mark.",
-      "descPtBr": "Assassinato supremo de Grão-Mestre Ninjitsu: golpe de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) e marca letal de 4 pulsos.",
+      "descEn": "Grandmaster Ninjitsu shadow-clone capstone: synchronized 1.25x-1.35x assassination strike (1.95x execute below 35% HP) planting a 4-tick Twin Shadow Mark.",
+      "descPtBr": "Assassinato supremo de Grão-Mestre Ninjitsu: golpe sincronizado de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) aplicando a Marca das Sombras Gêmeas de 4 pulsos.",
       "inCatalog": true,
-      "catalogId": "ninja_death_r2"
+      "catalogId": "ninja_twin_shadow"
     }
   ],
   "abilities": [
@@ -348,7 +348,7 @@
       "gumpIcon": 21287,
       "iconKey": "gump_21287",
       "scalingFormula": {
-        "summary": "UO MirrorImage (ref 507): summons an ablative shadow clone (-8% damage taken in Mode A; Ninjitsu/150 hit interception in Mode B)",
+        "summary": "UO MirrorImage (ref 507, sole full-scaling version): summons an ablative shadow clone (-8% damage taken in Mode A; Ninjitsu/150 hit interception in Mode B)",
         "stat": "ninjitsu"
       },
       "unlockLevel": 10,
@@ -432,7 +432,7 @@
       "gumpIcon": 21281,
       "iconKey": "gump_21281",
       "scalingFormula": {
-        "summary": "UO DeathStrike (ref 501): pressure-point strike planting a 4-tick internal bleed in Mode A or 5-swing delayed detonation in Mode B",
+        "summary": "UO DeathStrike (ref 501, sole full-scaling version): pressure-point strike planting a 4-tick internal bleed in Mode A or 5-swing delayed detonation in Mode B",
         "stat": "ninjitsu",
         "minMultiplier": 1.05,
         "maxMultiplier": 1.15
@@ -680,10 +680,10 @@
       "inCatalog": true
     },
     {
-      "id": "ninja_mirror_r2",
-      "aliasOf": null,
-      "name": "Mirror Image II",
-      "namePtBr": "Imagem Espelhada II",
+      "id": "ninja_fukiya_barrage",
+      "aliasOf": "ninja_mirror_r2",
+      "name": "Fukiya & Egg Bomb Barrage",
+      "namePtBr": "Barragem de Fukiya e Bomba de Ovo",
       "category": "ninja",
       "kind": "Spell",
       "tab": "spell",
@@ -695,8 +695,8 @@
       "reagentsRequired": false,
       "effectType": "self_buff",
       "statusEffect": {
-        "id": "ninja_mirror_r2_clone",
-        "name": "Mirror Image II",
+        "id": "ninja_fukiya_egg_veil",
+        "name": "Fukiya & Egg Bomb Veil",
         "effectType": "posture",
         "durationMs": 7000,
         "tickIntervalMs": 0,
@@ -710,12 +710,12 @@
       },
       "weaponAbilityRef": null,
       "spellId": 507,
-      "itemId": null,
+      "itemId": 10154,
       "mapScope": "UO",
-      "gumpIcon": 21287,
-      "iconKey": "gump_21287",
+      "gumpIcon": 10154,
+      "iconKey": "idle_ninja_fukiya_barrage",
       "scalingFormula": {
-        "summary": "Master MirrorImage (ref 507 Rank II): multi-clone shadow posture granting -10% damage taken and +8% coordinated clone damage",
+        "summary": "UO EggBomb (10249) & Fukiya (10154) Ambush (ref 507): flash-powder decoy shroud (-10% damage taken) and poison-dart barrage (+8% damage dealt for 7s)",
         "stat": "ninjitsu"
       },
       "unlockLevel": 300,
@@ -723,10 +723,10 @@
       "inCatalog": true
     },
     {
-      "id": "ninja_death_r2",
-      "aliasOf": null,
-      "name": "Death Strike II",
-      "namePtBr": "Golpe Mortal II",
+      "id": "ninja_twin_shadow",
+      "aliasOf": "ninja_death_r2",
+      "name": "Kage Bunshin: Twin Shadow Execution",
+      "namePtBr": "Kage Bunshin: Execução das Sombras Gêmeas",
       "category": "ninja",
       "kind": "SpecialMove",
       "tab": "ability",
@@ -738,8 +738,8 @@
       "reagentsRequired": false,
       "effectType": "direct_damage",
       "statusEffect": {
-        "id": "ninja_death_r2_mark",
-        "name": "Death Mark II",
+        "id": "ninja_twin_shadow_mark",
+        "name": "Twin Shadow Mark",
         "effectType": "dot",
         "durationMs": 4000,
         "tickIntervalMs": 1000,
@@ -753,9 +753,9 @@
       "itemId": null,
       "mapScope": "UO",
       "gumpIcon": 21281,
-      "iconKey": "gump_21281",
+      "iconKey": "idle_ninja_twin_shadow",
       "scalingFormula": {
-        "summary": "Grandmaster DeathStrike (ref 501 Rank II): 1.25x-1.35x strike (1.95x execute below 35% HP) with 4-tick mark / 5-swing detonation",
+        "summary": "Grandmaster Kage Bunshin Finisher (ref 501 Capstone): 1.25x-1.35x twin-clone strike (1.95x execute below 35% HP) with 4-tick mark / 5-swing detonation",
         "stat": "ninjitsu",
         "minMultiplier": 1.25,
         "maxMultiplier": 1.35,

@@ -91,8 +91,8 @@ SAMURAI_STEMS: list[tuple[str, str, str]] = [
     ("samurai_evasion", "L35 Spell", "Evasion"),
     ("samurai_momentum_strike", "L40 Spell", "Momentum Strike"),
     ("samurai_armor_ignore", "L45 Weapon", "Armor Ignore"),
-    ("samurai_lightning_r2", "L50 Skill II", "Lightning Strike II"),
-    ("samurai_honorable_r2", "L60 Capstone", "Honorable Exec II"),
+    ("samurai_frenzied_whirlwind", "L50 Weapon", "Frenzied Whirlwind"),
+    ("samurai_kensei_judgment", "L60 Capstone", "Kensei Judgment"),
     # 11 06-CONTEXT.md Alias & Passive Badge IDs
     ("samurai_lightning_strike", "Alias L5", "Lightning Strike"),
     ("samurai_honorable_exec", "Alias L15", "Honorable Exec"),
@@ -120,8 +120,8 @@ NINJA_STEMS: list[tuple[str, str, str]] = [
     ("ninja_shuriken", "L35 Bonus", "Shuriken Volley"),
     ("ninja_ki_attack", "L40 Skill", "Ki Attack"),
     ("ninja_surprise_attack", "L45 Skill", "Surprise Attack"),
-    ("ninja_mirror_r2", "L50 Spell II", "Mirror Image II"),
-    ("ninja_death_r2", "L60 Capstone", "Death Strike II"),
+    ("ninja_fukiya_barrage", "L50 Tool/Spell", "Fukiya & Egg Bomb"),
+    ("ninja_twin_shadow", "L60 Capstone", "Twin Shadow Exec"),
     # 9 06-CONTEXT.md Alias & Passive Badge IDs
     ("ninja_focus_attack", "Alias L5", "Focus Attack"),
     ("ninja_mirror_image", "Alias L10", "Mirror Image"),
@@ -328,7 +328,7 @@ def draw_katana_blade(
 
 def draw_samurai_motif(stem: str) -> Image.Image:
     """Renders distinct high-contrast Layer 1-4 artwork for each of the 23 Samurai icon stems."""
-    is_r2 = stem.endswith("_r2")
+    is_r2 = stem.endswith("_r2") or stem in {"samurai_frenzied_whirlwind", "samurai_kensei_judgment"}
     is_badge = stem in {
         "samurai_bushido_initiate",
         "samurai_inner_calm",
@@ -360,17 +360,30 @@ def draw_samurai_motif(stem: str) -> Image.Image:
         if stem == "samurai_way_of_the_blade":
             d.polygon([(cx, 32), (cx + 18, 60), (cx, 88), (cx - 18, 60)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
 
-    elif stem in {"samurai_lightning", "samurai_lightning_strike", "samurai_lightning_r2"}:
-        bolt_col = GOLD_BRIGHT if is_r2 else LIGHTNING_CYAN
-        d.polygon([(36, 214), (108, 118), (94, 108), (168, 38), (222, 34), (144, 124), (164, 134), (72, 222)], fill=(*bolt_col[:3], 95))
-        draw_katana_blade(d, (44, 210), (214, 40), width=18 if is_r2 else 16, curve=-12, glow_rgba=(125, 211, 252, 120))
-        zig = [(204, 34), (148, 92), (174, 98), (108, 156), (132, 162), (56, 224)]
-        d.line(zig, fill=GOLD_BRIGHT, width=10)
-        d.line(zig, fill=SPECULAR_CREAM, width=4)
-        if stem != "samurai_lightning":
-            zig2 = [(62, 52), (114, 108), (96, 124), (158, 186), (202, 212)]
-            d.line(zig2, fill=LIGHTNING_CYAN, width=8 if is_r2 else 5)
-            d.line(zig2, fill=SPECULAR_CREAM, width=3)
+    elif stem in {"samurai_lightning", "samurai_lightning_strike", "samurai_frenzied_whirlwind"}:
+        if stem == "samurai_frenzied_whirlwind":
+            d.ellipse([30, 30, 226, 226], outline=GOLD_BRIGHT, width=8)
+            d.arc([42, 42, 214, 214], start=10, end=330, fill=SAMURAI_CRIMSON, width=14)
+            d.arc([58, 58, 198, 198], start=45, end=315, fill=LIGHTNING_CYAN, width=8)
+            for i in range(4):
+                ang = i * math.pi / 2.0 + 0.25
+                x1 = cx + math.cos(ang) * 18
+                y1 = cy + math.sin(ang) * 18
+                x2 = cx + math.cos(ang + 1.05) * 98
+                y2 = cy + math.sin(ang + 1.05) * 98
+                draw_katana_blade(d, (x1, y1), (x2, y2), width=14, curve=14, glow_rgba=(229, 193, 88, 140))
+            d.ellipse([cx - 26, cy - 26, cx + 26, cy + 26], fill=SAMURAI_CRIMSON, outline=GOLD_BRIGHT, width=5)
+        else:
+            bolt_col = GOLD_BRIGHT if is_r2 else LIGHTNING_CYAN
+            d.polygon([(36, 214), (108, 118), (94, 108), (168, 38), (222, 34), (144, 124), (164, 134), (72, 222)], fill=(*bolt_col[:3], 95))
+            draw_katana_blade(d, (44, 210), (214, 40), width=18 if is_r2 else 16, curve=-12, glow_rgba=(125, 211, 252, 120))
+            zig = [(204, 34), (148, 92), (174, 98), (108, 156), (132, 162), (56, 224)]
+            d.line(zig, fill=GOLD_BRIGHT, width=10)
+            d.line(zig, fill=SPECULAR_CREAM, width=4)
+            if stem != "samurai_lightning":
+                zig2 = [(62, 52), (114, 108), (96, 124), (158, 186), (202, 212)]
+                d.line(zig2, fill=LIGHTNING_CYAN, width=8 if is_r2 else 5)
+                d.line(zig2, fill=SPECULAR_CREAM, width=3)
 
     elif stem in {"samurai_perfection", "samurai_bushido_initiate"}:
         for ring_r, col in [(82, SAMURAI_CRIMSON), (64, GOLD_PRIMARY), (44, (40, 18, 18, 255))]:
@@ -395,7 +408,7 @@ def draw_samurai_motif(stem: str) -> Image.Image:
             d.rounded_rectangle([54, 174, 202, 208], radius=8, fill=(180, 145, 95, 255), outline=OUTLINE_DARK, width=3)
             d.line([(68, 191), (188, 191)], fill=SAMURAI_CRIMSON, width=5)
 
-    elif stem in {"samurai_honorable", "samurai_honorable_exec", "samurai_honorable_r2", "samurai_honorable_exec_r2"}:
+    elif stem in {"samurai_honorable", "samurai_honorable_exec", "samurai_kensei_judgment", "samurai_honorable_exec_r2"}:
         if is_r2:
             d.ellipse([cx - 88, cy - 88, cx + 88, cy + 88], outline=GOLD_BRIGHT, width=6)
             for i in range(12):
@@ -410,6 +423,8 @@ def draw_samurai_motif(stem: str) -> Image.Image:
         d.polygon([(112, 28), (144, 28), (136, 228), (120, 228)], fill=SAMURAI_CRIMSON)
         d.polygon([(122, 30), (134, 30), (128, 226)], fill=SPECULAR_CREAM)
         draw_katana_blade(d, (128, 26), (128, 224), width=20 if is_r2 else 16, curve=0, glow_rgba=(255, 80, 60, 150))
+        if stem == "samurai_kensei_judgment":
+            draw_katana_blade(d, (36, 198), (220, 58), width=15, curve=-12, glow_rgba=(229, 193, 88, 160))
 
     elif stem in {"samurai_confidence", "samurai_inner_calm"}:
         for angle_deg in (-50, -25, 0, 25, 50):
@@ -529,7 +544,7 @@ def draw_samurai_motif(stem: str) -> Image.Image:
 
 def draw_ninja_motif(stem: str) -> Image.Image:
     """Renders distinct high-contrast Layer 1-4 artwork for each of the 22 Ninja icon stems."""
-    is_r2 = stem.endswith("_r2")
+    is_r2 = stem.endswith("_r2") or stem in {"ninja_fukiya_barrage", "ninja_twin_shadow"}
     is_badge = stem in {
         "ninja_way_of_stealth",
         "ninja_shadow_discipline",
@@ -561,21 +576,33 @@ def draw_ninja_motif(stem: str) -> Image.Image:
         d.polygon(kryss_pts, fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
         d.ellipse([cx - 16, cy - 16, cx + 16, cy + 16], fill=SPECULAR_CREAM, outline=NINJA_EMERALD, width=4)
 
-    elif stem in {"ninja_mirror", "ninja_mirror_image", "ninja_mirror_r2"}:
-        offsets = [(-44, 14), (44, 14), (0, -14)] if is_r2 else [(-30, 10), (26, -10)]
-        for idx, (ox, oy) in enumerate(offsets):
-            is_front = idx == len(offsets) - 1
-            fill_c = NINJA_INDIGO if is_front else (34, 88, 74, 185)
-            rim_c = GOLD_BRIGHT if (is_front and is_r2) else NINJA_GLOW
-            mx, my = cx + ox, cy + oy
-            d.polygon(
-                [(mx, my - 58), (mx + 46, my - 14), (mx + 36, my + 56), (mx, my + 70), (mx - 36, my + 56), (mx - 46, my - 14)],
-                fill=fill_c,
-                outline=rim_c,
-                width=4,
-            )
-            d.polygon([(mx - 24, my - 6), (mx - 6, my), (mx - 20, my + 8)], fill=SPECULAR_CREAM if is_front else NINJA_GLOW)
-            d.polygon([(mx + 24, my - 6), (mx + 6, my), (mx + 20, my + 8)], fill=SPECULAR_CREAM if is_front else NINJA_GLOW)
+    elif stem in {"ninja_mirror", "ninja_mirror_image", "ninja_fukiya_barrage"}:
+        if stem == "ninja_fukiya_barrage":
+            for sx, sy, sr, col in [
+                (82, 92, 46, (229, 193, 88, 200)),
+                (168, 86, 44, (46, 158, 107, 210)),
+                (128, 146, 54, (255, 246, 214, 220)),
+            ]:
+                d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill=col, outline=OUTLINE_DARK, width=3)
+            d.polygon([(36, 194), (194, 36), (212, 54), (54, 212)], fill=GOLD_PRIMARY, outline=OUTLINE_DARK, width=4)
+            for dy in (-26, 0, 26):
+                d.line([(64, 164 + dy), (214, 48 + dy)], fill=NINJA_GLOW, width=6)
+                d.polygon([(218, 44 + dy), (190, 52 + dy), (202, 68 + dy)], fill=SPECULAR_CREAM, outline=OUTLINE_DARK)
+        else:
+            offsets = [(-44, 14), (44, 14), (0, -14)] if is_r2 else [(-30, 10), (26, -10)]
+            for idx, (ox, oy) in enumerate(offsets):
+                is_front = idx == len(offsets) - 1
+                fill_c = NINJA_INDIGO if is_front else (34, 88, 74, 185)
+                rim_c = GOLD_BRIGHT if (is_front and is_r2) else NINJA_GLOW
+                mx, my = cx + ox, cy + oy
+                d.polygon(
+                    [(mx, my - 58), (mx + 46, my - 14), (mx + 36, my + 56), (mx, my + 70), (mx - 36, my + 56), (mx - 46, my - 14)],
+                    fill=fill_c,
+                    outline=rim_c,
+                    width=4,
+                )
+                d.polygon([(mx - 24, my - 6), (mx - 6, my), (mx - 20, my + 8)], fill=SPECULAR_CREAM if is_front else NINJA_GLOW)
+                d.polygon([(mx + 24, my - 6), (mx + 6, my), (mx + 20, my + 8)], fill=SPECULAR_CREAM if is_front else NINJA_GLOW)
 
     elif stem in {"ninja_backstab", "ninja_shadow_strike"}:
         for i in range(6):
@@ -584,7 +611,7 @@ def draw_ninja_motif(stem: str) -> Image.Image:
         d.polygon([(128, 34), (148, 106), (220, 128), (148, 150), (128, 222), (108, 150), (36, 128), (108, 106)], fill=SAMURAI_CRIMSON, outline=NINJA_GLOW, width=3)
         draw_katana_blade(d, (48, 48), (204, 204), width=18, curve=18, glow_rgba=(104, 211, 145, 150))
 
-    elif stem in {"ninja_death", "ninja_death_r2"}:
+    elif stem in {"ninja_death", "ninja_twin_shadow"}:
         pts = []
         for i in range(5):
             ang = -math.pi / 2.0 + i * (2.0 * math.pi / 5.0)
@@ -598,6 +625,9 @@ def draw_ninja_motif(stem: str) -> Image.Image:
         d.ellipse([cx + 6, cy - 16, cx + 20, cy - 2], fill=SAMURAI_CRIMSON if is_r2 else NINJA_EMERALD)
         for px, py in pts:
             d.ellipse([px - 14, py - 14, px + 14, py + 14], fill=GOLD_BRIGHT if is_r2 else NINJA_GLOW, outline=OUTLINE_DARK, width=3)
+        if stem == "ninja_twin_shadow":
+            draw_katana_blade(d, (38, 204), (214, 44), width=15, curve=-14, glow_rgba=(104, 211, 145, 150))
+            draw_katana_blade(d, (218, 204), (42, 44), width=15, curve=14, glow_rgba=(229, 193, 88, 150))
 
     elif stem in {"ninja_animal_form", "ninja_shadow_discipline"}:
         d.pieslice([28, 36, 228, 224], start=130, end=240, fill=NINJA_EMERALD, outline=NINJA_GLOW, width=4)

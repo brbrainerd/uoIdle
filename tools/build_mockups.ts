@@ -162,8 +162,8 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
     qCEstimator: '1.00x Weapon Auto-Swing + 25.8% (1H) / 29.3% (2H) Parry @ 100 Bushido',
   },
   samurai_lightning: {
-    modeA: 'SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.',
-    modeB: 'Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll).',
+    modeA: 'Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.',
+    modeB: 'Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll, full scaling).',
     qCEstimator: '1.10x - 1.20x Melee + 13.9% IgnoreArmor Crit @ 100 Bushido',
   },
   samurai_perfection: {
@@ -172,7 +172,7 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
     qCEstimator: '+10% Damage Dealt (8.0s Mode A) / +15% Streak Cap + Vital Restore (Mode B)',
   },
   samurai_honorable: {
-    modeA: 'SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute <= 35% HP) + 10s +15% Attack Speed.',
+    modeA: 'Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute <= 35% HP) + 10s +15% Attack Speed.',
     modeB: 'HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.',
     qCEstimator: '1.15x - 1.25x (1.60x <= 35% HP) + 15% Swing Haste (10s)',
   },
@@ -206,14 +206,14 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
     modeB: 'ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.',
     qCEstimator: '1.25x - 1.35x Direct Pierce + -18% Enemy Defense (7.0s)',
   },
-  samurai_lightning_r2: {
-    modeA: 'Master SpecialMove (spellId: 404 R2, 15 Stamina) 1.25x-1.35x strike + 45% secondary arc splash.',
-    modeB: 'Grandmaster LightningStrike II with guaranteed IgnoreArmor crit roll and 45% chain lightning.',
-    qCEstimator: '1.25x - 1.35x Primary + 45% Arc Splash (15 Stamina)',
+  samurai_frenzied_whirlwind: {
+    modeA: 'WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed.',
+    modeB: 'ModernUO FrenziedWhirlwind (ref: 6) multi-target Tokuno blade gale with 25% armor bypass and bleed ticks.',
+    qCEstimator: '1.15x - 1.25x Primary + 50% Cyclone Splash + 4-Tick Gale (10 Mana)',
   },
-  samurai_honorable_r2: {
-    modeA: 'Capstone SpecialMove (spellId: 400 R2, 15 Stamina) 1.95x Execute <= 35% HP + +12% Speed / +8% Damage (10s).',
-    modeB: 'Grandmaster HonorableExecution II: 1.95x Execute finisher + dual offensive posture.',
+  samurai_kensei_judgment: {
+    modeA: 'Capstone SpecialMove (spellId: 400, 15 Stamina) 1.95x Execute <= 35% HP + Kensei Stance (+12% Speed / +8% Dmg, 10s).',
+    modeB: "Grandmaster Kensei: Amakura's Judgment Iaijutsu stroke: 1.95x Execute finisher + dual offensive posture.",
     qCEstimator: '1.15x - 1.25x (1.95x Execute <= 35% HP) + 12% Haste / +8% Dmg',
   },
   ninja_shadowjump: {
@@ -227,7 +227,7 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
     qCEstimator: '1.15x - 1.25x Strike + +8% Focused Ki (4.0s)',
   },
   ninja_mirror: {
-    modeA: 'Spell (spellId: 507) summons illusory shadow clone granting -8% damage taken for 8.0s.',
+    modeA: 'Sole single-rank Spell (spellId: 507) summoning an illusory shadow clone granting -8% damage taken for 8.0s.',
     modeB: 'MirrorImage clone stack: intercepts incoming hit at Ninjitsu/150 chance (70% ablative absorb, 1.5s ICD).',
     qCEstimator: '1 Shadow Clone (-8% Damage Taken Mode A / 70% Intercept Mode B)',
   },
@@ -237,7 +237,7 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
     qCEstimator: '1.15x - 1.25x Ambush + +6% Damage Dealt (5.0s)',
   },
   ninja_death: {
-    modeA: 'SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).',
+    modeA: 'Sole single-rank SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).',
     modeB: 'DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.',
     qCEstimator: '1.10x - 1.20x Strike + 4-Tick Trauma DoT / 5-Swing Detonation',
   },
@@ -271,14 +271,14 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
     modeB: 'SurpriseAttack consuming stealth window to apply -8% defense vulnerability before DeathStrike.',
     qCEstimator: '1.10x - 1.20x Strike + -8% Target Defense Shred (6.0s)',
   },
-  ninja_mirror_r2: {
-    modeA: 'Master Spell (spellId: 507 R2) deploying coordinated shadow clones (-10% dmg taken, +8% dmg dealt for 7.0s).',
-    modeB: 'Summons 2 ablative shadow clones (70% hit interception each, 1.5s ICD) + +8% offensive clone sync.',
-    qCEstimator: '2 Shadow Clones (-10% Dmg Taken & +8% Dmg Dealt, 7.0s)',
+  ninja_fukiya_barrage: {
+    modeA: 'Spell (spellId: 507, itemId: 10154) Fukiya & Egg Bomb Barrage (-10% dmg taken, +8% dmg dealt for 7.0s).',
+    modeB: 'Detonates ModernUO EggBomb flash-cloud + 2 ablative decoys (70% hit interception each) + Fukiya poison darts.',
+    qCEstimator: 'Egg Bomb Veil + 2 Decoys (-10% Dmg Taken & +8% Dmg Dealt, 7.0s)',
   },
-  ninja_death_r2: {
-    modeA: 'Capstone SpecialMove (spellId: 501 R2, 18 Stamina) 1.25x-1.35x (1.95x Execute <= 35% HP) + 4-tick Death Mark II.',
-    modeB: 'Grandmaster DeathStrike II: 1.95x Execute below 35% HP + 5-swing delayed assassination detonation.',
+  ninja_twin_shadow: {
+    modeA: 'Capstone SpecialMove (spellId: 501, 18 Stamina) 1.25x-1.35x (1.95x Execute <= 35% HP) + 4-tick Twin Shadow Mark.',
+    modeB: 'Grandmaster Kage Bunshin: Twin Shadow Execution (1.95x Execute below 35% HP + 5-swing dual-clone detonation).',
     qCEstimator: '1.25x - 1.35x (1.95x Execute <= 35% HP) + 4-Tick Mark (18 Stamina)',
   },
 };
@@ -317,8 +317,8 @@ const PASSIVE_BADGES: Record<
       tier: 'Tier IV (L60)',
       nameEn: 'Grandmaster Bushido Seal',
       namePtBr: 'Selo de Grão-Mestre Bushido',
-      descEn: 'Crowns the Samurai with Lightning Strike II and Honorable Execution II (1.95x Execute).',
-      descPtBr: 'Coroa o Samurai com Golpe Relâmpago II e Execução Honrosa II (Execução 1.95x).',
+      descEn: "Crowns the Samurai with Frenzied Whirlwind and Kensei: Amakura's Judgment (1.95x Execute).",
+      descPtBr: 'Coroa o Samurai com Turbilhão Frenético e Kensei: Julgamento de Amakura (Execução 1.95x).',
     },
   ],
   ninja: [
@@ -351,8 +351,8 @@ const PASSIVE_BADGES: Record<
       tier: 'Tier IV (L60)',
       nameEn: 'Grandmaster Assassin Seal',
       namePtBr: 'Selo de Mestre Assassino',
-      descEn: 'Unlocks Mirror Image II and Death Strike II (1.95x Execute + 5-swing lethal detonation).',
-      descPtBr: 'Libera Imagem Espelhada II e Golpe Mortal II (Execução 1.95x + detonação de 5 golpes).',
+      descEn: 'Unlocks Fukiya & Egg Bomb Barrage and Kage Bunshin: Twin Shadow Execution (1.95x Execute).',
+      descPtBr: 'Libera Barragem de Fukiya e Bomba de Ovo e Kage Bunshin: Execução das Sombras Gêmeas (Execução 1.95x).',
     },
   ],
 };

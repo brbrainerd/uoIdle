@@ -170,38 +170,45 @@ function crossCheckDropInClassWithCatalog(
   }
 
   const byId = new Map(cls.abilities.map((a) => [a.id, a]));
+  const byAlias = new Map(
+    cls.abilities.filter((a) => a.aliasOf !== null).map((a) => [a.aliasOf!, a])
+  );
   for (const rawEntry of classCatalog) {
-    const skill = byId.get(rawEntry.id);
+    const directSkill = byId.get(rawEntry.id);
+    const aliasedCapstone = byAlias.get(rawEntry.id);
+    const skill = directSkill ?? aliasedCapstone;
     if (!skill) {
       errors.push(`${cls.id}.json: missing pre-existing catalog ability "${rawEntry.id}"`);
       continue;
     }
     if (!skill.inCatalog) {
-      errors.push(`${cls.id}.json: ability "${rawEntry.id}" must have inCatalog === true`);
-    }
-    if (skill.name !== rawEntry.name) {
-      errors.push(
-        `${cls.id}.json [${rawEntry.id}]: name "${skill.name}" !== catalog "${rawEntry.name}"`
-      );
+      errors.push(`${cls.id}.json: ability "${skill.id}" must have inCatalog === true`);
     }
     if (skill.unlockLevel !== rawEntry.unlock) {
       errors.push(
-        `${cls.id}.json [${rawEntry.id}]: unlockLevel ${String(skill.unlockLevel)} !== catalog unlock ${rawEntry.unlock}`
+        `${cls.id}.json [${skill.id}]: unlockLevel ${String(skill.unlockLevel)} !== catalog unlock ${rawEntry.unlock}`
       );
     }
-    if (rawEntry.kind === 'WeaponAbility') {
-      const expectedRef = rawEntry.ref ?? null;
-      if (skill.weaponAbilityRef !== expectedRef) {
+    if (directSkill) {
+      if (skill.name !== rawEntry.name) {
         errors.push(
-          `${cls.id}.json [${rawEntry.id}]: weaponAbilityRef ${String(skill.weaponAbilityRef)} !== catalog ref ${String(expectedRef)}`
+          `${cls.id}.json [${rawEntry.id}]: name "${skill.name}" !== catalog "${rawEntry.name}"`
         );
       }
-    } else if (rawEntry.kind === 'Spell' || rawEntry.kind === 'SpecialMove') {
-      const expectedRef = rawEntry.ref ?? null;
-      if (skill.spellId !== expectedRef) {
-        errors.push(
-          `${cls.id}.json [${rawEntry.id}]: spellId ${String(skill.spellId)} !== catalog ref ${String(expectedRef)}`
-        );
+      if (rawEntry.kind === 'WeaponAbility') {
+        const expectedRef = rawEntry.ref ?? null;
+        if (skill.weaponAbilityRef !== expectedRef) {
+          errors.push(
+            `${cls.id}.json [${rawEntry.id}]: weaponAbilityRef ${String(skill.weaponAbilityRef)} !== catalog ref ${String(expectedRef)}`
+          );
+        }
+      } else if (rawEntry.kind === 'Spell' || rawEntry.kind === 'SpecialMove') {
+        const expectedRef = rawEntry.ref ?? null;
+        if (skill.spellId !== expectedRef) {
+          errors.push(
+            `${cls.id}.json [${rawEntry.id}]: spellId ${String(skill.spellId)} !== catalog ref ${String(expectedRef)}`
+          );
+        }
       }
     }
   }

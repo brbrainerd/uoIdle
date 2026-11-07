@@ -119,8 +119,8 @@
       "nameEn": "Lightning Strike",
       "namePtBr": "Golpe Relâmpago",
       "type": "skill",
-      "descEn": "High-accuracy Bushido precision strike (+50 Accuracy) with a critical IgnoreArmor roll and brief stagger.",
-      "descPtBr": "Golpe de precisão Bushido (+50 de Precisão) com chance crítica de ignorar armadura e breve desequilíbrio.",
+      "descEn": "Complete single-rank Bushido precision strike (+50 Accuracy) with full Bushido^2/72000 IgnoreArmor critical scaling and brief stagger.",
+      "descPtBr": "Golpe único completo de precisão Bushido (+50 de Precisão) com escalonamento crítico total de ignorar armadura e breve desequilíbrio.",
       "inCatalog": true,
       "catalogId": "samurai_lightning"
     },
@@ -141,8 +141,8 @@
       "nameEn": "Honorable Execution",
       "namePtBr": "Execução Honrosa",
       "type": "skill",
-      "descEn": "Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.",
-      "descPtBr": "Finalizador Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.",
+      "descEn": "Complete single-rank Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.",
+      "descPtBr": "Finalizador único completo de Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.",
       "inCatalog": true,
       "catalogId": "samurai_honorable"
     },
@@ -214,25 +214,25 @@
     },
     {
       "level": 50,
-      "id": "samurai_lightning_r2",
-      "nameEn": "Lightning Strike II",
-      "namePtBr": "Golpe Relâmpago II",
+      "id": "samurai_frenzied_whirlwind",
+      "nameEn": "Frenzied Whirlwind",
+      "namePtBr": "Turbilhão Frenético",
       "type": "skill",
-      "descEn": "Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash.",
-      "descPtBr": "Golpe de precisão Bushido aprimorado com multiplicador superior, perfuração crítica e arco secundário.",
+      "descEn": "Signature Tokuno Wakizashi & Lajatang WeaponAbility (ref: 6): unleashes a high-velocity blade tempest with 50% secondary cleave and kinetic stagger.",
+      "descPtBr": "Habilidade de arma clássica de Tokuno para Wakizashi e Lajatang (ref: 6): desfere uma tempestade de lâminas com 50% de corte secundário e desequilíbrio.",
       "inCatalog": true,
-      "catalogId": "samurai_lightning_r2"
+      "catalogId": "samurai_frenzied_whirlwind"
     },
     {
       "level": 60,
-      "id": "samurai_honorable_r2",
-      "nameEn": "Honorable Execution II",
-      "namePtBr": "Execução Honrosa II",
+      "id": "samurai_kensei_judgment",
+      "nameEn": "Kensei: Amakura's Judgment",
+      "namePtBr": "Kensei: Julgamento de Amakura",
       "type": "feature",
-      "descEn": "Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage.",
-      "descPtBr": "Finalizador supremo de Grão-Mestre Bushido: multiplicador 1.95x abaixo de 35% de vida com +12% de velocidade e +8% de dano.",
+      "descEn": "Grandmaster Bushido Sword-Saint Iaijutsu capstone: 1.95x execute finisher below 35% HP that locks Kensei Stance (+12% attack speed and +8% damage).",
+      "descPtBr": "Supremo Iaijutsu do Santo da Espada Bushido: finalizador de execução 1.95x abaixo de 35% de vida que ativa a Postura Kensei (+12% de velocidade e +8% de dano).",
       "inCatalog": true,
-      "catalogId": "samurai_honorable_r2"
+      "catalogId": "samurai_kensei_judgment"
     }
   ],
   "abilities": [
@@ -303,7 +303,7 @@
       "gumpIcon": 21540,
       "iconKey": "gump_21540",
       "scalingFormula": {
-        "summary": "UO LightningStrike (ref 404): +50 Accuracy precision strike with Bushido^2/72000 IgnoreArmor critical roll",
+        "summary": "UO LightningStrike (ref 404, sole full-scaling version): +50 Accuracy precision strike with Bushido^2/72000 IgnoreArmor critical roll",
         "stat": "bushido",
         "minMultiplier": 1.1,
         "maxMultiplier": 1.2
@@ -389,7 +389,7 @@
       "gumpIcon": 21536,
       "iconKey": "gump_21536",
       "scalingFormula": {
-        "summary": "UO HonorableExecution (ref 400): 1.35x-1.45x Bushido strike (1.85x execute below 35% HP) granting +15% attack speed",
+        "summary": "UO HonorableExecution (ref 400, sole full-scaling version): 1.35x-1.45x Bushido strike (1.85x execute below 35% HP) granting +15% attack speed",
         "stat": "bushido",
         "minMultiplier": 1.35,
         "maxMultiplier": 1.45,
@@ -643,12 +643,12 @@
       "inCatalog": true
     },
     {
-      "id": "samurai_lightning_r2",
-      "aliasOf": null,
-      "name": "Lightning Strike II",
-      "namePtBr": "Golpe Relâmpago II",
+      "id": "samurai_frenzied_whirlwind",
+      "aliasOf": "samurai_lightning_r2",
+      "name": "Frenzied Whirlwind",
+      "namePtBr": "Turbilhão Frenético",
       "category": "samurai",
-      "kind": "SpecialMove",
+      "kind": "WeaponAbility",
       "tab": "ability",
       "cooldownMs": 8000,
       "customCooldownMs": 0,
@@ -658,8 +658,8 @@
       "reagentsRequired": false,
       "effectType": "direct_damage",
       "statusEffect": {
-        "id": "samurai_lightning_r2_stagger",
-        "name": "Lightning Stagger II",
+        "id": "samurai_frenzied_gale",
+        "name": "Frenzied Gale",
         "effectType": "debuff",
         "durationMs": 3000,
         "tickIntervalMs": 0,
@@ -670,14 +670,14 @@
         "stackingRule": "refresh",
         "authorityTier": "design-proposal"
       },
-      "weaponAbilityRef": null,
-      "spellId": 404,
+      "weaponAbilityRef": 6,
+      "spellId": null,
       "itemId": null,
       "mapScope": "UO",
-      "gumpIcon": 21540,
-      "iconKey": "gump_21540",
+      "gumpIcon": 20997,
+      "iconKey": "gump_20997",
       "scalingFormula": {
-        "summary": "Master LightningStrike (ref 404 Rank II): 1.15x-1.25x precision strike with 50% secondary arc splash",
+        "summary": "UO FrenziedWhirlwind (ref 6, Wakizashi/Lajatang mastery): 1.15x-1.25x Tokuno blade tempest with 50% secondary cleave and 25% armor bypass",
         "stat": "bushido",
         "minMultiplier": 1.15,
         "maxMultiplier": 1.25,
@@ -689,10 +689,10 @@
       "inCatalog": true
     },
     {
-      "id": "samurai_honorable_r2",
-      "aliasOf": null,
-      "name": "Honorable Execution II",
-      "namePtBr": "Execução Honrosa II",
+      "id": "samurai_kensei_judgment",
+      "aliasOf": "samurai_honorable_r2",
+      "name": "Kensei: Amakura's Judgment",
+      "namePtBr": "Kensei: Julgamento de Amakura",
       "category": "samurai",
       "kind": "SpecialMove",
       "tab": "ability",
@@ -704,8 +704,8 @@
       "reagentsRequired": false,
       "effectType": "direct_damage",
       "statusEffect": {
-        "id": "samurai_honorable_r2_haste",
-        "name": "Honorable Haste II",
+        "id": "samurai_kensei_stance",
+        "name": "Kensei Stance",
         "effectType": "self_buff",
         "durationMs": 10000,
         "tickIntervalMs": 0,
@@ -722,9 +722,9 @@
       "itemId": null,
       "mapScope": "UO",
       "gumpIcon": 21536,
-      "iconKey": "gump_21536",
+      "iconKey": "idle_samurai_kensei_judgment",
       "scalingFormula": {
-        "summary": "Grandmaster HonorableExecution (ref 400 Rank II): 1.15x-1.25x strike (1.95x below 35% HP) granting +12% haste and +8% damage",
+        "summary": "Grandmaster Bushido Sword-Saint Iaijutsu (ref 400 Capstone): 1.15x-1.25x strike (1.95x execute below 35% HP) granting Kensei Stance (+12% haste, +8% damage)",
         "stat": "bushido",
         "minMultiplier": 1.15,
         "maxMultiplier": 1.25,

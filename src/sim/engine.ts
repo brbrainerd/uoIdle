@@ -65,6 +65,9 @@ function isAoeOrCleaveSkill(skill: SkillDefinition): boolean {
 
 function isStrictMultiTargetOnlySkill(skill: SkillDefinition): boolean {
   const id = skill.id.toLowerCase();
+  if (id === 'samurai_frenzied_whirlwind') {
+    return false;
+  }
   return (
     id.includes('whirlwind') ||
     id.includes('chain_lightning') ||
@@ -319,7 +322,7 @@ export function computeSkillBaseOutput(
   let armorIgnorePct = 0;
   if (skill.weaponAbilityRef === 1 || id.includes('piercing') || id.includes('charged_shot')) {
     armorIgnorePct = 100;
-  } else if (id.includes('lightning')) {
+  } else if (id.includes('lightning') || id.includes('frenzied_whirlwind')) {
     armorIgnorePct = 25;
   }
   if (skill.statusEffect) {
@@ -401,7 +404,7 @@ export function computeSkillBaseOutput(
     const maxMult = skill.scalingFormula.maxMultiplier ?? minMult;
     const avgMult = (minMult + maxMult) / 2;
 
-    if (id.includes('execution') || id.includes('deadeye')) {
+    if (id.includes('execution') || id.includes('deadeye') || id.includes('kensei_judgment')) {
       const cqBase = Math.floor(tactics * 0.6) + 20 * rank;
       rawDamagePerHit = autoRaw * 1.15 + cqBase * stats.levelFactor;
     } else if (id.includes('shield_bash') || id.includes('earthshaker')) {
@@ -837,8 +840,12 @@ export function simulateScenario(
             }
           }
         }
-        if (mode === 'mode_b' && skill.id.includes('mirror')) {
-          state.cloneStacks = skill.id.endsWith('_r2') ? 2 : 1;
+        if (
+          mode === 'mode_b' &&
+          (skill.id.includes('mirror') || skill.id.includes('fukiya_barrage'))
+        ) {
+          state.cloneStacks =
+            skill.id.endsWith('_r2') || skill.id.includes('fukiya_barrage') ? 2 : 1;
         }
       } else if (skill.effectType === 'debuff') {
         if (skill.statusEffect) {
@@ -899,7 +906,8 @@ export function simulateScenario(
           buffDamagePct,
           totalPerfectionBonus
         );
-        const accuracyBonus = skill.id.includes('lightning') ? 50 : 10;
+        const accuracyBonus =
+          skill.id.includes('lightning') || skill.id.includes('frenzied_whirlwind') ? 50 : 10;
         const hitProb = computeHitChance(
           bracket,
           stats,
@@ -952,7 +960,13 @@ export function simulateScenario(
           }
         }
 
-        if (skill.statusEffect && !(mode === 'mode_b' && skill.id.includes('death'))) {
+        if (
+          skill.statusEffect &&
+          !(
+            mode === 'mode_b' &&
+            (skill.id.includes('death') || skill.id.includes('twin_shadow'))
+          )
+        ) {
           if (skill.statusEffect.effectType === 'self_buff') {
             upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
           } else {
@@ -972,7 +986,10 @@ export function simulateScenario(
           state.counterStanceRemainingMs = 7000;
         }
 
-        if (mode === 'mode_b' && skill.id.includes('death')) {
+        if (
+          mode === 'mode_b' &&
+          (skill.id.includes('death') || skill.id.includes('twin_shadow'))
+        ) {
           state.deathStrikeSwingsRemaining = 5;
           state.deathStrikePendingDamage = out.rawDamagePerHit * 0.95;
         }

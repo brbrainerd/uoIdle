@@ -94,8 +94,8 @@ To satisfy both **raw catalog provenance** (`unlockLevel` preserved at `1, 5, 10
 | **`L35`** | `samurai_evasion` | `"spell"` | New (`unlockLevel: 35`) | `Spell` / `spell` | `402` / `null` | `20000` / `0` | `10` / `0` | `self_buff`, `samurai_evasion_stance` (`posture`, `5000ms`, `defense_pct: +4%`, `exclusive_posture`) |
 | **`L40`** | `samurai_momentum_strike` | `"spell"` | New (`unlockLevel: 40`) | `Spell` / `spell` | `405` / `null` | `8000` / `0` | `12` / `0` | `direct_damage` (`1.00x–1.10x`, `splashRatio: 1.15`), `samurai_momentum_stagger` (`3000ms`, `disarm: 1`) |
 | **`L45`** | `samurai_armor_ignore` | `"skill"` | Shared alias (`duelist_armor_ignore`, `unlockLevel: 45`) | `WeaponAbility` / `ability` | `null` / `1` | `14000` / `0` | `14` / `0` | `debuff` (`1.00x`), `samurai_armor_shred` (`7000ms`, `defense_pct: -18%`, `disarm: 1`) |
-| **`L50`** | `samurai_lightning_r2` | `"skill"` | Pre-existing (`unlockLevel: 300`) | `SpecialMove` / `ability` | `404` / `null` | `8000` / `0` | `10` / `0` | `direct_damage` (`1.15x–1.25x`, `splashRatio: 0.50`), `samurai_lightning_r2_stagger` (`3000ms`, `disarm: 1`) |
-| **`L60`** | `samurai_honorable_r2` | `"feature"` | Pre-existing (`unlockLevel: 200`) | `SpecialMove` / `ability` | `400` / `null` | `11000` / `0` | `0` / `15` | `direct_damage` (`1.15x–1.25x`, `1.95x` at `hp <= 35%`), `samurai_honorable_r2_haste` (`10000ms`, `attack_speed_pct: +12%`, `damage_dealt_pct: +8%`) |
+| **`L50`** | `samurai_frenzied_whirlwind` | `"skill"` | Upgraded L50 WeaponAbility (`aliasOf: "samurai_lightning_r2"`, `unlockLevel: 300`) | `WeaponAbility` / `ability` | `null` / `6` | `8000` / `0` | `10` / `0` | `direct_damage` (`1.15x–1.25x`, `splashRatio: 0.50`), `samurai_frenzied_gale` (`3000ms`, `disarm: 1`) |
+| **`L60`** | `samurai_kensei_judgment` | `"feature"` | Upgraded L60 Capstone (`aliasOf: "samurai_honorable_r2"`, `unlockLevel: 200`) | `SpecialMove` / `ability` | `400` / `null` | `11000` / `0` | `0` / `15` | `direct_damage` (`1.15x–1.25x`, `1.95x` at `hp <= 35%`), `samurai_kensei_stance` (`10000ms`, `attack_speed_pct: +12%`, `damage_dealt_pct: +8%`) |
 
 ---
 
@@ -291,37 +291,37 @@ Every Samurai ability is specified in two complementary execution modes:
 
 ---
 
-### 3.11 `samurai_lightning_r2` — *Lightning Strike II* / *Golpe Relâmpago II* (`L50` Skill, Raw `unlockLevel: 300`)
+### 3.11 `samurai_frenzied_whirlwind` — *Frenzied Whirlwind* / *Turbilhão Frenético* (`L50` WeaponAbility, Raw `unlockLevel: 300`)
 
-- **Canonical ModernUO Formula & C# Provenance (`LightningStrike.cs` Rank II Mastery — `[[bushido-lightning-strike]] C2`):**
-  - Pre-existing catalog entry (`abilities-catalog.json:1630-1642`, `ref: 404`, raw `unlock: 300`, `mana: 10`).
-  - Represents Grandmaster (`100.0–120.0` Bushido) mastery of `LightningStrike` where `criticalChance = Bushido^2 / 72000.0` reaches `13.89%–20.0%` and arcs lightning to a secondary target (`splashRatio: 0.50`).
+- **Canonical ModernUO Formula & C# Provenance (`FrenziedWhirlwind.cs` — `WeaponAbility` ID `6`):**
+  - Source: `Projects/UOContent/Items/Weapons/Abilities/FrenziedWhirlwind.cs` (`WeaponAbility.FrenziedWhirlwind`, `ref: 6`), paired with pre-existing catalog provenance (`aliasOf: "samurai_lightning_r2"`, raw `unlock: 300`, `mana: 10`).
+  - Signature Tokuno `Wakizashi` (`10228`) and `Lajatang` (`10247`) cyclone ability: unleashes a howling blade gale that strikes the primary target and adjacent foes (`splashRatio: 0.50`) while inflicting periodic gale trauma and slowing enemy cadence.
 - **Idle Adaptation Rationale:**
-  - Normalized from legacy `unlock: 300` to `progressionTreeLevel: 50`. Upgrades `samurai_lightning` with a faster `8,000ms` cooldown, higher `1.15x–1.25x` multiplier, and `0.50` secondary arc splash.
+  - Replaces a generic "Rank II" repeat of `Lightning Strike` at `L50` (`progressionTreeLevel: 50`) with a distinct, iconic Tokuno Samurai technique (`Frenzied Whirlwind`), while keeping `samurai_lightning` (`L5`) as the sole, full-scaling single-rank precision strike.
 - **Mode A (Engine-Strict) Payload:**
-  - `id: "samurai_lightning_r2"`, `kind: "SpecialMove"`, `tab: "ability"`, `spellId: 404`, `mapScope: "UO"`, `gumpIcon: 21540`, `iconKey: "gump_21540"`.
+  - `id: "samurai_frenzied_whirlwind"`, `aliasOf: "samurai_lightning_r2"`, `kind: "WeaponAbility"`, `tab: "ability"`, `weaponAbilityRef: 6`, `mapScope: "UO"`, `gumpIcon: 20997`, `iconKey: "gump_20997"`.
   - `cooldownMs: 8000`, `customCooldownMs: 0`, `manaCost: 10`, `staminaCost: 0`, `effectType: "direct_damage"`.
   - `scalingFormula`: `{ "stat": "bushido", "minMultiplier": 1.15, "maxMultiplier": 1.25, "hits": 1, "splashRatio": 0.50 }`.
-  - `statusEffect`: `{ "id": "samurai_lightning_r2_stagger", "name": "Lightning Stagger II", "effectType": "debuff", "durationMs": 3000, "tickIntervalMs": 0, "tickCount": 0, "modifiers": [{ "stat": "disarm", "value": 1 }], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
+  - `statusEffect`: `{ "id": "samurai_frenzied_gale", "name": "Frenzied Gale", "effectType": "debuff", "durationMs": 3000, "tickIntervalMs": 0, "tickCount": 0, "modifiers": [{ "stat": "disarm", "value": 1 }], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
 - **Mode B (Authentic Extension) Behavior:**
-  - Executes Rank II `LightningStrike` (`spellId: 404`) with `+50` accuracy, `Bushido^2 / 72000` `IgnoreArmor` crit roll, and `50%` arc splash to an adjacent foe.
+  - Executes `WeaponAbility.FrenziedWhirlwind` (`ref: 6`) with `25%` armor penetration, `50%` cyclone cleave onto an adjacent enemy, and a `3.0s` gale stagger.
 
 ---
 
-### 3.12 `samurai_honorable_r2` — *Honorable Execution II* / *Execução Honrosa II* (`L60` Capstone Feature, Raw `unlockLevel: 200`)
+### 3.12 `samurai_kensei_judgment` — *Kensei: Amakura's Judgment* / *Kensei: Julgamento de Amakura* (`L60` Capstone Feature, Raw `unlockLevel: 200`)
 
-- **Canonical ModernUO Formula & C# Provenance (`HonorableExecution.cs` Rank II Capstone — `[[bushido-honorable-execution]] C1`..`C2`):**
-  - Pre-existing catalog entry (`abilities-catalog.json:1616-1628`, `ref: 400`, raw `unlock: 200`, `mana: 0`).
-  - Represents Grandmaster (`L60`) mastery of `HonorableExecution`, combining a `1.95x` low-HP execute multiplier (`hp <= 35%`) with a `10,000ms` dual offensive buff (`+12%` `attack_speed_pct` and `+8%` `damage_dealt_pct`).
+- **Canonical ModernUO Formula & C# Provenance (`HonorableExecution.cs` + Sword-Saint Iaijutsu Capstone — `[[bushido-honorable-execution]] C1`..`C2`):**
+  - Source: `Projects/UOContent/Spells/Bushido/HonorableExecution.cs` (`spellId: 400`), paired with pre-existing catalog provenance (`aliasOf: "samurai_honorable_r2"`, raw `unlock: 200`, `mana: 0`).
+  - Represents the ultimate Grandmaster (`L60`) Bushido *Kensei* (Sword-Saint) Iaijutsu stroke: unsheathes a transcendent judgment slash (`1.95x` execute multiplier when `enemy.hp <= 35%`) and enters `Kensei Stance` (`10,000ms` dual offensive buff: `+12%` `attack_speed_pct` and `+8%` `damage_dealt_pct`).
 - **Idle Adaptation Rationale:**
-  - Normalized from legacy `unlock: 200` to `progressionTreeLevel: 60` as Samurai's capstone feature (`type: "feature"`). Consumes `15` Stamina (`manaCost: 0`, preserving the raw catalog `mana: 0` field) so Samurai's L60 rotation achieves `0.00` net mana drain/min and `358.21` sustained boss DPS (right inside the `351.58–387.85` live L60 envelope).
+  - Replaces a generic "Rank II" repeat of `Honorable Execution` at `L60` (`progressionTreeLevel: 60`, `type: "feature"`) with a unique Grandmaster Bushido capstone, while keeping `samurai_honorable` (`L15`) as the sole single-rank execution technique. Consumes `15` Stamina (`manaCost: 0`) so Samurai's L60 rotation achieves `0.00` net mana drain/min and `363.15` sustained boss DPS (squarely inside the `351.58–387.85` live L60 envelope).
 - **Mode A (Engine-Strict) Payload:**
-  - `id: "samurai_honorable_r2"`, `kind: "SpecialMove"`, `tab: "ability"`, `spellId: 400`, `mapScope: "UO"`, `gumpIcon: 21536`, `iconKey: "gump_21536"`.
+  - `id: "samurai_kensei_judgment"`, `aliasOf: "samurai_honorable_r2"`, `kind: "SpecialMove"`, `tab: "ability"`, `spellId: 400`, `mapScope: "UO"`, `gumpIcon: 21536`, `iconKey: "idle_samurai_kensei_judgment"`.
   - `cooldownMs: 11000`, `customCooldownMs: 0`, `manaCost: 0`, `staminaCost: 15`, `effectType: "direct_damage"`.
   - `scalingFormula`: `{ "stat": "bushido", "minMultiplier": 1.15, "maxMultiplier": 1.25, "executeThresholdHpPct": 35, "executeMultiplier": 1.95 }`.
-  - `statusEffect`: `{ "id": "samurai_honorable_r2_haste", "name": "Honorable Haste II", "effectType": "self_buff", "durationMs": 10000, "tickIntervalMs": 0, "tickCount": 0, "modifiers": [{ "stat": "attack_speed_pct", "value": 12 }, { "stat": "damage_dealt_pct", "value": 8 }], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
+  - `statusEffect`: `{ "id": "samurai_kensei_stance", "name": "Kensei Stance", "effectType": "self_buff", "durationMs": 10000, "tickIntervalMs": 0, "tickCount": 0, "modifiers": [{ "stat": "attack_speed_pct", "value": 12 }, { "stat": "damage_dealt_pct", "value": 8 }], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
 - **Mode B (Authentic Extension) Behavior:**
-  - Executes Grandmaster `HonorableExecution` (`spellId: 400`) with `1.95x` execute amplification below `35%` HP, granting `+12%` swing speed and `+8%` melee damage for `10.0s` without resistance penalty.
+  - Executes Grandmaster *Kensei: Amakura's Judgment* (`spellId: 400`) with `1.95x` execute amplification below `35%` HP, granting `+12%` swing speed and `+8%` melee damage for `10.0s` without resistance penalty.
 
 ---
 
@@ -390,8 +390,8 @@ All 12 progression milestones and ability entries in `design/drop-in/samurai.jso
 | **L35** | `samurai_evasion` | Evasion | Evasão | Short burst Bushido posture that amplifies weapon parry chance and intercepts incoming direct-damage spells. | Postura curta de Bushido que multiplica a chance de aparar com a arma e intercepta magias de dano direto. |
 | **L40** | `samurai_momentum_strike` | Momentum Strike | Golpe de Ímpeto | Two-target Bushido cleave that channels weapon momentum through the primary enemy into a second adjacent foe. | Corte Bushido para dois alvos que transfere o ímpeto da lâmina do alvo principal para um segundo inimigo adjacente. |
 | **L45** | `samurai_armor_ignore` | Armor Ignore | Ignorar Armadura | Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses. | Maestria secundária de Katana: perfura as defesas do alvo (-18% de defesa por 7s) e desequilibra chefes blindados. |
-| **L50** | `samurai_lightning_r2` | Lightning Strike II | Golpe Relâmpago II | Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash. | Golpe de precisão Bushido aprimorado com multiplicador superior, perfuração crítica e arco secundário. |
-| **L60** | `samurai_honorable_r2` | Honorable Execution II | Execução Honrosa II | Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage. | Finalizador supremo de Grão-Mestre Bushido: multiplicador 1.95x abaixo de 35% de vida com +12% de velocidade e +8% de dano. |
+| **L50** | `samurai_frenzied_whirlwind` | Frenzied Whirlwind | Turbilhão Frenético | Signature Wakizashi & Tetsubo Tokuno cyclone: slashes primary and adjacent foes with a howling blade gale that bleeds and slows. | Técnica ciclônica de Wakizashi e Tetsubo: corta o alvo principal e inimigos adjacentes com uma tempestade de lâminas que sangra e desacelera. |
+| **L60** | `samurai_kensei_judgment` | Kensei: Amakura's Judgment | Kensei: Julgamento de Amakura | Grandmaster Bushido Iaijutsu capstone: unsheathes a transcendent stroke (1.95x below 35% HP) and enters Kensei Stance (+12% Speed, +8% Damage). | Técnica suprema de Iaijutsu Bushido: desembainha um corte transcendente (1.95x abaixo de 35% de vida) e ativa a Postura Kensei (+12% Velocidade, +8% Dano). |
 
 ---
 
@@ -403,5 +403,5 @@ Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/samurai.json 
 |---|---:|---:|---:|---:|---:|---:|---:|---|
 | **`L10`** | **7.26** | **3.42** | **6.62** | **8.57s** | **-9.50** | **+188.40** | **15.67** | **PASS** (Within $\pm 8\%$ of Warrior `7.32` DPS / `15.48` EHP) |
 | **`L25`** | **47.99** | **21.10** | **54.74** | **3.48s** | **-74.00** | **+266.40** | **53.24** | **PASS** (Inside `[45.06, 52.39]` Ranger–Warrior DPS & `[46.88, 54.63]` EHP) |
-| **`L45`** | **169.23** | **85.01** | **195.69** | **3.24s** | **-94.50** | **+352.40** | **147.95** | **PASS** (Inside `[167.35, 179.72]` 3-class DPS & `[143.43, 151.90]` EHP) |
-| **`L60`** | **358.21** | **212.02** | **458.73** | **2.81s** | **0.00** | **+432.00** | **316.89** | **PASS** (Inside `[351.58, 387.85]` 3-class DPS & `-0.2%` vs Warrior `317.63` EHP) |
+| **`L45`** | **178.87** | **83.97** | **196.29** | **3.24s** | **-94.50** | **+352.40** | **147.95** | **PASS** (Inside `[167.35, 179.72]` 3-class DPS & `[143.43, 151.90]` EHP) |
+| **`L60`** | **363.15** | **212.02** | **465.83** | **2.81s** | **0.00** | **+432.00** | **316.89** | **PASS** (Inside `[351.58, 387.85]` 3-class DPS & `-0.2%` vs Warrior `317.63` EHP) |

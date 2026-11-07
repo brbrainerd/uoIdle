@@ -222,8 +222,8 @@ export const PROGRESSION_TREE_PATCH = {
     ['samurai_evasion', 35],
     ['samurai_momentum_strike', 40],
     ['samurai_armor_ignore', 45],
-    ['samurai_lightning_r2', 50],
-    ['samurai_honorable_r2', 60],
+    ['samurai_frenzied_whirlwind', 50],
+    ['samurai_kensei_judgment', 60],
   ],
   ninja: [
     ['ninja_shadowjump', 1],
@@ -236,8 +236,8 @@ export const PROGRESSION_TREE_PATCH = {
     ['ninja_smoke_bomb', 35],
     ['ninja_ki_attack', 40],
     ['ninja_surprise_attack', 45],
-    ['ninja_mirror_r2', 50],
-    ['ninja_death_r2', 60],
+    ['ninja_fukiya_barrage', 50],
+    ['ninja_twin_shadow', 60],
   ],
 };
 
@@ -393,25 +393,25 @@ export const ABILITIES_CATALOG_PATCH = {
       iconKey: 'gump_20992',
     },
     {
-      id: 'samurai_lightning_r2',
+      id: 'samurai_frenzied_whirlwind',
       class: 'samurai',
-      kind: 'SpecialMove',
-      name: 'Lightning Strike II',
+      kind: 'WeaponAbility',
+      name: 'Frenzied Whirlwind',
       unlock: 50,
       legacyUnlock: 300,
       mana: 10,
       blurb: 'Unlocks at level 50.',
       tab: 'ability',
-      ref: 404,
+      ref: 6,
       map: 'UO',
-      gumpIcon: 21540,
-      iconKey: 'gump_21540',
+      gumpIcon: 20997,
+      iconKey: 'gump_20997',
     },
     {
-      id: 'samurai_honorable_r2',
+      id: 'samurai_kensei_judgment',
       class: 'samurai',
       kind: 'SpecialMove',
-      name: 'Honorable Execution II',
+      name: "Kensei: Amakura's Judgment",
       unlock: 60,
       legacyUnlock: 200,
       mana: 0,
@@ -421,7 +421,7 @@ export const ABILITIES_CATALOG_PATCH = {
       ref: 400,
       map: 'UO',
       gumpIcon: 21536,
-      iconKey: 'gump_21536',
+      iconKey: 'idle_samurai_kensei_judgment',
     },
   ],
   ninja: [
@@ -591,10 +591,10 @@ export const ABILITIES_CATALOG_PATCH = {
       iconKey: 'gump_21285',
     },
     {
-      id: 'ninja_mirror_r2',
+      id: 'ninja_fukiya_barrage',
       class: 'ninja',
       kind: 'Spell',
-      name: 'Mirror Image II',
+      name: 'Fukiya & Egg Bomb Barrage',
       unlock: 50,
       legacyUnlock: 300,
       mana: 14,
@@ -602,14 +602,14 @@ export const ABILITIES_CATALOG_PATCH = {
       tab: 'spell',
       ref: 507,
       map: 'UO',
-      gumpIcon: 21287,
-      iconKey: 'gump_21287',
+      gumpIcon: 10154,
+      iconKey: 'idle_ninja_fukiya_barrage',
     },
     {
-      id: 'ninja_death_r2',
+      id: 'ninja_twin_shadow',
       class: 'ninja',
       kind: 'SpecialMove',
-      name: 'Death Strike II',
+      name: 'Kage Bunshin: Twin Shadow Execution',
       unlock: 60,
       legacyUnlock: 200,
       mana: 0,
@@ -619,7 +619,7 @@ export const ABILITIES_CATALOG_PATCH = {
       ref: 501,
       map: 'UO',
       gumpIcon: 21281,
-      iconKey: 'gump_21281',
+      iconKey: 'idle_ninja_twin_shadow',
     },
   ],
 };
@@ -635,13 +635,15 @@ export const COMBAT_ESTIMATOR_PATCH = {
 
     switch (id) {
       case 'samurai_lightning':
-      case 'samurai_lightning_r2': {
-        const base = 14 + Math.floor(tacticsOrSkill * 0.22) + 6 * rank;
+      case 'samurai_frenzied_whirlwind': {
+        const isCapstone = id === 'samurai_frenzied_whirlwind';
+        const base = 14 + Math.floor(tacticsOrSkill * 0.22) + (isCapstone ? 12 : 6 * rank);
         return mkRange('damage', base - 2, base + 6);
       }
       case 'samurai_honorable':
-      case 'samurai_honorable_r2': {
-        const base = Math.floor(tacticsOrSkill * 0.55) + 18 * rank;
+      case 'samurai_kensei_judgment': {
+        const isCapstone = id === 'samurai_kensei_judgment';
+        const base = Math.floor(tacticsOrSkill * 0.55) + (isCapstone ? 36 : 18 * rank);
         return mkRange('damage', base, base + 8);
       }
       case 'samurai_confidence': {
@@ -674,16 +676,18 @@ export const COMBAT_ESTIMATOR_PATCH = {
         return mkRange('damage', base - 2, base + 6);
       }
       case 'ninja_death':
-      case 'ninja_death_r2': {
-        const base = 18 + Math.floor(tacticsOrSkill * 0.35) + 14 * rank;
+      case 'ninja_twin_shadow': {
+        const isCapstone = id === 'ninja_twin_shadow';
+        const base = 18 + Math.floor(tacticsOrSkill * 0.35) + (isCapstone ? 28 : 14 * rank);
         return mkRange('damage', base, base + 10);
       }
       case 'ninja_infectious_strike': {
         const base = 12 + Math.floor(tacticsOrSkill * 0.22);
         return mkRange('damage', base, base + 8);
       }
-      case 'ninja_shuriken': {
-        const main = 11 + Math.floor(tacticsOrSkill * 0.18);
+      case 'ninja_shuriken':
+      case 'ninja_fukiya_barrage': {
+        const main = 11 + Math.floor(tacticsOrSkill * 0.18) + (id === 'ninja_fukiya_barrage' ? 8 : 0);
         const splash = Math.floor(main * 0.75);
         return { kind: 'damage', min: main, max: main + 4, avg: main + 2, variant: 'cleave', splash };
       }
@@ -721,7 +725,7 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_lightning: {
         name: 'Lightning Strike',
-        desc: 'High-accuracy Bushido precision strike (+50 Accuracy) with a critical IgnoreArmor roll and brief stagger.',
+        desc: 'Signature single-rank Bushido precision strike (+50 Accuracy) with full Bushido/Tactics scaling and a critical IgnoreArmor roll.',
       },
       samurai_perfection: {
         name: 'Honor & Perfection',
@@ -729,7 +733,7 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_honorable: {
         name: 'Honorable Execution',
-        desc: 'Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.',
+        desc: 'Sole Bushido threshold execution strike that deals 1.60x execute damage below 35% HP and grants +15% attack speed.',
       },
       samurai_confidence: {
         name: 'Confidence',
@@ -755,13 +759,13 @@ export const I18N_LOCALE_PATCH = {
         name: 'Armor Ignore',
         desc: 'Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses.',
       },
-      samurai_lightning_r2: {
-        name: 'Lightning Strike II',
-        desc: 'Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash.',
+      samurai_frenzied_whirlwind: {
+        name: 'Frenzied Whirlwind',
+        desc: 'Signature Wakizashi & Tetsubo Tokuno cyclone: slashes primary and adjacent foes with a howling blade gale that bleeds and slows.',
       },
-      samurai_honorable_r2: {
-        name: 'Honorable Execution II',
-        desc: 'Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage.',
+      samurai_kensei_judgment: {
+        name: "Kensei: Amakura's Judgment",
+        desc: 'Grandmaster Bushido Iaijutsu capstone: unsheathes a transcendent stroke (1.95x below 35% HP) and enters Kensei Stance (+12% Speed, +8% Damage).',
       },
       ninja_shadowjump: {
         name: 'Shadowjump',
@@ -773,7 +777,7 @@ export const I18N_LOCALE_PATCH = {
       },
       ninja_mirror: {
         name: 'Mirror Image',
-        desc: 'Summons an illusory Ninjitsu clone that diverts incoming melee attacks and reduces damage taken by 8%.',
+        desc: 'Sole Ninjitsu clone illusion technique: summons an ablative shadow clone that intercepts melee attacks and reduces damage taken by 8%.',
       },
       ninja_backstab: {
         name: 'Backstab',
@@ -781,7 +785,7 @@ export const I18N_LOCALE_PATCH = {
       },
       ninja_death: {
         name: 'Death Strike',
-        desc: 'Strikes vital pressure points and plants a lethal Ninjitsu mark that detonates after 5 combat swings or 4s of internal trauma.',
+        desc: 'Signature single-rank Ninjitsu vital-point technique: plants a lethal mark that detonates after 5 combat swings or 4s of internal trauma.',
       },
       ninja_animal_form: {
         name: 'Animal Form',
@@ -807,13 +811,13 @@ export const I18N_LOCALE_PATCH = {
         name: 'Surprise Attack',
         desc: 'Blindsides the enemy from stealth, shredding target physical defense by 8% for 6s to expose them to Death Strike.',
       },
-      ninja_mirror_r2: {
-        name: 'Mirror Image II',
-        desc: 'Master Ninjitsu clone technique: deploys coordinated shadow decoys (-10% damage taken and +8% damage dealt for 7s).',
+      ninja_fukiya_barrage: {
+        name: 'Fukiya & Egg Bomb Barrage',
+        desc: 'Unleashes a Tokuno Fukiya blowgun poison-dart barrage while detonating a blinding Egg Bomb (-10% damage taken and +8% damage dealt for 7s).',
       },
-      ninja_death_r2: {
-        name: 'Death Strike II',
-        desc: 'Grandmaster Ninjitsu capstone assassination: 1.25x-1.35x strike (1.95x execute below 35% HP) plus a 4-tick lethal detonation mark.',
+      ninja_twin_shadow: {
+        name: 'Kage Bunshin: Twin Shadow Execution',
+        desc: 'Grandmaster Ninjitsu capstone: two shadow clones converge from opposite angles to sever the target (1.95x below 35% HP) and trigger a 4-tick Twin Shadow Mark.',
       },
     },
   },
@@ -835,7 +839,7 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_lightning: {
         name: 'Golpe Relâmpago',
-        desc: 'Golpe de precisão Bushido (+50 de Precisão) com chance crítica de ignorar armadura e breve desequilíbrio.',
+        desc: 'Golpe de precisão Bushido de grau único (+50 de Precisão) com escalonamento completo e chance crítica de ignorar armadura.',
       },
       samurai_perfection: {
         name: 'Honra e Perfeição',
@@ -843,7 +847,7 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_honorable: {
         name: 'Execução Honrosa',
-        desc: 'Finalizador Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.',
+        desc: 'Golpe finalizador único de Bushido que causa 1.60x de dano abaixo de 35% de vida e concede +15% de velocidade de ataque.',
       },
       samurai_confidence: {
         name: 'Confiança',
@@ -869,13 +873,13 @@ export const I18N_LOCALE_PATCH = {
         name: 'Ignorar Armadura',
         desc: 'Maestria secundária de Katana: perfura as defesas do alvo (-18% de defesa por 7s) e desequilibra chefes blindados.',
       },
-      samurai_lightning_r2: {
-        name: 'Golpe Relâmpago II',
-        desc: 'Golpe de precisão Bushido aprimorado com multiplicador superior, perfuração crítica e arco secundário.',
+      samurai_frenzied_whirlwind: {
+        name: 'Turbilhão Frenético',
+        desc: 'Técnica ciclônica de Wakizashi e Tetsubo: corta o alvo principal e inimigos adjacentes com uma tempestade de lâminas que sangra e desacelera.',
       },
-      samurai_honorable_r2: {
-        name: 'Execução Honrosa II',
-        desc: 'Finalizador supremo de Grão-Mestre Bushido: multiplicador 1.95x abaixo de 35% de vida com +12% de velocidade e +8% de dano.',
+      samurai_kensei_judgment: {
+        name: 'Kensei: Julgamento de Amakura',
+        desc: 'Técnica suprema de Iaijutsu Bushido: desembainha um corte transcendente (1.95x abaixo de 35% de vida) e ativa a Postura Kensei (+12% Velocidade, +8% Dano).',
       },
       ninja_shadowjump: {
         name: 'Salto das Sombras',
@@ -887,7 +891,7 @@ export const I18N_LOCALE_PATCH = {
       },
       ninja_mirror: {
         name: 'Imagem Espelhada',
-        desc: 'Conjura um clone ilusório de Ninjitsu que desvia ataques corpo a corpo recebidos e reduz o dano sofrido em 8%.',
+        desc: 'Técnica única de ilusão Ninjitsu: conjura um clone sombrio ablativo que desvia ataques corpo a corpo e reduz o dano sofrido em 8%.',
       },
       ninja_backstab: {
         name: 'Punhalada pelas Costas',
@@ -895,7 +899,7 @@ export const I18N_LOCALE_PATCH = {
       },
       ninja_death: {
         name: 'Golpe Mortal',
-        desc: 'Atinge pontos vitais de pressão e planta uma marca letal de Ninjitsu que detona após 5 golpes de combate ou 4s de trauma interno.',
+        desc: 'Técnica de ponto vital Ninjitsu de grau único: planta uma marca letal que detona após 5 golpes de combate ou 4s de trauma interno.',
       },
       ninja_animal_form: {
         name: 'Forma Animal',
@@ -921,13 +925,13 @@ export const I18N_LOCALE_PATCH = {
         name: 'Ataque Surpresa',
         desc: 'Surpreende o inimigo a partir da furtividade, reduzindo a defesa física do alvo em 8% por 6s para expô-lo ao Golpe Mortal.',
       },
-      ninja_mirror_r2: {
-        name: 'Imagem Espelhada II',
-        desc: 'Técnica mestre de clones Ninjitsu: invoca chamarizes sombrios coordenados (-10% de dano recebido e +8% de dano causado por 7s).',
+      ninja_fukiya_barrage: {
+        name: 'Barragem de Fukiya e Bomba de Ovo',
+        desc: 'Dispara uma barragem de dardos envenenados de zarabatana Fukiya enquanto detona uma Bomba de Ovo cegante (-10% de dano recebido e +8% de dano causado por 7s).',
       },
-      ninja_death_r2: {
-        name: 'Golpe Mortal II',
-        desc: 'Assassinato supremo de Grão-Mestre Ninjitsu: golpe de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) e marca letal de 4 pulsos.',
+      ninja_twin_shadow: {
+        name: 'Kage Bunshin: Execução das Sombras Gêmeas',
+        desc: 'Técnica suprema de Grão-Mestre Ninjitsu: dois clones convergem de ângulos opostos (1.95x abaixo de 35% de vida) e ativam a Marca das Sombras Gêmeas.',
       },
     },
   },

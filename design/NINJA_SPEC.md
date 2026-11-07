@@ -96,8 +96,8 @@ To satisfy both **raw catalog provenance** (`unlockLevel` preserved at `75, 1, 1
 | **`L35`** | `ninja_shuriken` | Bonus (`abilities[]`) | — | New (`unlockLevel: 20`) | `Custom` / `ability` | `null` / `null` / `10248` | `11000` / `11000` | `8` / `0` | `direct_damage` (`0.75x–0.85x`, `hits: 1`, `splashRatio: 0.75`), `statusEffect: null` |
 | **`L40`** | `ninja_ki_attack` | Yes (`L40`) | `"skill"` | New (`unlockLevel: 40`) | `SpecialMove` / `ability` | `503` / `null` / `null` | `10000` / `0` | `12` / `0` | `direct_damage` (`0.95x–1.05x`, `hits: 1`, `splashRatio: 0.85`), `statusEffect: null` |
 | **`L45`** | `ninja_surprise_attack` | Yes (`L45`) | `"skill"` | New (`unlockLevel: 45`) | `SpecialMove` / `ability` | `505` / `null` / `null` | `16000` / `0` | `12` / `0` | `debuff` (`1.00x`), `ninja_surprise_malus` (`debuff`, `6000ms`, `defense_pct: -8%`) |
-| **`L50`** | `ninja_mirror_r2` | Yes (`L50`) | `"spell"` | Pre-existing (`unlockLevel: 300`) | `Spell` / `spell` | `507` / `null` / `null` | `18000` / `0` | `14` / `0` | `self_buff`, `ninja_mirror_r2_clone` (`posture`, `7000ms`, `damage_taken_pct: -10%`, `damage_dealt_pct: +8%`) |
-| **`L60`** | `ninja_death_r2` | Yes (`L60`) | `"feature"` | Pre-existing (`unlockLevel: 200`) | `SpecialMove` / `ability` | `501` / `null` / `null` | `11000` / `0` | `0` / `18` | `direct_damage` (`1.25x–1.35x`, `1.95x` at `hp <= 35%`), `ninja_death_r2_mark` (`dot`, `4000ms`, `4x1000ms` ticks) |
+| **`L50`** | `ninja_fukiya_barrage` | Yes (`L50`) | `"spell"` | Upgraded L50 Tool/Spell (`aliasOf: "ninja_mirror_r2"`, `unlockLevel: 300`) | `Spell` / `spell` | `507` / `null` / `10154` | `18000` / `0` | `14` / `0` | `self_buff`, `ninja_fukiya_egg_veil` (`posture`, `7000ms`, `damage_taken_pct: -10%`, `damage_dealt_pct: +8%`) |
+| **`L60`** | `ninja_twin_shadow` | Yes (`L60`) | `"feature"` | Upgraded L60 Capstone (`aliasOf: "ninja_death_r2"`, `unlockLevel: 200`) | `SpecialMove` / `ability` | `501` / `null` / `null` | `11000` / `0` | `0` / `18` | `direct_damage` (`1.25x–1.35x`, `1.95x` at `hp <= 35%`), `ninja_twin_shadow_mark` (`dot`, `4000ms`, `4x1000ms` ticks) |
 
 ---
 
@@ -311,37 +311,37 @@ Every Ninja ability is specified in two complementary execution modes:
 
 ---
 
-### 3.12 `ninja_mirror_r2` — *Mirror Image II* / *Imagem Espelhada II* (`L50` Spell, Raw `unlockLevel: 300`)
+### 3.12 `ninja_fukiya_barrage` — *Fukiya & Egg Bomb Barrage* / *Barragem de Fukiya e Bomba de Ovo* (`L50` Spell, Raw `unlockLevel: 300`)
 
-- **Canonical ModernUO Formula & C# Provenance (`MirrorImage.cs` Rank II Mastery — `[[ninjitsu-mirror-image]] C1`..`C4`):**
-  - Pre-existing catalog entry (`abilities-catalog.json:1467-1480`, `ref: 507`, raw `unlock: 300`, `mana: 10`).
-  - Represents Master (`L50`) shadow-clone coordination: deploys offensive/defensive shadow decoys that both divert incoming blows (`damage_taken_pct: -10%`) and flank the target (`damage_dealt_pct: +8%`) for `7,000ms`.
+- **Canonical ModernUO Formula & C# Provenance (`Fukiya.cs`, `EggBomb.cs` & `MirrorImage.cs` — `[[ninjitsu-items]] C1`..`C4`, `[[ninjitsu-stealth-hiding]] C1`..`C4`):**
+  - Source: `Projects/UOContent/Items/Weapons/SE Weapons/Fukiya.cs` (`10154`), `EggBomb.cs` (`10249`), and `MirrorImage.cs` (`spellId: 507`), paired with pre-existing catalog provenance (`aliasOf: "ninja_mirror_r2"`, raw `unlock: 300`).
+  - Unleashes a Tokuno `Fukiya` blowgun poison-dart barrage while detonating a blinding `EggBomb` flash-cloud (`damage_taken_pct: -10%` and `damage_dealt_pct: +8%` for `7,000ms`).
 - **Idle Adaptation Rationale:**
-  - Normalized from legacy `unlock: 300` to `progressionTreeLevel: 50`. Replaces Rank I `Mirror Image` in the `exclusive_posture` slot during endgame encounters.
+  - Replaces a generic "Rank II" repeat of `Mirror Image` at `L50` (`progressionTreeLevel: 50`) with a dedicated Tokuno Ninjitsu tool-mastery ability (`Fukiya & Egg Bomb Barrage`), while keeping `ninja_mirror` (`L10`) as the sole single-rank shadow clone spell.
 - **Mode A (Engine-Strict) Payload:**
-  - `id: "ninja_mirror_r2"`, `kind: "Spell"`, `tab: "spell"`, `spellId: 507`, `mapScope: "UO"`, `gumpIcon: 21287`, `iconKey: "gump_21287"`.
+  - `id: "ninja_fukiya_barrage"`, `aliasOf: "ninja_mirror_r2"`, `kind: "Spell"`, `tab: "spell"`, `spellId: 507`, `itemId: 10154`, `mapScope: "UO"`, `gumpIcon: 10154`, `iconKey: "idle_ninja_fukiya_barrage"`.
   - `cooldownMs: 18000`, `customCooldownMs: 0`, `manaCost: 14`, `staminaCost: 0`, `effectType: "self_buff"`.
   - `scalingFormula`: `{ "stat": "ninjitsu" }`.
-  - `statusEffect`: `{ "id": "ninja_mirror_r2_clone", "name": "Mirror Image II", "effectType": "posture", "durationMs": 7000, "tickIntervalMs": 0, "tickCount": 0, "modifiers": [{ "stat": "damage_taken_pct", "value": -10 }, { "stat": "damage_dealt_pct", "value": 8 }], "stackingRule": "exclusive_posture", "authorityTier": "design-proposal" }`.
+  - `statusEffect`: `{ "id": "ninja_fukiya_egg_veil", "name": "Egg Bomb & Fukiya Veil", "effectType": "posture", "durationMs": 7000, "tickIntervalMs": 0, "tickCount": 0, "modifiers": [{ "stat": "damage_taken_pct", "value": -10 }, { "stat": "damage_dealt_pct", "value": 8 }], "stackingRule": "exclusive_posture", "authorityTier": "design-proposal" }`.
 - **Mode B (Authentic Extension) Behavior:**
-  - Summons a Rank II shadow clone (`cloneStacks = 1`, `Ninjitsu / 150.0` interception with `1,500ms` ICD) while granting `+8%` coordinated clone flanking damage for `7.0s`.
+  - Detonates an `EggBomb` flash-cloud (`cloneStacks = 1`, `Ninjitsu / 150.0` interception with `1,500ms` ICD) while granting `+8%` Fukiya poison-dart flanking damage for `7.0s`.
 
 ---
 
-### 3.13 `ninja_death_r2` — *Death Strike II* / *Golpe Mortal II* (`L60` Capstone Feature, Raw `unlockLevel: 200`)
+### 3.13 `ninja_twin_shadow` — *Kage Bunshin: Twin Shadow Execution* / *Kage Bunshin: Execução das Sombras Gêmeas* (`L60` Capstone Feature, Raw `unlockLevel: 200`)
 
-- **Canonical ModernUO Formula & C# Provenance (`DeathStrike.cs` Rank II Capstone — `[[ninjitsu-death-strike]] C1`..`C5`):**
-  - Pre-existing catalog entry (`abilities-catalog.json:1453-1466`, `ref: 501`, raw `unlock: 200`, `mana: 30`).
-  - Represents Grandmaster (`100.0–120.0` Ninjitsu + `Hiding` + `Stealth`) mastery of `DeathStrike`, combining a `1.25x–1.35x` vital strike (`1.95x` execute amplification when `enemy.hp <= 35%`) with a 4-tick pressure-point bleed in Mode A or a 5-swing delayed detonation in Mode B.
+- **Canonical ModernUO Formula & C# Provenance (`DeathStrike.cs` + `MirrorImage.cs` Dual-Clone Capstone — `[[ninjitsu-death-strike]] C1`..`C5`):**
+  - Source: `Projects/UOContent/Spells/Ninjitsu/DeathStrike.cs` (`spellId: 501`), paired with pre-existing catalog provenance (`aliasOf: "ninja_death_r2"`, raw `unlock: 200`, `mana: 30`).
+  - Represents Grandmaster (`100.0–120.0` Ninjitsu + `Hiding` + `Stealth`) *Kage Bunshin* assassination mastery: two shadow clones converge from opposite angles to sever the target (`1.25x–1.35x` vital strike, `1.95x` execute amplification when `enemy.hp <= 35%`) and trigger a 4-tick `Twin Shadow Mark` in Mode A or a 5-swing dual-clone detonation in Mode B.
 - **Idle Adaptation Rationale:**
-  - Normalized from legacy `unlock: 200` to `progressionTreeLevel: 60` as Ninja's capstone feature (`type: "feature"`). Consumes `18` Stamina (`manaCost: 0`) to balance Ninja's Mana/Stamina economy at `L60` (`+26.0` net mana/min, `+426.0` net stamina/min), producing `374.50` sustained boss DPS (squarely inside the `351.58–387.85` live L60 envelope).
+  - Replaces a generic "Rank II" repeat of `Death Strike` at `L60` (`progressionTreeLevel: 60`, `type: "feature"`) with a unique Grandmaster Ninjitsu capstone, while keeping `ninja_death` (`L20`) as the sole single-rank pressure-point technique. Consumes `18` Stamina (`manaCost: 0`) to balance Ninja's Mana/Stamina economy at `L60` (`+26.0` net mana/min, `+426.0` net stamina/min), producing `374.50` sustained boss DPS (squarely inside the `351.58–387.85` live L60 envelope).
 - **Mode A (Engine-Strict) Payload:**
-  - `id: "ninja_death_r2"`, `kind: "SpecialMove"`, `tab: "ability"`, `spellId: 501`, `mapScope: "UO"`, `gumpIcon: 21281`, `iconKey: "gump_21281"`.
+  - `id: "ninja_twin_shadow"`, `aliasOf: "ninja_death_r2"`, `kind: "SpecialMove"`, `tab: "ability"`, `spellId: 501`, `mapScope: "UO"`, `gumpIcon: 21281`, `iconKey: "idle_ninja_twin_shadow"`.
   - `cooldownMs: 11000`, `customCooldownMs: 0`, `manaCost: 0`, `staminaCost: 18`, `effectType: "direct_damage"`.
   - `scalingFormula`: `{ "stat": "ninjitsu", "minMultiplier": 1.25, "maxMultiplier": 1.35, "executeThresholdHpPct": 35, "executeMultiplier": 1.95 }`.
-  - `statusEffect`: `{ "id": "ninja_death_r2_mark", "name": "Death Mark II", "effectType": "dot", "durationMs": 4000, "tickIntervalMs": 1000, "tickCount": 4, "modifiers": [], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
+  - `statusEffect`: `{ "id": "ninja_twin_shadow_mark", "name": "Twin Shadow Mark", "effectType": "dot", "durationMs": 4000, "tickIntervalMs": 1000, "tickCount": 4, "modifiers": [], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
 - **Mode B (Authentic Extension) Behavior:**
-  - Delivers the `1.25x–1.35x` (`1.95x` below `35%` HP) initial strike and arms the 5-swing delayed detonation (`state.deathStrikeSwingsRemaining = 5`, detonating on the 5th connected weapon swing via `DeathStrike.AddStep(defender)`).
+  - Delivers the `1.25x–1.35x` (`1.95x` below `35%` HP) initial twin-clone strike and arms the 5-swing delayed detonation (`state.deathStrikeSwingsRemaining = 5`, detonating on the 5th connected weapon swing via `DeathStrike.AddStep(defender)`).
 
 ---
 
@@ -413,8 +413,8 @@ All 12 progression milestones and all 13 ability entries in `design/drop-in/ninj
 | **L35** *(Bonus)* | `ninja_shuriken` | Shuriken & Fukiya Volley | Saraivada de Shuriken e Fukiya | Cooldown-gated Ninjitsu throwing star and blowgun dart volley dealing 0.75x-0.85x damage with 75% secondary splash. | Saraivada de estrelas ninja e dardos de zarabatana com recarga, causando 0.75x-0.85x de dano com 75% de alcance secundário. |
 | **L40** | `ninja_ki_attack` | Ki Attack | Ataque de Ki | High-velocity Ninjitsu dash strike that closes the gap and splashes 85% kinetic ki damage onto a second target. | Investida veloz de Ninjitsu que fecha a distância e espalha 85% de dano cinético de ki em um segundo alvo. |
 | **L45** | `ninja_surprise_attack` | Surprise Attack | Ataque Surpresa | Blindsides the enemy from stealth, shredding target physical defense by 8% for 6s to expose them to Death Strike. | Surpreende o inimigo a partir da furtividade, reduzindo a defesa física do alvo em 8% por 6s para expô-lo ao Golpe Mortal. |
-| **L50** | `ninja_mirror_r2` | Mirror Image II | Imagem Espelhada II | Master Ninjitsu clone technique: deploys coordinated shadow decoys (-10% damage taken and +8% damage dealt for 7s). | Técnica mestre de clones Ninjitsu: invoca chamarizes sombrios coordenados (-10% de dano recebido e +8% de dano causado por 7s). |
-| **L60** | `ninja_death_r2` | Death Strike II | Golpe Mortal II | Grandmaster Ninjitsu capstone assassination: 1.25x-1.35x strike (1.95x execute below 35% HP) plus a 4-tick lethal detonation mark. | Assassinato supremo de Grão-Mestre Ninjitsu: golpe de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) e marca letal de 4 pulsos. |
+| **L50** | `ninja_fukiya_barrage` | Fukiya & Egg Bomb Barrage | Barragem de Fukiya e Bomba de Ovo | Unleashes a Tokuno Fukiya blowgun poison-dart barrage while detonating a blinding Egg Bomb (-10% damage taken and +8% damage dealt for 7s). | Dispara uma barragem de dardos envenenados de zarabatana Fukiya enquanto detona uma Bomba de Ovo cegante (-10% de dano recebido e +8% de dano causado por 7s). |
+| **L60** | `ninja_twin_shadow` | Kage Bunshin: Twin Shadow Execution | Kage Bunshin: Execução das Sombras Gêmeas | Grandmaster Ninjitsu capstone: two shadow clones converge from opposite angles to sever the target (1.95x below 35% HP) and trigger a 4-tick Twin Shadow Mark. | Técnica suprema de Grão-Mestre Ninjitsu: dois clones convergem de ângulos opostos (1.95x abaixo de 35% de vida) e ativam a Marca das Sombras Gêmeas. |
 
 ---
 
