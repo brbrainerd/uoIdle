@@ -1,6 +1,6 @@
 ---
 phase: 01-repository-setup-kb-py-adaptation-live-extraction-pipeline
-verified: 2026-11-07T03:48:30Z
+verified: 2026-11-08T00:00:00Z
 status: passed
 score: 9/9 must-haves verified
 covered_files:
@@ -20,8 +20,8 @@ covered_files:
   - "package.json"
   - "tools/bundle_extract.mjs"
   - "tools/fetch_modernuo.py"
-covered_digest: "v1:sha256:ca579b8adfc3c42edf624dc73e577b15ca45dfd9a8b2b6592880ff14ff1c85e5"
-behavior_unverified: 0
+covered_digest: "v1:sha256:5b7d8f7154c9b88d23b70ace30276bf75cdb6569e9322e0f0d91e9983fa18dad"
+behavior_unverified: 2026-11-08T00:00:00Z
 overrides_applied: 0
 decision_coverage:
   honored: 0

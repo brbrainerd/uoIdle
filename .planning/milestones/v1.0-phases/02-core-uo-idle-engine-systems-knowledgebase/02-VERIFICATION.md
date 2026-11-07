@@ -1,6 +1,6 @@
 ---
 phase: 02-core-uo-idle-engine-systems-knowledgebase
-verified: 2026-11-07T04:32:00Z
+verified: 2026-11-08T00:00:00Z
 status: passed
 score: 9/9 must-haves verified
 covered_files:
@@ -16,8 +16,8 @@ covered_files:
   - "mechanics/systems/equipment-affixes.md"
   - "mechanics/systems/progression-unlocks.md"
   - "mechanics/topics/engine-capability-matrix.md"
-covered_digest: "v1:sha256:b751b0bd73ffa6f972950909da3fce4a8a6a1c8ecd40d0ab6867ce14e5fb30fa"
-behavior_unverified: 0
+covered_digest: "v1:sha256:5a92050ccb00562604a042f679d27f4022f57ce9dd0e315528745408d280a244"
+behavior_unverified: 2026-11-08T00:00:00Z
 overrides_applied: 0
 decision_coverage:
   honored: 0

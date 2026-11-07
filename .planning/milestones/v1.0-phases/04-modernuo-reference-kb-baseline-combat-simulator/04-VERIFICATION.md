@@ -1,6 +1,6 @@
 ---
 phase: 04-modernuo-reference-kb-baseline-combat-simulator
-verified: 2026-11-07T06:07:30Z
+verified: 2026-11-08T00:00:00Z
 status: passed
 score: 7/7 must-haves verified
 covered_files:
@@ -34,8 +34,8 @@ covered_files:
   - "src/sim/engine.ts"
   - "src/sim/types.ts"
   - "tools/sim_balance.ts"
-covered_digest: "v1:sha256:8a6321567748a00d4bf269ad5e78f7dffed4efbc23118013b23a028ab397af0f"
-behavior_unverified: 0
+covered_digest: "v1:sha256:40218ebe4d0fe4fb495c9451429f53b325e14130d52f3ba6dcef50bf10b0c141"
+behavior_unverified: 2026-11-08T00:00:00Z
 overrides_applied: 0
 decision_coverage:
   honored: 0

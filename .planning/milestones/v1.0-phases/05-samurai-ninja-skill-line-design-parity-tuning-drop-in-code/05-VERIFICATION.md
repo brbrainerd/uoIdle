@@ -1,6 +1,6 @@
 ---
 phase: 05-samurai-ninja-skill-line-design-parity-tuning-drop-in-code
-verified: 2026-11-07T07:30:00Z
+verified: 2026-11-08T00:00:00Z
 status: passed
 score: 11/11 must-haves verified
 covered_files:
@@ -21,8 +21,8 @@ covered_files:
   - "src/sim/engine.ts"
   - "tools/sim_balance.ts"
   - "tools/validate_skills.ts"
-covered_digest: "v1:sha256:40567083bb7a255cba9e7f8f93d839a42f9f4162ed860134d78ca62b30d6c8da"
-behavior_unverified: 0
+covered_digest: "v1:sha256:72899e9f4bbe6f0755614f17f6a304ba9e0cb6b0b2c273c5aa2247cfb5aa4b5e"
+behavior_unverified: 2026-11-08T00:00:00Z
 overrides_applied: 0
 decision_coverage:
   honored: 0

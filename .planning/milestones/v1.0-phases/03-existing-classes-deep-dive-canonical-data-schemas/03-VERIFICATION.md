@@ -1,6 +1,6 @@
 ---
 phase: 03-existing-classes-deep-dive-canonical-data-schemas
-verified: 2026-11-07T05:21:30Z
+verified: 2026-11-08T00:00:00Z
 status: passed
 score: 9/9 must-haves verified
 covered_files:
@@ -22,8 +22,8 @@ covered_files:
   - "schemas/skill.schema.json"
   - "src/schemas/skill.schema.ts"
   - "tools/validate_skills.ts"
-covered_digest: "v1:sha256:ca7556f966491440187bcdab0b5d87aa9fe482b09469114469b701af66867c99"
-behavior_unverified: 0
+covered_digest: "v1:sha256:79d0802f2d21f10934e4fd2ebc23a7594a28a0168b5fd80f38fbba15a47d056a"
+behavior_unverified: 2026-11-08T00:00:00Z
 overrides_applied: 0
 decision_coverage:
   honored: 0
