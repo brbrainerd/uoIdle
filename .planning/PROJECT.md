@@ -8,15 +8,9 @@ A comprehensive reverse-engineering knowledgebase of **UO Idle** (`https://uoidl
 
 Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerically balanced (parity-tested against live Warrior, Mage, and Ranger formulae), and implementation-ready Ninja and Samurai skill lines backed by a 100% source-verified UO Idle mechanics knowledgebase.
 
-## Current Milestone: v1.2 Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit
+## Current State: Milestones v1.0, v1.1 & v1.2 Shipped (2026-11-07)
 
-**Goal:** Eliminate every mathematical and behavioral gap between the deterministic combat simulator (`src/sim/`) and the live UO Idle `v0.99.0` codebase + ModernUO reference rules, unify the single-wave and multi-wave tick engines, audit and promote the `mechanics/` knowledgebase to multi-source `verified` rank with zero uncited `_raw/` slices, and synchronize all 5-class parity baselines, specs, and live GitHub Pages workbenches.
-
-**Target features:**
-- **Knowledgebase Audit, Cross-Verification & Coverage Expansion (`KB-05`, `KB-06`)**: Promote multi-source corroborated KB pages (`resources.md`, `damage-and-defense.md`, `tick-and-cooldowns.md`, `equipment-affixes.md`, Bushido/Ninjitsu pages) to `verified`, expand KB coverage across `bestiary-and-wiki.js`, `hunt-and-bot-config.js`, and `progression-tree-ui.js`, and author `mechanics/topics/simulator-fidelity-audit.md`
-- **Live-Codebase Combat Math, Affix Caps, Postures & Hotbar `ro(e)` Parity (`SIM-06`, `SIM-07`)**: Enforce live UO Idle hard caps (`SDI <= 50%`, `DI <= 100%`, skill `>100` flattening, gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, `INT` spell bonus), canonical `[huntpostura` postures (`agressivo` `+20%` dmg / `+40%` taken, `equilibrado` `0%/0%`, `defensivo` `-40%` dmg / `-20%` taken), `+8%` weapon / `+12%` armor material-tier step ladder, secondary-target `splashRatio`, class weapon speeds, 1H (`48,000`) / 2H (`41,140`) / Shield `CheckParry` math, and exact `ro(e)` hotbar trigger thresholds (`hp<=50%/32%/18%`, `mana<=40%`, `zE(3)`)
-- **Unified Tick Kernel Refactor, Recalibrated 5-Class Parity (`±5–8%`) & Expanded Unit Tests (`SIM-08`, `SIM-09`)**: Unify `simulateScenarioDetailed` and `simulateMultiWavePull` onto a single shared tick-step engine, recalibrate Samurai/Ninja tuning & baseline snapshots under the live formulas, and expand `tools/test_sim.ts`
-- **Workbench UI & Documentation Sync, Live GitHub Pages Redeploy (`UI-04`)**: Regenerate all 5 HTML workbenches, Retina screenshots, `BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, and `NINJA_SPEC.md`, and redeploy to GitHub Pages
+**Status:** Complete and deployed live to GitHub Pages (`https://brbrainerd.github.io/uoIdle/`). Run `/gsd-new-milestone` to begin a future milestone if needed.
 
 ## Requirements
 
@@ -49,16 +43,17 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 - ✓ **UI-02**: Rich visual simulator telemetry dashboard (`class-comparison.html`, guided by `/gsd-ui-phase` `09-UI-SPEC.md`) featuring interactive SVG DPS & EHP progression charts, damage source breakdown bars, `Iron..Valorite` gear-tier scaling explorer, and combat rotation timeline — v1.1
 - ✓ **UI-03**: CV visual audit (`read_file` inspection of Retina Chrome screenshots across `1600px`, `1280px`, `768px`, `500px` + `ui_components.ts` v2.1 component library & live 100ms combat ticker) across all front-facing pages and icon sheets with zero clipping, overlap, or polygonal artifacts — v1.1
 - ✓ **HOST-01**: Lead Developer Review Portal (`index.html` / `mockups/index.html`) with guided executive walkthrough, interactive demo links, and direct repository file navigation, deployed live on GitHub Pages (`https://brbrainerd.github.io/uoIdle/`) — v1.1
+- ✓ **KB-05**: Comprehensive Knowledgebase Audit & Multi-Source Rank Promotion (`mechanics/combat/*.md`, `mechanics/systems/*.md`, `mechanics/classes/*.md`, `mechanics/modernuo/*.md`) promoting corroborated claims to `[verified]` and eliminating uncited `_raw/` slices — v1.2
+- ✓ **KB-06**: Expanded Knowledgebase Coverage for Bestiary/Enemy Archetypes, Hunting Bot `[huntpostura` Rules, Progression Tree `[Arvore` Scaling, and a dedicated Simulator Fidelity Audit topic (`mechanics/topics/simulator-fidelity-audit.md`) — v1.2
+- ✓ **SIM-06**: Live-Codebase Combat Math & Hard Cap Enforcement in `src/sim/engine.ts` (`SDI <= 50%` + `INT` scaling, `DI <= 100%` + skill `>100` flattening, gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, defender `DCI` in `computeHitChance`, 1H `48,000` / 2H `41,140` / Shield `CheckParry` math, and secondary-target `splashRatio`) — v1.2
+- ✓ **SIM-07**: Authentic Hunting Bot Postures (`agressivo` `+20%` dmg / `+40%` taken, `equilibrado` `0%/0%`, `defensivo` `-40%` dmg / `-20%` taken), `+8%` weapon / `+12%` armor material-tier step ladder, class-authentic weapon speeds & `weaponArchetypeCurves` (`2.25s / 2.50s / 3.25s`), and exact `ro(e)` hotbar auto-trigger thresholds (`hp<=50%/32%/18%`, `mana<=40%`, `zE(3)`) in `src/sim/archetypes.ts` and `src/sim/engine.ts` — v1.2
+- ✓ **SIM-08**: Unified Tick-Step Kernel Refactor in `src/sim/engine.ts` eliminating the 340-line loop duplication between `simulateScenarioDetailed` and `simulateMultiWavePull` while recalibrating 5-class Mode A & Mode B parity within $\pm 5\text{–}8\%$ across all scenarios — v1.2
+- ✓ **SIM-09**: Expanded Automated Unit Test Suite (`tools/test_sim.ts`, `16/16` passing) verifying all live caps (`SDI`, `DI`, `SSI`, `LMC`), `[huntpostura` incoming/outgoing multipliers, `+8%/+12%` material ladder, `splashRatio`, 1H/2H/Shield parry divisors, `ro(e)` potion/heal/AoE triggers, single-wave vs. multi-wave kernel equivalence, and weapon swing speed archetypes — v1.2
+- ✓ **UI-04**: Synchronized Workbench UI, Design Specs (`BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, `NINJA_SPEC.md`, `README.md`), Retina Screenshots, and Live GitHub Pages Redeployment (`https://brbrainerd.github.io/uoIdle/`) reflecting `v1.2` simulator telemetry — v1.2
 
 ### Active
 
-- [ ] **KB-05**: Comprehensive Knowledgebase Audit & Multi-Source Rank Promotion (`mechanics/combat/*.md`, `mechanics/systems/*.md`, `mechanics/classes/*.md`, `mechanics/modernuo/*.md`) promoting corroborated claims to `[verified]` and eliminating uncited `_raw/` slices
-- [ ] **KB-06**: Expanded Knowledgebase Coverage for Bestiary/Enemy Archetypes, Hunting Bot `[huntpostura` Rules, Progression Tree `[Arvore` Scaling, and a dedicated Simulator Fidelity Audit topic (`mechanics/topics/simulator-fidelity-audit.md`)
-- [ ] **SIM-06**: Live-Codebase Combat Math & Hard Cap Enforcement in `src/sim/engine.ts` (`SDI <= 50%` + `INT` scaling, `DI <= 100%` + skill `>100` flattening, gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, defender `DCI` in `computeHitChance`, 1H `48,000` / 2H `41,140` / Shield `CheckParry` math, and secondary-target `splashRatio`)
-- [ ] **SIM-07**: Authentic Hunting Bot Postures (`agressivo` `+20%` dmg / `+40%` taken, `equilibrado` `0%/0%`, `defensivo` `-40%` dmg / `-20%` taken), `+8%` weapon / `+12%` armor material-tier step ladder, class-authentic weapon speeds, and exact `ro(e)` hotbar auto-trigger thresholds (`hp<=50%/32%/18%`, `mana<=40%`, `zE(3)`) in `src/sim/archetypes.ts` and `src/sim/engine.ts`
-- [ ] **SIM-08**: Unified Tick-Step Kernel Refactor in `src/sim/engine.ts` eliminating the 340-line loop duplication between `simulateScenarioDetailed` and `simulateMultiWavePull` while recalibrating 5-class Mode A & Mode B parity within $\pm 5\text{–}8\%$ across all scenarios
-- [ ] **SIM-09**: Expanded Automated Unit Test Suite (`tools/test_sim.ts`) verifying all live caps (`SDI`, `DI`, `SSI`, `LMC`), `[huntpostura` incoming/outgoing multipliers, `+8%/+12%` material ladder, `splashRatio`, 1H/2H/Shield parry divisors, `ro(e)` potion/heal/AoE triggers, and single-wave vs. multi-wave kernel equivalence
-- [ ] **UI-04**: Synchronized Workbench UI, Design Specs (`BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, `NINJA_SPEC.md`), Retina Screenshots, and Live GitHub Pages Redeployment (`https://brbrainerd.github.io/uoIdle/`) reflecting `v1.2` simulator telemetry
+*(None — Milestones `v1.0`, `v1.1`, and `v1.2` shipped 100% of requirements)*
 
 ### Out of Scope
 
@@ -68,9 +63,9 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 
 ## Context
 
-- **Current State (`v1.0` & `v1.1` Shipped 2026-11-07, Starting `v1.2`)**:
-  - **Knowledgebase (`mechanics/`)**: 31 claim-verified markdown pages (`290+` verbatim line-cited claims) backed by 68 SHA-256-verified raw files (`mechanics/_raw/manifest.json`). Audit identified opportunities to promote multi-source corroborated pages to `verified` and cover `bestiary-and-wiki.js`, `hunt-and-bot-config.js`, and `progression-tree-ui.js`.
-  - **Simulator Audit (`src/sim/engine.ts`, `src/sim/archetypes.ts`)**: Identified 7 concrete math/fidelity gaps against live `v0.99.0` bundle/server rules (`SDI`/`DI`/`SSI`/`LMC` caps, `[huntpostura` postures, `+8%/+12%` material steps, `splashRatio`, `ro(e)` hotbar thresholds, 1H/2H/shield `CheckParry`, and `simulateMultiWavePull` loop duplication).
+- **Current State (`v1.0`, `v1.1` & `v1.2` Shipped 2026-11-07)**:
+  - **Knowledgebase (`mechanics/`)**: 35 claim-verified markdown pages (`353` verbatim line-cited claims) backed by 68 SHA-256-verified raw files (`mechanics/_raw/manifest.json`), with multi-source `[verified]` promotions and the 8-Law Simulator Fidelity Audit (`mechanics/topics/simulator-fidelity-audit.md`).
+  - **Simulator (`src/sim/engine.ts`, `src/sim/archetypes.ts`, `tools/test_sim.ts`)**: Unified single/multi-wave 100ms tick kernel enforcing all 8 live `v0.99.0` combat math laws + weapon swing speed archetypes (`2.25s / 2.50s / 3.25s`), verified across 80 scenarios (`±5–8%` 5-class parity, `0` OOM ticks) and 16 unit test suites (`16/16` passing).
   - **GitHub Pages Live**: Hosted at `https://brbrainerd.github.io/uoIdle/` with 7/7 verification gates (`npm run verify:all`).
 
 ## Constraints
@@ -92,7 +87,7 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 | Switch `brbrainerd/uoIdle` to public & enable GitHub Pages (`v1.1`) | Allows hosting live interactive demos at `https://brbrainerd.github.io/uoIdle/` for immediate review by the UO Idle lead developer | ✓ Good (Deployed via `_site` staging artifact with HTTP 200 across all 5 surfaces) |
 | Extract real UO gump/item sprites from `uoidle.com/packs/` + AI raster art (`v1.1`) | Replaces procedural Pillow polygons with authentic Ultima Online gump/item art and oil-painted dark-fantasy icons | ✓ Good (`zeroPolygons: true`, 140 ability PNGs + 37 item/paperdoll PNGs verified with `stdDev >= 12.0` and SHA-256) |
 | Consolidate UI into v2.1 Component Architecture (`tools/ui_components.ts`) | Eliminates duplicate ability catalogs, adds progressive-disclosure schema drawers, live Mode A/B interactivity, and a 100ms tick combat preview across all breakpoints (`1600px`..`500px`) | ✓ Good (Verified via multi-resolution CV flywheel) |
-| Enforce live `v0.99.0` stat caps, `[huntpostura` postures, `+8%/+12%` material ladder, `splashRatio`, and unified tick kernel (`v1.2`) | Eliminates simulator drift at L45/L60/Valorite tiers and guarantees 1:1 behavioral parity between single-wave and multi-wave simulations | — Pending |
+| Enforce live `v0.99.0` stat caps, `[huntpostura` postures, `+8%/+12%` material ladder, `splashRatio`, weapon swing speed archetypes (`2.25s / 2.50s / 3.25s`), and unified tick kernel (`v1.2`) | Eliminates simulator drift at L45/L60/Valorite tiers and guarantees 1:1 behavioral parity between single-wave and multi-wave simulations | ✓ Good (`overallPass: true`, `16/16` unit tests, `4/4` code review fixes applied) |
 
 ## Evolution
 
@@ -112,4 +107,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-07 after v1.2 milestone initialization*
+*Last updated: 2026-11-07 after v1.2 milestone completion*

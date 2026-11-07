@@ -67,9 +67,42 @@
 - Model mix: 100% `inherit`
 - Sessions: 1 continuous v1.1 delivery + multi-pass CV flywheel + Phase 10 code review & fix
 
+---
+
+## Milestone: v1.2 — Live-Codebase Simulator Fidelity, Weapon Swing Speed Archetypes, Unified Tick Engine & Knowledgebase Verification Audit
+
+**Shipped:** 2026-11-07
+**Phases:** 4 (`Phases 11–14`) | **Plans:** 4 | **Requirements:** 7/7 (`KB-05..06`, `SIM-06..09`, `UI-04`)
+
+### What Was Built
+- **Multi-Source Knowledgebase Promotion & 8-Law Simulator Fidelity Audit (`Phase 11`)**: Promoted corroborated claims across core combat, progression, and ModernUO pages to `[verified]`, added 4 new claim-verified pages (`bestiary-and-monsters.md`, `hunting-bot-and-postures.md`, `progression-tree-ui.md`, and `simulator-fidelity-audit.md`), and expanded `mechanics/` to **35 pages** (`353` claims, `0` errors).
+- **Live-Codebase Combat Math, Postures, Material Steps & Weapon Speed Archetypes (`Phase 12`)**: Implemented live `v0.99.0` hard caps (`SDI <= 50%` + `INT` scaling, `DI <= 100%` + skill `>100` flattening, gear `SSI <= 60%` + `treeSpeedPct`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`), `[huntpostura` postures (`agressivo`/`equilibrado`/`defensivo`), `+8%` weapon / `+12%` armor material steps (`Copper..Valorite`), secondary-target `splashRatio`, 1H (`48,000`) / 2H (`41,140`) / Shield `CheckParry`, `ro(e)` hotbar auto-triggers, and `weaponArchetypeCurves` (`2.25s` Fast 1H vs `2.50s` Balanced 1H vs `3.25s` Heavy 2H).
+- **Unified Combat Tick Kernel & 16-Suite Unit Test Harness (`Phase 13`)**: Consolidated `simulateScenarioDetailed` and `simulateMultiWavePull` onto a single shared tick loop in `src/sim/engine.ts`, recalibrated 80-scenario 5-class baselines (`±5–8%` parity, `0` OOM ticks), and expanded `tools/test_sim.ts` to 16 unit test suites (`16/16` passing).
+- **Synchronized Workbenches, `README.md` Maintainability Overhaul & Code Review Fixes (`Phase 14`)**: Regenerated `BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, `NINJA_SPEC.md`, `README.md`, `package.json` scripts, and all 5 HTML workbenches + Retina screenshots, and fixed all 4 Phase 14 review findings (`WR-01`, `WR-02`, `IN-01`, `IN-02` in `14-REVIEW-FIX.md`).
+
+### What Worked
+- **Single-Kernel Simulation Architecture**: Extracting the shared tick execution loop eliminated ~340 lines of duplicated combat resolution between single-wave and multi-wave runs and immediately surfaced subtle multi-target wave state mismatches (`WR-01`).
+- **Weapon Swing Speed Archetype Sweep (`fast_1h`, `balanced_1h`, `heavy_2h`)**: Parameterizing weapon speed alongside handedness (`1H` `48,000` vs `2H` `41,140` `CheckParry` divisor) proved why Ninja thrives on `2.25s` Fast 1H (`+7.4%` DPS from `SSI` floor avoidance + 3rd-swing spirit procs) while Samurai peaks on `2.50s` Balanced 1H (`13.54%` parry + `1.63x` EHP).
+
+### What Was Inefficient
+- **Upper Clamp on `splashRatio` (`<= 1`)**: Initially clamping `splashRatio` to `[0, 1]` inadvertently suppressed `samurai_momentum_strike`'s `1.15` secondary blade transfer ratio until caught by `/gsd-code-review` (`IN-01`).
+
+### Patterns Established
+- **8-Law Simulator Fidelity Contract (`mechanics/topics/simulator-fidelity-audit.md`)**: Every mathematical formula in `src/sim/` is now explicitly documented and cross-linked to verbatim `_raw/` bundle/wiki/ModernUO citations and unit-tested in `tools/test_sim.ts`.
+- **Standardized `package.json` Script Surface**: Every build and verification step (`build:kb`, `verify:kb`, `verify:skills`, `build:sim`, `verify:sim`, `test:sim`, `verify:icons`, `build:mockups`, `verify:mockups`, `verify:all`) is addressable via `npm run`.
+
+### Key Lessons
+- Always verify upper clamp bounds against domain-specific multipliers (`MomentumStrike` transfers `115%` to secondary targets in ModernUO/UO Idle).
+- Include posture incoming-damage multipliers (`resolvePostureProfile(stats.posture).incomingDamageMultiplier`) in effective HP (`ehpMultiplier`) telemetry so aggressive/defensive posture trade-offs are reflected in EHP charts (`WR-02`).
+
+### Cost Observations
+- Model mix: 100% `inherit`
+- Sessions: 1 continuous `v1.2` execution + weapon swing speed expansion + `README.md` overhaul + `/gsd-code-review --fix`
+
 ## Cross-Milestone Trends
 
 | Milestone | Phases | Plans | Requirements | Verification Gates | Status |
 |-----------|--------|-------|--------------|--------------------|--------|
 | `v1.0` | 6 (`1–6`) | 14 | 17/17 (100%) | 6/6 (`npm run verify:all`) | Shipped 2026-11-07 |
 | `v1.1` | 4 (`7–10`) | 4 | 10/10 (100%) | 7/7 (`npm run verify:all`) | Shipped 2026-11-07 |
+| `v1.2` | 4 (`11–14`) | 4 | 7/7 (100%) | 7/7 (`npm run verify:all`, `16/16` unit tests) | Shipped 2026-11-07 |

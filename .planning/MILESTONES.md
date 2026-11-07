@@ -1,5 +1,18 @@
 # Milestones
 
+## v1.2 Live-Codebase Simulator Fidelity, Weapon Swing Speed Archetypes, Unified Tick Engine & Knowledgebase Verification Audit (Shipped: 2026-11-07)
+
+**Phases completed:** 4 phases (Phases 11–14), 4 plans, 7/7 requirements (`KB-05..06`, `SIM-06..09`, `UI-04`)
+
+**Key accomplishments:**
+
+- **Knowledgebase Audit, Multi-Source Promotion & 8-Law Simulator Fidelity Audit (`Phase 11`)**: Audited all 31 existing KB pages, promoted multi-source corroborated claims (`bundle:` + `wiki:` / `modernuo:` / `live:`) to `[verified]`, authored 4 new claim-verified KB pages (`bestiary-and-monsters.md`, `hunting-bot-and-postures.md`, `progression-tree-ui.md`, `simulator-fidelity-audit.md`), and grew `mechanics/` to **35 pages** (`353` verbatim line-cited claims across `68` SHA-256-tracked `_raw/` files) with `0` errors and `0` warnings.
+- **Live-Codebase Combat Math, Affix Caps, Postures, Material Ladder & Weapon Speed Archetypes (`Phase 12`)**: Implemented exact live UO Idle `v0.99.0` attribute/affix caps (`SDI <= 50%` + `INT` scaling, `DI <= 100%` + skill `>100` flattening, gear `SSI <= 60%` + additive `[Arvore` `treeSpeedPct`, `LMC <= 40%`, `EnhancePotions`, `ReflectPhysical`, defender `DCI`), canonical `[huntpostura` postures (`agressivo`, `equilibrado`, `defensivo`), `+8%` weapon / `+12%` armor material steps (`Copper..Valorite`), secondary-target `splashRatio`, 1H (`48,000`) / 2H (`41,140`) / Shield `CheckParry` divisors, `ro(e)` hotbar auto-triggers, and 3 weapon swing speed archetypes (`fast_1h` `2.25s`, `balanced_1h` `2.50s`, `heavy_2h` `3.25s`).
+- **Unified Tick Kernel Refactor, Recalibrated 5-Class Parity & 16-Suite Unit Test Harness (`Phase 13`)**: Unified `simulateScenarioDetailed` and `simulateMultiWavePull` onto a single shared combat tick kernel in `src/sim/engine.ts` (`0` duplicated combat resolution loops), recalibrated 5-class Mode A & Mode B parity within $\pm 5\text{–}8\%$ across all 80 scenarios (`0` OOM ticks), and expanded `tools/test_sim.ts` to 16 unit test suites (`16/16` passing).
+- **Workbench UI Sync, Maintainability Overhaul & Code Review Hardening (`Phase 14`)**: Synchronized `BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, `NINJA_SPEC.md`, `README.md`, and all 5 HTML workbenches + Retina screenshots with `v1.2` simulator telemetry, added standardized `npm run` scripts in `package.json`, and resolved all 4/4 `v1.2` code review findings (`14-REVIEW-FIX.md`).
+
+---
+
 ## v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal (Shipped: 2026-11-07)
 
 **Phases completed:** 4 phases (Phases 7–10), 4 plans, 10/10 requirements (`IDLE-01..02`, `SIM-04..05`, `ART-01..02`, `UI-01..03`, `HOST-01`)

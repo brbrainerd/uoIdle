@@ -65,10 +65,10 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-11-07T16:50:00.000Z
-Stopped at: Milestone v1.2 initialized — starting Phase 11
+Last session: 2026-11-07T17:35:00.000Z
+Stopped at: Milestone v1.2 archived & tagged (`v1.2`)
 Resume file: None
 
 ## Operator Next Steps
 
-- Plan and execute Phase 11 (`11-01-PLAN.md`) through Phase 14 (`14-01-PLAN.md`)
+- Run `/gsd-new-milestone` when ready to start the next milestone cycle
