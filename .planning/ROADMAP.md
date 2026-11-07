@@ -160,9 +160,13 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
+**Wave 1**
 
-- [ ] 06-01: Custom dark-fantasy UO class portraits and active/passive skill icon generation & post-processing (`mockups/assets/icons/{samurai,ninja}/`) (`VISUAL-01`)
-- [ ] 06-02: Pixel-accurate `uoidle.com/beta` HTML/CSS skill tree and 5-class comparison mockups, high-res DevTools captures, and final repository verification (`VISUAL-02`)
+- [ ] 06-01-PLAN.md — Custom dark-fantasy UO Samurai & Ninja class portraits ($256\times 256$ & $64\times 64$), super-sampled Pillow (`13.0.0`) skill/milestone icon generator (`tools/generate_icons.py`), `mockups/assets/icons/contact-sheet.png`, and `mockups/assets/icons/manifest.json` (`VISUAL-01`)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 06-02-PLAN.md — Data-driven `uoidle.com/beta` HTML/CSS mockups (`tools/build_mockups.ts`, `mockups/{samurai-skill-tree,ninja-skill-tree,class-comparison}.html`), headless Chrome verification screenshots (`mockups/screenshots/*.png`), root `README.md` executive handoff index, and 6-command Milestone v1.0 verification gate (`VISUAL-02`)
 
 ## Progress
 
