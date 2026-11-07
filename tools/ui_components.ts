@@ -478,7 +478,7 @@ export function renderQuickCommandBar(activePage: 'portal' | 'samurai' | 'ninja'
         ${
           activePage === 'samurai' || activePage === 'ninja'
             ? `<span class="kbd-chip"><kbd>L</kbd> EN / PT-BR</span>
-               <span class="kbd-chip"><kbd>1–9</kbd> Select Tier</span>
+               <span class="kbd-chip"><kbd>1–9</kbd> Select Milestone</span>
                <span class="kbd-chip"><kbd>Space</kbd> Combat Sim</span>`
             : `<span class="kbd-chip"><kbd>1–3</kbd> Switch View</span>`
         }
