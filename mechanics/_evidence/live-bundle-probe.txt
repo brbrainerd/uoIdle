@@ -1,0 +1,20 @@
+# UO Idle Live Surface & Runtime Probe Evidence (Redacted)
+probe_target: https://uoidle.com/beta
+bundle_version: 0.99.0
+entry_bundle_url: https://uoidle.com/assets/index-CCYN0Dy6.js
+entry_bundle_sha256: 7bbbb072772d6210339eb739a112cbc32a14b4a5494fc5d79d26458df5353edb
+game_chunk_url: https://uoidle.com/assets/Jogo-D5xEfvfV.js
+game_chunk_sha256: 4770a0fcb06e7222f285f6f3b1fdd0da2ea3952a94d0f493a69f527016e73b0d
+paperdoll_chunk_url: https://uoidle.com/assets/bonecoVivo-DY66RLNm.js
+paperdoll_chunk_sha256: 9c5428a741aedb2d07661e07a737dc0054c9452afc219d155968ab271bf06201
+stylesheet_url: https://uoidle.com/assets/Jogo-CVXGOt-C.css
+stylesheet_sha256: 0640a38c8ee4882e84dbf74793616792e319ce2d07d5ec809b108ca878d675e9
+abilities_catalog_url: https://cdn.uoidle.com/packs/idle/abilities.json?v=0.99.0
+abilities_catalog_sha256: 17f9ce60a11b29d0a75ffc6738503a54b67f18f40a6522c42d2e14bbe14f8a36
+ability_icons_url: https://cdn.uoidle.com/packs/ability-icons/ability-icons.json?v=9
+ability_icons_sha256: a305a907412851dd4158f1100cf00cbcb8ddd5aba8c708e6600a0be00e477eab
+closed_beta_api_url: https://api.uoidle.com/closed-beta
+closed_beta_status: {"aberto":true,"abertoEm":"2026-11-01T18:00:00.000Z","ativo":true}
+localStorage.uo-idle-token: "<REDACTED>"
+localStorage.uoidle.convidado: "<REDACTED>"
+localStorage.uoidle.google: "<REDACTED>"

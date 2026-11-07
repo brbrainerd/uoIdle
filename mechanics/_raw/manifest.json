@@ -1,9 +1,21 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T03:37:41Z",
+  "updatedAt": "2026-11-07T03:39:34Z",
   "bundleVersion": "0.99.0",
   "modernuoCommit": "b0e6b17c5cba3a6944ca25a9676dcdec0022ac38",
   "entries": {
+    "api/closed-beta-status.json": {
+      "sha256": "d85703e5337b485f9c0b5c7d1a5a7e96c77c77b6ed885cc3a939e36c283bf1aa",
+      "lines": 5,
+      "category": "engine-ui",
+      "source": "https://api.uoidle.com/closed-beta"
+    },
+    "api/protocol-commands-index.json": {
+      "sha256": "4a3b973a0f16edcb93f9da5bc33abd3f4104bc2303c9caadcd0776c1a5a20938",
+      "lines": 420,
+      "category": "engine-ui",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#protocol-commands"
+    },
     "bundle/abilities-catalog.json": {
       "sha256": "17f9ce60a11b29d0a75ffc6738503a54b67f18f40a6522c42d2e14bbe14f8a36",
       "lines": 1761,
@@ -87,6 +99,30 @@
       "lines": 488,
       "category": "progression",
       "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L7604-L8087"
+    },
+    "wiki/changelog-client-dev.md": {
+      "sha256": "71858b04c50786d5e7d890fcf1ade46b554e17c89ab4adaa322226691503e30f",
+      "lines": 850,
+      "category": "engine-ui",
+      "source": "https://cdn.uoidle.com/news/client/dev.md"
+    },
+    "wiki/changelog-client-en.md": {
+      "sha256": "2852c6517eb1ff8478fabd82daa2aa53dc11f0fac4e2e6d95c48c4f7aa0e2944",
+      "lines": 303,
+      "category": "engine-ui",
+      "source": "https://api.uoidle.com/news/client/en.md"
+    },
+    "wiki/changelog-server-dev.md": {
+      "sha256": "08d150026221e3942b9247a2cb32a24d58c876b3e2d3300212b800fc9146d3b1",
+      "lines": 1201,
+      "category": "combat",
+      "source": "https://cdn.uoidle.com/news/server/dev.md"
+    },
+    "wiki/changelog-server-en.md": {
+      "sha256": "b08b355ed260ce2da00a0df5addfce6f9458e314f15f91712d40f3fa81706c55",
+      "lines": 288,
+      "category": "combat",
+      "source": "https://api.uoidle.com/news/server/en.md"
     }
   }
 }
