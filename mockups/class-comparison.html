@@ -450,32 +450,35 @@
     }
 
     .arvore-circulo {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
+      display: block;
+      width: 48px;
+      height: 48px;
       border: 2px solid #6d5733;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      border-radius: 5px;
+      background: #090b08;
+      padding: 0;
       overflow: hidden;
       flex-shrink: 0;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.65);
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .arvore-circulo.is-on {
       border-color: #e6c36a;
-      box-shadow: 0 0 12px #e6c36a73;
+      box-shadow: 0 0 12px rgba(230, 195, 106, 0.38);
     }
 
     .arvore-circulo:hover {
-      transform: scale(1.06);
+      transform: translateY(-2px) scale(1.06);
       border-color: var(--border-gold-bright);
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.55);
     }
 
     .arvore-circulo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 3px;
+      object-fit: cover;
       display: block;
     }
 
@@ -1021,7 +1024,7 @@
     }
     
     /* ==========================================================================
-       v2.1 Component Architecture & Dark-Fantasy Animation System
+       v2.2 Progressive Disclosure, Command Deck Clustering & Micro-Animation System
        ========================================================================== */
     @keyframes auraPulse {
       0%, 100% { opacity: 0.55; transform: scale(1); }
@@ -1035,18 +1038,17 @@
       0%, 100% { box-shadow: 0 0 0 0 rgba(230, 195, 106, 0.55), 0 0 14px var(--class-glow); }
       50% { box-shadow: 0 0 0 5px rgba(230, 195, 106, 0), 0 0 22px var(--border-gold-bright); }
     }
-    @keyframes modeFlash {
-      0% { filter: brightness(1.35); transform: translateY(-1px); }
-      100% { filter: brightness(1); transform: translateY(0); }
-    }
-    @keyframes tickerSweep {
-      0% { width: 0%; }
-      100% { width: 100%; }
+    @keyframes inspectorFadeSlide {
+      0% { opacity: 0.35; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     @keyframes floatUpBadge {
       0% { opacity: 0; transform: translateY(4px) scale(0.96); }
-      20% { opacity: 1; transform: translateY(0) scale(1); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes spotlightGlowSweep {
+      0% { box-shadow: 0 0 0 0 rgba(229, 193, 88, 0.55), inset 0 0 18px rgba(229, 193, 88, 0.22); }
+      100% { box-shadow: 0 0 22px rgba(229, 193, 88, 0.32), inset 0 0 12px rgba(229, 193, 88, 0.08); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1057,16 +1059,18 @@
       }
     }
 
-    /* 1. Global Quick Command & Shortcut Bar Component (<uo-quick-dock>) */
+    /* 1. Unified Beveled Command Deck & Clustered Controls (.command-deck) */
     .uo-quick-dock {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 8px 12px;
-      padding: 6px 14px;
-      background: linear-gradient(90deg, #0d100c 0%, #171c15 50%, #0d100c 100%);
-      border-bottom: 1px solid #352d1d;
+      gap: 6px 12px;
+      padding: 5px 12px;
+      background: linear-gradient(90deg, #0b0e0a 0%, #151a13 50%, #0b0e0a 100%);
+      border: 1px solid #483b22;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       color: var(--text-secondary);
@@ -1075,13 +1079,34 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 6px 10px;
+      gap: 6px 8px;
+    }
+    .command-cluster {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: rgba(12, 15, 11, 0.88);
+      border: 1px solid #3c3425;
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.05);
+    }
+    .cluster-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 3px;
+      opacity: 0.9;
     }
     .kbd-chip {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 1px 6px;
+      padding: 2px 6px;
       border-radius: 3px;
       background: #141812;
       border: 1px solid #3c3425;
@@ -1108,9 +1133,9 @@
       animation: auraPulse 2.2s infinite ease-in-out;
     }
 
-    /* 2. Segmented Stat Distribution & Resource Bar Component (<uo-stat-bar>) */
+    /* 2. De-Duplicated Segmented Stat Bars & Compact 2x4 Grandmaster Skill Pills */
     .stat-ratio-strip {
-      margin-top: 8px;
+      margin-top: 6px;
       padding: 6px 8px;
       background: #10140f;
       border: 1px solid #2a3026;
@@ -1129,21 +1154,21 @@
     .stat-seg-dex { background: linear-gradient(90deg, #2e9e6b, #48bb78); transition: width 0.3s ease; }
     .stat-seg-int { background: linear-gradient(90deg, #3b82f6, #63b3ed); transition: width 0.3s ease; }
 
-    /* 3. Starter Skill Mastery Progress Card Component */
     .skill-mastery-card {
-      padding: 5px 8px;
+      padding: 4px 7px;
       background: linear-gradient(180deg, #171c15 0%, #111510 100%);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
       min-width: 0;
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
     }
     .skill-mastery-card:hover {
       border-color: var(--border-gold);
       transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
     }
     .skill-mastery-top {
       display: flex;
@@ -1152,7 +1177,7 @@
       gap: 4px;
     }
     .skill-mastery-bar-bg {
-      height: 4px;
+      height: 3.5px;
       border-radius: 2px;
       background: #090b08;
       overflow: hidden;
@@ -1163,42 +1188,80 @@
       transition: width 0.4s ease;
     }
 
-    /* 4. Connected [Arvore Progression Rail & Halo Nodes */
+    /* 3. Connected [Arvore Level-Line Progression Rail — Beveled Square Icon Frames (Zero Circular Cutoff!) */
     .arvore-cobra-wrap {
       position: relative;
       padding: 12px 14px;
       border-bottom: 1px solid #2a3026;
       background:
-        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 70%),
-        rgba(11, 13, 10, 0.72);
+        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 72%),
+        linear-gradient(180deg, rgba(16, 20, 15, 0.95) 0%, rgba(11, 13, 10, 0.95) 100%);
     }
     .arvore-tier-banner {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 6px 10px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9.5px;
       color: var(--text-secondary);
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed #262c22;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #2e3529;
+    }
+    .cobra-tier-btns {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .cobra-tier-btn {
+      padding: 2px 7px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      border-radius: 3px;
+      border: 1px solid #4a3c24;
+      background: #141812;
+      color: #d6e4ca;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .cobra-tier-btn:hover,
+    .cobra-tier-btn.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.32);
     }
     .arvore-col {
       position: relative;
       z-index: 1;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .arvore-col.is-tier-dimmed {
+      opacity: 0.32;
+      filter: grayscale(0.6);
     }
     .arvore-col::after {
       content: '';
       position: absolute;
-      top: 37px;
+      top: 41px;
       left: 55%;
       width: 90%;
-      height: 2px;
-      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(201, 162, 39, 0.2) 50%, var(--border-gold) 100%);
+      height: 3px;
+      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(229, 193, 88, 0.25) 50%, var(--border-gold) 100%);
       background-size: 200% 100%;
-      animation: railFlow 5s linear infinite;
+      animation: railFlow 4.5s linear infinite;
       z-index: -1;
       pointer-events: none;
+      border-radius: 2px;
+    }
+    .arvore-col.is-path-lit::after {
+      background: linear-gradient(90deg, #fff2bf 0%, var(--border-gold-bright) 50%, var(--class-accent) 100%);
+      background-size: 200% 100%;
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.55);
     }
     .arvore-col:nth-child(6n)::after,
     .arvore-col:last-child::after {
@@ -1207,7 +1270,7 @@
     .arvore-circulo.is-selected-node {
       border-color: #fff2bf !important;
       animation: nodeHaloPulse 2s infinite ease-in-out;
-      transform: scale(1.08);
+      transform: translateY(-2px) scale(1.08);
     }
     .arvore-circulo[data-node-kind="passive"] { border-color: var(--kind-passive); }
     .arvore-circulo[data-node-kind="skill"]   { border-color: var(--kind-skill); }
@@ -1218,10 +1281,32 @@
       box-shadow: 0 0 14px rgba(246, 224, 94, 0.45);
     }
 
-    /* 5. Ability Power & Scaling Meter Component (<uo-power-meter>) */
+    /* Live Interactive Progression Telemetry Strip inside [Arvore Chart */
+    .cobra-live-summary {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 5px;
+      border: 1px solid #5d4a2b;
+      border-left: 3px solid var(--border-gold-bright);
+      background: linear-gradient(90deg, rgba(38, 32, 19, 0.72) 0%, rgba(16, 20, 15, 0.94) 100%);
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1.35fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      animation: inspectorFadeSlide 0.22s ease-out;
+    }
+    .cobra-live-summary img {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+      display: block;
+    }
+
+    /* 4. Compact Ability Power & Scaling Meter (<uo-power-meter>) */
     .uo-power-meter {
       margin-top: 5px;
-      padding: 4px 6px;
+      padding: 3px 6px;
       background: #0e120d;
       border: 1px solid #252b21;
       border-radius: 3px;
@@ -1232,13 +1317,13 @@
       align-items: center;
       gap: 6px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
+      font-size: 8.8px;
       color: var(--text-secondary);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .uo-power-track {
       position: relative;
-      height: 5px;
+      height: 4.5px;
       border-radius: 3px;
       background: #080a07;
       overflow: hidden;
@@ -1247,28 +1332,74 @@
     .uo-power-seg-base {
       height: 100%;
       background: linear-gradient(90deg, #8b6f1e, #d4af37);
-      transition: width 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .uo-power-seg-burst {
       height: 100%;
       background: linear-gradient(90deg, var(--class-accent), #f6ad55);
-      transition: width 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .uo-power-seg-modeb {
       height: 100%;
       background: #68d391;
       opacity: 0.35;
-      transition: width 0.25s ease, opacity 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
     .is-mode-b-active .uo-power-seg-modeb {
       opacity: 1;
       box-shadow: 0 0 8px #68d391;
     }
 
+    /* 5. Progressive-Disclosure Inspector Tabs (.inspector-tab-bar) */
+    .inspector-tab-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      margin: 8px 0;
+      padding: 3px;
+      background: #0b0e0a;
+      border: 1px solid #352d1d;
+      border-radius: 4px;
+    }
+    .insp-tab-btn {
+      padding: 4px 5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .insp-tab-btn:hover {
+      color: #fff2bf;
+      background: #171c15;
+    }
+    .insp-tab-btn.is-active {
+      color: #fff2bf;
+      background: linear-gradient(180deg, #332915 0%, #1b160c 100%);
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.28);
+    }
+    .insp-pane {
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .insp-pane.is-highlighted-pane {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.28);
+      animation: inspectorFadeSlide 0.22s ease-out;
+    }
+
     /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
     .uo-combat-ticker {
-      margin-top: 8px;
-      padding: 8px 10px;
+      margin-top: 6px;
+      padding: 7px 9px;
       border-radius: 4px;
       border: 1px solid #4a3c24;
       background: linear-gradient(180deg, #151913 0%, #0b0e0a 100%);
@@ -1280,16 +1411,16 @@
       justify-content: space-between;
       align-items: center;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .ticker-progress-bg {
       position: relative;
-      height: 6px;
+      height: 5px;
       border-radius: 3px;
       background: #070907;
       border: 1px solid #2a3026;
       overflow: hidden;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .ticker-progress-fill {
       height: 100%;
@@ -1302,7 +1433,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       flex-wrap: wrap;
     }
     .posture-pips {
@@ -1311,8 +1442,8 @@
       align-items: center;
     }
     .posture-pip {
-      width: 12px;
-      height: 8px;
+      width: 11px;
+      height: 7px;
       border-radius: 2px;
       background: #141812;
       border: 1px solid #3c3425;
@@ -1331,7 +1462,7 @@
     .ticker-log-feed {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .ticker-log-item {
       display: flex;
@@ -1343,7 +1474,7 @@
       background: #10140f;
       border-left: 2px solid var(--border-gold);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9.5px;
+      font-size: 9.2px;
       animation: floatUpBadge 0.22s ease-out;
     }
 
@@ -1374,7 +1505,7 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 5px;
       padding-top: 5px;
       border-top: 1px dashed #2a3026;
     }
@@ -1393,41 +1524,57 @@
     .w-stat-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
-      transition: width 0.25s ease;
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* 8. 5-Class Executive KPI Comparison Strip (class-comparison.html) */
+    /* 8. 5-Class Hero Spotlight Cards with SVG Sparklines (Concept Art Match) */
     .exec-kpi-strip {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
     .exec-kpi-card {
-      padding: 8px 10px;
-      border-radius: 4px;
-      background: linear-gradient(180deg, #181d16 0%, #10140f 100%);
-      border: 1px solid #2a3026;
+      padding: 9px 11px;
+      border-radius: 6px;
+      background: linear-gradient(180deg, #1b2019 0%, #0f130e 100%);
+      border: 1px solid #353c30;
       border-top: 3px solid var(--border-gold);
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
       min-width: 0;
       cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.18s ease, background 0.18s ease;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
     }
     .exec-kpi-card.is-spotlight-class {
       border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #282415 0%, #151912 100%);
-      box-shadow: 0 0 16px rgba(229, 193, 88, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+      background: linear-gradient(180deg, #2b2414 0%, #151912 100%);
+      box-shadow: 0 0 20px rgba(229, 193, 88, 0.42), inset 0 0 14px rgba(229, 193, 88, 0.16);
       transform: translateY(-2px);
     }
+    .kpi-emblem {
+      width: 28px;
+      height: 28px;
+      border-radius: 5px;
+      display: inline-grid;
+      place-items: center;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff2bf;
+      border: 1px solid rgba(255, 242, 191, 0.45);
+      flex-shrink: 0;
+    }
     tr.is-class-spotlight td {
-      background: rgba(229, 193, 88, 0.14) !important;
+      background: rgba(229, 193, 88, 0.15) !important;
       border-top: 1px solid var(--border-gold-bright) !important;
       border-bottom: 1px solid var(--border-gold-bright) !important;
     }
@@ -1437,13 +1584,14 @@
     [data-comp-section],
     .milestone-card {
       scroll-margin-top: 14px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease, transform 0.22s ease, background 0.22s ease;
     }
     section.arvore-secao.is-focused-section,
     [data-comp-section].is-focused-section,
     .is-focused-section {
       border-color: var(--border-gold-bright) !important;
       box-shadow: 0 0 24px rgba(229, 193, 88, 0.36), inset 0 0 14px rgba(229, 193, 88, 0.1) !important;
+      animation: spotlightGlowSweep 0.6s ease-out;
     }
     section.arvore-secao.is-focused-section > .arvore-secao-titulo {
       background: linear-gradient(90deg, #332913 0%, #1d2219 100%) !important;
@@ -1463,7 +1611,7 @@
     .passive-badge-item,
     .skill-mastery-card {
       cursor: pointer;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease, background 0.16s ease;
     }
     .kbd-chip:hover,
     .arvore-saldo:hover,
@@ -1486,6 +1634,9 @@
       }
       .arvore-col::after {
         display: none;
+      }
+      .cobra-live-summary {
+        grid-template-columns: 44px minmax(0, 1fr);
       }
     }
   
@@ -1600,15 +1751,18 @@
       
     <nav class="uo-quick-dock" aria-label="Developer Quick Command Bar">
       <div class="uo-quick-dock-left">
-        <span style="display:inline-flex;align-items:center;gap:5px;color:#fff2bf;font-weight:600;">
+        <span style="display:inline-flex;align-items:center;gap:6px;color:#fff2bf;font-weight:700;letter-spacing:0.03em;">
           <i class="live-pulse-dot"></i>
-          UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
+          UO IDLE v0.99.0 · TOKUNO WORKBENCH
         </span>
-        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
-        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="view" onclick="window.handleQuickDock && window.handleQuickDock('view')" title="Cycle &amp; Smooth-Scroll Workbench Sections"><kbd>1–3</kbd> Switch View</span>
+        <div class="command-cluster" role="group" aria-label="Keyboard & Quick Actions">
+          <span class="cluster-tag">Quick:</span>
+          <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
+          <span class="kbd-chip" role="button" tabindex="0" data-dock-action="view" onclick="window.handleQuickDock && window.handleQuickDock('view')" title="Cycle &amp; Smooth-Scroll Workbench Sections"><kbd>1–3</kbd> Switch View</span>
+        </div>
       </div>
       <div class="uo-quick-dock-right">
-        <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
+        <span style="color:var(--text-gold);">Gates: 7/7 PASS · 0 Polygons · ±5–8% Parity</span>
         <a href="samurai-skill-tree.html?mode=mode_b" style="color:#ff9b93;text-decoration:none;font-weight:600;">⚡ SM Mode B</a>
         <a href="ninja-skill-tree.html?mode=mode_b" style="color:#7ce8b4;text-decoration:none;font-weight:600;">⚡ NJ Mode B</a>
       </div>
@@ -1638,17 +1792,20 @@
           </div>
         </div>
         <div class="arvore-head-acoes">
-          <a class="nav-pill" href="index.html">Review Portal</a>
-          <a class="nav-pill" href="samurai-skill-tree.html">Samurai (SM 114)</a>
-          <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
-          <a class="nav-pill is-active" href="class-comparison.html">5-Class Parity &amp; Sim</a>
+          <div class="command-cluster">
+            <span class="cluster-tag">Surface</span>
+            <a class="nav-pill" href="index.html">Portal</a>
+            <a class="nav-pill" href="samurai-skill-tree.html">Samurai (114)</a>
+            <a class="nav-pill" href="ninja-skill-tree.html">Ninja (115)</a>
+            <a class="nav-pill is-active" href="class-comparison.html">5-Class Sim</a>
+          </div>
         </div>
       </header>
 
       <!-- Interactive Workbench Smooth-Scroll Navigation Bar (Zero Show/Hide) -->
       <div class="filter-bar" style="margin-bottom:0;background:linear-gradient(180deg,#1a1f18,#10140f);border-color:#5d4a2b;">
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-          <span class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;">JUMP TO SECTION:</span>
+        <div class="command-cluster">
+          <span class="cluster-tag">Jump to Section</span>
           <button type="button" class="beta-btn is-active" data-comp-tab="all" onclick="switchCompTab('all')">↑ Top Overview</button>
           <button type="button" class="beta-btn" data-comp-tab="sim" onclick="switchCompTab('sim')">1A. Combat Simulator &amp; KPIs</button>
           <button type="button" class="beta-btn" data-comp-tab="charts" data-scroll-target="#sec-charts" onclick="switchCompTab('charts')">1B. Visual SVG Curves &amp; Breakdown</button>
@@ -1667,20 +1824,20 @@
         </h2>
         <div class="panel-body">
           <div class="filter-bar" id="sec-sim-controls">
-            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-              <span class="mono" style="font-size:11px;color:var(--text-gold);">Mode:</span>
+            <div class="command-cluster">
+              <span class="cluster-tag">Engine Mode</span>
               <button type="button" class="beta-btn is-active" data-sim-mode="mode_a" onclick="updateSimFilter('mode', 'mode_a')">Mode A (100% Existing Engine)</button>
               <button type="button" class="beta-btn" data-sim-mode="mode_b" onclick="updateSimFilter('mode', 'mode_b')">Mode B (&lt;20 LOC C# Hook)</button>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-              <span class="mono" style="font-size:11px;color:var(--text-gold);">Bracket:</span>
+            <div class="command-cluster">
+              <span class="cluster-tag">Bracket</span>
               <button type="button" class="beta-btn" data-sim-bracket="L10" onclick="updateSimFilter('bracket', 'L10')">L10</button>
               <button type="button" class="beta-btn" data-sim-bracket="L25" onclick="updateSimFilter('bracket', 'L25')">L25</button>
               <button type="button" class="beta-btn" data-sim-bracket="L45" onclick="updateSimFilter('bracket', 'L45')">L45</button>
               <button type="button" class="beta-btn is-active" data-sim-bracket="L60" onclick="updateSimFilter('bracket', 'L60')">L60</button>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-              <span class="mono" style="font-size:11px;color:var(--text-gold);">Archetype:</span>
+            <div class="command-cluster">
+              <span class="cluster-tag">Archetype</span>
               <button type="button" class="beta-btn is-active" data-sim-arch="low_def_boss" onclick="updateSimFilter('arch', 'low_def_boss')">low_def_boss</button>
               <button type="button" class="beta-btn" data-sim-arch="high_def_boss" onclick="updateSimFilter('arch', 'high_def_boss')">high_def_boss</button>
               <button type="button" class="beta-btn" data-sim-arch="fast_trash" onclick="updateSimFilter('arch', 'fast_trash')">fast_trash</button>
@@ -1700,78 +1857,117 @@
 
           <div class="exec-kpi-strip" id="sim-exec-kpi-strip">
     
-          <div class="exec-kpi-card" data-kpi-class="warrior" onclick="window.spotlightSimClass && window.spotlightSimClass('warrior')" style="border-top-color:#d97706;" title="Click to spotlight WARRIOR across telemetry table, SVG curves &amp; 5-channel breakdown">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#d97706;text-transform:uppercase;">warrior</strong>
-              <span class="mono" style="font-size:9.5px;color:#82d5b0;">-7.8% vs Mean</span>
+          <div class="exec-kpi-card" data-kpi-class="warrior" data-spot-class="warrior" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#d97706;" title="Click to spotlight WARRIOR across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #d97706, #0c0f0b 82%);border-color:#d97706;">WR</span>
+                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">warrior</strong>
+              </div>
+              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS -7.8%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
-              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">345.1 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11px;color:#9ec9ff;">222.3 EHP/s</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
+              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">345.1 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">222.3 EHP/s</span>
             </div>
-            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
+              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#d97706" stroke-width="2" opacity="0.88" />
+              <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#d97706" stroke-width="1.5" />
+            </svg>
+            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>12 Shield Parries</span>
-              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
+              <span style="color:var(--text-gold);">Spotlight ▸</span>
             </div>
           </div>
         
-          <div class="exec-kpi-card" data-kpi-class="mage" onclick="window.spotlightSimClass && window.spotlightSimClass('mage')" style="border-top-color:#3b82f6;" title="Click to spotlight MAGE across telemetry table, SVG curves &amp; 5-channel breakdown">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#3b82f6;text-transform:uppercase;">mage</strong>
-              <span class="mono" style="font-size:9.5px;color:#82d5b0;">+0.0% vs Mean</span>
+
+          <div class="exec-kpi-card" data-kpi-class="mage" data-spot-class="mage" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#3b82f6;" title="Click to spotlight MAGE across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #3b82f6, #0c0f0b 82%);border-color:#3b82f6;">MG</span>
+                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">mage</strong>
+              </div>
+              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS +0.0%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
-              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">374.5 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11px;color:#9ec9ff;">248.8 EHP/s</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
+              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">374.5 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">248.8 EHP/s</span>
             </div>
-            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
+              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.88" />
+              <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#3b82f6" stroke-width="1.5" />
+            </svg>
+            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>3 Shield Parries</span>
-              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
+              <span style="color:var(--text-gold);">Spotlight ▸</span>
             </div>
           </div>
         
-          <div class="exec-kpi-card" data-kpi-class="ranger" onclick="window.spotlightSimClass && window.spotlightSimClass('ranger')" style="border-top-color:#84cc16;" title="Click to spotlight RANGER across telemetry table, SVG curves &amp; 5-channel breakdown">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#84cc16;text-transform:uppercase;">ranger</strong>
-              <span class="mono" style="font-size:9.5px;color:#82d5b0;">+7.8% vs Mean</span>
+
+          <div class="exec-kpi-card" data-kpi-class="ranger" data-spot-class="ranger" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#84cc16;" title="Click to spotlight RANGER across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #84cc16, #0c0f0b 82%);border-color:#84cc16;">RG</span>
+                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">ranger</strong>
+              </div>
+              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS +7.8%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
-              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">403.6 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11px;color:#9ec9ff;">224.2 EHP/s</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
+              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">403.6 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">224.2 EHP/s</span>
             </div>
-            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
+              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#84cc16" stroke-width="2" opacity="0.88" />
+              <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#84cc16" stroke-width="1.5" />
+            </svg>
+            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>3 Shield Parries</span>
-              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
+              <span style="color:var(--text-gold);">Spotlight ▸</span>
             </div>
           </div>
         
-          <div class="exec-kpi-card" data-kpi-class="samurai" onclick="window.spotlightSimClass && window.spotlightSimClass('samurai')" style="border-top-color:#c83e37;" title="Click to spotlight SAMURAI across telemetry table, SVG curves &amp; 5-channel breakdown">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#c83e37;text-transform:uppercase;">samurai</strong>
-              <span class="mono" style="font-size:9.5px;color:#82d5b0;">-1.4% vs Mean</span>
+
+          <div class="exec-kpi-card" data-kpi-class="samurai" data-spot-class="samurai" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#c83e37;" title="Click to spotlight SAMURAI across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #c83e37, #0c0f0b 82%);border-color:#c83e37;">SM</span>
+                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">samurai</strong>
+              </div>
+              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS -1.4%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
-              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">369.0 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11px;color:#9ec9ff;">235.4 EHP/s</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
+              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">369.0 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">235.4 EHP/s</span>
             </div>
-            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
+              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#c83e37" stroke-width="2" opacity="0.88" />
+              <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#c83e37" stroke-width="1.5" />
+            </svg>
+            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>12 Bushido Parries</span>
-              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
+              <span style="color:var(--text-gold);">Spotlight ▸</span>
             </div>
           </div>
         
-          <div class="exec-kpi-card" data-kpi-class="ninja" onclick="window.spotlightSimClass && window.spotlightSimClass('ninja')" style="border-top-color:#2e9e6b;" title="Click to spotlight NINJA across telemetry table, SVG curves &amp; 5-channel breakdown">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#2e9e6b;text-transform:uppercase;">ninja</strong>
-              <span class="mono" style="font-size:9.5px;color:#82d5b0;">-1.0% vs Mean</span>
+
+          <div class="exec-kpi-card" data-kpi-class="ninja" data-spot-class="ninja" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#2e9e6b;" title="Click to spotlight NINJA across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #2e9e6b, #0c0f0b 82%);border-color:#2e9e6b;">NJ</span>
+                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">ninja</strong>
+              </div>
+              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS -1.0%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
-              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">370.9 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11px;color:#9ec9ff;">229.6 EHP/s</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
+              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">370.9 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">229.6 EHP/s</span>
             </div>
-            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
+              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#2e9e6b" stroke-width="2" opacity="0.88" />
+              <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#2e9e6b" stroke-width="1.5" />
+            </svg>
+            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>Smoke &amp; Clone Veil</span>
-              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
+              <span style="color:var(--text-gold);">Spotlight ▸</span>
             </div>
           </div>
         
@@ -1897,6 +2093,24 @@
           <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
           <div class="sim-charts-grid" id="sec-charts" data-comp-section="charts">
             <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #252b21;">
+                <div class="command-cluster">
+                  <span class="cluster-tag">Chart Metric</span>
+                  <button type="button" class="cobra-tier-btn is-active" data-chart-metric="sustainedDps" onclick="setChartMetric('sustainedDps')">Sustained DPS</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-metric="ehpPerSec" onclick="setChartMetric('ehpPerSec')">Effective HP/s</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-metric="trashTtkSec" onclick="setChartMetric('trashTtkSec')">Trash TTK Speed</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-metric="parityDelta" onclick="setChartMetric('parityDelta')">Parity Envelope %</button>
+                </div>
+                <div class="command-cluster">
+                  <span class="cluster-tag">Curve Focus</span>
+                  <button type="button" class="cobra-tier-btn is-active" data-chart-class="" onclick="spotlightSimClass('')">All 5</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="warrior" onclick="spotlightSimClass('warrior')">WR</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="mage" onclick="spotlightSimClass('mage')">MG</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="ranger" onclick="spotlightSimClass('ranger')">RG</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="samurai" onclick="spotlightSimClass('samurai')">SM</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="ninja" onclick="spotlightSimClass('ninja')">NJ</button>
+                </div>
+              </div>
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
                 <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
@@ -1939,7 +2153,13 @@
 <polyline fill="none" stroke="#c83e37" stroke-width="2.8" points="48,186 251,170 453,123 656,40" /><circle cx="48" cy="186" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 6.2 DPS</title></circle><circle cx="251" cy="170" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 46.1 DPS</title></circle><circle cx="453" cy="123" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 163.2 DPS</title></circle><circle cx="656" cy="40" r="6" fill="#c83e37" stroke="#fff2bf" stroke-width="2"><title>SAMURAI: 369.0 DPS</title></circle>
 <polyline fill="none" stroke="#2e9e6b" stroke-width="2.8" points="48,185 251,167 453,111 656,40" /><circle cx="48" cy="185" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 6.8 DPS</title></circle><circle cx="251" cy="167" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 51.4 DPS</title></circle><circle cx="453" cy="111" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 193.1 DPS</title></circle><circle cx="656" cy="40" r="6" fill="#2e9e6b" stroke="#fff2bf" stroke-width="2"><title>NINJA: 370.9 DPS</title></circle>
     </svg></div>
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:10px 0 6px;">
+              <div id="chart-bracket-inspector" style="margin:6px 0 8px;padding:6px 10px;background:#10140f;border:1px solid #3c3425;border-left:3px solid var(--border-gold-bright);border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div class="mono" style="font-size:10.5px;color:#fff2bf;" id="chart-insp-headline">
+                  <strong>[L60 Grandmaster Bracket]</strong> Click any bracket marker (L10 · L25 · L45 · L60) on the chart or metric pills above to inspect power-spike deltas.
+                </div>
+                <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="chart-insp-delta">SM 363.2 DPS (-3.6%) · NJ 374.5 DPS (-0.6%) · Within ±5% Envelope</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:8px 0 6px;">
                 <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60 · Mode A · low_def_boss)
                 </strong>
@@ -3567,8 +3787,8 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
     }
 }</code></pre>
               </div>
-              <details class="schema-drawer" open style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;min-width:0;">
-                <summary style="font-size:10.5px;">Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools</summary>
+              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+                <summary style="font-size:10.5px;">▸ Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools (Progressive Disclosure)</summary>
                 <div style="margin-top:8px;min-width:0;">
                   <div class="table-scroll-wrap" style="margin-bottom:8px;">
                     <table class="comp-table">
@@ -3865,9 +4085,10 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
       var payload = JSON.parse(document.getElementById('mockup-data').textContent);
       var parityData = payload.parity;
       var breakdownsData = payload.breakdowns || [];
-      var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss', spotlightClass: '' };
+      var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss', spotlightClass: '', chartMetric: 'sustainedDps' };
       var orderedClasses = ['warrior', 'mage', 'ranger', 'samurai', 'ninja'];
       var classCols = { warrior: '#d97706', mage: '#3b82f6', ranger: '#84cc16', samurai: '#c83e37', ninja: '#2e9e6b' };
+      var classShort = { warrior: 'WR', mage: 'MG', ranger: 'RG', samurai: 'SM', ninja: 'NJ' };
       var brackets = ['L10', 'L25', 'L45', 'L60'];
       var tabOrder = ['sim', 'charts', 'endurance', 'matrix', 'armaments'];
       var currentTabIdx = 0;
@@ -3917,6 +4138,20 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         }
       };
 
+      function getChartMetricValue(scen, metricKey, brId) {
+        if (metricKey === 'trashTtkSec') {
+          return Math.round(3600 / Math.max(1.0, scen.trashTtkSec));
+        }
+        if (metricKey === 'parityDelta') {
+          var scens = parityData[state.mode].scenarios.filter(function(s) {
+            return s.bracketId === brId && s.archetypeId === state.arch && (s.classId === 'warrior' || s.classId === 'mage' || s.classId === 'ranger');
+          });
+          var meanD = scens.length > 0 ? scens.reduce(function(a, b) { return a + b.sustainedDps; }, 0) / scens.length : 375.0;
+          return Math.round((scen.sustainedDps / meanD) * 100);
+        }
+        return scen[metricKey] || 0;
+      }
+
       function renderProgressionSvg(metricKey, maxVal, unitLabel) {
         var chartW = 680, chartH = 220, padL = 48, padR = 24, padT = 20, padB = 32;
         var plotW = chartW - padL - padR;
@@ -3937,15 +4172,20 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         }
 
         // Active Bracket Vertical Spotlight Band + Badge
-        svg += '<rect x="' + (activeBx - 26) + '" y="' + padT + '" width="52" height="' + plotH + '" fill="rgba(229,193,88,0.18)" stroke="#e5c158" stroke-width="1.2" stroke-dasharray="2,2" rx="3" />';
-        svg += '<rect x="' + (activeBx - 24) + '" y="' + (padT + 2) + '" width="48" height="13" rx="2" fill="#e5c158" />';
-        svg += '<text x="' + activeBx + '" y="' + (padT + 11) + '" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE ' + state.bracket + '</text>';
+        svg += '<rect x="' + (activeBx - 28) + '" y="' + padT + '" width="56" height="' + plotH + '" fill="rgba(229,193,88,0.18)" stroke="#e5c158" stroke-width="1.3" stroke-dasharray="2,2" rx="3" />';
+        svg += '<rect x="' + (activeBx - 26) + '" y="' + (padT + 2) + '" width="52" height="14" rx="2" fill="#e5c158" />';
+        svg += '<text x="' + activeBx + '" y="' + (padT + 12) + '" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE ' + state.bracket + '</text>';
 
         for (var b = 0; b < brackets.length; b++) {
           var bx = Math.round(padL + (b / (brackets.length - 1)) * plotW);
           var isActBr = b === activeIdx;
+          var brCode = brackets[b];
+          svg += '<g data-svg-bracket="' + brCode + '" onclick="window.updateSimFilter(&quot;bracket&quot;, &quot;' + brCode + '&quot;)" style="cursor:pointer;">';
+          svg += '<rect x="' + (bx - 28) + '" y="' + padT + '" width="56" height="' + (plotH + 24) + '" fill="transparent" />';
           svg += '<line x1="' + bx + '" y1="' + padT + '" x2="' + bx + '" y2="' + (padT + plotH) + '" stroke="' + (isActBr ? '#e5c158' : '#1e241b') + '" stroke-width="' + (isActBr ? '1.5' : '1') + '" />';
-          svg += '<text x="' + bx + '" y="' + (chartH - 10) + '" fill="' + (isActBr ? '#fff2bf' : '#d4af37') + '" font-size="' + (isActBr ? '11' : '10') + '" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">' + brackets[b] + '</text>';
+          svg += '<rect x="' + (bx - 20) + '" y="' + (chartH - 22) + '" width="40" height="16" rx="3" fill="' + (isActBr ? 'rgba(229,193,88,0.22)' : '#141912') + '" stroke="' + (isActBr ? '#e5c158' : '#3a4233') + '" />';
+          svg += '<text x="' + bx + '" y="' + (chartH - 11) + '" fill="' + (isActBr ? '#fff2bf' : '#d4af37') + '" font-size="' + (isActBr ? '10.5' : '9.5') + '" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">' + brCode + '</text>';
+          svg += '</g>';
         }
         var scens = parityData[state.mode].scenarios;
         for (var c = 0; c < orderedClasses.length; c++) {
@@ -3960,7 +4200,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
             var val = 0;
             for (var si = 0; si < scens.length; si++) {
               if (scens[si].classId === cid && scens[si].bracketId === brId && scens[si].archetypeId === state.arch) {
-                val = scens[si][metricKey];
+                val = getChartMetricValue(scens[si], metricKey, brId);
                 break;
               }
             }
@@ -3970,7 +4210,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
             var isActPt = bi === activeIdx;
             var rVal = isSpot ? (isActPt ? '7.5' : '5.5') : (isActPt ? '6' : '3.8');
             var sCol = (isActPt || isSpot) ? '#fff2bf' : '#0b0d0a';
-            circles += '<circle cx="' + px + '" cy="' + py + '" r="' + rVal + '" fill="' + col + '" stroke="' + sCol + '" stroke-width="' + (isActPt || isSpot ? '2' : '1.5') + '" opacity="' + (isDim ? '0.35' : '1') + '"><title>' + cid.toUpperCase() + ': ' + val.toFixed(1) + ' ' + unitLabel + '</title></circle>';
+            circles += '<circle cx="' + px + '" cy="' + py + '" r="' + rVal + '" fill="' + col + '" stroke="' + sCol + '" stroke-width="' + (isActPt || isSpot ? '2' : '1.5') + '" opacity="' + (isDim ? '0.35' : '1') + '" onclick="window.updateSimFilter(&quot;bracket&quot;, &quot;' + brId + '&quot;)" style="cursor:pointer;"><title>' + cid.toUpperCase() + ' (' + brId + '): ' + val.toFixed(1) + ' ' + unitLabel + '</title></circle>';
             if (isSpot && isActPt) {
               circles += '<text x="' + (px - 8) + '" y="' + Math.max(padT + 14, py - 9) + '" fill="#fff2bf" font-size="9.5" font-weight="700" font-family="IBM Plex Mono" text-anchor="end">' + cid.toUpperCase() + ' ' + val.toFixed(0) + '</text>';
             }
@@ -3985,8 +4225,25 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         return svg;
       }
 
+      window.setChartMetric = function(metricKey) {
+        state.chartMetric = metricKey;
+        var btns = document.querySelectorAll('[data-chart-metric]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-chart-metric') === metricKey);
+        }
+        window.updateSimFilter('mode', state.mode);
+      };
+
       window.spotlightSimClass = function(classId) {
-        state.spotlightClass = state.spotlightClass === classId ? '' : classId;
+        if (classId === '') {
+          state.spotlightClass = '';
+        } else {
+          state.spotlightClass = state.spotlightClass === classId ? '' : classId;
+        }
+        var cBtns = document.querySelectorAll('[data-chart-class]');
+        for (var i = 0; i < cBtns.length; i++) {
+          cBtns[i].classList.toggle('is-active', cBtns[i].getAttribute('data-chart-class') === state.spotlightClass);
+        }
         window.updateSimFilter('mode', state.mode);
       };
 
@@ -4068,7 +4325,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
 
-        // Also update Executive 5-Class KPI Strip (without unescaped single quotes!)
+        // Also update Executive 5-Class KPI Strip with Class Emblems & Sparklines
         var kpiStripEl = document.getElementById('sim-exec-kpi-strip');
         if (kpiStripEl && list.length > 0) {
           var baseScens = list.filter(function(s) {
@@ -4081,6 +4338,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
           for (var ki = 0; ki < list.length; ki++) {
             var ks = list[ki];
             var kCol = classCols[ks.classId] || '#c9a227';
+            var kShort = classShort[ks.classId] || ks.classId.slice(0, 2).toUpperCase();
             var isSpotKpi = state.spotlightClass === ks.classId;
             var dPct = (((ks.sustainedDps - meanD) / meanD) * 100).toFixed(1);
             var dStr = parseFloat(dPct) >= 0 ? ('+' + dPct + '%') : (dPct + '%');
@@ -4090,14 +4348,21 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
                 ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
                 : (ks.parryCount + ' Shield Parries'));
             kpiHtml += '<div class="exec-kpi-card ' + (isSpotKpi ? 'is-spotlight-class' : '') + '" data-kpi-class="' + escHtml(ks.classId) + '" data-spot-class="' + escHtml(ks.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="border-top-color:' + escHtml(kCol) + ';">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<strong style="font-family:Cinzel,serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
-                '<span class="mono" style="font-size:9.5px;color:#82d5b0;">' + escHtml(dStr) + ' vs Mean</span>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">' +
+                '<div style="display:flex;align-items:center;gap:6px;">' +
+                  '<span class="kpi-emblem" style="color:' + escHtml(kCol) + ';border-color:' + escHtml(kCol) + ';">' + escHtml(kShort) + '</span>' +
+                  '<strong style="font-family:Cinzel,serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
+                '</div>' +
+                '<span class="mono" style="font-size:9px;color:#82d5b0;background:rgba(46,158,107,0.14);border:1px solid rgba(46,158,107,0.4);padding:1px 5px;border-radius:3px;">PASS ' + escHtml(dStr) + '</span>' +
               '</div>' +
               '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
                 '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
                 '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
               '</div>' +
+              '<svg viewBox="0 0 120 16" style="width:100%;height:14px;display:block;opacity:0.9;">' +
+                '<polyline fill="none" stroke="' + escHtml(kCol) + '" stroke-width="1.6" points="4,13 38,10 78,6 116,2" />' +
+                '<circle cx="116" cy="2" r="2.3" fill="#fff2bf" stroke="' + escHtml(kCol) + '" stroke-width="1.2" />' +
+              '</svg>' +
               '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
                 '<span>' + escHtml(mLbl) + '</span>' +
                 '<span style="color:#82d5b0;">' + (isSpotKpi ? 'SPOTLIGHT ON' : '0 OOM · Spotlight ▸') + '</span>' +
@@ -4108,15 +4373,38 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         }
 
         var modeLabel = isModeB ? 'Mode B (<20 LOC C#)' : 'Mode A (100% Engine)';
+        var activeMetric = state.chartMetric || 'sustainedDps';
+        var metricTitleMap = {
+          sustainedDps: { label: 'Sustained DPS Curve', max: state.arch === 'multi_target_pack' ? 680 : 420, unit: 'DPS' },
+          ehpPerSec: { label: 'Effective HP / Sec (EHP/s) Curve', max: 350, unit: 'EHP/s' },
+          trashTtkSec: { label: 'Clear Cadence (Kills / Hour)', max: state.arch === 'fast_trash' ? 320 : 80, unit: 'Kills/Hr' },
+          parityDelta: { label: 'Parity Ratio vs Baseline Mean (%)', max: 130, unit: '% Mean' }
+        };
+        var mCfg = metricTitleMap[activeMetric] || metricTitleMap.sustainedDps;
         var dpsTitle = document.getElementById('svg-dps-title');
         var ehpTitle = document.getElementById('svg-ehp-title');
-        if (dpsTitle) dpsTitle.textContent = 'Multi-Bracket Sustained DPS Curve (Active: ' + state.bracket + ' · ' + modeLabel + ' · ' + state.arch + ')';
+        if (dpsTitle) dpsTitle.textContent = 'Multi-Bracket ' + mCfg.label + ' (Active: ' + state.bracket + ' · ' + modeLabel + ' · ' + state.arch + ')';
         if (ehpTitle) ehpTitle.textContent = 'Multi-Bracket Effective HP / Sec (EHP/s) Curve (Active: ' + state.bracket + ' · ' + modeLabel + ' · ' + state.arch + ')';
-        var dpsMax = state.arch === 'multi_target_pack' ? 680 : 420;
         var svgDpsWrap = document.getElementById('svg-dps-wrap');
         var svgEhpWrap = document.getElementById('svg-ehp-wrap');
-        if (svgDpsWrap) svgDpsWrap.innerHTML = renderProgressionSvg('sustainedDps', dpsMax, 'DPS');
+        if (svgDpsWrap) svgDpsWrap.innerHTML = renderProgressionSvg(activeMetric, mCfg.max, mCfg.unit);
         if (svgEhpWrap) svgEhpWrap.innerHTML = renderProgressionSvg('ehpPerSec', 350, 'EHP/s');
+
+        var inspHead = document.getElementById('chart-insp-headline');
+        var inspDelta = document.getElementById('chart-insp-delta');
+        var smRow = list.filter(function(s) { return s.classId === 'samurai'; })[0];
+        var njRow = list.filter(function(s) { return s.classId === 'ninja'; })[0];
+        var wrRow = list.filter(function(s) { return s.classId === 'warrior'; })[0];
+        if (inspHead && smRow && njRow) {
+          var spikeMilestone = state.bracket === 'L10' ? 'L10 Starter Tier (Lightning Strike / Focus Attack + Smoke Bomb)' :
+            (state.bracket === 'L25' ? 'L25 Mid-Tier Spike (Confidence + CounterAttack / Backstab + Mirror Image)' :
+            (state.bracket === 'L45' ? 'L45 Mastery Tier (Momentum Cleave + Bushido Master / Ki Attack + Shadowlord)' :
+            'L60 Grandmaster Capstone (Judgment of the Kensei /Kensei & Kuji-Kiri /Shadowblade)'));
+          inspHead.innerHTML = '<strong>[' + escHtml(state.bracket) + ' · ' + escHtml(mCfg.unit) + ']</strong> ' + escHtml(spikeMilestone);
+        }
+        if (inspDelta && smRow && njRow && wrRow) {
+          inspDelta.textContent = 'SM: ' + smRow.sustainedDps.toFixed(1) + ' DPS (' + smRow.ehpPerSec.toFixed(0) + ' EHP/s) · NJ: ' + njRow.sustainedDps.toFixed(1) + ' DPS (' + njRow.ehpPerSec.toFixed(0) + ' EHP/s) · WR Base: ' + wrRow.sustainedDps.toFixed(1) + ' DPS';
+        }
 
         var bTitle = document.getElementById('breakdown-title');
         if (bTitle) bTitle.textContent = '5-Channel Damage Source Breakdown (' + state.bracket + ' · ' + state.arch + ' · ' + modeLabel + ')';

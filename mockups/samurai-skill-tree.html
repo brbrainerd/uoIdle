@@ -449,32 +449,35 @@
     }
 
     .arvore-circulo {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
+      display: block;
+      width: 48px;
+      height: 48px;
       border: 2px solid #6d5733;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      border-radius: 5px;
+      background: #090b08;
+      padding: 0;
       overflow: hidden;
       flex-shrink: 0;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.65);
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .arvore-circulo.is-on {
       border-color: #e6c36a;
-      box-shadow: 0 0 12px #e6c36a73;
+      box-shadow: 0 0 12px rgba(230, 195, 106, 0.38);
     }
 
     .arvore-circulo:hover {
-      transform: scale(1.06);
+      transform: translateY(-2px) scale(1.06);
       border-color: var(--border-gold-bright);
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.55);
     }
 
     .arvore-circulo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 3px;
+      object-fit: cover;
       display: block;
     }
 
@@ -1020,7 +1023,7 @@
     }
     
     /* ==========================================================================
-       v2.1 Component Architecture & Dark-Fantasy Animation System
+       v2.2 Progressive Disclosure, Command Deck Clustering & Micro-Animation System
        ========================================================================== */
     @keyframes auraPulse {
       0%, 100% { opacity: 0.55; transform: scale(1); }
@@ -1034,18 +1037,17 @@
       0%, 100% { box-shadow: 0 0 0 0 rgba(230, 195, 106, 0.55), 0 0 14px var(--class-glow); }
       50% { box-shadow: 0 0 0 5px rgba(230, 195, 106, 0), 0 0 22px var(--border-gold-bright); }
     }
-    @keyframes modeFlash {
-      0% { filter: brightness(1.35); transform: translateY(-1px); }
-      100% { filter: brightness(1); transform: translateY(0); }
-    }
-    @keyframes tickerSweep {
-      0% { width: 0%; }
-      100% { width: 100%; }
+    @keyframes inspectorFadeSlide {
+      0% { opacity: 0.35; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     @keyframes floatUpBadge {
       0% { opacity: 0; transform: translateY(4px) scale(0.96); }
-      20% { opacity: 1; transform: translateY(0) scale(1); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes spotlightGlowSweep {
+      0% { box-shadow: 0 0 0 0 rgba(229, 193, 88, 0.55), inset 0 0 18px rgba(229, 193, 88, 0.22); }
+      100% { box-shadow: 0 0 22px rgba(229, 193, 88, 0.32), inset 0 0 12px rgba(229, 193, 88, 0.08); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1056,16 +1058,18 @@
       }
     }
 
-    /* 1. Global Quick Command & Shortcut Bar Component (<uo-quick-dock>) */
+    /* 1. Unified Beveled Command Deck & Clustered Controls (.command-deck) */
     .uo-quick-dock {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 8px 12px;
-      padding: 6px 14px;
-      background: linear-gradient(90deg, #0d100c 0%, #171c15 50%, #0d100c 100%);
-      border-bottom: 1px solid #352d1d;
+      gap: 6px 12px;
+      padding: 5px 12px;
+      background: linear-gradient(90deg, #0b0e0a 0%, #151a13 50%, #0b0e0a 100%);
+      border: 1px solid #483b22;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       color: var(--text-secondary);
@@ -1074,13 +1078,34 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 6px 10px;
+      gap: 6px 8px;
+    }
+    .command-cluster {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: rgba(12, 15, 11, 0.88);
+      border: 1px solid #3c3425;
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.05);
+    }
+    .cluster-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 3px;
+      opacity: 0.9;
     }
     .kbd-chip {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 1px 6px;
+      padding: 2px 6px;
       border-radius: 3px;
       background: #141812;
       border: 1px solid #3c3425;
@@ -1107,9 +1132,9 @@
       animation: auraPulse 2.2s infinite ease-in-out;
     }
 
-    /* 2. Segmented Stat Distribution & Resource Bar Component (<uo-stat-bar>) */
+    /* 2. De-Duplicated Segmented Stat Bars & Compact 2x4 Grandmaster Skill Pills */
     .stat-ratio-strip {
-      margin-top: 8px;
+      margin-top: 6px;
       padding: 6px 8px;
       background: #10140f;
       border: 1px solid #2a3026;
@@ -1128,21 +1153,21 @@
     .stat-seg-dex { background: linear-gradient(90deg, #2e9e6b, #48bb78); transition: width 0.3s ease; }
     .stat-seg-int { background: linear-gradient(90deg, #3b82f6, #63b3ed); transition: width 0.3s ease; }
 
-    /* 3. Starter Skill Mastery Progress Card Component */
     .skill-mastery-card {
-      padding: 5px 8px;
+      padding: 4px 7px;
       background: linear-gradient(180deg, #171c15 0%, #111510 100%);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
       min-width: 0;
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
     }
     .skill-mastery-card:hover {
       border-color: var(--border-gold);
       transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
     }
     .skill-mastery-top {
       display: flex;
@@ -1151,7 +1176,7 @@
       gap: 4px;
     }
     .skill-mastery-bar-bg {
-      height: 4px;
+      height: 3.5px;
       border-radius: 2px;
       background: #090b08;
       overflow: hidden;
@@ -1162,42 +1187,80 @@
       transition: width 0.4s ease;
     }
 
-    /* 4. Connected [Arvore Progression Rail & Halo Nodes */
+    /* 3. Connected [Arvore Level-Line Progression Rail — Beveled Square Icon Frames (Zero Circular Cutoff!) */
     .arvore-cobra-wrap {
       position: relative;
       padding: 12px 14px;
       border-bottom: 1px solid #2a3026;
       background:
-        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 70%),
-        rgba(11, 13, 10, 0.72);
+        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 72%),
+        linear-gradient(180deg, rgba(16, 20, 15, 0.95) 0%, rgba(11, 13, 10, 0.95) 100%);
     }
     .arvore-tier-banner {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 6px 10px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9.5px;
       color: var(--text-secondary);
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed #262c22;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #2e3529;
+    }
+    .cobra-tier-btns {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .cobra-tier-btn {
+      padding: 2px 7px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      border-radius: 3px;
+      border: 1px solid #4a3c24;
+      background: #141812;
+      color: #d6e4ca;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .cobra-tier-btn:hover,
+    .cobra-tier-btn.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.32);
     }
     .arvore-col {
       position: relative;
       z-index: 1;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .arvore-col.is-tier-dimmed {
+      opacity: 0.32;
+      filter: grayscale(0.6);
     }
     .arvore-col::after {
       content: '';
       position: absolute;
-      top: 37px;
+      top: 41px;
       left: 55%;
       width: 90%;
-      height: 2px;
-      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(201, 162, 39, 0.2) 50%, var(--border-gold) 100%);
+      height: 3px;
+      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(229, 193, 88, 0.25) 50%, var(--border-gold) 100%);
       background-size: 200% 100%;
-      animation: railFlow 5s linear infinite;
+      animation: railFlow 4.5s linear infinite;
       z-index: -1;
       pointer-events: none;
+      border-radius: 2px;
+    }
+    .arvore-col.is-path-lit::after {
+      background: linear-gradient(90deg, #fff2bf 0%, var(--border-gold-bright) 50%, var(--class-accent) 100%);
+      background-size: 200% 100%;
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.55);
     }
     .arvore-col:nth-child(6n)::after,
     .arvore-col:last-child::after {
@@ -1206,7 +1269,7 @@
     .arvore-circulo.is-selected-node {
       border-color: #fff2bf !important;
       animation: nodeHaloPulse 2s infinite ease-in-out;
-      transform: scale(1.08);
+      transform: translateY(-2px) scale(1.08);
     }
     .arvore-circulo[data-node-kind="passive"] { border-color: var(--kind-passive); }
     .arvore-circulo[data-node-kind="skill"]   { border-color: var(--kind-skill); }
@@ -1217,10 +1280,32 @@
       box-shadow: 0 0 14px rgba(246, 224, 94, 0.45);
     }
 
-    /* 5. Ability Power & Scaling Meter Component (<uo-power-meter>) */
+    /* Live Interactive Progression Telemetry Strip inside [Arvore Chart */
+    .cobra-live-summary {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 5px;
+      border: 1px solid #5d4a2b;
+      border-left: 3px solid var(--border-gold-bright);
+      background: linear-gradient(90deg, rgba(38, 32, 19, 0.72) 0%, rgba(16, 20, 15, 0.94) 100%);
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1.35fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      animation: inspectorFadeSlide 0.22s ease-out;
+    }
+    .cobra-live-summary img {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+      display: block;
+    }
+
+    /* 4. Compact Ability Power & Scaling Meter (<uo-power-meter>) */
     .uo-power-meter {
       margin-top: 5px;
-      padding: 4px 6px;
+      padding: 3px 6px;
       background: #0e120d;
       border: 1px solid #252b21;
       border-radius: 3px;
@@ -1231,13 +1316,13 @@
       align-items: center;
       gap: 6px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
+      font-size: 8.8px;
       color: var(--text-secondary);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .uo-power-track {
       position: relative;
-      height: 5px;
+      height: 4.5px;
       border-radius: 3px;
       background: #080a07;
       overflow: hidden;
@@ -1246,28 +1331,74 @@
     .uo-power-seg-base {
       height: 100%;
       background: linear-gradient(90deg, #8b6f1e, #d4af37);
-      transition: width 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .uo-power-seg-burst {
       height: 100%;
       background: linear-gradient(90deg, var(--class-accent), #f6ad55);
-      transition: width 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .uo-power-seg-modeb {
       height: 100%;
       background: #68d391;
       opacity: 0.35;
-      transition: width 0.25s ease, opacity 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
     .is-mode-b-active .uo-power-seg-modeb {
       opacity: 1;
       box-shadow: 0 0 8px #68d391;
     }
 
+    /* 5. Progressive-Disclosure Inspector Tabs (.inspector-tab-bar) */
+    .inspector-tab-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      margin: 8px 0;
+      padding: 3px;
+      background: #0b0e0a;
+      border: 1px solid #352d1d;
+      border-radius: 4px;
+    }
+    .insp-tab-btn {
+      padding: 4px 5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .insp-tab-btn:hover {
+      color: #fff2bf;
+      background: #171c15;
+    }
+    .insp-tab-btn.is-active {
+      color: #fff2bf;
+      background: linear-gradient(180deg, #332915 0%, #1b160c 100%);
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.28);
+    }
+    .insp-pane {
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .insp-pane.is-highlighted-pane {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.28);
+      animation: inspectorFadeSlide 0.22s ease-out;
+    }
+
     /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
     .uo-combat-ticker {
-      margin-top: 8px;
-      padding: 8px 10px;
+      margin-top: 6px;
+      padding: 7px 9px;
       border-radius: 4px;
       border: 1px solid #4a3c24;
       background: linear-gradient(180deg, #151913 0%, #0b0e0a 100%);
@@ -1279,16 +1410,16 @@
       justify-content: space-between;
       align-items: center;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .ticker-progress-bg {
       position: relative;
-      height: 6px;
+      height: 5px;
       border-radius: 3px;
       background: #070907;
       border: 1px solid #2a3026;
       overflow: hidden;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .ticker-progress-fill {
       height: 100%;
@@ -1301,7 +1432,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       flex-wrap: wrap;
     }
     .posture-pips {
@@ -1310,8 +1441,8 @@
       align-items: center;
     }
     .posture-pip {
-      width: 12px;
-      height: 8px;
+      width: 11px;
+      height: 7px;
       border-radius: 2px;
       background: #141812;
       border: 1px solid #3c3425;
@@ -1330,7 +1461,7 @@
     .ticker-log-feed {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .ticker-log-item {
       display: flex;
@@ -1342,7 +1473,7 @@
       background: #10140f;
       border-left: 2px solid var(--border-gold);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9.5px;
+      font-size: 9.2px;
       animation: floatUpBadge 0.22s ease-out;
     }
 
@@ -1373,7 +1504,7 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 5px;
       padding-top: 5px;
       border-top: 1px dashed #2a3026;
     }
@@ -1392,41 +1523,57 @@
     .w-stat-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
-      transition: width 0.25s ease;
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* 8. 5-Class Executive KPI Comparison Strip (class-comparison.html) */
+    /* 8. 5-Class Hero Spotlight Cards with SVG Sparklines (Concept Art Match) */
     .exec-kpi-strip {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
     .exec-kpi-card {
-      padding: 8px 10px;
-      border-radius: 4px;
-      background: linear-gradient(180deg, #181d16 0%, #10140f 100%);
-      border: 1px solid #2a3026;
+      padding: 9px 11px;
+      border-radius: 6px;
+      background: linear-gradient(180deg, #1b2019 0%, #0f130e 100%);
+      border: 1px solid #353c30;
       border-top: 3px solid var(--border-gold);
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
       min-width: 0;
       cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.18s ease, background 0.18s ease;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
     }
     .exec-kpi-card.is-spotlight-class {
       border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #282415 0%, #151912 100%);
-      box-shadow: 0 0 16px rgba(229, 193, 88, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+      background: linear-gradient(180deg, #2b2414 0%, #151912 100%);
+      box-shadow: 0 0 20px rgba(229, 193, 88, 0.42), inset 0 0 14px rgba(229, 193, 88, 0.16);
       transform: translateY(-2px);
     }
+    .kpi-emblem {
+      width: 28px;
+      height: 28px;
+      border-radius: 5px;
+      display: inline-grid;
+      place-items: center;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff2bf;
+      border: 1px solid rgba(255, 242, 191, 0.45);
+      flex-shrink: 0;
+    }
     tr.is-class-spotlight td {
-      background: rgba(229, 193, 88, 0.14) !important;
+      background: rgba(229, 193, 88, 0.15) !important;
       border-top: 1px solid var(--border-gold-bright) !important;
       border-bottom: 1px solid var(--border-gold-bright) !important;
     }
@@ -1436,13 +1583,14 @@
     [data-comp-section],
     .milestone-card {
       scroll-margin-top: 14px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease, transform 0.22s ease, background 0.22s ease;
     }
     section.arvore-secao.is-focused-section,
     [data-comp-section].is-focused-section,
     .is-focused-section {
       border-color: var(--border-gold-bright) !important;
       box-shadow: 0 0 24px rgba(229, 193, 88, 0.36), inset 0 0 14px rgba(229, 193, 88, 0.1) !important;
+      animation: spotlightGlowSweep 0.6s ease-out;
     }
     section.arvore-secao.is-focused-section > .arvore-secao-titulo {
       background: linear-gradient(90deg, #332913 0%, #1d2219 100%) !important;
@@ -1462,7 +1610,7 @@
     .passive-badge-item,
     .skill-mastery-card {
       cursor: pointer;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease, background 0.16s ease;
     }
     .kbd-chip:hover,
     .arvore-saldo:hover,
@@ -1486,6 +1634,9 @@
       .arvore-col::after {
         display: none;
       }
+      .cobra-live-summary {
+        grid-template-columns: 44px minmax(0, 1fr);
+      }
     }
   
   </style>
@@ -1496,17 +1647,20 @@
       
     <nav class="uo-quick-dock" aria-label="Developer Quick Command Bar">
       <div class="uo-quick-dock-left">
-        <span style="display:inline-flex;align-items:center;gap:5px;color:#fff2bf;font-weight:600;">
+        <span style="display:inline-flex;align-items:center;gap:6px;color:#fff2bf;font-weight:700;letter-spacing:0.03em;">
           <i class="live-pulse-dot"></i>
-          UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
+          UO IDLE v0.99.0 · TOKUNO WORKBENCH
         </span>
-        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
-        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="locale" onclick="window.handleQuickDock && window.handleQuickDock('locale')" title="Toggle EN / PT-BR Localization"><kbd>L</kbd> EN / PT-BR</span>
-               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="milestone" onclick="window.handleQuickDock && window.handleQuickDock('milestone')" title="Cycle &amp; Scroll to Next Milestone Card"><kbd>1–9</kbd> Select Milestone</span>
-               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="ticker" onclick="window.handleQuickDock && window.handleQuickDock('ticker')" title="Scroll to &amp; Step 100ms Combat Loop Preview"><kbd>Space</kbd> Combat Sim</span>
+        <div class="command-cluster" role="group" aria-label="Keyboard & Quick Actions">
+          <span class="cluster-tag">Quick:</span>
+          <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
+          <span class="kbd-chip" role="button" tabindex="0" data-dock-action="locale" onclick="window.handleQuickDock && window.handleQuickDock('locale')" title="Toggle EN / PT-BR Localization"><kbd>L</kbd> EN / PT-BR</span>
+                 <span class="kbd-chip" role="button" tabindex="0" data-dock-action="milestone" onclick="window.handleQuickDock && window.handleQuickDock('milestone')" title="Cycle Next Milestone on [Arvore Progression Chart"><kbd>1–9</kbd> Step Milestone</span>
+                 <span class="kbd-chip" role="button" tabindex="0" data-dock-action="ticker" onclick="window.handleQuickDock && window.handleQuickDock('ticker')" title="Step 100ms Combat Loop Preview"><kbd>Space</kbd> Combat Sim</span>
+        </div>
       </div>
       <div class="uo-quick-dock-right">
-        <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
+        <span style="color:var(--text-gold);">Gates: 7/7 PASS · 0 Polygons · ±5–8% Parity</span>
         <a href="samurai-skill-tree.html?mode=mode_b" style="color:#ff9b93;text-decoration:none;font-weight:600;">⚡ SM Mode B</a>
         <a href="ninja-skill-tree.html?mode=mode_b" style="color:#7ce8b4;text-decoration:none;font-weight:600;">⚡ NJ Mode B</a>
       </div>
@@ -1554,24 +1708,33 @@
         </div>
 
         <div class="arvore-head-acoes">
-          <button type="button" class="beta-btn is-active" id="btn-lang-en" onclick="setLocale('en')">EN</button>
-          <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
-          <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
-          <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
-          <a class="nav-pill" href="index.html">Review Portal</a>
-          <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
-          <a class="nav-pill" href="class-comparison.html">5-Class Parity &amp; Sim</a>
+          <div class="command-cluster" role="group" aria-label="Localization Cluster">
+            <span class="cluster-tag">Lang:</span>
+            <button type="button" class="beta-btn is-active" id="btn-lang-en" onclick="setLocale('en')">EN</button>
+            <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
+          </div>
+          <div class="command-cluster" role="group" aria-label="Engine Mode Cluster">
+            <span class="cluster-tag">Engine:</span>
+            <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
+            <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
+          </div>
+          <div class="command-cluster" role="group" aria-label="Workbench Surface Switcher">
+            <span class="cluster-tag">Surface:</span>
+            <a class="nav-pill" href="index.html">Portal</a>
+            <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
+            <a class="nav-pill" href="class-comparison.html">5-Class Sim</a>
+          </div>
         </div>
       </header>
 
-      <!-- 3-Column Beta Workbench (Consolidated v2.0 — Zero Duplication) -->
+      <!-- 3-Column Beta Workbench (Consolidated v2.2 — Progressive Disclosure & Zero Duplication) -->
       <div class="workbench-grid">
-        <!-- LEFT COLUMN: Character Profile, 8 Starter Skills & Interactive Tokuno Paperdoll -->
+        <!-- LEFT COLUMN: De-Duplicated Character Profile, 8 Starter Skills & Interactive Tokuno Paperdoll -->
         <div class="col-stack">
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-starter-skills">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Character &amp; Resource Profile</span>
-              <span class="arvore-secao-sub">_E / dx[114]</span>
+              <span class="title-left">Character &amp; Grandmaster Template</span>
+              <span class="arvore-secao-sub">_E / WE[114] · 8 GM Skills</span>
             </h2>
             <div class="panel-body">
               <div class="identity-hero">
@@ -1580,22 +1743,16 @@
                   <img class="portrait-mini-badge" src="assets/icons/samurai/portrait-samurai-64.png" alt="SM 64x64 Icon" />
                 </div>
                 <div>
-                  <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">Samurai (Bushido)</div>
-                  <div class="mono" style="font-size:10.5px;color:var(--text-secondary);">classId: "samurai" · numericId: 114 · badge: "SM"</div>
-                  <div class="mono" style="font-size:10px;color:var(--text-gold);margin-top:2px;">
-                    Primary: mana | StartMana: 25 | MedCap: 100 | Reagents: false | Ammo: false
-                  </div>
-                  <div class="stat-chips">
-                    <div class="stat-chip"><span>STR</span><strong>50</strong></div>
-                    <div class="stat-chip"><span>DEX</span><strong>30</strong></div>
-                    <div class="stat-chip"><span>INT</span><strong>10</strong></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">Samurai (Bushido)</div>
+                    <span class="lv-pill">ID 114 · Hue 1884</span>
                   </div>
                   
     <div class="stat-ratio-strip">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;">
-        <span style="color:#ff9b93;">STR 50 (56%)</span>
-        <span style="color:#7ce8b4;">DEX 30 (33%)</span>
-        <span style="color:#9ec9ff;">INT 10 (11%)</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;">
+        <span style="color:#ff9b93;">STR 50 <small style="font-weight:400;opacity:0.8;">(56%)</small></span>
+        <span style="color:#7ce8b4;">DEX 30 <small style="font-weight:400;opacity:0.8;">(33%)</small></span>
+        <span style="color:#9ec9ff;">INT 10 <small style="font-weight:400;opacity:0.8;">(11%)</small></span>
       </div>
       <div class="stat-ratio-bar" title="Stat Allocation: 50 STR / 30 DEX / 10 INT (Sum = 90)">
         <div class="stat-seg-str" style="width:56%;"></div>
@@ -1603,165 +1760,148 @@
         <div class="stat-seg-int" style="width:11%;"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-secondary);">
-        <span>Swing Floor: 2,000ms</span>
-        <span>Reagents: 0 · Ammo: 0</span>
+        <span>Primary: MANA (25 / Med 100)</span>
+        <span>2.0s Floor · 0 Reag/Ammo</span>
       </div>
     </div>
   
                 </div>
               </div>
-            </div>
-          </section>
-
-          <section class="arvore-secao" id="sec-starter-skills">
-            <h2 class="arvore-secao-titulo">
-              <span class="title-left">8 Starter Skills &amp; Template</span>
-              <span class="arvore-secao-sub">WE / hE &amp; FE (100%)</span>
-            </h2>
-            <div class="panel-body">
-              <div class="kv-grid">
+              <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.03em;">
+                Grandmaster Starter Skill Pills (50.0 Base → 100.0 GM Cap):
+              </div>
+              <div class="kv-grid" style="margin-top:4px;">
                 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Bushido (Skill #52) — Core Scaling &amp; Parry · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Bushido <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#52)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Bushido <small class="mono" style="color:var(--text-secondary);font-size:9px;">#52</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#e05a47;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Core Scaling &amp; Parry</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Core Scaling &amp; Parry
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Swords (Skill #40) — Primary Katana/Daisho · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Swords <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#40)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Swords <small class="mono" style="color:var(--text-secondary);font-size:9px;">#40</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#e6c36a;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Primary Katana/No-Dachi</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Primary Katana/Daisho
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Tactics (Skill #27) — Base Damage Mult · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Tactics <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#27)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Tactics <small class="mono" style="color:var(--text-secondary);font-size:9px;">#27</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#f6ad55;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Base Damage Multiplier</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Base Damage Mult
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Parrying (Skill #5) — Shieldless Blade Ward · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Parry <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#5)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Parrying <small class="mono" style="color:var(--text-secondary);font-size:9px;">#5</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#63b3ed;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Shieldless Weapon Ward</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Shieldless Blade Ward
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Anatomy (Skill #1) — Phys Bonus &amp; Stagger · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Anatomy <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#1)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Anatomy <small class="mono" style="color:var(--text-secondary);font-size:9px;">#1</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#fc8181;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Physical Bonus &amp; Stagger</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Phys Bonus &amp; Stagger
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Healing (Skill #17) — Bandage &amp; Confidence · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Healing <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#17)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Healing <small class="mono" style="color:var(--text-secondary);font-size:9px;">#17</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#68d391;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Bandage &amp; Confidence Syn</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Bandage &amp; Confidence
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Resist Spells (Skill #26) — Evasion &amp; Spell Ward · Starts at 30.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              MagicResist <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#26)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Resist Spells <small class="mono" style="color:var(--text-secondary);font-size:9px;">#26</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">30.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">30</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:30%;background:#b794f4;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Evasion &amp; Spell Ward</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Evasion &amp; Spell Ward
           </div>
         </div>
       
 
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="Focus (Skill #50) — Stam &amp; Mana Sustain · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              Focus <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#50)</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              Focus <small class="mono" style="color:var(--text-secondary);font-size:9px;">#50</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">50</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:50%;background:#4fd1c5;"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>Stamina &amp; Mana Sustain</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            Stam &amp; Mana Sustain
           </div>
         </div>
       
               </div>
-              <div style="margin-top:5px;font-size:10px;color:var(--text-secondary);">
-                Shieldless Bushido Weapon Parry scales via Parrying (50) × Bushido (50) ÷ 48,000 (1H) or 41,140 (2H).
-              </div>
               <details class="schema-drawer" style="margin-top:6px;">
-                <summary>Legacy Template Weights (FE = 100% Sum)</summary>
+                <summary>▸ Progressive Disclosure: Legacy Template Weights (FE = 100% Sum)</summary>
                 <div class="kv-grid" style="margin-top:4px;">
                   
       <div class="kv-item">
@@ -1799,7 +1939,7 @@
             </h2>
             <div class="panel-body">
               <div class="mono" style="font-size:10px;color:var(--text-secondary);margin-bottom:4px;">
-                Material Tier Scaling (<span id="pd-tier-label" style="color:var(--text-gold);font-weight:700;">Valorite · 1.85x Dmg / +96% Res</span>):
+                9-Tier Material Selector (<span id="pd-tier-label" style="color:var(--text-gold);font-weight:700;">Valorite · 1.85x Dmg / +96% Res</span>):
               </div>
               <div class="tier-pill-bar">
                 <button type="button" class="tier-mini-btn " data-mat-tier="Iron" onclick="setPaperdollTier('Iron', 1, 0)">Iron</button><button type="button" class="tier-mini-btn " data-mat-tier="DullCopper" onclick="setPaperdollTier('DullCopper', 1.08, 12)">DullCopper</button><button type="button" class="tier-mini-btn " data-mat-tier="ShadowIron" onclick="setPaperdollTier('ShadowIron', 1.17, 24)">ShadowIron</button><button type="button" class="tier-mini-btn " data-mat-tier="Copper" onclick="setPaperdollTier('Copper', 1.26, 36)">Copper</button><button type="button" class="tier-mini-btn " data-mat-tier="Bronze" onclick="setPaperdollTier('Bronze', 1.36, 48)">Bronze</button><button type="button" class="tier-mini-btn " data-mat-tier="Gold" onclick="setPaperdollTier('Gold', 1.47, 60)">Gold</button><button type="button" class="tier-mini-btn " data-mat-tier="Agapite" onclick="setPaperdollTier('Agapite', 1.59, 72)">Agapite</button><button type="button" class="tier-mini-btn " data-mat-tier="Verite" onclick="setPaperdollTier('Verite', 1.71, 84)">Verite</button><button type="button" class="tier-mini-btn is-active" data-mat-tier="Valorite" onclick="setPaperdollTier('Valorite', 1.85, 96)">Valorite</button>
@@ -1855,7 +1995,7 @@
 
               <!-- 4 Signature Tokuno Weapons Strip -->
               <div style="margin-top:7px;font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--text-gold);text-transform:uppercase;">
-                Signature Tokuno Armaments (Hover / Click for Stats):
+                Signature Tokuno Armaments (Click Slot to Inspect):
               </div>
               <div class="weapon-rack-strip">
                 
@@ -1884,16 +2024,13 @@
   
               </div>
 
-              <!-- Live Mouseover Gear Stat Card (#paperdoll-gear-tooltip) -->
+              <!-- De-Duplicated Single Active Armament Card (#paperdoll-gear-tooltip) -->
               <div class="gear-mouseover-card" id="paperdoll-gear-tooltip">
                 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 6px;">
                   <strong style="color:#fff2bf;font-size:12px;" id="gear-tt-name">Ancestral Daisho Pair</strong>
                   <span class="lv-pill" id="gear-tt-slot">Primary Weapon (2H)</span>
                 </div>
-                <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:2px;" id="gear-tt-meta">
-                  graphic: 10153 (0x27A9) · gump: 50470 · layer: TwoHanded · hue: 1884
-                </div>
-                <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:4px;" id="gear-tt-stats">
+                <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:3px;" id="gear-tt-stats">
                   Valorite Weapon: 24–28 Dmg · Speed 40 · Feint (#8) / Double Strike (#7)
                 </div>
                 <div class="weapon-stat-bars">
@@ -1913,14 +2050,17 @@
                 <div class="cost-badges" id="gear-tt-affixes" style="margin-top:5px;">
                   <span class="badge-mana">Damage +40%</span><span class="badge-mana">Swing Speed +20%</span><span class="badge-mana">Bushido +15</span>
                 </div>
-                <div style="font-size:10px;color:var(--text-primary);margin-top:4px;" id="gear-tt-lore">
+                <div style="font-size:10px;color:var(--text-secondary);margin-top:4px;" id="gear-tt-lore">
                   Matched katana and wakizashi pair enabling shieldless 2H Bushido parrying (÷41,140).
+                </div>
+                <div class="mono" style="font-size:8.5px;color:var(--text-secondary);margin-top:3px;opacity:0.8;" id="gear-tt-meta">
+                  graphic: 10153 (0x27A9) · gump: 50470 · layer: TwoHanded
                 </div>
               </div>
 
               <details class="schema-drawer" style="margin-top:6px;">
                 <summary>
-                  Raw Bundle Starter Layer IDs (kitTokens: ["samuraiSet", "katana", "bandages", "potionsMelee", "robeCloak"])
+                  ▸ Progressive Disclosure: Bundle Layer IDs (5 tokens)
                 </summary>
                 <div class="kv-grid" style="margin-top:4px;">
                   
@@ -1977,23 +2117,32 @@
           </section>
         </div>
 
-        <!-- CENTER COLUMN: Unified L1-L60 [Arvore Progression & Schema Cards (De-Duplicated) -->
+        <!-- CENTER COLUMN: Interactive [Arvore Level-Line Progression Chart & Compact Tier-1 Cards -->
         <div class="col-stack">
           <section class="arvore-secao" id="sec-milestone-tree">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Unified L1–L60 [Arvore Progression &amp; Ability Cards (12 Milestones)</span>
-              <span class="arvore-secao-sub" id="filter-kind-status">Showing All 12 Milestones · Click any card or expand ▸ Schema</span>
+              <span class="title-left">Interactive L1–L60 [Arvore Progression Chart &amp; Milestone Cards</span>
+              <span class="arvore-secao-sub" id="filter-kind-status">Click any level node or tier button to inspect progression</span>
             </h2>
 
-            <!-- Live .arvore-cobra 12-node ribbon -->
+            <!-- Live .arvore-cobra 12-node progression chart with interactive tier buttons & live telemetry strip -->
             <div class="arvore-cobra-wrap">
               <div class="arvore-tier-banner">
-                <span><strong style="color:var(--text-gold);">ROW 1 (L1–L25):</strong> Initiate → Adept Foundation</span>
-                <span><strong style="color:var(--text-gold);">ROW 2 (L30–L60):</strong> Master → Grandmaster Capstone</span>
+                <div class="cobra-tier-btns" role="group" aria-label="Progression Chart Tier Controls">
+                  <span class="cluster-tag">Chart Tier:</span>
+                  <button type="button" class="cobra-tier-btn is-active" data-cobra-tier="all" onclick="setCobraTier('all')">All L1–L60 (12)</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-tier="initiate" onclick="setCobraTier('initiate')">Initiate (L1–L15)</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-tier="adept" onclick="setCobraTier('adept')">Adept (L20–L35)</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-tier="master" onclick="setCobraTier('master')">Grandmaster (L40–L60)</button>
+                </div>
+                <div class="cobra-tier-btns">
+                  <button type="button" class="cobra-tier-btn" data-cobra-step="prev" onclick="stepCobraMilestone(-1)">◀ Prev</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-step="next" onclick="stepCobraMilestone(1)">Next Milestone ▶</button>
+                </div>
               </div>
               <div class="arvore-cobra">
                 
-        <div class="arvore-col" onclick="selectAbility('samurai_way', true)" title="L1: Way of the Blade / Caminho da Lâmina (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_way" data-cobra-lv="1" onclick="selectAbility('samurai_way', false)" title="L1: Way of the Blade / Caminho da Lâmina (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L1</span>
           <div class="arvore-circulo is-on is-selected-node" data-cobra-id="samurai_way" data-node-kind="passive">
             <img src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
@@ -2002,7 +2151,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_lightning', true)" title="L5: Lightning Strike / Golpe Relâmpago (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_lightning" data-cobra-lv="5" onclick="selectAbility('samurai_lightning', false)" title="L5: Lightning Strike / Golpe Relâmpago (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L5</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_lightning" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_lightning@64.png" alt="Lightning Strike" />
@@ -2011,7 +2160,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_perfection', true)" title="L10: Honor &amp; Perfection / Honra e Perfeição (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_perfection" data-cobra-lv="10" onclick="selectAbility('samurai_perfection', false)" title="L10: Honor &amp; Perfection / Honra e Perfeição (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L10</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_perfection" data-node-kind="mechanic">
             <img src="assets/icons/samurai/samurai_perfection@64.png" alt="Honor &amp; Perfection" />
@@ -2020,7 +2169,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_honorable', true)" title="L15: Honorable Execution / Execução Honrosa (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_honorable" data-cobra-lv="15" onclick="selectAbility('samurai_honorable', false)" title="L15: Honorable Execution / Execução Honrosa (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L15</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_honorable" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_honorable@64.png" alt="Honorable Execution" />
@@ -2029,7 +2178,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_confidence', true)" title="L20: Confidence / Confiança (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_confidence" data-cobra-lv="20" onclick="selectAbility('samurai_confidence', false)" title="L20: Confidence / Confiança (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L20</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_confidence" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_confidence@64.png" alt="Confidence" />
@@ -2038,7 +2187,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_counter', true)" title="L25: Counter Attack / Contra-Ataque (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_counter" data-cobra-lv="25" onclick="selectAbility('samurai_counter', false)" title="L25: Counter Attack / Contra-Ataque (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L25</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_counter" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_counter@64.png" alt="Counter Attack" />
@@ -2047,7 +2196,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_double_strike', true)" title="L30: Double Strike / Golpe Duplo (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_double_strike" data-cobra-lv="30" onclick="selectAbility('samurai_double_strike', false)" title="L30: Double Strike / Golpe Duplo (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L30</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_double_strike" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_double_strike@64.png" alt="Double Strike" />
@@ -2056,7 +2205,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_evasion', true)" title="L35: Evasion / Evasão (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_evasion" data-cobra-lv="35" onclick="selectAbility('samurai_evasion', false)" title="L35: Evasion / Evasão (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L35</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_evasion" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_evasion@64.png" alt="Evasion" />
@@ -2065,7 +2214,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_momentum_strike', true)" title="L40: Momentum Strike / Golpe de Ímpeto (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_momentum_strike" data-cobra-lv="40" onclick="selectAbility('samurai_momentum_strike', false)" title="L40: Momentum Strike / Golpe de Ímpeto (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L40</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_momentum_strike" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_momentum_strike@64.png" alt="Momentum Strike" />
@@ -2074,7 +2223,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_armor_ignore', true)" title="L45: Armor Ignore / Ignorar Armadura (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_armor_ignore" data-cobra-lv="45" onclick="selectAbility('samurai_armor_ignore', false)" title="L45: Armor Ignore / Ignorar Armadura (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L45</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_armor_ignore" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_armor_ignore@64.png" alt="Armor Ignore" />
@@ -2083,7 +2232,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_frenzied_whirlwind', true)" title="L50: Frenzied Whirlwind / Turbilhão Frenético (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_frenzied_whirlwind" data-cobra-lv="50" onclick="selectAbility('samurai_frenzied_whirlwind', false)" title="L50: Frenzied Whirlwind / Turbilhão Frenético (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L50</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_frenzied_whirlwind" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_frenzied_whirlwind@64.png" alt="Frenzied Whirlwind" />
@@ -2092,7 +2241,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('samurai_kensei_judgment', true)" title="L60: Kensei: Amakura&#39;s Judgment / Kensei: Julgamento de Amakura (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="samurai_kensei_judgment" data-cobra-lv="60" onclick="selectAbility('samurai_kensei_judgment', false)" title="L60: Kensei: Amakura&#39;s Judgment / Kensei: Julgamento de Amakura (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L60</span>
           <div class="arvore-circulo is-on " data-cobra-id="samurai_kensei_judgment" data-node-kind="feature">
             <img src="assets/icons/samurai/samurai_kensei_judgment@64.png" alt="Kensei: Amakura&#39;s Judgment" />
@@ -2101,12 +2250,31 @@
         </div>
       
               </div>
+              <!-- Live Interactive Milestone & Cumulative Build Telemetry Strip inside Progression Chart -->
+              <div class="cobra-live-summary" id="cobra-live-summary">
+                <img id="cobra-sum-icon" src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
+                <div style="min-width:0;">
+                  <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                    <span class="lv-pill" id="cobra-sum-lv">L1</span>
+                    <strong style="color:#fff2bf;font-size:12px;" id="cobra-sum-title">Way of the Blade</strong>
+                    <span class="type-pill kind-passive" id="cobra-sum-kind">passive</span>
+                  </div>
+                  <div class="mono" style="font-size:9.5px;color:var(--text-gold);margin-top:2px;overflow-wrap:anywhere;" id="cobra-sum-qc">
+                    1.00x Weapon Auto-Swing + 25.8% (1H) / 29.3% (2H) Parry @ 100 Bushido
+                  </div>
+                </div>
+                <div class="mono" style="font-size:9.5px;color:#82d5b0;min-width:0;" id="cobra-sum-cum">
+                  <div><strong style="color:#fff2bf;">Path L1→L1:</strong> 1/12 Milestones Unlocked</div>
+                  <div style="color:var(--text-secondary);">1 Passive · 0 Actives · Est. 121.5 DPS</div>
+                </div>
+                <button type="button" class="beta-btn" onclick="scrollToSelectedCard()" style="font-size:9.5px;padding:4px 8px;white-space:nowrap;">Scroll to Card ▾</button>
+              </div>
             </div>
 
-            <!-- Semantic Ability-Kind Filter Strip -->
+            <!-- Clustered Ability-Kind Spotlight & Disclosure Strip -->
             <div class="filter-strip">
-              <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
-                <span class="mono" style="font-size:10px;color:var(--text-gold);">Spotlight Kind:</span>
+              <div class="command-cluster" role="group" aria-label="Spotlight Ability Kind">
+                <span class="cluster-tag">Spotlight Kind:</span>
                 <button type="button" class="beta-btn is-active" data-kind-btn="all" onclick="filterAbilityKind('all')">All (12)</button>
                 <button type="button" class="beta-btn" data-kind-btn="passive" onclick="filterAbilityKind('passive')" style="color:var(--kind-passive);">Passive</button>
                 <button type="button" class="beta-btn" data-kind-btn="skill" onclick="filterAbilityKind('skill')" style="color:var(--kind-skill);">Skills</button>
@@ -2116,10 +2284,10 @@
               <button type="button" class="beta-btn" onclick="toggleAllSchemaDrawers()">Toggle All ▸ Schema Drawers</button>
             </div>
 
-            <!-- 12 Unified Interactive Milestone & Schema Cards -->
+            <!-- 12 Compact Scannable Tier-1 Milestone Cards -->
             <div class="milestone-grid" id="milestone-cards-container">
               
-        <div class="milestone-card is-selected " data-milestone-id="samurai_way" data-kind="passive" onclick="selectAbility('samurai_way')">
+        <div class="milestone-card is-selected " data-milestone-id="samurai_way" data-kind="passive" onclick="selectAbility('samurai_way', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
           </div>
@@ -2127,17 +2295,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L1</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_way</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Way of the Blade" data-pt="Caminho da Lâmina">Way of the Blade</strong>
               </div>
               <span class="type-pill kind-passive">passive</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Way of the Blade" data-pt="Caminho da Lâmina">Way of the Blade</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Caminho da Lâmina</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho." data-pt="Trilhe o código Bushido de Tokuno: sua lâmina e mente tornam-se uma guarda sem escudo. Concede maestria contínua de ataque automático e Aparar de Arma Bushido autêntico (Parry * Bushido / 48.000 1M ou 41.140 2M) com Katana, Wakizashi, No-Dachi e Daisho.">Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 0ms</span>
-                    <span class="badge-mana">Mana 0</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward." data-pt="Trilhe o código Bushido de Tokuno: sua lâmina e mente tornam-se uma guarda sem escudo." title="Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho.">Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 0ms">Passive 0s</span>
+                    <span class="badge-stamina" title="Mana: 0 | Stamina: 0">0 Cost</span>
                     <span class="badge-meta">innate</span>
                   </div>
             
@@ -2154,17 +2319,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling." data-mode-b="Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.">Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_way</code> · innate · gump 21536)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">Passive</strong> · tab: ability · scope: New · effect: direct_damage · iconKey: idle_samurai_way (assets/icons/samurai/samurai_way@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_way</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling." data-mode-b="Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.">Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                innate · gump 21536 · kind: <strong style="color:#fff2bf;">Passive</strong> · scope: New · effect: direct_damage
                 
               </div>
             </details>
@@ -2173,7 +2336,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_lightning" data-kind="skill" onclick="selectAbility('samurai_lightning')">
+        <div class="milestone-card  " data-milestone-id="samurai_lightning" data-kind="skill" onclick="selectAbility('samurai_lightning', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_lightning@64.png" alt="Lightning Strike" />
           </div>
@@ -2181,17 +2344,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L5</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_lightning</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Lightning Strike" data-pt="Golpe Relâmpago">Lightning Strike</strong>
               </div>
               <span class="type-pill kind-skill">skill</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Lightning Strike" data-pt="Golpe Relâmpago">Lightning Strike</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Relâmpago</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.15x-1.25x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger." data-pt="Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda. Desfere um corte de precisão (+50 de Acerto, 1.15x-1.25x) com chance crítica Bushido^2/72.000 de ignorar armadura e 3s de desequilíbrio.">Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.15x-1.25x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 9000ms</span>
-                    <span class="badge-mana">Mana 10</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard." data-pt="Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda." title="Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.15x-1.25x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.">Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 9000ms">CD 9s</span>
+                    <span class="badge-mana" title="Mana: 10 | Stamina: 0">Mana 10</span>
                     <span class="badge-meta">spellId: 404</span>
                   </div>
             
@@ -2208,17 +2368,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff." data-mode-b="Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll, full scaling).">Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_lightning</code> · spellId: 404 · gump 21540)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21540 (assets/icons/samurai/samurai_lightning@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_lightning</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff." data-mode-b="Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll, full scaling).">Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 404 · gump 21540 · kind: <strong style="color:#fff2bf;">SpecialMove</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2227,7 +2385,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_perfection" data-kind="mechanic" onclick="selectAbility('samurai_perfection')">
+        <div class="milestone-card  " data-milestone-id="samurai_perfection" data-kind="mechanic" onclick="selectAbility('samurai_perfection', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_perfection@64.png" alt="Honor &amp; Perfection" />
           </div>
@@ -2235,17 +2393,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L10</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_perfection</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Honor &amp; Perfection" data-pt="Honra e Perfeição">Honor &amp; Perfection</strong>
               </div>
               <span class="type-pill kind-mechanic">mechanic</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Honor &amp; Perfection" data-pt="Honra e Perfeição">Honor &amp; Perfection</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Honra e Perfeição</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+14% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill." data-pt="Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial crescente. Acumula bônus de dano em acertos consecutivos (+14% Modo A / até +15% Modo B) e restaura Vida, Mana e Estamina ao abater.">Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+14% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 14000ms</span>
-                    <span class="badge-mana">Mana 8</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection." data-pt="Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial cresc..." title="Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+14% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.">Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 14000ms">CD 14s</span>
+                    <span class="badge-mana" title="Mana: 8 | Stamina: 0">Mana 8</span>
                     <span class="badge-meta">innate</span>
                   </div>
             
@@ -2262,18 +2417,16 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Custom self-buff (customCooldownMs: 14,000ms &gt;= 2,000ms floor) granting +10% Perfection streak." data-mode-b="Passive BaseWeapon.OnHit auto-Honored target bind (+4%/hit up to +15% cap, +8 HP/Stam/Mana on kill).">Custom self-buff (customCooldownMs: 14,000ms &gt;= 2,000ms floor) granting +10% Perfection streak.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_perfection</code> · innate · gump 21536)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">Custom</strong> · tab: ability · scope: Idle · effect: self_buff · iconKey: idle_samurai_perfection (assets/icons/samurai/samurai_perfection@48.png)
-                 · customCD: 14000ms (&gt;=2000ms)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_perfection</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Custom self-buff (customCooldownMs: 14,000ms &gt;= 2,000ms floor) granting +10% Perfection streak." data-mode-b="Passive BaseWeapon.OnHit auto-Honored target bind (+4%/hit up to +15% cap, +8 HP/Stam/Mana on kill).">Custom self-buff (customCooldownMs: 14,000ms &gt;= 2,000ms floor) granting +10% Perfection streak.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                innate · gump 21536 · kind: <strong style="color:#fff2bf;">Custom</strong> · scope: Idle · effect: self_buff
+                 · customCD: 14000ms
               </div>
             </details>
           
@@ -2281,7 +2434,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_honorable" data-kind="skill" onclick="selectAbility('samurai_honorable')">
+        <div class="milestone-card  " data-milestone-id="samurai_honorable" data-kind="skill" onclick="selectAbility('samurai_honorable', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_honorable@64.png" alt="Honorable Execution" />
           </div>
@@ -2289,17 +2442,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L15</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_honorable</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Honorable Execution" data-pt="Execução Honrosa">Honorable Execution</strong>
               </div>
               <span class="type-pill kind-skill">skill</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Honorable Execution" data-pt="Execução Honrosa">Honorable Execution</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Execução Honrosa</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Deliver the merciful final stroke of the Samurai code when your foe wavers near death. Unleashes a decisive Bushido cut (1.35x-1.45x base, surging to 1.85x execute below 35% HP) and ignites +15% attack speed for 9s with zero failure penalty." data-pt="Desfira o golpe final misericordioso do código Samurai quando o inimigo vacilar. Executa um corte decisivo de Bushido (1.35x-1.45x base, subindo para 1.85x abaixo de 35% de Vida) e concede +15% de velocidade de ataque por 9s sem penalidade.">Deliver the merciful final stroke of the Samurai code when your foe wavers near death. Unleashes a decisive Bushido cut (1.35x-1.45x base, surging to 1.85x execute below 35% HP) and ignites +15% attack speed for 9s with zero failure penalty.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 9000ms</span>
-                    <span class="badge-mana">Mana 0</span>
-                    <span class="badge-stamina">Stam 10</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Deliver the merciful final stroke of the Samurai code when your foe wavers near death." data-pt="Desfira o golpe final misericordioso do código Samurai quando o inimigo vacilar." title="Deliver the merciful final stroke of the Samurai code when your foe wavers near death. Unleashes a decisive Bushido cut (1.35x-1.45x base, surging to 1.85x execute below 35% HP) and ignites +15% attack speed for 9s with zero failure penalty.">Deliver the merciful final stroke of the Samurai code when your foe wavers near death.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 9000ms">CD 9s</span>
+                    <span class="badge-stamina" title="Mana: 0 | Stamina: 10">Stam 10</span>
                     <span class="badge-meta">spellId: 400</span>
                   </div>
             
@@ -2316,17 +2466,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed." data-mode-b="HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.">Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_honorable</code> · spellId: 400 · gump 21536)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21536 (assets/icons/samurai/samurai_honorable@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_honorable</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed." data-mode-b="HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.">Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 400 · gump 21536 · kind: <strong style="color:#fff2bf;">SpecialMove</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2335,7 +2483,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_confidence" data-kind="spell" onclick="selectAbility('samurai_confidence')">
+        <div class="milestone-card  " data-milestone-id="samurai_confidence" data-kind="spell" onclick="selectAbility('samurai_confidence', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_confidence@64.png" alt="Confidence" />
           </div>
@@ -2343,17 +2491,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L20</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_confidence</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Confidence" data-pt="Confiança">Confidence</strong>
               </div>
               <span class="type-pill kind-spell">spell</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Confidence" data-pt="Confiança">Confidence</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Confiança</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Exhale doubt and center your spirit in unshakable Bushido composure. Restores health on cast (15 + Bushido^2/576) and awakens Inner Calm for 6s: every parried blow restores bonus Stamina and Mana while empowering your next counter-cut." data-pt="Afaste a dúvida e concentre seu espírito na serenidade inabalável do Bushido. Restaura vida ao conjurar (15 + Bushido^2/576) e desperta Calma Interior por 6s: cada golpe aparado recupera Estamina e Mana extras e fortalece seu próximo corte.">Exhale doubt and center your spirit in unshakable Bushido composure. Restores health on cast (15 + Bushido^2/576) and awakens Inner Calm for 6s: every parried blow restores bonus Stamina and Mana while empowering your next counter-cut.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 18000ms</span>
-                    <span class="badge-mana">Mana 8</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Exhale doubt and center your spirit in unshakable Bushido composure." data-pt="Afaste a dúvida e concentre seu espírito na serenidade inabalável do Bushido." title="Exhale doubt and center your spirit in unshakable Bushido composure. Restores health on cast (15 + Bushido^2/576) and awakens Inner Calm for 6s: every parried blow restores bonus Stamina and Mana while empowering your next counter-cut.">Exhale doubt and center your spirit in unshakable Bushido composure.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 18000ms">CD 18s</span>
+                    <span class="badge-mana" title="Mana: 8 | Stamina: 0">Mana 8</span>
                     <span class="badge-meta">spellId: 401</span>
                   </div>
             
@@ -2370,17 +2515,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s." data-mode-b="Confidence posture: instant heal + reactive on-parry recovery (+8 HP / +20 Stam, 2.0s ICD).">Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_confidence</code> · spellId: 401 · gump 21537)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: heal · iconKey: gump_21537 (assets/icons/samurai/samurai_confidence@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_confidence</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s." data-mode-b="Confidence posture: instant heal + reactive on-parry recovery (+8 HP / +20 Stam, 2.0s ICD).">Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 401 · gump 21537 · kind: <strong style="color:#fff2bf;">Spell</strong> · scope: UO · effect: heal
                 
               </div>
             </details>
@@ -2389,7 +2532,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_counter" data-kind="spell" onclick="selectAbility('samurai_counter')">
+        <div class="milestone-card  " data-milestone-id="samurai_counter" data-kind="spell" onclick="selectAbility('samurai_counter', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_counter@64.png" alt="Counter Attack" />
           </div>
@@ -2397,17 +2540,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L25</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_counter</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Counter Attack" data-pt="Contra-Ataque">Counter Attack</strong>
               </div>
               <span class="type-pill kind-spell">spell</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Counter Attack" data-pt="Contra-Ataque">Counter Attack</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Contra-Ataque</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Read the rhythm of the enemy&#39;s steel and turn their aggression into their undoing. Strikes for 1.55x-1.65x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry." data-pt="Leia o ritmo do aço inimigo e transforme a agressão deles em ruína. Golpeia com 1.55x-1.65x de dano Bushido, concede +18% de dano na Postura de Contra-Ataque por 7s e desfere uma retaliação imediata gratuita ao aparar.">Read the rhythm of the enemy&#39;s steel and turn their aggression into their undoing. Strikes for 1.55x-1.65x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 7000ms</span>
-                    <span class="badge-mana">Mana 10</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Read the rhythm of the enemy&#39;s steel and turn their aggression into their undoing." data-pt="Leia o ritmo do aço inimigo e transforme a agressão deles em ruína." title="Read the rhythm of the enemy&#39;s steel and turn their aggression into their undoing. Strikes for 1.55x-1.65x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.">Read the rhythm of the enemy&#39;s steel and turn their aggression into their undoing.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 7000ms">CD 7s</span>
+                    <span class="badge-mana" title="Mana: 10 | Stamina: 0">Mana 10</span>
                     <span class="badge-meta">spellId: 403</span>
                   </div>
             
@@ -2424,17 +2564,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s." data-mode-b="CounterAttack posture: +18% damage + instant free BaseWeapon.OnSwing counter-attack on parry (2.0s ICD).">Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_counter</code> · spellId: 403 · gump 21539)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: direct_damage · iconKey: gump_21539 (assets/icons/samurai/samurai_counter@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_counter</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s." data-mode-b="CounterAttack posture: +18% damage + instant free BaseWeapon.OnSwing counter-attack on parry (2.0s ICD).">Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 403 · gump 21539 · kind: <strong style="color:#fff2bf;">Spell</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2443,7 +2581,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_double_strike" data-kind="skill" onclick="selectAbility('samurai_double_strike')">
+        <div class="milestone-card  " data-milestone-id="samurai_double_strike" data-kind="skill" onclick="selectAbility('samurai_double_strike', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_double_strike@64.png" alt="Double Strike" />
           </div>
@@ -2451,17 +2589,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L30</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_double_strike</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Double Strike" data-pt="Golpe Duplo">Double Strike</strong>
               </div>
               <span class="type-pill kind-skill">skill</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Double Strike" data-pt="Golpe Duplo">Double Strike</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Duplo</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Flow from an overhead Katana cut directly into a rising reverse slash before the enemy can recover. Signature Katana, Daisho, and Wakizashi technique that lands two rapid consecutive blows at 90% weapon damage each, accelerating Perfection." data-pt="Flua de um corte descendente de Katana diretamente para um corte reverso ascendente num único fôlego. Técnica clássica de Katana, Daisho e Wakizashi que aplica dois golpes rápidos consecutivos com 90% de dano cada, acelerando a Perfeição.">Flow from an overhead Katana cut directly into a rising reverse slash before the enemy can recover. Signature Katana, Daisho, and Wakizashi technique that lands two rapid consecutive blows at 90% weapon damage each, accelerating Perfection.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 9000ms</span>
-                    <span class="badge-mana">Mana 12</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Flow from an overhead Katana cut directly into a rising reverse slash before the enemy can recover." data-pt="Flua de um corte descendente de Katana diretamente para um corte reverso ascendente num único fôlego." title="Flow from an overhead Katana cut directly into a rising reverse slash before the enemy can recover. Signature Katana, Daisho, and Wakizashi technique that lands two rapid consecutive blows at 90% weapon damage each, accelerating Perfection.">Flow from an overhead Katana cut directly into a rising reverse slash before the enemy can recover.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 9000ms">CD 9s</span>
+                    <span class="badge-mana" title="Mana: 12 | Stamina: 0">Mana 12</span>
                     <span class="badge-meta">weaponRef: 7</span>
                   </div>
             
@@ -2478,17 +2613,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total)." data-mode-b="DoubleStrike (ref: 7) 2-hit combo advancing Perfection streak twice in a single swing.">WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total).</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_double_strike</code> · weaponRef: 7 · gump 20998)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_20998 (assets/icons/samurai/samurai_double_strike@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_double_strike</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total)." data-mode-b="DoubleStrike (ref: 7) 2-hit combo advancing Perfection streak twice in a single swing.">WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total).</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                weaponRef: 7 · gump 20998 · kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2497,7 +2630,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_evasion" data-kind="spell" onclick="selectAbility('samurai_evasion')">
+        <div class="milestone-card  " data-milestone-id="samurai_evasion" data-kind="spell" onclick="selectAbility('samurai_evasion', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_evasion@64.png" alt="Evasion" />
           </div>
@@ -2505,17 +2638,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L35</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_evasion</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Evasion" data-pt="Evasão">Evasion</strong>
               </div>
               <span class="type-pill kind-spell">spell</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Evasion" data-pt="Evasão">Evasion</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Evasão</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Enter a transcendent state of sixth-sense awareness where even arcane bolts part before your blade. Amplifies Weapon Parry (1.16x-1.50x) and intercepts direct-damage spells for 5s; deflecting an attack triggers an instant 0.85x Iaido Flash Riposte." data-pt="Entre em um estado transcendente de sexto sentido onde até projéteis arcanos são cortados no ar. Multiplica o Aparar de Arma (1.16x-1.50x) e intercepta magias por 5s; defletir um ataque dispara um Lampejo Iaido imediato de 0.85x.">Enter a transcendent state of sixth-sense awareness where even arcane bolts part before your blade. Amplifies Weapon Parry (1.16x-1.50x) and intercepts direct-damage spells for 5s; deflecting an attack triggers an instant 0.85x Iaido Flash Riposte.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 20000ms</span>
-                    <span class="badge-mana">Mana 10</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Enter a transcendent state of sixth-sense awareness where even arcane bolts part before your blade." data-pt="Entre em um estado transcendente de sexto sentido onde até projéteis arcanos são cortados no ar." title="Enter a transcendent state of sixth-sense awareness where even arcane bolts part before your blade. Amplifies Weapon Parry (1.16x-1.50x) and intercepts direct-damage spells for 5s; deflecting an attack triggers an instant 0.85x Iaido Flash Riposte.">Enter a transcendent state of sixth-sense awareness where even arcane bolts part before your blade.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 20000ms">CD 20s</span>
+                    <span class="badge-mana" title="Mana: 10 | Stamina: 0">Mana 10</span>
                     <span class="badge-meta">spellId: 402</span>
                   </div>
             
@@ -2532,17 +2662,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection." data-mode-b="Evasion posture: 1.32x Bushido parry multiplier + spell interception for 8.0s (20s CD).">Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_evasion</code> · spellId: 402 · gump 21538)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: self_buff · iconKey: gump_21538 (assets/icons/samurai/samurai_evasion@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_evasion</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection." data-mode-b="Evasion posture: 1.32x Bushido parry multiplier + spell interception for 8.0s (20s CD).">Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 402 · gump 21538 · kind: <strong style="color:#fff2bf;">Spell</strong> · scope: UO · effect: self_buff
                 
               </div>
             </details>
@@ -2551,7 +2679,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_momentum_strike" data-kind="spell" onclick="selectAbility('samurai_momentum_strike')">
+        <div class="milestone-card  " data-milestone-id="samurai_momentum_strike" data-kind="spell" onclick="selectAbility('samurai_momentum_strike', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_momentum_strike@64.png" alt="Momentum Strike" />
           </div>
@@ -2559,17 +2687,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L40</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_momentum_strike</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Momentum Strike" data-pt="Golpe de Ímpeto">Momentum Strike</strong>
               </div>
               <span class="type-pill kind-spell">spell</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Momentum Strike" data-pt="Golpe de Ímpeto">Momentum Strike</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe de Ímpeto</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Channel the full kinetic weight of your blade through the first enemy&#39;s ribs directly into a second foe beside them. Cleaves two targets with 115% transferred momentum (150% if the primary target falls) and staggers their footing for 3s." data-pt="Canalize todo o peso cinético da lâmina através do primeiro inimigo diretamente contra um segundo adversário ao lado. Corta dois alvos transferindo 115% de ímpeto (150% se o alvo principal cair) e desequilibra a guarda por 3s.">Channel the full kinetic weight of your blade through the first enemy&#39;s ribs directly into a second foe beside them. Cleaves two targets with 115% transferred momentum (150% if the primary target falls) and staggers their footing for 3s.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 8000ms</span>
-                    <span class="badge-mana">Mana 12</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Channel the full kinetic weight of your blade through the first enemy&#39;s ribs directly into a second fo..." data-pt="Canalize todo o peso cinético da lâmina através do primeiro inimigo diretamente contra um segundo adve..." title="Channel the full kinetic weight of your blade through the first enemy&#39;s ribs directly into a second foe beside them. Cleaves two targets with 115% transferred momentum (150% if the primary target falls) and staggers their footing for 3s.">Channel the full kinetic weight of your blade through the first enemy&#39;s ribs directly into a second fo...</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 8000ms">CD 8s</span>
+                    <span class="badge-mana" title="Mana: 12 | Stamina: 0">Mana 12</span>
                     <span class="badge-meta">spellId: 405</span>
                   </div>
             
@@ -2586,17 +2711,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target." data-mode-b="MomentumStrike 2-target cleave transferring full kinetic blade force to secondary enemy.">Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_momentum_strike</code> · spellId: 405 · gump 21541)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: direct_damage · iconKey: gump_21541 (assets/icons/samurai/samurai_momentum_strike@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_momentum_strike</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target." data-mode-b="MomentumStrike 2-target cleave transferring full kinetic blade force to secondary enemy.">Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 405 · gump 21541 · kind: <strong style="color:#fff2bf;">Spell</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2605,7 +2728,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_armor_ignore" data-kind="skill" onclick="selectAbility('samurai_armor_ignore')">
+        <div class="milestone-card  " data-milestone-id="samurai_armor_ignore" data-kind="skill" onclick="selectAbility('samurai_armor_ignore', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_armor_ignore@64.png" alt="Armor Ignore" />
           </div>
@@ -2613,17 +2736,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L45</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_armor_ignore</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Armor Ignore" data-pt="Ignorar Armadura">Armor Ignore</strong>
               </div>
               <span class="type-pill kind-skill">skill</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Armor Ignore" data-pt="Ignorar Armadura">Armor Ignore</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Ignorar Armadura</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Slide the razor tip of your Katana through the narrow seams of plate and dragon-scale alike. Bypasses target physical resistance, shreds enemy defense by -18% for 7s, and staggers heavily armored bosses." data-pt="Deslize a ponta afiada da Katana pelas frestas mais estreitas de placas e escamas dracônicas. Ignora a resistência física, reduz a defesa inimiga em -18% por 7s e desequilibra chefes pesadamente blindados.">Slide the razor tip of your Katana through the narrow seams of plate and dragon-scale alike. Bypasses target physical resistance, shreds enemy defense by -18% for 7s, and staggers heavily armored bosses.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 14000ms</span>
-                    <span class="badge-mana">Mana 14</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Slide the razor tip of your Katana through the narrow seams of plate and dragon-scale alike." data-pt="Deslize a ponta afiada da Katana pelas frestas mais estreitas de placas e escamas dracônicas." title="Slide the razor tip of your Katana through the narrow seams of plate and dragon-scale alike. Bypasses target physical resistance, shreds enemy defense by -18% for 7s, and staggers heavily armored bosses.">Slide the razor tip of your Katana through the narrow seams of plate and dragon-scale alike.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 14000ms">CD 14s</span>
+                    <span class="badge-mana" title="Mana: 14 | Stamina: 0">Mana 14</span>
                     <span class="badge-meta">weaponRef: 1</span>
                   </div>
             
@@ -2640,17 +2760,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred." data-mode-b="ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.">WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_armor_ignore</code> · weaponRef: 1 · gump 20992)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · tab: ability · scope: UO · effect: debuff · iconKey: gump_20992 (assets/icons/samurai/samurai_armor_ignore@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_armor_ignore</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred." data-mode-b="ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.">WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                weaponRef: 1 · gump 20992 · kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · scope: UO · effect: debuff
                 
               </div>
             </details>
@@ -2659,7 +2777,7 @@
         </div>
       
 
-        <div class="milestone-card  " data-milestone-id="samurai_frenzied_whirlwind" data-kind="skill" onclick="selectAbility('samurai_frenzied_whirlwind')">
+        <div class="milestone-card  " data-milestone-id="samurai_frenzied_whirlwind" data-kind="skill" onclick="selectAbility('samurai_frenzied_whirlwind', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_frenzied_whirlwind@64.png" alt="Frenzied Whirlwind" />
           </div>
@@ -2667,17 +2785,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L50</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_frenzied_whirlwind</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Frenzied Whirlwind" data-pt="Turbilhão Frenético">Frenzied Whirlwind</strong>
               </div>
               <span class="type-pill kind-skill">skill</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Frenzied Whirlwind" data-pt="Turbilhão Frenético">Frenzied Whirlwind</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Turbilhão Frenético</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Become the eye of a howling Tokuno steel tempest. Signature Wakizashi and Lajatang mastery (ref: 6) that lashes primary and adjacent enemies for 1.15x-1.25x Bushido damage with 50% cyclone cleave, 25% armor bypass, and kinetic stagger." data-pt="Torne-se o olho de uma tempestade uivante de aço de Tokuno. Maestria clássica de Wakizashi e Lajatang (ref: 6) que açoita o alvo e inimigos adjacentes com 1.15x-1.25x de dano Bushido, 50% de corte ciclônico e 25% de penetração.">Become the eye of a howling Tokuno steel tempest. Signature Wakizashi and Lajatang mastery (ref: 6) that lashes primary and adjacent enemies for 1.15x-1.25x Bushido damage with 50% cyclone cleave, 25% armor bypass, and kinetic stagger.</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 8000ms</span>
-                    <span class="badge-mana">Mana 10</span>
-                    <span class="badge-stamina">Stam 0</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="Become the eye of a howling Tokuno steel tempest." data-pt="Torne-se o olho de uma tempestade uivante de aço de Tokuno." title="Become the eye of a howling Tokuno steel tempest. Signature Wakizashi and Lajatang mastery (ref: 6) that lashes primary and adjacent enemies for 1.15x-1.25x Bushido damage with 50% cyclone cleave, 25% armor bypass, and kinetic stagger.">Become the eye of a howling Tokuno steel tempest.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 8000ms">CD 8s</span>
+                    <span class="badge-mana" title="Mana: 10 | Stamina: 0">Mana 10</span>
                     <span class="badge-meta">weaponRef: 6</span>
                   </div>
             
@@ -2694,17 +2809,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed." data-mode-b="ModernUO FrenziedWhirlwind (ref: 6) multi-target Tokuno blade gale with 25% armor bypass and bleed ticks.">WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed.</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_frenzied_whirlwind</code> · weaponRef: 6 · gump 20997)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_20997 (assets/icons/samurai/samurai_frenzied_whirlwind@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_frenzied_whirlwind</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed." data-mode-b="ModernUO FrenziedWhirlwind (ref: 6) multi-target Tokuno blade gale with 25% armor bypass and bleed ticks.">WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed.</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                weaponRef: 6 · gump 20997 · kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2713,7 +2826,7 @@
         </div>
       
 
-        <div class="milestone-card  is-capstone" data-milestone-id="samurai_kensei_judgment" data-kind="feature" onclick="selectAbility('samurai_kensei_judgment')">
+        <div class="milestone-card  is-capstone" data-milestone-id="samurai_kensei_judgment" data-kind="feature" onclick="selectAbility('samurai_kensei_judgment', false)">
           <div class="milestone-icon-box">
             <img src="assets/icons/samurai/samurai_kensei_judgment@64.png" alt="Kensei: Amakura&#39;s Judgment" />
           </div>
@@ -2721,17 +2834,14 @@
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L60</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">samurai_kensei_judgment</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="Kensei: Amakura&#39;s Judgment" data-pt="Kensei: Julgamento de Amakura">Kensei: Amakura&#39;s Judgment</strong>
               </div>
-              <span class="type-pill kind-feature">capstone · feature</span>
+              <span class="type-pill kind-feature">capstone</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Kensei: Amakura&#39;s Judgment" data-pt="Kensei: Julgamento de Amakura">Kensei: Amakura&#39;s Judgment</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Kensei: Julgamento de Amakura</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="The forbidden Grandmaster Iaijutsu stroke of Sword-Saint Amakura. Unsheathes a blinding horizon cut (1.15x-1.25x base, surging to 1.95x execute below 35% HP) and awakens Kensei Stance for 10s (+12% Attack Speed and +8% Damage)." data-pt="O golpe proibido de Iaijutsu do Grão-Mestre e Santo da Espada Amakura. Desembainha um corte cegante no horizonte (1.15x-1.25x base, 1.95x de execução abaixo de 35% de Vida) e desperta a Postura Kensei por 10s (+12% Velocidade e +8% Dano).">The forbidden Grandmaster Iaijutsu stroke of Sword-Saint Amakura. Unsheathes a blinding horizon cut (1.15x-1.25x base, surging to 1.95x execute below 35% HP) and awakens Kensei Stance for 10s (+12% Attack Speed and +8% Damage).</p>
-            <div class="cost-badges">
-                    <span class="badge-cd">CD 11000ms</span>
-                    <span class="badge-mana">Mana 0</span>
-                    <span class="badge-stamina">Stam 15</span>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="The forbidden Grandmaster Iaijutsu stroke of Sword-Saint Amakura." data-pt="O golpe proibido de Iaijutsu do Grão-Mestre e Santo da Espada Amakura." title="The forbidden Grandmaster Iaijutsu stroke of Sword-Saint Amakura. Unsheathes a blinding horizon cut (1.15x-1.25x base, surging to 1.95x execute below 35% HP) and awakens Kensei Stance for 10s (+12% Attack Speed and +8% Damage).">The forbidden Grandmaster Iaijutsu stroke of Sword-Saint Amakura.</p>
+            <div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: 11000ms">CD 11s</span>
+                    <span class="badge-stamina" title="Mana: 0 | Stamina: 15">Stam 15</span>
                     <span class="badge-meta">spellId: 400</span>
                   </div>
             
@@ -2748,17 +2858,15 @@
     </div>
   
             
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="Capstone SpecialMove (spellId: 400, 15 Stamina) 1.95x Execute &lt;= 35% HP + Kensei Stance (+12% Speed / +8% Dmg, 10s)." data-mode-b="Grandmaster Kensei: Amakura&#39;s Judgment Iaijutsu stroke: 1.95x Execute finisher + dual offensive posture.">Capstone SpecialMove (spellId: 400, 15 Stamina) 1.95x Execute &lt;= 35% HP + Kensei Stance (+12% Speed / +8% Dmg, 10s).</span>
-            </div>
-          
-            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>samurai_kensei_judgment</code> · spellId: 400 · gump 21536)</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: idle_samurai_kensei_judgment (assets/icons/samurai/samurai_kensei_judgment@48.png)
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>samurai_kensei_judgment</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="Capstone SpecialMove (spellId: 400, 15 Stamina) 1.95x Execute &lt;= 35% HP + Kensei Stance (+12% Speed / +8% Dmg, 10s)." data-mode-b="Grandmaster Kensei: Amakura&#39;s Judgment Iaijutsu stroke: 1.95x Execute finisher + dual offensive posture.">Capstone SpecialMove (spellId: 400, 15 Stamina) 1.95x Execute &lt;= 35% HP + Kensei Stance (+12% Speed / +8% Dmg, 10s).</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                spellId: 400 · gump 21536 · kind: <strong style="color:#fff2bf;">SpecialMove</strong> · scope: UO · effect: direct_damage
                 
               </div>
             </details>
@@ -2770,7 +2878,7 @@
           </section>
         </div>
 
-        <!-- RIGHT COLUMN: Sticky .arvore-dica Inspector, 5-Slot Seeded Hotbar & Mastery Seals -->
+        <!-- RIGHT COLUMN: Sticky Tabbed Tier-2 Deep-Dive Inspector, 5-Slot Hotbar & Mastery Seals -->
         <div class="col-stack">
           <section class="arvore-secao" id="sec-ability-inspector">
             <h2 class="arvore-secao-titulo">
@@ -2779,18 +2887,7 @@
             </h2>
             <div class="panel-body">
               <div class="arvore-dica-pinned" id="live-inspector">
-                <div id="insp-mode-banner" class="active-mode-strip" style="margin:0 0 8px;">
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
-                    <span class="mode-tag-pill" id="insp-banner-tag">MODE A · 100% EXISTING ENGINE</span>
-                    <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="insp-banner-sim">
-                      L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries · 0 C# Changes
-                    </span>
-                  </div>
-                  <div style="font-size:10px;margin-top:2px;color:var(--text-primary);" id="insp-banner-desc">
-                    Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.
-                  </div>
-                </div>
-                <div class="dica-header">
+                <div class="dica-header" style="margin-bottom:6px;">
                   <img id="insp-icon" src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
                   <div>
                     <div style="display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;">
@@ -2802,42 +2899,72 @@
                     <div class="mono" style="font-size:10px;color:var(--text-gold);" id="insp-qC">qC Estimator: 1.00x Weapon Auto-Swing + 25.8% (1H) / 29.3% (2H) Parry @ 100 Bushido</div>
                   </div>
                 </div>
-                <p id="insp-desc" data-en="Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho." data-pt="Trilhe o código Bushido de Tokuno: sua lâmina e mente tornam-se uma guarda sem escudo. Concede maestria contínua de ataque automático e Aparar de Arma Bushido autêntico (Parry * Bushido / 48.000 1M ou 41.140 2M) com Katana, Wakizashi, No-Dachi e Daisho." style="margin:0 0 8px;font-size:11.5px;color:var(--text-primary);">Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho.</p>
-                <div class="cost-badges" id="insp-badges" style="margin-bottom:8px;">
-                  <span class="badge-cd">CD: 0ms</span>
-                  <span class="badge-cd">CustomCD: 0ms</span>
-                  <span class="badge-mana">Mana: 0</span>
-                  <span class="badge-stamina">Stamina: 0</span>
-                  <span class="badge-meta">Gump: 21536</span>
+
+                <!-- Progressive Disclosure Inspector Tabs -->
+                <div class="inspector-tab-bar" role="tablist" aria-label="Inspector Progressive Disclosure Tabs">
+                  <button type="button" class="insp-tab-btn is-active" data-insp-tab="overview" onclick="switchInspectorTab('overview')">Overview</button>
+                  <button type="button" class="insp-tab-btn" data-insp-tab="modes" onclick="switchInspectorTab('modes')">Mode A/B</button>
+                  <button type="button" class="insp-tab-btn" data-insp-tab="ticker" onclick="switchInspectorTab('ticker')">100ms Sim</button>
+                  <button type="button" class="insp-tab-btn" data-insp-tab="schema" onclick="switchInspectorTab('schema')">JSON</button>
                 </div>
-                <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
-                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
-                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</div>
-                  <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
-                </div>
-                <div class="inspector-modes-grid">
-                  <div id="mode-card-a" class="mode-card-box is-active-mode" onclick="setExecMode('mode_a')" title="Click to activate Mode A (100% Existing Engine)">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-                      <strong style="color:#fff2bf;">Mode A (Drop-In JSON)</strong>
-                      <span class="lv-pill" id="mode-pill-a" style="font-size:8.5px;padding:0 4px;">ACTIVE</span>
-                    </div>
-                    <span id="insp-mode-a" style="color:var(--text-primary);">Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</span>
+
+                <!-- Pane 1: Overview, Full Lore & Formula Breakdown -->
+                <div class="insp-pane" data-insp-pane="overview">
+                  <p id="insp-desc" data-en="Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho." data-pt="Trilhe o código Bushido de Tokuno: sua lâmina e mente tornam-se uma guarda sem escudo. Concede maestria contínua de ataque automático e Aparar de Arma Bushido autêntico (Parry * Bushido / 48.000 1M ou 41.140 2M) com Katana, Wakizashi, No-Dachi e Daisho." style="margin:0 0 7px;font-size:11.5px;color:var(--text-primary);line-height:1.45;">Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho.</p>
+                  <div class="cost-badges" id="insp-badges" style="margin-bottom:7px;">
+                    <span class="badge-cd">CD: 0ms</span>
+                    <span class="badge-cd">CustomCD: 0ms</span>
+                    <span class="badge-mana">Mana: 0</span>
+                    <span class="badge-stamina">Stamina: 0</span>
+                    <span class="badge-meta">Gump: 21536</span>
                   </div>
-                  <div id="mode-card-b" class="mode-card-box" onclick="setExecMode('mode_b')" title="Click to activate Mode B (<20 LOC C# Hook)">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-                      <strong style="color:#fff2bf;">Mode B (&lt;20 LOC C# Hook)</strong>
-                      <span class="lv-pill" id="mode-pill-b" style="font-size:8.5px;padding:0 4px;opacity:0.45;">CLICK TO VIEW</span>
-                    </div>
-                    <span id="insp-mode-b" style="color:var(--text-primary);">Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.</span>
+                  <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
+                    <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
+                    <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</div>
+                    <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
                   </div>
                 </div>
-                
+
+                <!-- Pane 2: Mode A vs Mode B Side-by-Side Comparison & Class Sim Banner -->
+                <div class="insp-pane" data-insp-pane="modes">
+                  <div id="insp-mode-banner" class="active-mode-strip" style="margin:0 0 6px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                      <span class="mode-tag-pill" id="insp-banner-tag">MODE A · 100% EXISTING ENGINE</span>
+                      <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="insp-banner-sim">
+                        L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries
+                      </span>
+                    </div>
+                    <div style="font-size:9.5px;margin-top:2px;color:var(--text-secondary);" id="insp-banner-desc">
+                      Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.
+                    </div>
+                  </div>
+                  <div class="inspector-modes-grid">
+                    <div id="mode-card-a" class="mode-card-box is-active-mode" onclick="setExecMode('mode_a')" title="Click to activate Mode A (100% Existing Engine)">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                        <strong style="color:#fff2bf;">Mode A (Drop-In JSON)</strong>
+                        <span class="lv-pill" id="mode-pill-a" style="font-size:8.5px;padding:0 4px;">ACTIVE</span>
+                      </div>
+                      <span id="insp-mode-a" style="color:var(--text-primary);">Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</span>
+                    </div>
+                    <div id="mode-card-b" class="mode-card-box" onclick="setExecMode('mode_b')" title="Click to activate Mode B (<20 LOC C# Hook)">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                        <strong style="color:#fff2bf;">Mode B (&lt;20 LOC C# Hook)</strong>
+                        <span class="lv-pill" id="mode-pill-b" style="font-size:8.5px;padding:0 4px;opacity:0.45;">CLICK TO VIEW</span>
+                      </div>
+                      <span id="insp-mode-b" style="color:var(--text-primary);">Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pane 3: Live 100ms Tick Combat Loop Preview -->
+                <div class="insp-pane" data-insp-pane="ticker">
+                  
     <div class="uo-combat-ticker" id="live-combat-ticker">
       <div class="ticker-head">
         <div style="display:flex;align-items:center;gap:6px;">
           <i class="live-pulse-dot"></i>
-          <strong style="font-family:'Cinzel',serif;font-size:11px;color:var(--text-gold);text-transform:uppercase;">
-            Live 100ms Tick Combat Loop Preview
+          <strong style="font-family:'Cinzel',serif;font-size:10.5px;color:var(--text-gold);text-transform:uppercase;">
+            Live 100ms Tick Combat Loop
           </strong>
         </div>
         <div style="display:flex;gap:4px;">
@@ -2875,9 +3002,13 @@
       </div>
     </div>
   
-                <details class="schema-drawer" style="margin-top:7px;">
-                  <summary>View Live Drop-In JSON Payload (<code>design/drop-in/samurai.json</code>)</summary>
-                  <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">{
+                </div>
+
+                <!-- Pane 4: Raw Drop-In JSON Payload -->
+                <div class="insp-pane" data-insp-pane="schema">
+                  <details class="schema-drawer" id="insp-schema-details" style="margin-top:6px;">
+                    <summary>▸ View Live Drop-In JSON Payload (<code>design/drop-in/samurai.json</code>)</summary>
+                    <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">{
   &quot;id&quot;: &quot;samurai_way&quot;,
   &quot;aliasOf&quot;: null,
   &quot;name&quot;: &quot;Way of the Blade&quot;,
@@ -2909,7 +3040,8 @@
   &quot;progressionTreeLevel&quot;: 1,
   &quot;inCatalog&quot;: true
 }</pre>
-                </details>
+                  </details>
+                </div>
               </div>
             </div>
           </section>
@@ -3061,6 +3193,87 @@
         var rect = el.getBoundingClientRect();
         var targetY = Math.max(0, Math.round(rect.top + window.scrollY - 16));
         window.scrollTo({ top: targetY, behavior: 'smooth' });
+      };
+
+      window.scrollToSelectedCard = function() {
+        var cardMilestoneId = selectedAbilityId === 'ninja_shuriken' ? 'ninja_smoke_bomb' : selectedAbilityId;
+        var targetCardEl = document.querySelector('.milestone-card[data-milestone-id="' + cardMilestoneId + '"]');
+        if (targetCardEl) {
+          var rect = targetCardEl.getBoundingClientRect();
+          var targetY = Math.max(0, Math.round(rect.top + window.scrollY - 90));
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
+      };
+
+      window.switchInspectorTab = function(tabName) {
+        var btns = document.querySelectorAll('[data-insp-tab]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-insp-tab') === tabName);
+        }
+        var panes = document.querySelectorAll('[data-insp-pane]');
+        for (var j = 0; j < panes.length; j++) {
+          var pName = panes[j].getAttribute('data-insp-pane');
+          var isMatch = pName === tabName;
+          panes[j].classList.toggle('is-highlighted-pane', isMatch);
+          if (tabName === 'schema' && pName === 'schema') {
+            var det = document.getElementById('insp-schema-details');
+            if (det) det.setAttribute('open', 'open');
+          }
+        }
+      };
+
+      window.setCobraTier = function(tierKey) {
+        var btns = document.querySelectorAll('[data-cobra-tier]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-cobra-tier') === tierKey);
+        }
+        var cols = document.querySelectorAll('[data-cobra-col]');
+        var firstId = null;
+        for (var j = 0; j < cols.length; j++) {
+          var lv = parseInt(cols[j].getAttribute('data-cobra-lv'), 10);
+          var match = tierKey === 'all' ||
+            (tierKey === 'initiate' && lv <= 15) ||
+            (tierKey === 'adept' && lv >= 20 && lv <= 35) ||
+            (tierKey === 'master' && lv >= 40);
+          cols[j].classList.toggle('is-tier-dimmed', !match);
+          cols[j].classList.toggle('is-path-lit', match);
+          if (match && !firstId) {
+            firstId = cols[j].getAttribute('data-cobra-col');
+          }
+        }
+        var cards = document.querySelectorAll('.milestone-card');
+        for (var k = 0; k < cards.length; k++) {
+          var cId = cards[k].getAttribute('data-milestone-id');
+          var msObj = null;
+          for (var m = 0; m < cls.progression.length; m++) {
+            if (cls.progression[m].id === cId) {
+              msObj = cls.progression[m];
+              break;
+            }
+          }
+          var cLv = msObj ? msObj.level : 1;
+          var cMatch = tierKey === 'all' ||
+            (tierKey === 'initiate' && cLv <= 15) ||
+            (tierKey === 'adept' && cLv >= 20 && cLv <= 35) ||
+            (tierKey === 'master' && cLv >= 40);
+          cards[k].classList.toggle('is-kind-match', tierKey !== 'all' && cMatch);
+          cards[k].classList.toggle('is-kind-dimmed', tierKey !== 'all' && !cMatch);
+        }
+        if (firstId) {
+          window.selectAbility(firstId, false);
+        }
+      };
+
+      window.stepCobraMilestone = function(delta) {
+        var curIdx = 0;
+        for (var i = 0; i < cls.progression.length; i++) {
+          if (cls.progression[i].id === selectedAbilityId) {
+            curIdx = i;
+            break;
+          }
+        }
+        var nextIdx = (curIdx + delta + cls.progression.length) % cls.progression.length;
+        window.selectAbility(cls.progression[nextIdx].id, false);
       };
 
       window.setPaperdollTier = function(tierId, mult, resBonus) {
@@ -3240,7 +3453,47 @@
         for (var c = 0; c < cobraCircles.length; c++) {
           cobraCircles[c].classList.toggle('is-selected-node', cobraCircles[c].getAttribute('data-cobra-id') === cardMilestoneId);
         }
+        var cobraCols = document.querySelectorAll('.arvore-col[data-cobra-lv]');
+        var unlockedTotal = 0;
+        var unlockedActives = 0;
+        var unlockedPassives = 0;
+        var unlockedSpecials = 0;
+        for (var p = 0; p < cls.progression.length; p++) {
+          if (cls.progression[p].level <= ab.progressionTreeLevel) {
+            unlockedTotal++;
+            var pType = cls.progression[p].type;
+            if (pType === 'skill' || pType === 'spell') unlockedActives++;
+            else if (pType === 'passive') unlockedPassives++;
+            else unlockedSpecials++;
+          }
+        }
+        for (var cc = 0; cc < cobraCols.length; cc++) {
+          var cLv = parseInt(cobraCols[cc].getAttribute('data-cobra-lv') || '0', 10);
+          cobraCols[cc].classList.toggle('is-path-lit', cLv <= ab.progressionTreeLevel);
+        }
         var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
+        var isModeB = currentMode === 'mode_b';
+        var sumIcon = document.getElementById('cobra-sum-icon');
+        if (sumIcon) sumIcon.src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
+        var sumLv = document.getElementById('cobra-sum-lv');
+        if (sumLv) sumLv.textContent = 'L' + ab.progressionTreeLevel;
+        var sumTitle = document.getElementById('cobra-sum-title');
+        if (sumTitle) sumTitle.textContent = (ms ? ms.nameEn : ab.name) + ' / ' + (ms ? ms.namePtBr : ab.namePtBr);
+        var sumKind = document.getElementById('cobra-sum-kind');
+        if (sumKind) sumKind.textContent = ab.kind.toUpperCase() + ' · CD ' + ab.cooldownMs + 'ms · Mana ' + ab.manaCost + ' / Stam ' + ab.staminaCost;
+        var sumQc = document.getElementById('cobra-sum-qc');
+        if (sumQc) sumQc.textContent = (isModeB ? '[Mode B C# Hook] ' + mInfo.modeB : '[Mode A Engine] ' + mInfo.modeA) + ' · qC: ' + mInfo.qCEstimator;
+        var sumCum = document.getElementById('cobra-sum-cum');
+        if (sumCum) {
+          sumCum.innerHTML = '<div><strong style="color:#fff2bf;">Path L1→L' + ab.progressionTreeLevel + ':</strong> ' + unlockedTotal + '/12 Milestones Unlocked</div>' +
+            '<div style="color:var(--text-secondary);">' + unlockedActives + ' Actives · ' + unlockedPassives + ' Passive · ' + unlockedSpecials + ' Capstones</div>';
+        }
+        var inspBody = document.getElementById('insp-body-wrap');
+        if (inspBody) {
+          inspBody.classList.remove('is-switching');
+          void inspBody.offsetWidth;
+          inspBody.classList.add('is-switching');
+        }
         document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
         document.getElementById('insp-level').textContent = 'L' + ab.progressionTreeLevel;
         document.getElementById('insp-kind').textContent = ab.kind;
@@ -3256,7 +3509,6 @@
         inspDescEl.setAttribute('data-en', descEn);
         inspDescEl.setAttribute('data-pt', descPt);
         inspDescEl.textContent = currentLocale === 'pt' ? descPt : descEn;
-        var isModeB = currentMode === 'mode_b';
         var fHead = document.getElementById('insp-formula-heading');
         if (fHead) {
           fHead.textContent = isModeB

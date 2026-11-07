@@ -1307,32 +1307,35 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
     }
 
     .arvore-circulo {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
+      display: block;
+      width: 48px;
+      height: 48px;
       border: 2px solid #6d5733;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      border-radius: 5px;
+      background: #090b08;
+      padding: 0;
       overflow: hidden;
       flex-shrink: 0;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.65);
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .arvore-circulo.is-on {
       border-color: #e6c36a;
-      box-shadow: 0 0 12px #e6c36a73;
+      box-shadow: 0 0 12px rgba(230, 195, 106, 0.38);
     }
 
     .arvore-circulo:hover {
-      transform: scale(1.06);
+      transform: translateY(-2px) scale(1.06);
       border-color: var(--border-gold-bright);
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.55);
     }
 
     .arvore-circulo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 3px;
+      object-fit: cover;
       display: block;
     }
 
@@ -1895,11 +1898,19 @@ function buildClassSkillTreeHtml(
 
   const shurikenAbility: SkillDefinition | undefined = cls.abilities.find((a) => a.id === 'ninja_shuriken');
 
+  const shortHook = (text: string): string => {
+    const idx = text.indexOf('. ');
+    if (idx !== -1 && idx <= 105) {
+      return text.slice(0, idx + 1);
+    }
+    return text.length > 105 ? `${text.slice(0, 102)}...` : text;
+  };
+
   const cobraNodesHtml = cls.progression
     .map((m, idx) => {
       const iconRel = `assets/icons/${cls.id}/${m.id}@64.png`;
       return `
-        <div class="arvore-col" onclick="selectAbility('${escapeHtml(m.id)}', true)" title="L${m.level}: ${escapeHtml(m.nameEn)} / ${escapeHtml(m.namePtBr)} (Click to inspect &amp; scroll to card)">
+        <div class="arvore-col is-path-lit" data-cobra-col="${escapeHtml(m.id)}" data-cobra-lv="${m.level}" onclick="selectAbility('${escapeHtml(m.id)}', false)" title="L${m.level}: ${escapeHtml(m.nameEn)} / ${escapeHtml(m.namePtBr)} (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L${m.level}</span>
           <div class="arvore-circulo is-on ${idx === 0 ? 'is-selected-node' : ''}" data-cobra-id="${escapeHtml(m.id)}" data-node-kind="${escapeHtml(m.type)}">
             <img src="${escapeHtml(iconRel)}" alt="${escapeHtml(m.nameEn)}" />
@@ -1935,22 +1946,12 @@ function buildClassSkillTreeHtml(
       const dualUnlockHtml =
         !isSamurai && m.level === 35 && shurikenAbility
           ? `
-            <div class="dual-unlock-banner" onclick="event.stopPropagation(); selectAbility('ninja_shuriken');">
+            <div class="dual-unlock-banner" onclick="event.stopPropagation(); selectAbility('ninja_shuriken', true);">
               <img src="assets/icons/ninja/ninja_shuriken@48.png" alt="Shuriken &amp; Fukiya Volley" />
               <div>
                 <strong>+ Dual L35 Unlock: <span data-en="${escapeHtml(shurikenAbility.name)}" data-pt="${escapeHtml(shurikenAbility.namePtBr)}">${escapeHtml(shurikenAbility.name)}</span></strong>
-                <div class="mono" style="font-size:9px;color:#a39e90;">id: ninja_shuriken | CD: ${shurikenAbility.cooldownMs}ms | Mana: ${shurikenAbility.manaCost} | Stam: ${shurikenAbility.staminaCost} | gump: ${shurikenAbility.gumpIcon}</div>
+                <div class="mono" style="font-size:9px;color:#a39e90;">CD: ${(shurikenAbility.cooldownMs / 1000).toFixed(0)}s · 0.75x Ranged Volley + 75% 2nd-Target Splash</div>
               </div>
-            </div>
-          `
-          : '';
-
-      const activeModeStripHtml =
-        ability && modeInfo
-          ? `
-            <div class="active-mode-strip" data-mode-strip>
-              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
-              <span class="mode-text" data-mode-a="${escapeHtml(modeInfo.modeA)}" data-mode-b="${escapeHtml(modeInfo.modeB)}">${escapeHtml(modeInfo.modeA)}</span>
             </div>
           `
           : '';
@@ -1959,17 +1960,32 @@ function buildClassSkillTreeHtml(
         ability && modeInfo
           ? `
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Raw Spec (<code>${escapeHtml(ability.id)}</code> · ${escapeHtml(refBadge)} · gump ${ability.gumpIcon})</summary>
-              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
-                kind: <strong style="color:#fff2bf;">${escapeHtml(ability.kind)}</strong> · tab: ${escapeHtml(ability.tab)} · scope: ${escapeHtml(ability.mapScope)} · effect: ${escapeHtml(ability.effectType)} · iconKey: ${escapeHtml(ability.iconKey)} (${escapeHtml(`assets/icons/${cls.id}/${ability.id}@48.png`)})
-                ${ability.customCooldownMs > 0 ? ` · customCD: ${ability.customCooldownMs}ms (&gt;=2000ms)` : ''}
+              <summary>▸ Progressive Disclosure: Mode A/B &amp; Schema (<code>${escapeHtml(ability.id)}</code>)</summary>
+              <div class="active-mode-strip" data-mode-strip style="margin-top:4px;">
+                <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+                <span class="mode-text" data-mode-a="${escapeHtml(modeInfo.modeA)}" data-mode-b="${escapeHtml(modeInfo.modeB)}">${escapeHtml(modeInfo.modeA)}</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                ${escapeHtml(refBadge)} · gump ${ability.gumpIcon} · kind: <strong style="color:#fff2bf;">${escapeHtml(ability.kind)}</strong> · scope: ${escapeHtml(ability.mapScope)} · effect: ${escapeHtml(ability.effectType)}
+                ${ability.customCooldownMs > 0 ? ` · customCD: ${ability.customCooldownMs}ms` : ''}
               </div>
             </details>
           `
           : '';
 
+      const hookEn = shortHook(m.descEn);
+      const hookPt = shortHook(m.descPtBr);
+      const cdLabel = ability ? (ability.cooldownMs > 0 ? `CD ${(ability.cooldownMs / 1000).toFixed(0)}s` : 'Passive 0s') : 'Passive';
+      const costLabel = ability
+        ? ability.manaCost > 0
+          ? `Mana ${ability.manaCost}`
+          : ability.staminaCost > 0
+            ? `Stam ${ability.staminaCost}`
+            : '0 Cost'
+        : '0 Cost';
+
       return `
-        <div class="milestone-card ${idx === 0 ? 'is-selected' : ''} ${isCapstone ? 'is-capstone' : ''}" data-milestone-id="${escapeHtml(m.id)}" data-kind="${escapeHtml(m.type)}" onclick="selectAbility('${escapeHtml(m.id)}')">
+        <div class="milestone-card ${idx === 0 ? 'is-selected' : ''} ${isCapstone ? 'is-capstone' : ''}" data-milestone-id="${escapeHtml(m.id)}" data-kind="${escapeHtml(m.type)}" onclick="selectAbility('${escapeHtml(m.id)}', false)">
           <div class="milestone-icon-box">
             <img src="${escapeHtml(icon64)}" alt="${escapeHtml(m.nameEn)}" />
           </div>
@@ -1977,25 +1993,21 @@ function buildClassSkillTreeHtml(
             <div class="milestone-card-head">
               <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L${m.level}</span>
-                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">${escapeHtml(m.id)}</code>
+                <strong style="color:#fff2bf;font-size:13px;" data-en="${escapeHtml(m.nameEn)}" data-pt="${escapeHtml(m.namePtBr)}">${escapeHtml(m.nameEn)}</strong>
               </div>
-              <span class="type-pill kind-${escapeHtml(m.type)}">${escapeHtml(isCapstone ? 'capstone · feature' : m.type)}</span>
+              <span class="type-pill kind-${escapeHtml(m.type)}">${escapeHtml(isCapstone ? 'capstone' : m.type)}</span>
             </div>
-            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="${escapeHtml(m.nameEn)}" data-pt="${escapeHtml(m.namePtBr)}">${escapeHtml(m.nameEn)}</div>
-            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">${escapeHtml(m.namePtBr)}</div>
-            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="${escapeHtml(m.descEn)}" data-pt="${escapeHtml(m.descPtBr)}">${escapeHtml(m.descEn)}</p>
+            <p style="margin:3px 0 0;font-size:11px;color:var(--text-secondary);line-height:1.35;" data-en="${escapeHtml(hookEn)}" data-pt="${escapeHtml(hookPt)}" title="${escapeHtml(m.descEn)}">${escapeHtml(hookEn)}</p>
             ${
               ability
-                ? `<div class="cost-badges">
-                    <span class="badge-cd">CD ${ability.cooldownMs}ms</span>
-                    <span class="badge-mana">Mana ${ability.manaCost}</span>
-                    <span class="badge-stamina">Stam ${ability.staminaCost}</span>
+                ? `<div class="cost-badges" style="margin-top:5px;">
+                    <span class="badge-cd" title="Cooldown: ${ability.cooldownMs}ms">${escapeHtml(cdLabel)}</span>
+                    <span class="${ability.manaCost > 0 ? 'badge-mana' : 'badge-stamina'}" title="Mana: ${ability.manaCost} | Stamina: ${ability.staminaCost}">${escapeHtml(costLabel)}</span>
                     <span class="badge-meta">${escapeHtml(refBadge)}</span>
                   </div>`
                 : ''
             }
             ${renderAbilityPowerMeter(m.id)}
-            ${activeModeStripHtml}
             ${dualUnlockHtml}
             ${schemaDrawerHtml}
           </div>
@@ -2169,24 +2181,33 @@ function buildClassSkillTreeHtml(
         </div>
 
         <div class="arvore-head-acoes">
-          <button type="button" class="beta-btn is-active" id="btn-lang-en" onclick="setLocale('en')">EN</button>
-          <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
-          <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
-          <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
-          <a class="nav-pill" href="index.html">Review Portal</a>
-          <a class="nav-pill" href="${escapeHtml(otherClassFile)}">${escapeHtml(otherClassLabel)}</a>
-          <a class="nav-pill" href="class-comparison.html">5-Class Parity &amp; Sim</a>
+          <div class="command-cluster" role="group" aria-label="Localization Cluster">
+            <span class="cluster-tag">Lang:</span>
+            <button type="button" class="beta-btn is-active" id="btn-lang-en" onclick="setLocale('en')">EN</button>
+            <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
+          </div>
+          <div class="command-cluster" role="group" aria-label="Engine Mode Cluster">
+            <span class="cluster-tag">Engine:</span>
+            <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
+            <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
+          </div>
+          <div class="command-cluster" role="group" aria-label="Workbench Surface Switcher">
+            <span class="cluster-tag">Surface:</span>
+            <a class="nav-pill" href="index.html">Portal</a>
+            <a class="nav-pill" href="${escapeHtml(otherClassFile)}">${escapeHtml(otherClassLabel)}</a>
+            <a class="nav-pill" href="class-comparison.html">5-Class Sim</a>
+          </div>
         </div>
       </header>
 
-      <!-- 3-Column Beta Workbench (Consolidated v2.0 — Zero Duplication) -->
+      <!-- 3-Column Beta Workbench (Consolidated v2.2 — Progressive Disclosure & Zero Duplication) -->
       <div class="workbench-grid">
-        <!-- LEFT COLUMN: Character Profile, 8 Starter Skills & Interactive Tokuno Paperdoll -->
+        <!-- LEFT COLUMN: De-Duplicated Character Profile, 8 Starter Skills & Interactive Tokuno Paperdoll -->
         <div class="col-stack">
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-starter-skills">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Character &amp; Resource Profile</span>
-              <span class="arvore-secao-sub">_E / dx[${cls.classNumericId}]</span>
+              <span class="title-left">Character &amp; Grandmaster Template</span>
+              <span class="arvore-secao-sub">_E / WE[${cls.classNumericId}] · 8 GM Skills</span>
             </h2>
             <div class="panel-body">
               <div class="identity-hero">
@@ -2195,40 +2216,21 @@ function buildClassSkillTreeHtml(
                   <img class="portrait-mini-badge" src="${escapeHtml(portrait64Rel)}" alt="${escapeHtml(cls.badge)} 64x64 Icon" />
                 </div>
                 <div>
-                  <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">${escapeHtml(classTitle)}</div>
-                  <div class="mono" style="font-size:10.5px;color:var(--text-secondary);">classId: "${escapeHtml(cls.id)}" · numericId: ${cls.classNumericId} · badge: "${escapeHtml(cls.badge)}"</div>
-                  <div class="mono" style="font-size:10px;color:var(--text-gold);margin-top:2px;">
-                    Primary: ${escapeHtml(cls.resourceProfile.primaryResource)} | StartMana: ${cls.resourceProfile.startingManaMax} | MedCap: ${cls.resourceProfile.meditationCap} | Reagents: false | Ammo: false
-                  </div>
-                  <div class="stat-chips">
-                    <div class="stat-chip"><span>STR</span><strong>${cls.baseStats.str}</strong></div>
-                    <div class="stat-chip"><span>DEX</span><strong>${cls.baseStats.dex}</strong></div>
-                    <div class="stat-chip"><span>INT</span><strong>${cls.baseStats.int}</strong></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">${escapeHtml(classTitle)}</div>
+                    <span class="lv-pill">ID ${cls.classNumericId} · Hue ${cls.robeHue}</span>
                   </div>
                   ${renderStatDistributionStrip(cls)}
                 </div>
               </div>
-            </div>
-          </section>
-
-          <section class="arvore-secao" id="sec-starter-skills">
-            <h2 class="arvore-secao-titulo">
-              <span class="title-left">8 Starter Skills &amp; Template</span>
-              <span class="arvore-secao-sub">WE / hE &amp; FE (100%)</span>
-            </h2>
-            <div class="panel-body">
-              <div class="kv-grid">
+              <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.03em;">
+                Grandmaster Starter Skill Pills (50.0 Base → 100.0 GM Cap):
+              </div>
+              <div class="kv-grid" style="margin-top:4px;">
                 ${starterSkillsHtml}
               </div>
-              <div style="margin-top:5px;font-size:10px;color:var(--text-secondary);">
-                ${
-                  isSamurai
-                    ? 'Shieldless Bushido Weapon Parry scales via Parrying (50) × Bushido (50) ÷ 48,000 (1H) or 41,140 (2H).'
-                    : 'Synergizes with Poisoning (#30) for Infectious Strike, Shuriken, and Fukiya virulent toxin application.'
-                }
-              </div>
               <details class="schema-drawer" style="margin-top:6px;">
-                <summary>Legacy Template Weights (FE = 100% Sum)</summary>
+                <summary>▸ Progressive Disclosure: Legacy Template Weights (FE = 100% Sum)</summary>
                 <div class="kv-grid" style="margin-top:4px;">
                   ${legacyWeightsHtml}
                 </div>
@@ -2243,7 +2245,7 @@ function buildClassSkillTreeHtml(
             </h2>
             <div class="panel-body">
               <div class="mono" style="font-size:10px;color:var(--text-secondary);margin-bottom:4px;">
-                Material Tier Scaling (<span id="pd-tier-label" style="color:var(--text-gold);font-weight:700;">Valorite · 1.85x Dmg / +96% Res</span>):
+                9-Tier Material Selector (<span id="pd-tier-label" style="color:var(--text-gold);font-weight:700;">Valorite · 1.85x Dmg / +96% Res</span>):
               </div>
               <div class="tier-pill-bar">
                 ${tierButtonsHtml}
@@ -2265,22 +2267,19 @@ function buildClassSkillTreeHtml(
 
               <!-- 4 Signature Tokuno Weapons Strip -->
               <div style="margin-top:7px;font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--text-gold);text-transform:uppercase;">
-                Signature Tokuno Armaments (Hover / Click for Stats):
+                Signature Tokuno Armaments (Click Slot to Inspect):
               </div>
               <div class="weapon-rack-strip">
                 ${weaponRackSlots.map((g, idx) => renderGearTile(g, idx === 0)).join('\n')}
               </div>
 
-              <!-- Live Mouseover Gear Stat Card (#paperdoll-gear-tooltip) -->
+              <!-- De-Duplicated Single Active Armament Card (#paperdoll-gear-tooltip) -->
               <div class="gear-mouseover-card" id="paperdoll-gear-tooltip">
                 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 6px;">
                   <strong style="color:#fff2bf;font-size:12px;" id="gear-tt-name">${escapeHtml(defaultGear.nameEn)}</strong>
                   <span class="lv-pill" id="gear-tt-slot">${escapeHtml(defaultGear.slotLabel)}</span>
                 </div>
-                <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:2px;" id="gear-tt-meta">
-                  graphic: ${defaultGear.graphic} (${escapeHtml(defaultGear.hex)}) · gump: ${defaultGear.maleGump} · layer: ${escapeHtml(defaultGear.layer)} · hue: ${cls.robeHue}
-                </div>
-                <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:4px;" id="gear-tt-stats">
+                <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:3px;" id="gear-tt-stats">
                   Valorite Weapon: ${Math.round((defaultGear.baseDmg?.[0] ?? 11) * 1.85)}–${Math.round((defaultGear.baseDmg?.[1] ?? 13) * 1.85)} Dmg · Speed ${defaultGear.speed ?? 45} · ${escapeHtml(defaultGear.primaryAbility ?? '')} / ${escapeHtml(defaultGear.secondaryAbility ?? '')}
                 </div>
                 <div class="weapon-stat-bars">
@@ -2300,14 +2299,17 @@ function buildClassSkillTreeHtml(
                 <div class="cost-badges" id="gear-tt-affixes" style="margin-top:5px;">
                   ${defaultGear.affixesEn.map((af) => `<span class="badge-mana">${escapeHtml(af)}</span>`).join('')}
                 </div>
-                <div style="font-size:10px;color:var(--text-primary);margin-top:4px;" id="gear-tt-lore">
+                <div style="font-size:10px;color:var(--text-secondary);margin-top:4px;" id="gear-tt-lore">
                   ${escapeHtml(defaultGear.loreEn)}
+                </div>
+                <div class="mono" style="font-size:8.5px;color:var(--text-secondary);margin-top:3px;opacity:0.8;" id="gear-tt-meta">
+                  graphic: ${defaultGear.graphic} (${escapeHtml(defaultGear.hex)}) · gump: ${defaultGear.maleGump} · layer: ${escapeHtml(defaultGear.layer)}
                 </div>
               </div>
 
               <details class="schema-drawer" style="margin-top:6px;">
                 <summary>
-                  Raw Bundle Starter Layer IDs (kitTokens: [${cls.starterEquipment.kitTokens.map((t) => `"${escapeHtml(t)}"`).join(', ')}])
+                  ▸ Progressive Disclosure: Bundle Layer IDs (${cls.starterEquipment.kitTokens.length} tokens)
                 </summary>
                 <div class="kv-grid" style="margin-top:4px;">
                   ${paperdollHtml}
@@ -2317,29 +2319,57 @@ function buildClassSkillTreeHtml(
           </section>
         </div>
 
-        <!-- CENTER COLUMN: Unified L1-L60 [Arvore Progression & Schema Cards (De-Duplicated) -->
+        <!-- CENTER COLUMN: Interactive [Arvore Level-Line Progression Chart & Compact Tier-1 Cards -->
         <div class="col-stack">
           <section class="arvore-secao" id="sec-milestone-tree">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Unified L1–L60 [Arvore Progression &amp; Ability Cards (12 Milestones)</span>
-              <span class="arvore-secao-sub" id="filter-kind-status">Showing All 12 Milestones · Click any card or expand ▸ Schema</span>
+              <span class="title-left">Interactive L1–L60 [Arvore Progression Chart &amp; Milestone Cards</span>
+              <span class="arvore-secao-sub" id="filter-kind-status">Click any level node or tier button to inspect progression</span>
             </h2>
 
-            <!-- Live .arvore-cobra 12-node ribbon -->
+            <!-- Live .arvore-cobra 12-node progression chart with interactive tier buttons & live telemetry strip -->
             <div class="arvore-cobra-wrap">
               <div class="arvore-tier-banner">
-                <span><strong style="color:var(--text-gold);">ROW 1 (L1–L25):</strong> Initiate → Adept Foundation</span>
-                <span><strong style="color:var(--text-gold);">ROW 2 (L30–L60):</strong> Master → Grandmaster Capstone</span>
+                <div class="cobra-tier-btns" role="group" aria-label="Progression Chart Tier Controls">
+                  <span class="cluster-tag">Chart Tier:</span>
+                  <button type="button" class="cobra-tier-btn is-active" data-cobra-tier="all" onclick="setCobraTier('all')">All L1–L60 (12)</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-tier="initiate" onclick="setCobraTier('initiate')">Initiate (L1–L15)</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-tier="adept" onclick="setCobraTier('adept')">Adept (L20–L35)</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-tier="master" onclick="setCobraTier('master')">Grandmaster (L40–L60)</button>
+                </div>
+                <div class="cobra-tier-btns">
+                  <button type="button" class="cobra-tier-btn" data-cobra-step="prev" onclick="stepCobraMilestone(-1)">◀ Prev</button>
+                  <button type="button" class="cobra-tier-btn" data-cobra-step="next" onclick="stepCobraMilestone(1)">Next Milestone ▶</button>
+                </div>
               </div>
               <div class="arvore-cobra">
                 ${cobraNodesHtml}
               </div>
+              <!-- Live Interactive Milestone & Cumulative Build Telemetry Strip inside Progression Chart -->
+              <div class="cobra-live-summary" id="cobra-live-summary">
+                <img id="cobra-sum-icon" src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(firstAbility.id)}@64.png" alt="${escapeHtml(firstAbility.name)}" />
+                <div style="min-width:0;">
+                  <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                    <span class="lv-pill" id="cobra-sum-lv">L${firstMilestone.level}</span>
+                    <strong style="color:#fff2bf;font-size:12px;" id="cobra-sum-title">${escapeHtml(firstMilestone.nameEn)}</strong>
+                    <span class="type-pill kind-${escapeHtml(firstMilestone.type)}" id="cobra-sum-kind">${escapeHtml(firstMilestone.type)}</span>
+                  </div>
+                  <div class="mono" style="font-size:9.5px;color:var(--text-gold);margin-top:2px;overflow-wrap:anywhere;" id="cobra-sum-qc">
+                    ${escapeHtml(firstMode.qCEstimator)}
+                  </div>
+                </div>
+                <div class="mono" style="font-size:9.5px;color:#82d5b0;min-width:0;" id="cobra-sum-cum">
+                  <div><strong style="color:#fff2bf;">Path L1→L${firstMilestone.level}:</strong> 1/12 Milestones Unlocked</div>
+                  <div style="color:var(--text-secondary);">1 Passive · 0 Actives · Est. ${isSamurai ? '121.5' : '124.9'} DPS</div>
+                </div>
+                <button type="button" class="beta-btn" onclick="scrollToSelectedCard()" style="font-size:9.5px;padding:4px 8px;white-space:nowrap;">Scroll to Card ▾</button>
+              </div>
             </div>
 
-            <!-- Semantic Ability-Kind Filter Strip -->
+            <!-- Clustered Ability-Kind Spotlight & Disclosure Strip -->
             <div class="filter-strip">
-              <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
-                <span class="mono" style="font-size:10px;color:var(--text-gold);">Spotlight Kind:</span>
+              <div class="command-cluster" role="group" aria-label="Spotlight Ability Kind">
+                <span class="cluster-tag">Spotlight Kind:</span>
                 <button type="button" class="beta-btn is-active" data-kind-btn="all" onclick="filterAbilityKind('all')">All (12)</button>
                 <button type="button" class="beta-btn" data-kind-btn="passive" onclick="filterAbilityKind('passive')" style="color:var(--kind-passive);">Passive</button>
                 <button type="button" class="beta-btn" data-kind-btn="skill" onclick="filterAbilityKind('skill')" style="color:var(--kind-skill);">Skills</button>
@@ -2349,14 +2379,14 @@ function buildClassSkillTreeHtml(
               <button type="button" class="beta-btn" onclick="toggleAllSchemaDrawers()">Toggle All ▸ Schema Drawers</button>
             </div>
 
-            <!-- 12 Unified Interactive Milestone & Schema Cards -->
+            <!-- 12 Compact Scannable Tier-1 Milestone Cards -->
             <div class="milestone-grid" id="milestone-cards-container">
               ${milestoneCardsHtml}
             </div>
           </section>
         </div>
 
-        <!-- RIGHT COLUMN: Sticky .arvore-dica Inspector, 5-Slot Seeded Hotbar & Mastery Seals -->
+        <!-- RIGHT COLUMN: Sticky Tabbed Tier-2 Deep-Dive Inspector, 5-Slot Hotbar & Mastery Seals -->
         <div class="col-stack">
           <section class="arvore-secao" id="sec-ability-inspector">
             <h2 class="arvore-secao-titulo">
@@ -2365,26 +2395,7 @@ function buildClassSkillTreeHtml(
             </h2>
             <div class="panel-body">
               <div class="arvore-dica-pinned" id="live-inspector">
-                <div id="insp-mode-banner" class="active-mode-strip" style="margin:0 0 8px;">
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
-                    <span class="mode-tag-pill" id="insp-banner-tag">MODE A · 100% EXISTING ENGINE</span>
-                    <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="insp-banner-sim">
-                      ${
-                        isSamurai
-                          ? 'L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries · 0 C# Changes'
-                          : 'L60 Boss: 374.50 DPS · 221.23 EHP/s · -8% Clone Veil · 0 C# Changes'
-                      }
-                    </span>
-                  </div>
-                  <div style="font-size:10px;margin-top:2px;color:var(--text-primary);" id="insp-banner-desc">
-                    ${
-                      isSamurai
-                        ? 'Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.'
-                        : 'Zero server C# edits: maps all 13 Ninjitsu skills to existing SpecialMove, Spell, WeaponAbility, DoT ticks, and timed Smoke Veil buffs.'
-                    }
-                  </div>
-                </div>
-                <div class="dica-header">
+                <div class="dica-header" style="margin-bottom:6px;">
                   <img id="insp-icon" src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(firstAbility.id)}@64.png" alt="${escapeHtml(firstAbility.name)}" />
                   <div>
                     <div style="display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;">
@@ -2396,40 +2407,83 @@ function buildClassSkillTreeHtml(
                     <div class="mono" style="font-size:10px;color:var(--text-gold);" id="insp-qC">qC Estimator: ${escapeHtml(firstMode.qCEstimator)}</div>
                   </div>
                 </div>
-                <p id="insp-desc" data-en="${escapeHtml(firstMilestone.descEn)}" data-pt="${escapeHtml(firstMilestone.descPtBr)}" style="margin:0 0 8px;font-size:11.5px;color:var(--text-primary);">${escapeHtml(firstMilestone.descEn)}</p>
-                <div class="cost-badges" id="insp-badges" style="margin-bottom:8px;">
-                  <span class="badge-cd">CD: ${firstAbility.cooldownMs}ms</span>
-                  <span class="badge-cd">CustomCD: ${firstAbility.customCooldownMs}ms</span>
-                  <span class="badge-mana">Mana: ${firstAbility.manaCost}</span>
-                  <span class="badge-stamina">Stamina: ${firstAbility.staminaCost}</span>
-                  <span class="badge-meta">Gump: ${firstAbility.gumpIcon}</span>
+
+                <!-- Progressive Disclosure Inspector Tabs -->
+                <div class="inspector-tab-bar" role="tablist" aria-label="Inspector Progressive Disclosure Tabs">
+                  <button type="button" class="insp-tab-btn is-active" data-insp-tab="overview" onclick="switchInspectorTab('overview')">Overview</button>
+                  <button type="button" class="insp-tab-btn" data-insp-tab="modes" onclick="switchInspectorTab('modes')">Mode A/B</button>
+                  <button type="button" class="insp-tab-btn" data-insp-tab="ticker" onclick="switchInspectorTab('ticker')">100ms Sim</button>
+                  <button type="button" class="insp-tab-btn" data-insp-tab="schema" onclick="switchInspectorTab('schema')">JSON</button>
                 </div>
-                <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
-                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
-                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] ${escapeHtml(firstMode.modeA)}</div>
-                  <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
-                </div>
-                <div class="inspector-modes-grid">
-                  <div id="mode-card-a" class="mode-card-box is-active-mode" onclick="setExecMode('mode_a')" title="Click to activate Mode A (100% Existing Engine)">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-                      <strong style="color:#fff2bf;">Mode A (Drop-In JSON)</strong>
-                      <span class="lv-pill" id="mode-pill-a" style="font-size:8.5px;padding:0 4px;">ACTIVE</span>
-                    </div>
-                    <span id="insp-mode-a" style="color:var(--text-primary);">${escapeHtml(firstMode.modeA)}</span>
+
+                <!-- Pane 1: Overview, Full Lore & Formula Breakdown -->
+                <div class="insp-pane" data-insp-pane="overview">
+                  <p id="insp-desc" data-en="${escapeHtml(firstMilestone.descEn)}" data-pt="${escapeHtml(firstMilestone.descPtBr)}" style="margin:0 0 7px;font-size:11.5px;color:var(--text-primary);line-height:1.45;">${escapeHtml(firstMilestone.descEn)}</p>
+                  <div class="cost-badges" id="insp-badges" style="margin-bottom:7px;">
+                    <span class="badge-cd">CD: ${firstAbility.cooldownMs}ms</span>
+                    <span class="badge-cd">CustomCD: ${firstAbility.customCooldownMs}ms</span>
+                    <span class="badge-mana">Mana: ${firstAbility.manaCost}</span>
+                    <span class="badge-stamina">Stamina: ${firstAbility.staminaCost}</span>
+                    <span class="badge-meta">Gump: ${firstAbility.gumpIcon}</span>
                   </div>
-                  <div id="mode-card-b" class="mode-card-box" onclick="setExecMode('mode_b')" title="Click to activate Mode B (<20 LOC C# Hook)">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-                      <strong style="color:#fff2bf;">Mode B (&lt;20 LOC C# Hook)</strong>
-                      <span class="lv-pill" id="mode-pill-b" style="font-size:8.5px;padding:0 4px;opacity:0.45;">CLICK TO VIEW</span>
-                    </div>
-                    <span id="insp-mode-b" style="color:var(--text-primary);">${escapeHtml(firstMode.modeB)}</span>
+                  <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
+                    <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
+                    <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] ${escapeHtml(firstMode.modeA)}</div>
+                    <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
                   </div>
                 </div>
-                ${renderLiveCombatTickerComponent(cls)}
-                <details class="schema-drawer" style="margin-top:7px;">
-                  <summary>View Live Drop-In JSON Payload (<code>design/drop-in/${escapeHtml(cls.id)}.json</code>)</summary>
-                  <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">${escapeHtml(JSON.stringify(firstAbility, null, 2))}</pre>
-                </details>
+
+                <!-- Pane 2: Mode A vs Mode B Side-by-Side Comparison & Class Sim Banner -->
+                <div class="insp-pane" data-insp-pane="modes">
+                  <div id="insp-mode-banner" class="active-mode-strip" style="margin:0 0 6px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                      <span class="mode-tag-pill" id="insp-banner-tag">MODE A · 100% EXISTING ENGINE</span>
+                      <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="insp-banner-sim">
+                        ${
+                          isSamurai
+                            ? 'L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries'
+                            : 'L60 Boss: 374.50 DPS · 221.23 EHP/s · -8% Clone Veil'
+                        }
+                      </span>
+                    </div>
+                    <div style="font-size:9.5px;margin-top:2px;color:var(--text-secondary);" id="insp-banner-desc">
+                      ${
+                        isSamurai
+                          ? 'Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.'
+                          : 'Zero server C# edits: maps all 13 Ninjitsu skills to existing SpecialMove, Spell, WeaponAbility, DoT ticks, and timed Smoke Veil buffs.'
+                      }
+                    </div>
+                  </div>
+                  <div class="inspector-modes-grid">
+                    <div id="mode-card-a" class="mode-card-box is-active-mode" onclick="setExecMode('mode_a')" title="Click to activate Mode A (100% Existing Engine)">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                        <strong style="color:#fff2bf;">Mode A (Drop-In JSON)</strong>
+                        <span class="lv-pill" id="mode-pill-a" style="font-size:8.5px;padding:0 4px;">ACTIVE</span>
+                      </div>
+                      <span id="insp-mode-a" style="color:var(--text-primary);">${escapeHtml(firstMode.modeA)}</span>
+                    </div>
+                    <div id="mode-card-b" class="mode-card-box" onclick="setExecMode('mode_b')" title="Click to activate Mode B (<20 LOC C# Hook)">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                        <strong style="color:#fff2bf;">Mode B (&lt;20 LOC C# Hook)</strong>
+                        <span class="lv-pill" id="mode-pill-b" style="font-size:8.5px;padding:0 4px;opacity:0.45;">CLICK TO VIEW</span>
+                      </div>
+                      <span id="insp-mode-b" style="color:var(--text-primary);">${escapeHtml(firstMode.modeB)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pane 3: Live 100ms Tick Combat Loop Preview -->
+                <div class="insp-pane" data-insp-pane="ticker">
+                  ${renderLiveCombatTickerComponent(cls)}
+                </div>
+
+                <!-- Pane 4: Raw Drop-In JSON Payload -->
+                <div class="insp-pane" data-insp-pane="schema">
+                  <details class="schema-drawer" id="insp-schema-details" style="margin-top:6px;">
+                    <summary>▸ View Live Drop-In JSON Payload (<code>design/drop-in/${escapeHtml(cls.id)}.json</code>)</summary>
+                    <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">${escapeHtml(JSON.stringify(firstAbility, null, 2))}</pre>
+                  </details>
+                </div>
               </div>
             </div>
           </section>
@@ -2493,6 +2547,87 @@ function buildClassSkillTreeHtml(
         var rect = el.getBoundingClientRect();
         var targetY = Math.max(0, Math.round(rect.top + window.scrollY - 16));
         window.scrollTo({ top: targetY, behavior: 'smooth' });
+      };
+
+      window.scrollToSelectedCard = function() {
+        var cardMilestoneId = selectedAbilityId === 'ninja_shuriken' ? 'ninja_smoke_bomb' : selectedAbilityId;
+        var targetCardEl = document.querySelector('.milestone-card[data-milestone-id="' + cardMilestoneId + '"]');
+        if (targetCardEl) {
+          var rect = targetCardEl.getBoundingClientRect();
+          var targetY = Math.max(0, Math.round(rect.top + window.scrollY - 90));
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
+      };
+
+      window.switchInspectorTab = function(tabName) {
+        var btns = document.querySelectorAll('[data-insp-tab]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-insp-tab') === tabName);
+        }
+        var panes = document.querySelectorAll('[data-insp-pane]');
+        for (var j = 0; j < panes.length; j++) {
+          var pName = panes[j].getAttribute('data-insp-pane');
+          var isMatch = pName === tabName;
+          panes[j].classList.toggle('is-highlighted-pane', isMatch);
+          if (tabName === 'schema' && pName === 'schema') {
+            var det = document.getElementById('insp-schema-details');
+            if (det) det.setAttribute('open', 'open');
+          }
+        }
+      };
+
+      window.setCobraTier = function(tierKey) {
+        var btns = document.querySelectorAll('[data-cobra-tier]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-cobra-tier') === tierKey);
+        }
+        var cols = document.querySelectorAll('[data-cobra-col]');
+        var firstId = null;
+        for (var j = 0; j < cols.length; j++) {
+          var lv = parseInt(cols[j].getAttribute('data-cobra-lv'), 10);
+          var match = tierKey === 'all' ||
+            (tierKey === 'initiate' && lv <= 15) ||
+            (tierKey === 'adept' && lv >= 20 && lv <= 35) ||
+            (tierKey === 'master' && lv >= 40);
+          cols[j].classList.toggle('is-tier-dimmed', !match);
+          cols[j].classList.toggle('is-path-lit', match);
+          if (match && !firstId) {
+            firstId = cols[j].getAttribute('data-cobra-col');
+          }
+        }
+        var cards = document.querySelectorAll('.milestone-card');
+        for (var k = 0; k < cards.length; k++) {
+          var cId = cards[k].getAttribute('data-milestone-id');
+          var msObj = null;
+          for (var m = 0; m < cls.progression.length; m++) {
+            if (cls.progression[m].id === cId) {
+              msObj = cls.progression[m];
+              break;
+            }
+          }
+          var cLv = msObj ? msObj.level : 1;
+          var cMatch = tierKey === 'all' ||
+            (tierKey === 'initiate' && cLv <= 15) ||
+            (tierKey === 'adept' && cLv >= 20 && cLv <= 35) ||
+            (tierKey === 'master' && cLv >= 40);
+          cards[k].classList.toggle('is-kind-match', tierKey !== 'all' && cMatch);
+          cards[k].classList.toggle('is-kind-dimmed', tierKey !== 'all' && !cMatch);
+        }
+        if (firstId) {
+          window.selectAbility(firstId, false);
+        }
+      };
+
+      window.stepCobraMilestone = function(delta) {
+        var curIdx = 0;
+        for (var i = 0; i < cls.progression.length; i++) {
+          if (cls.progression[i].id === selectedAbilityId) {
+            curIdx = i;
+            break;
+          }
+        }
+        var nextIdx = (curIdx + delta + cls.progression.length) % cls.progression.length;
+        window.selectAbility(cls.progression[nextIdx].id, false);
       };
 
       window.setPaperdollTier = function(tierId, mult, resBonus) {
@@ -2672,7 +2807,47 @@ function buildClassSkillTreeHtml(
         for (var c = 0; c < cobraCircles.length; c++) {
           cobraCircles[c].classList.toggle('is-selected-node', cobraCircles[c].getAttribute('data-cobra-id') === cardMilestoneId);
         }
+        var cobraCols = document.querySelectorAll('.arvore-col[data-cobra-lv]');
+        var unlockedTotal = 0;
+        var unlockedActives = 0;
+        var unlockedPassives = 0;
+        var unlockedSpecials = 0;
+        for (var p = 0; p < cls.progression.length; p++) {
+          if (cls.progression[p].level <= ab.progressionTreeLevel) {
+            unlockedTotal++;
+            var pType = cls.progression[p].type;
+            if (pType === 'skill' || pType === 'spell') unlockedActives++;
+            else if (pType === 'passive') unlockedPassives++;
+            else unlockedSpecials++;
+          }
+        }
+        for (var cc = 0; cc < cobraCols.length; cc++) {
+          var cLv = parseInt(cobraCols[cc].getAttribute('data-cobra-lv') || '0', 10);
+          cobraCols[cc].classList.toggle('is-path-lit', cLv <= ab.progressionTreeLevel);
+        }
         var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
+        var isModeB = currentMode === 'mode_b';
+        var sumIcon = document.getElementById('cobra-sum-icon');
+        if (sumIcon) sumIcon.src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
+        var sumLv = document.getElementById('cobra-sum-lv');
+        if (sumLv) sumLv.textContent = 'L' + ab.progressionTreeLevel;
+        var sumTitle = document.getElementById('cobra-sum-title');
+        if (sumTitle) sumTitle.textContent = (ms ? ms.nameEn : ab.name) + ' / ' + (ms ? ms.namePtBr : ab.namePtBr);
+        var sumKind = document.getElementById('cobra-sum-kind');
+        if (sumKind) sumKind.textContent = ab.kind.toUpperCase() + ' · CD ' + ab.cooldownMs + 'ms · Mana ' + ab.manaCost + ' / Stam ' + ab.staminaCost;
+        var sumQc = document.getElementById('cobra-sum-qc');
+        if (sumQc) sumQc.textContent = (isModeB ? '[Mode B C# Hook] ' + mInfo.modeB : '[Mode A Engine] ' + mInfo.modeA) + ' · qC: ' + mInfo.qCEstimator;
+        var sumCum = document.getElementById('cobra-sum-cum');
+        if (sumCum) {
+          sumCum.innerHTML = '<div><strong style="color:#fff2bf;">Path L1→L' + ab.progressionTreeLevel + ':</strong> ' + unlockedTotal + '/12 Milestones Unlocked</div>' +
+            '<div style="color:var(--text-secondary);">' + unlockedActives + ' Actives · ' + unlockedPassives + ' Passive · ' + unlockedSpecials + ' Capstones</div>';
+        }
+        var inspBody = document.getElementById('insp-body-wrap');
+        if (inspBody) {
+          inspBody.classList.remove('is-switching');
+          void inspBody.offsetWidth;
+          inspBody.classList.add('is-switching');
+        }
         document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
         document.getElementById('insp-level').textContent = 'L' + ab.progressionTreeLevel;
         document.getElementById('insp-kind').textContent = ab.kind;
@@ -2688,7 +2863,6 @@ function buildClassSkillTreeHtml(
         inspDescEl.setAttribute('data-en', descEn);
         inspDescEl.setAttribute('data-pt', descPt);
         inspDescEl.textContent = currentLocale === 'pt' ? descPt : descEn;
-        var isModeB = currentMode === 'mode_b';
         var fHead = document.getElementById('insp-formula-heading');
         if (fHead) {
           fHead.textContent = isModeB
@@ -3453,17 +3627,20 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           </div>
         </div>
         <div class="arvore-head-acoes">
-          <a class="nav-pill" href="index.html">Review Portal</a>
-          <a class="nav-pill" href="samurai-skill-tree.html">Samurai (SM 114)</a>
-          <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
-          <a class="nav-pill is-active" href="class-comparison.html">5-Class Parity &amp; Sim</a>
+          <div class="command-cluster">
+            <span class="cluster-tag">Surface</span>
+            <a class="nav-pill" href="index.html">Portal</a>
+            <a class="nav-pill" href="samurai-skill-tree.html">Samurai (114)</a>
+            <a class="nav-pill" href="ninja-skill-tree.html">Ninja (115)</a>
+            <a class="nav-pill is-active" href="class-comparison.html">5-Class Sim</a>
+          </div>
         </div>
       </header>
 
       <!-- Interactive Workbench Smooth-Scroll Navigation Bar (Zero Show/Hide) -->
       <div class="filter-bar" style="margin-bottom:0;background:linear-gradient(180deg,#1a1f18,#10140f);border-color:#5d4a2b;">
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-          <span class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;">JUMP TO SECTION:</span>
+        <div class="command-cluster">
+          <span class="cluster-tag">Jump to Section</span>
           <button type="button" class="beta-btn is-active" data-comp-tab="all" onclick="switchCompTab('all')">↑ Top Overview</button>
           <button type="button" class="beta-btn" data-comp-tab="sim" onclick="switchCompTab('sim')">1A. Combat Simulator &amp; KPIs</button>
           <button type="button" class="beta-btn" data-comp-tab="charts" data-scroll-target="#sec-charts" onclick="switchCompTab('charts')">1B. Visual SVG Curves &amp; Breakdown</button>
@@ -3482,20 +3659,20 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         </h2>
         <div class="panel-body">
           <div class="filter-bar" id="sec-sim-controls">
-            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-              <span class="mono" style="font-size:11px;color:var(--text-gold);">Mode:</span>
+            <div class="command-cluster">
+              <span class="cluster-tag">Engine Mode</span>
               <button type="button" class="beta-btn is-active" data-sim-mode="mode_a" onclick="updateSimFilter('mode', 'mode_a')">Mode A (100% Existing Engine)</button>
               <button type="button" class="beta-btn" data-sim-mode="mode_b" onclick="updateSimFilter('mode', 'mode_b')">Mode B (&lt;20 LOC C# Hook)</button>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-              <span class="mono" style="font-size:11px;color:var(--text-gold);">Bracket:</span>
+            <div class="command-cluster">
+              <span class="cluster-tag">Bracket</span>
               <button type="button" class="beta-btn" data-sim-bracket="L10" onclick="updateSimFilter('bracket', 'L10')">L10</button>
               <button type="button" class="beta-btn" data-sim-bracket="L25" onclick="updateSimFilter('bracket', 'L25')">L25</button>
               <button type="button" class="beta-btn" data-sim-bracket="L45" onclick="updateSimFilter('bracket', 'L45')">L45</button>
               <button type="button" class="beta-btn is-active" data-sim-bracket="L60" onclick="updateSimFilter('bracket', 'L60')">L60</button>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-              <span class="mono" style="font-size:11px;color:var(--text-gold);">Archetype:</span>
+            <div class="command-cluster">
+              <span class="cluster-tag">Archetype</span>
               <button type="button" class="beta-btn is-active" data-sim-arch="low_def_boss" onclick="updateSimFilter('arch', 'low_def_boss')">low_def_boss</button>
               <button type="button" class="beta-btn" data-sim-arch="high_def_boss" onclick="updateSimFilter('arch', 'high_def_boss')">high_def_boss</button>
               <button type="button" class="beta-btn" data-sim-arch="fast_trash" onclick="updateSimFilter('arch', 'fast_trash')">fast_trash</button>
@@ -3541,6 +3718,24 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
           <div class="sim-charts-grid" id="sec-charts" data-comp-section="charts">
             <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #252b21;">
+                <div class="command-cluster">
+                  <span class="cluster-tag">Chart Metric</span>
+                  <button type="button" class="cobra-tier-btn is-active" data-chart-metric="sustainedDps" onclick="setChartMetric('sustainedDps')">Sustained DPS</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-metric="ehpPerSec" onclick="setChartMetric('ehpPerSec')">Effective HP/s</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-metric="trashTtkSec" onclick="setChartMetric('trashTtkSec')">Trash TTK Speed</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-metric="parityDelta" onclick="setChartMetric('parityDelta')">Parity Envelope %</button>
+                </div>
+                <div class="command-cluster">
+                  <span class="cluster-tag">Curve Focus</span>
+                  <button type="button" class="cobra-tier-btn is-active" data-chart-class="" onclick="spotlightSimClass('')">All 5</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="warrior" onclick="spotlightSimClass('warrior')">WR</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="mage" onclick="spotlightSimClass('mage')">MG</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="ranger" onclick="spotlightSimClass('ranger')">RG</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="samurai" onclick="spotlightSimClass('samurai')">SM</button>
+                  <button type="button" class="cobra-tier-btn" data-chart-class="ninja" onclick="spotlightSimClass('ninja')">NJ</button>
+                </div>
+              </div>
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
                 <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
@@ -3554,7 +3749,13 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 </div>
               </div>
               <div id="svg-dps-wrap">${dpsProgressionSvg}</div>
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:10px 0 6px;">
+              <div id="chart-bracket-inspector" style="margin:6px 0 8px;padding:6px 10px;background:#10140f;border:1px solid #3c3425;border-left:3px solid var(--border-gold-bright);border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div class="mono" style="font-size:10.5px;color:#fff2bf;" id="chart-insp-headline">
+                  <strong>[L60 Grandmaster Bracket]</strong> Click any bracket marker (L10 · L25 · L45 · L60) on the chart or metric pills above to inspect power-spike deltas.
+                </div>
+                <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="chart-insp-delta">SM 363.2 DPS (-3.6%) · NJ 374.5 DPS (-0.6%) · Within ±5% Envelope</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:8px 0 6px;">
                 <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60 · Mode A · low_def_boss)
                 </strong>
@@ -3690,8 +3891,8 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 </div>
                 <pre class="code-card" style="margin:0;"><code>${escapeHtml(ninjaCSharp)}</code></pre>
               </div>
-              <details class="schema-drawer" open style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;min-width:0;">
-                <summary style="font-size:10.5px;">Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools</summary>
+              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+                <summary style="font-size:10.5px;">▸ Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools (Progressive Disclosure)</summary>
                 <div style="margin-top:8px;min-width:0;">
                   <div class="table-scroll-wrap" style="margin-bottom:8px;">
                     <table class="comp-table">
@@ -3744,9 +3945,10 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       var payload = JSON.parse(document.getElementById('mockup-data').textContent);
       var parityData = payload.parity;
       var breakdownsData = payload.breakdowns || [];
-      var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss', spotlightClass: '' };
+      var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss', spotlightClass: '', chartMetric: 'sustainedDps' };
       var orderedClasses = ['warrior', 'mage', 'ranger', 'samurai', 'ninja'];
       var classCols = { warrior: '#d97706', mage: '#3b82f6', ranger: '#84cc16', samurai: '#c83e37', ninja: '#2e9e6b' };
+      var classShort = { warrior: 'WR', mage: 'MG', ranger: 'RG', samurai: 'SM', ninja: 'NJ' };
       var brackets = ['L10', 'L25', 'L45', 'L60'];
       var tabOrder = ['sim', 'charts', 'endurance', 'matrix', 'armaments'];
       var currentTabIdx = 0;
@@ -3796,6 +3998,20 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
       };
 
+      function getChartMetricValue(scen, metricKey, brId) {
+        if (metricKey === 'trashTtkSec') {
+          return Math.round(3600 / Math.max(1.0, scen.trashTtkSec));
+        }
+        if (metricKey === 'parityDelta') {
+          var scens = parityData[state.mode].scenarios.filter(function(s) {
+            return s.bracketId === brId && s.archetypeId === state.arch && (s.classId === 'warrior' || s.classId === 'mage' || s.classId === 'ranger');
+          });
+          var meanD = scens.length > 0 ? scens.reduce(function(a, b) { return a + b.sustainedDps; }, 0) / scens.length : 375.0;
+          return Math.round((scen.sustainedDps / meanD) * 100);
+        }
+        return scen[metricKey] || 0;
+      }
+
       function renderProgressionSvg(metricKey, maxVal, unitLabel) {
         var chartW = 680, chartH = 220, padL = 48, padR = 24, padT = 20, padB = 32;
         var plotW = chartW - padL - padR;
@@ -3816,15 +4032,20 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
 
         // Active Bracket Vertical Spotlight Band + Badge
-        svg += '<rect x="' + (activeBx - 26) + '" y="' + padT + '" width="52" height="' + plotH + '" fill="rgba(229,193,88,0.18)" stroke="#e5c158" stroke-width="1.2" stroke-dasharray="2,2" rx="3" />';
-        svg += '<rect x="' + (activeBx - 24) + '" y="' + (padT + 2) + '" width="48" height="13" rx="2" fill="#e5c158" />';
-        svg += '<text x="' + activeBx + '" y="' + (padT + 11) + '" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE ' + state.bracket + '</text>';
+        svg += '<rect x="' + (activeBx - 28) + '" y="' + padT + '" width="56" height="' + plotH + '" fill="rgba(229,193,88,0.18)" stroke="#e5c158" stroke-width="1.3" stroke-dasharray="2,2" rx="3" />';
+        svg += '<rect x="' + (activeBx - 26) + '" y="' + (padT + 2) + '" width="52" height="14" rx="2" fill="#e5c158" />';
+        svg += '<text x="' + activeBx + '" y="' + (padT + 12) + '" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE ' + state.bracket + '</text>';
 
         for (var b = 0; b < brackets.length; b++) {
           var bx = Math.round(padL + (b / (brackets.length - 1)) * plotW);
           var isActBr = b === activeIdx;
+          var brCode = brackets[b];
+          svg += '<g data-svg-bracket="' + brCode + '" onclick="window.updateSimFilter(&quot;bracket&quot;, &quot;' + brCode + '&quot;)" style="cursor:pointer;">';
+          svg += '<rect x="' + (bx - 28) + '" y="' + padT + '" width="56" height="' + (plotH + 24) + '" fill="transparent" />';
           svg += '<line x1="' + bx + '" y1="' + padT + '" x2="' + bx + '" y2="' + (padT + plotH) + '" stroke="' + (isActBr ? '#e5c158' : '#1e241b') + '" stroke-width="' + (isActBr ? '1.5' : '1') + '" />';
-          svg += '<text x="' + bx + '" y="' + (chartH - 10) + '" fill="' + (isActBr ? '#fff2bf' : '#d4af37') + '" font-size="' + (isActBr ? '11' : '10') + '" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">' + brackets[b] + '</text>';
+          svg += '<rect x="' + (bx - 20) + '" y="' + (chartH - 22) + '" width="40" height="16" rx="3" fill="' + (isActBr ? 'rgba(229,193,88,0.22)' : '#141912') + '" stroke="' + (isActBr ? '#e5c158' : '#3a4233') + '" />';
+          svg += '<text x="' + bx + '" y="' + (chartH - 11) + '" fill="' + (isActBr ? '#fff2bf' : '#d4af37') + '" font-size="' + (isActBr ? '10.5' : '9.5') + '" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">' + brCode + '</text>';
+          svg += '</g>';
         }
         var scens = parityData[state.mode].scenarios;
         for (var c = 0; c < orderedClasses.length; c++) {
@@ -3839,7 +4060,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
             var val = 0;
             for (var si = 0; si < scens.length; si++) {
               if (scens[si].classId === cid && scens[si].bracketId === brId && scens[si].archetypeId === state.arch) {
-                val = scens[si][metricKey];
+                val = getChartMetricValue(scens[si], metricKey, brId);
                 break;
               }
             }
@@ -3849,7 +4070,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
             var isActPt = bi === activeIdx;
             var rVal = isSpot ? (isActPt ? '7.5' : '5.5') : (isActPt ? '6' : '3.8');
             var sCol = (isActPt || isSpot) ? '#fff2bf' : '#0b0d0a';
-            circles += '<circle cx="' + px + '" cy="' + py + '" r="' + rVal + '" fill="' + col + '" stroke="' + sCol + '" stroke-width="' + (isActPt || isSpot ? '2' : '1.5') + '" opacity="' + (isDim ? '0.35' : '1') + '"><title>' + cid.toUpperCase() + ': ' + val.toFixed(1) + ' ' + unitLabel + '</title></circle>';
+            circles += '<circle cx="' + px + '" cy="' + py + '" r="' + rVal + '" fill="' + col + '" stroke="' + sCol + '" stroke-width="' + (isActPt || isSpot ? '2' : '1.5') + '" opacity="' + (isDim ? '0.35' : '1') + '" onclick="window.updateSimFilter(&quot;bracket&quot;, &quot;' + brId + '&quot;)" style="cursor:pointer;"><title>' + cid.toUpperCase() + ' (' + brId + '): ' + val.toFixed(1) + ' ' + unitLabel + '</title></circle>';
             if (isSpot && isActPt) {
               circles += '<text x="' + (px - 8) + '" y="' + Math.max(padT + 14, py - 9) + '" fill="#fff2bf" font-size="9.5" font-weight="700" font-family="IBM Plex Mono" text-anchor="end">' + cid.toUpperCase() + ' ' + val.toFixed(0) + '</text>';
             }
@@ -3864,8 +4085,25 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         return svg;
       }
 
+      window.setChartMetric = function(metricKey) {
+        state.chartMetric = metricKey;
+        var btns = document.querySelectorAll('[data-chart-metric]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-chart-metric') === metricKey);
+        }
+        window.updateSimFilter('mode', state.mode);
+      };
+
       window.spotlightSimClass = function(classId) {
-        state.spotlightClass = state.spotlightClass === classId ? '' : classId;
+        if (classId === '') {
+          state.spotlightClass = '';
+        } else {
+          state.spotlightClass = state.spotlightClass === classId ? '' : classId;
+        }
+        var cBtns = document.querySelectorAll('[data-chart-class]');
+        for (var i = 0; i < cBtns.length; i++) {
+          cBtns[i].classList.toggle('is-active', cBtns[i].getAttribute('data-chart-class') === state.spotlightClass);
+        }
         window.updateSimFilter('mode', state.mode);
       };
 
@@ -3947,7 +4185,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
 
-        // Also update Executive 5-Class KPI Strip (without unescaped single quotes!)
+        // Also update Executive 5-Class KPI Strip with Class Emblems & Sparklines
         var kpiStripEl = document.getElementById('sim-exec-kpi-strip');
         if (kpiStripEl && list.length > 0) {
           var baseScens = list.filter(function(s) {
@@ -3960,6 +4198,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           for (var ki = 0; ki < list.length; ki++) {
             var ks = list[ki];
             var kCol = classCols[ks.classId] || '#c9a227';
+            var kShort = classShort[ks.classId] || ks.classId.slice(0, 2).toUpperCase();
             var isSpotKpi = state.spotlightClass === ks.classId;
             var dPct = (((ks.sustainedDps - meanD) / meanD) * 100).toFixed(1);
             var dStr = parseFloat(dPct) >= 0 ? ('+' + dPct + '%') : (dPct + '%');
@@ -3969,14 +4208,21 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
                 : (ks.parryCount + ' Shield Parries'));
             kpiHtml += '<div class="exec-kpi-card ' + (isSpotKpi ? 'is-spotlight-class' : '') + '" data-kpi-class="' + escHtml(ks.classId) + '" data-spot-class="' + escHtml(ks.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="border-top-color:' + escHtml(kCol) + ';">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<strong style="font-family:Cinzel,serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
-                '<span class="mono" style="font-size:9.5px;color:#82d5b0;">' + escHtml(dStr) + ' vs Mean</span>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">' +
+                '<div style="display:flex;align-items:center;gap:6px;">' +
+                  '<span class="kpi-emblem" style="color:' + escHtml(kCol) + ';border-color:' + escHtml(kCol) + ';">' + escHtml(kShort) + '</span>' +
+                  '<strong style="font-family:Cinzel,serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
+                '</div>' +
+                '<span class="mono" style="font-size:9px;color:#82d5b0;background:rgba(46,158,107,0.14);border:1px solid rgba(46,158,107,0.4);padding:1px 5px;border-radius:3px;">PASS ' + escHtml(dStr) + '</span>' +
               '</div>' +
               '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
                 '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
                 '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
               '</div>' +
+              '<svg viewBox="0 0 120 16" style="width:100%;height:14px;display:block;opacity:0.9;">' +
+                '<polyline fill="none" stroke="' + escHtml(kCol) + '" stroke-width="1.6" points="4,13 38,10 78,6 116,2" />' +
+                '<circle cx="116" cy="2" r="2.3" fill="#fff2bf" stroke="' + escHtml(kCol) + '" stroke-width="1.2" />' +
+              '</svg>' +
               '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
                 '<span>' + escHtml(mLbl) + '</span>' +
                 '<span style="color:#82d5b0;">' + (isSpotKpi ? 'SPOTLIGHT ON' : '0 OOM · Spotlight ▸') + '</span>' +
@@ -3987,15 +4233,38 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
 
         var modeLabel = isModeB ? 'Mode B (<20 LOC C#)' : 'Mode A (100% Engine)';
+        var activeMetric = state.chartMetric || 'sustainedDps';
+        var metricTitleMap = {
+          sustainedDps: { label: 'Sustained DPS Curve', max: state.arch === 'multi_target_pack' ? 680 : 420, unit: 'DPS' },
+          ehpPerSec: { label: 'Effective HP / Sec (EHP/s) Curve', max: 350, unit: 'EHP/s' },
+          trashTtkSec: { label: 'Clear Cadence (Kills / Hour)', max: state.arch === 'fast_trash' ? 320 : 80, unit: 'Kills/Hr' },
+          parityDelta: { label: 'Parity Ratio vs Baseline Mean (%)', max: 130, unit: '% Mean' }
+        };
+        var mCfg = metricTitleMap[activeMetric] || metricTitleMap.sustainedDps;
         var dpsTitle = document.getElementById('svg-dps-title');
         var ehpTitle = document.getElementById('svg-ehp-title');
-        if (dpsTitle) dpsTitle.textContent = 'Multi-Bracket Sustained DPS Curve (Active: ' + state.bracket + ' · ' + modeLabel + ' · ' + state.arch + ')';
+        if (dpsTitle) dpsTitle.textContent = 'Multi-Bracket ' + mCfg.label + ' (Active: ' + state.bracket + ' · ' + modeLabel + ' · ' + state.arch + ')';
         if (ehpTitle) ehpTitle.textContent = 'Multi-Bracket Effective HP / Sec (EHP/s) Curve (Active: ' + state.bracket + ' · ' + modeLabel + ' · ' + state.arch + ')';
-        var dpsMax = state.arch === 'multi_target_pack' ? 680 : 420;
         var svgDpsWrap = document.getElementById('svg-dps-wrap');
         var svgEhpWrap = document.getElementById('svg-ehp-wrap');
-        if (svgDpsWrap) svgDpsWrap.innerHTML = renderProgressionSvg('sustainedDps', dpsMax, 'DPS');
+        if (svgDpsWrap) svgDpsWrap.innerHTML = renderProgressionSvg(activeMetric, mCfg.max, mCfg.unit);
         if (svgEhpWrap) svgEhpWrap.innerHTML = renderProgressionSvg('ehpPerSec', 350, 'EHP/s');
+
+        var inspHead = document.getElementById('chart-insp-headline');
+        var inspDelta = document.getElementById('chart-insp-delta');
+        var smRow = list.filter(function(s) { return s.classId === 'samurai'; })[0];
+        var njRow = list.filter(function(s) { return s.classId === 'ninja'; })[0];
+        var wrRow = list.filter(function(s) { return s.classId === 'warrior'; })[0];
+        if (inspHead && smRow && njRow) {
+          var spikeMilestone = state.bracket === 'L10' ? 'L10 Starter Tier (Lightning Strike / Focus Attack + Smoke Bomb)' :
+            (state.bracket === 'L25' ? 'L25 Mid-Tier Spike (Confidence + CounterAttack / Backstab + Mirror Image)' :
+            (state.bracket === 'L45' ? 'L45 Mastery Tier (Momentum Cleave + Bushido Master / Ki Attack + Shadowlord)' :
+            'L60 Grandmaster Capstone (Judgment of the Kensei /Kensei & Kuji-Kiri /Shadowblade)'));
+          inspHead.innerHTML = '<strong>[' + escHtml(state.bracket) + ' · ' + escHtml(mCfg.unit) + ']</strong> ' + escHtml(spikeMilestone);
+        }
+        if (inspDelta && smRow && njRow && wrRow) {
+          inspDelta.textContent = 'SM: ' + smRow.sustainedDps.toFixed(1) + ' DPS (' + smRow.ehpPerSec.toFixed(0) + ' EHP/s) · NJ: ' + njRow.sustainedDps.toFixed(1) + ' DPS (' + njRow.ehpPerSec.toFixed(0) + ' EHP/s) · WR Base: ' + wrRow.sustainedDps.toFixed(1) + ' DPS';
+        }
 
         var bTitle = document.getElementById('breakdown-title');
         if (bTitle) bTitle.textContent = '5-Channel Damage Source Breakdown (' + state.bracket + ' · ' + state.arch + ' · ' + modeLabel + ')';

@@ -52,6 +52,16 @@
 Plans:
 - [x] `15-01-PLAN.md` — Smooth-Scroll Navigation Overhaul, Sim View Un-Hiding & Playwright + CV Before/After Verification
 
+### Phase 16: UI De-duplication, Progressive Disclosure, Control Clustering & Concept-Art CV Flywheel
+
+**Goal:** Eliminate repeated information across all 4 workbench surfaces (`index.html`, `samurai-skill-tree.html`, `ninja-skill-tree.html`, `class-comparison.html`); consolidate stacked headers/toolbars into a clustered Command Deck; refactor ability cards, character/paperdoll panels, and simulator sections around progressive disclosure (headlines up front, deep-dive details in tabbed inspectors/drawers); add tasteful micro-animations; generate high-res UI Concept Art for user review first; and iterate via the Playwright + Computer Vision (CV) flywheel with inline before/after captures until the live GUI matches the approved concept art.
+**Requirements**: UI-DEDUP-01, UI-PROG-DISC-01, UI-CLUSTER-01, UI-ANIM-01, UI-CONCEPT-CV-01
+**Depends on:** Phase 15
+**Plans:** 1 plan
+
+Plans:
+- [x] `16-01-PLAN.md` — Concept Art Review, UI De-duplication, Progressive Disclosure & Iterative CV Flywheel
+
 ---
 
 ## Progress
@@ -73,3 +83,4 @@ Plans:
 | 13. Unified Tick Kernel & 5-Class Recalibration | v1.2 | 1/1 | Complete | 2026-11-07 |
 | 14. Workbench Sync & GitHub Pages Redeploy | v1.2 | 1/1 | Complete | 2026-11-07 |
 | 15. Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit | v1.2 | 1/1 | Complete | 2026-11-07 |
+| 16. UI De-duplication, Progressive Disclosure, Control Clustering & Concept-Art CV Flywheel | v1.2 | 1/1 | Complete | 2026-11-07 |

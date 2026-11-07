@@ -1,17 +1,17 @@
 ---
 gsd_state_version: "1.0"
 milestone: v1.2
-status: Complete — Phase 15 Verified & Shipped
-stopped_at: Phase 15 complete (Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit 38/38 passing)
-last_updated: "2026-11-07T22:28:00.000Z"
+status: Complete — Phase 16 Verified & Shipped
+stopped_at: Phase 16 complete (UI De-duplication, Progressive Disclosure, 48x48 Square Level-Line Sockets & Concept-Art CV Flywheel 46/46 passing)
+last_updated: "2026-11-07T23:00:00.000Z"
 last_activity: 2026-11-07
-last_activity_desc: Completed Phase 15 (Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit — 38/38 passed vs 16/38 baseline)
-state_head: 618450a
+last_activity_desc: Completed Phase 16 (UI De-duplication, Progressive Disclosure, Square Level-Line Sockets & Concept-Art CV Flywheel — 46/46 passed)
+state_head: f3c583d
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 5
-  completed_plans: 5
+  total_phases: 6
+  completed_phases: 6
+  total_plans: 6
+  completed_plans: 6
   percent: 100
 milestone_name: Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit
 ---
@@ -23,14 +23,14 @@ milestone_name: Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledg
 See: .planning/PROJECT.md (updated 2026-11-07)
 
 **Core value:** Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerically balanced (parity-tested against live Warrior, Mage, and Ranger formulae), and implementation-ready Ninja and Samurai skill lines backed by a 100% source-verified UO Idle mechanics knowledgebase.
-**Current focus:** Phase 15 Shipped (`38/38` Playwright + CV button audit checks passing)
+**Current focus:** Phase 16 Shipped (`46/46` Playwright + CV button audit checks passing)
 
 ## Current Position
 
-Phase: 15 of 15 (Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit)
-Plan: 15-01
+Phase: 16 of 16 (UI De-duplication, Progressive Disclosure, Control Clustering & Concept-Art CV Flywheel)
+Plan: 16-01
 Status: Complete
-Last activity: 2026-11-07 — Completed Phase 15 (`15-01-SUMMARY.md`) and verified `38/38` interactive button tests via Playwright + CV before/after diffing
+Last activity: 2026-11-07 — Completed Phase 16 (`16-01-SUMMARY.md`) and verified `46/46` interactive button & progression chart checks via Playwright + CV before/after diffing
 
 ## Performance Metrics
 

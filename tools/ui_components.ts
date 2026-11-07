@@ -1,5 +1,5 @@
 import { escapeHtml } from './build_mockups.js';
-import type { ClassDefinition, SkillDefinition } from '../src/schemas/skill.schema.js';
+import type { ClassDefinition } from '../src/schemas/skill.schema.js';
 
 export interface AbilityPowerMetric {
   basePct: number;
@@ -41,23 +41,35 @@ const ABILITY_POWER_MAP: Record<string, AbilityPowerMetric> = {
 
 const SKILL_ROLE_MAP: Record<string, { role: string; color: string; label: string }> = {
   bushido: { label: 'Bushido', role: 'Core Scaling & Parry', color: '#e05a47' },
-  swords: { label: 'Swords', role: 'Primary Katana/No-Dachi', color: '#e6c36a' },
-  tactics: { label: 'Tactics', role: 'Base Damage Multiplier', color: '#f6ad55' },
-  parry: { label: 'Parry', role: 'Shieldless Weapon Ward', color: '#63b3ed' },
-  anatomy: { label: 'Anatomy', role: 'Physical Bonus & Stagger', color: '#fc8181' },
-  healing: { label: 'Healing', role: 'Bandage & Confidence Syn', color: '#68d391' },
-  magicresist: { label: 'MagicResist', role: 'Evasion & Spell Ward', color: '#b794f4' },
-  focus: { label: 'Focus', role: 'Stamina & Mana Sustain', color: '#4fd1c5' },
+  swords: { label: 'Swords', role: 'Primary Katana/Daisho', color: '#e6c36a' },
+  tactics: { label: 'Tactics', role: 'Base Damage Mult', color: '#f6ad55' },
+  parry: { label: 'Parrying', role: 'Shieldless Blade Ward', color: '#63b3ed' },
+  anatomy: { label: 'Anatomy', role: 'Phys Bonus & Stagger', color: '#fc8181' },
+  healing: { label: 'Healing', role: 'Bandage & Confidence', color: '#68d391' },
+  magicresist: { label: 'Resist Spells', role: 'Evasion & Spell Ward', color: '#b794f4' },
+  focus: { label: 'Focus', role: 'Stam & Mana Sustain', color: '#4fd1c5' },
   ninjitsu: { label: 'Ninjitsu', role: 'Core Scaling & Clones', color: '#34b37a' },
-  fencing: { label: 'Fencing', role: 'Primary Kryss & Tekagi', color: '#e6c36a' },
+  fencing: { label: 'Fencing', role: 'Primary Kryss/Tekagi', color: '#e6c36a' },
   hiding: { label: 'Hiding', role: 'Smoke Veil & Ambush', color: '#63b3ed' },
-  stealth: { label: 'Stealth', role: 'Backstab Opener Scaling', color: '#b794f4' },
+  stealth: { label: 'Stealth', role: 'Opener Multiplier', color: '#b794f4' },
 };
+
+export function getAbilityPowerMetric(abilityId: string): AbilityPowerMetric {
+  return (
+    ABILITY_POWER_MAP[abilityId] ?? {
+      basePct: 55,
+      burstPct: 80,
+      modeBPct: 90,
+      labelLeft: '1.15x–1.25x Base',
+      labelRight: 'Mode B Hook Ready',
+    }
+  );
+}
 
 export function buildComponentStyles(): string {
   return `
     /* ==========================================================================
-       v2.1 Component Architecture & Dark-Fantasy Animation System
+       v2.2 Progressive Disclosure, Command Deck Clustering & Micro-Animation System
        ========================================================================== */
     @keyframes auraPulse {
       0%, 100% { opacity: 0.55; transform: scale(1); }
@@ -71,18 +83,17 @@ export function buildComponentStyles(): string {
       0%, 100% { box-shadow: 0 0 0 0 rgba(230, 195, 106, 0.55), 0 0 14px var(--class-glow); }
       50% { box-shadow: 0 0 0 5px rgba(230, 195, 106, 0), 0 0 22px var(--border-gold-bright); }
     }
-    @keyframes modeFlash {
-      0% { filter: brightness(1.35); transform: translateY(-1px); }
-      100% { filter: brightness(1); transform: translateY(0); }
-    }
-    @keyframes tickerSweep {
-      0% { width: 0%; }
-      100% { width: 100%; }
+    @keyframes inspectorFadeSlide {
+      0% { opacity: 0.35; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     @keyframes floatUpBadge {
       0% { opacity: 0; transform: translateY(4px) scale(0.96); }
-      20% { opacity: 1; transform: translateY(0) scale(1); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes spotlightGlowSweep {
+      0% { box-shadow: 0 0 0 0 rgba(229, 193, 88, 0.55), inset 0 0 18px rgba(229, 193, 88, 0.22); }
+      100% { box-shadow: 0 0 22px rgba(229, 193, 88, 0.32), inset 0 0 12px rgba(229, 193, 88, 0.08); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -93,16 +104,18 @@ export function buildComponentStyles(): string {
       }
     }
 
-    /* 1. Global Quick Command & Shortcut Bar Component (<uo-quick-dock>) */
+    /* 1. Unified Beveled Command Deck & Clustered Controls (.command-deck) */
     .uo-quick-dock {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 8px 12px;
-      padding: 6px 14px;
-      background: linear-gradient(90deg, #0d100c 0%, #171c15 50%, #0d100c 100%);
-      border-bottom: 1px solid #352d1d;
+      gap: 6px 12px;
+      padding: 5px 12px;
+      background: linear-gradient(90deg, #0b0e0a 0%, #151a13 50%, #0b0e0a 100%);
+      border: 1px solid #483b22;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       color: var(--text-secondary);
@@ -111,13 +124,34 @@ export function buildComponentStyles(): string {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 6px 10px;
+      gap: 6px 8px;
+    }
+    .command-cluster {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: rgba(12, 15, 11, 0.88);
+      border: 1px solid #3c3425;
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.05);
+    }
+    .cluster-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 3px;
+      opacity: 0.9;
     }
     .kbd-chip {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 1px 6px;
+      padding: 2px 6px;
       border-radius: 3px;
       background: #141812;
       border: 1px solid #3c3425;
@@ -144,9 +178,9 @@ export function buildComponentStyles(): string {
       animation: auraPulse 2.2s infinite ease-in-out;
     }
 
-    /* 2. Segmented Stat Distribution & Resource Bar Component (<uo-stat-bar>) */
+    /* 2. De-Duplicated Segmented Stat Bars & Compact 2x4 Grandmaster Skill Pills */
     .stat-ratio-strip {
-      margin-top: 8px;
+      margin-top: 6px;
       padding: 6px 8px;
       background: #10140f;
       border: 1px solid #2a3026;
@@ -165,21 +199,21 @@ export function buildComponentStyles(): string {
     .stat-seg-dex { background: linear-gradient(90deg, #2e9e6b, #48bb78); transition: width 0.3s ease; }
     .stat-seg-int { background: linear-gradient(90deg, #3b82f6, #63b3ed); transition: width 0.3s ease; }
 
-    /* 3. Starter Skill Mastery Progress Card Component */
     .skill-mastery-card {
-      padding: 5px 8px;
+      padding: 4px 7px;
       background: linear-gradient(180deg, #171c15 0%, #111510 100%);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
       min-width: 0;
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
     }
     .skill-mastery-card:hover {
       border-color: var(--border-gold);
       transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
     }
     .skill-mastery-top {
       display: flex;
@@ -188,7 +222,7 @@ export function buildComponentStyles(): string {
       gap: 4px;
     }
     .skill-mastery-bar-bg {
-      height: 4px;
+      height: 3.5px;
       border-radius: 2px;
       background: #090b08;
       overflow: hidden;
@@ -199,42 +233,80 @@ export function buildComponentStyles(): string {
       transition: width 0.4s ease;
     }
 
-    /* 4. Connected [Arvore Progression Rail & Halo Nodes */
+    /* 3. Connected [Arvore Level-Line Progression Rail — Beveled Square Icon Frames (Zero Circular Cutoff!) */
     .arvore-cobra-wrap {
       position: relative;
       padding: 12px 14px;
       border-bottom: 1px solid #2a3026;
       background:
-        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 70%),
-        rgba(11, 13, 10, 0.72);
+        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 72%),
+        linear-gradient(180deg, rgba(16, 20, 15, 0.95) 0%, rgba(11, 13, 10, 0.95) 100%);
     }
     .arvore-tier-banner {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 6px 10px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9.5px;
       color: var(--text-secondary);
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed #262c22;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #2e3529;
+    }
+    .cobra-tier-btns {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .cobra-tier-btn {
+      padding: 2px 7px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      border-radius: 3px;
+      border: 1px solid #4a3c24;
+      background: #141812;
+      color: #d6e4ca;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .cobra-tier-btn:hover,
+    .cobra-tier-btn.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.32);
     }
     .arvore-col {
       position: relative;
       z-index: 1;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .arvore-col.is-tier-dimmed {
+      opacity: 0.32;
+      filter: grayscale(0.6);
     }
     .arvore-col::after {
       content: '';
       position: absolute;
-      top: 37px;
+      top: 41px;
       left: 55%;
       width: 90%;
-      height: 2px;
-      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(201, 162, 39, 0.2) 50%, var(--border-gold) 100%);
+      height: 3px;
+      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(229, 193, 88, 0.25) 50%, var(--border-gold) 100%);
       background-size: 200% 100%;
-      animation: railFlow 5s linear infinite;
+      animation: railFlow 4.5s linear infinite;
       z-index: -1;
       pointer-events: none;
+      border-radius: 2px;
+    }
+    .arvore-col.is-path-lit::after {
+      background: linear-gradient(90deg, #fff2bf 0%, var(--border-gold-bright) 50%, var(--class-accent) 100%);
+      background-size: 200% 100%;
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.55);
     }
     .arvore-col:nth-child(6n)::after,
     .arvore-col:last-child::after {
@@ -243,7 +315,7 @@ export function buildComponentStyles(): string {
     .arvore-circulo.is-selected-node {
       border-color: #fff2bf !important;
       animation: nodeHaloPulse 2s infinite ease-in-out;
-      transform: scale(1.08);
+      transform: translateY(-2px) scale(1.08);
     }
     .arvore-circulo[data-node-kind="passive"] { border-color: var(--kind-passive); }
     .arvore-circulo[data-node-kind="skill"]   { border-color: var(--kind-skill); }
@@ -254,10 +326,32 @@ export function buildComponentStyles(): string {
       box-shadow: 0 0 14px rgba(246, 224, 94, 0.45);
     }
 
-    /* 5. Ability Power & Scaling Meter Component (<uo-power-meter>) */
+    /* Live Interactive Progression Telemetry Strip inside [Arvore Chart */
+    .cobra-live-summary {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 5px;
+      border: 1px solid #5d4a2b;
+      border-left: 3px solid var(--border-gold-bright);
+      background: linear-gradient(90deg, rgba(38, 32, 19, 0.72) 0%, rgba(16, 20, 15, 0.94) 100%);
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1.35fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      animation: inspectorFadeSlide 0.22s ease-out;
+    }
+    .cobra-live-summary img {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+      display: block;
+    }
+
+    /* 4. Compact Ability Power & Scaling Meter (<uo-power-meter>) */
     .uo-power-meter {
       margin-top: 5px;
-      padding: 4px 6px;
+      padding: 3px 6px;
       background: #0e120d;
       border: 1px solid #252b21;
       border-radius: 3px;
@@ -268,13 +362,13 @@ export function buildComponentStyles(): string {
       align-items: center;
       gap: 6px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
+      font-size: 8.8px;
       color: var(--text-secondary);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .uo-power-track {
       position: relative;
-      height: 5px;
+      height: 4.5px;
       border-radius: 3px;
       background: #080a07;
       overflow: hidden;
@@ -283,28 +377,74 @@ export function buildComponentStyles(): string {
     .uo-power-seg-base {
       height: 100%;
       background: linear-gradient(90deg, #8b6f1e, #d4af37);
-      transition: width 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .uo-power-seg-burst {
       height: 100%;
       background: linear-gradient(90deg, var(--class-accent), #f6ad55);
-      transition: width 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .uo-power-seg-modeb {
       height: 100%;
       background: #68d391;
       opacity: 0.35;
-      transition: width 0.25s ease, opacity 0.25s ease;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
     .is-mode-b-active .uo-power-seg-modeb {
       opacity: 1;
       box-shadow: 0 0 8px #68d391;
     }
 
+    /* 5. Progressive-Disclosure Inspector Tabs (.inspector-tab-bar) */
+    .inspector-tab-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      margin: 8px 0;
+      padding: 3px;
+      background: #0b0e0a;
+      border: 1px solid #352d1d;
+      border-radius: 4px;
+    }
+    .insp-tab-btn {
+      padding: 4px 5px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .insp-tab-btn:hover {
+      color: #fff2bf;
+      background: #171c15;
+    }
+    .insp-tab-btn.is-active {
+      color: #fff2bf;
+      background: linear-gradient(180deg, #332915 0%, #1b160c 100%);
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 8px rgba(229, 193, 88, 0.28);
+    }
+    .insp-pane {
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .insp-pane.is-highlighted-pane {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.28);
+      animation: inspectorFadeSlide 0.22s ease-out;
+    }
+
     /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
     .uo-combat-ticker {
-      margin-top: 8px;
-      padding: 8px 10px;
+      margin-top: 6px;
+      padding: 7px 9px;
       border-radius: 4px;
       border: 1px solid #4a3c24;
       background: linear-gradient(180deg, #151913 0%, #0b0e0a 100%);
@@ -316,16 +456,16 @@ export function buildComponentStyles(): string {
       justify-content: space-between;
       align-items: center;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .ticker-progress-bg {
       position: relative;
-      height: 6px;
+      height: 5px;
       border-radius: 3px;
       background: #070907;
       border: 1px solid #2a3026;
       overflow: hidden;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .ticker-progress-fill {
       height: 100%;
@@ -338,7 +478,7 @@ export function buildComponentStyles(): string {
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       flex-wrap: wrap;
     }
     .posture-pips {
@@ -347,8 +487,8 @@ export function buildComponentStyles(): string {
       align-items: center;
     }
     .posture-pip {
-      width: 12px;
-      height: 8px;
+      width: 11px;
+      height: 7px;
       border-radius: 2px;
       background: #141812;
       border: 1px solid #3c3425;
@@ -367,7 +507,7 @@ export function buildComponentStyles(): string {
     .ticker-log-feed {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .ticker-log-item {
       display: flex;
@@ -379,7 +519,7 @@ export function buildComponentStyles(): string {
       background: #10140f;
       border-left: 2px solid var(--border-gold);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9.5px;
+      font-size: 9.2px;
       animation: floatUpBadge 0.22s ease-out;
     }
 
@@ -410,7 +550,7 @@ export function buildComponentStyles(): string {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 5px;
       padding-top: 5px;
       border-top: 1px dashed #2a3026;
     }
@@ -429,41 +569,57 @@ export function buildComponentStyles(): string {
     .w-stat-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
-      transition: width 0.25s ease;
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* 8. 5-Class Executive KPI Comparison Strip (class-comparison.html) */
+    /* 8. 5-Class Hero Spotlight Cards with SVG Sparklines (Concept Art Match) */
     .exec-kpi-strip {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
     .exec-kpi-card {
-      padding: 8px 10px;
-      border-radius: 4px;
-      background: linear-gradient(180deg, #181d16 0%, #10140f 100%);
-      border: 1px solid #2a3026;
+      padding: 9px 11px;
+      border-radius: 6px;
+      background: linear-gradient(180deg, #1b2019 0%, #0f130e 100%);
+      border: 1px solid #353c30;
       border-top: 3px solid var(--border-gold);
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
       min-width: 0;
       cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.18s ease, background 0.18s ease;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
     }
     .exec-kpi-card.is-spotlight-class {
       border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #282415 0%, #151912 100%);
-      box-shadow: 0 0 16px rgba(229, 193, 88, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+      background: linear-gradient(180deg, #2b2414 0%, #151912 100%);
+      box-shadow: 0 0 20px rgba(229, 193, 88, 0.42), inset 0 0 14px rgba(229, 193, 88, 0.16);
       transform: translateY(-2px);
     }
+    .kpi-emblem {
+      width: 28px;
+      height: 28px;
+      border-radius: 5px;
+      display: inline-grid;
+      place-items: center;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff2bf;
+      border: 1px solid rgba(255, 242, 191, 0.45);
+      flex-shrink: 0;
+    }
     tr.is-class-spotlight td {
-      background: rgba(229, 193, 88, 0.14) !important;
+      background: rgba(229, 193, 88, 0.15) !important;
       border-top: 1px solid var(--border-gold-bright) !important;
       border-bottom: 1px solid var(--border-gold-bright) !important;
     }
@@ -473,13 +629,14 @@ export function buildComponentStyles(): string {
     [data-comp-section],
     .milestone-card {
       scroll-margin-top: 14px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease, transform 0.22s ease, background 0.22s ease;
     }
     section.arvore-secao.is-focused-section,
     [data-comp-section].is-focused-section,
     .is-focused-section {
       border-color: var(--border-gold-bright) !important;
       box-shadow: 0 0 24px rgba(229, 193, 88, 0.36), inset 0 0 14px rgba(229, 193, 88, 0.1) !important;
+      animation: spotlightGlowSweep 0.6s ease-out;
     }
     section.arvore-secao.is-focused-section > .arvore-secao-titulo {
       background: linear-gradient(90deg, #332913 0%, #1d2219 100%) !important;
@@ -499,7 +656,7 @@ export function buildComponentStyles(): string {
     .passive-badge-item,
     .skill-mastery-card {
       cursor: pointer;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease, background 0.16s ease;
     }
     .kbd-chip:hover,
     .arvore-saldo:hover,
@@ -523,6 +680,9 @@ export function buildComponentStyles(): string {
       .arvore-col::after {
         display: none;
       }
+      .cobra-live-summary {
+        grid-template-columns: 44px minmax(0, 1fr);
+      }
     }
   `;
 }
@@ -531,21 +691,24 @@ export function renderQuickCommandBar(activePage: 'portal' | 'samurai' | 'ninja'
   return `
     <nav class="uo-quick-dock" aria-label="Developer Quick Command Bar">
       <div class="uo-quick-dock-left">
-        <span style="display:inline-flex;align-items:center;gap:5px;color:#fff2bf;font-weight:600;">
+        <span style="display:inline-flex;align-items:center;gap:6px;color:#fff2bf;font-weight:700;letter-spacing:0.03em;">
           <i class="live-pulse-dot"></i>
-          UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
+          UO IDLE v0.99.0 · TOKUNO WORKBENCH
         </span>
-        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
-        ${
-          activePage === 'samurai' || activePage === 'ninja'
-            ? `<span class="kbd-chip" role="button" tabindex="0" data-dock-action="locale" onclick="window.handleQuickDock && window.handleQuickDock('locale')" title="Toggle EN / PT-BR Localization"><kbd>L</kbd> EN / PT-BR</span>
-               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="milestone" onclick="window.handleQuickDock && window.handleQuickDock('milestone')" title="Cycle &amp; Scroll to Next Milestone Card"><kbd>1–9</kbd> Select Milestone</span>
-               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="ticker" onclick="window.handleQuickDock && window.handleQuickDock('ticker')" title="Scroll to &amp; Step 100ms Combat Loop Preview"><kbd>Space</kbd> Combat Sim</span>`
-            : `<span class="kbd-chip" role="button" tabindex="0" data-dock-action="view" onclick="window.handleQuickDock && window.handleQuickDock('view')" title="Cycle &amp; Smooth-Scroll Workbench Sections"><kbd>1–3</kbd> Switch View</span>`
-        }
+        <div class="command-cluster" role="group" aria-label="Keyboard & Quick Actions">
+          <span class="cluster-tag">Quick:</span>
+          <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
+          ${
+            activePage === 'samurai' || activePage === 'ninja'
+              ? `<span class="kbd-chip" role="button" tabindex="0" data-dock-action="locale" onclick="window.handleQuickDock && window.handleQuickDock('locale')" title="Toggle EN / PT-BR Localization"><kbd>L</kbd> EN / PT-BR</span>
+                 <span class="kbd-chip" role="button" tabindex="0" data-dock-action="milestone" onclick="window.handleQuickDock && window.handleQuickDock('milestone')" title="Cycle Next Milestone on [Arvore Progression Chart"><kbd>1–9</kbd> Step Milestone</span>
+                 <span class="kbd-chip" role="button" tabindex="0" data-dock-action="ticker" onclick="window.handleQuickDock && window.handleQuickDock('ticker')" title="Step 100ms Combat Loop Preview"><kbd>Space</kbd> Combat Sim</span>`
+              : `<span class="kbd-chip" role="button" tabindex="0" data-dock-action="view" onclick="window.handleQuickDock && window.handleQuickDock('view')" title="Cycle &amp; Smooth-Scroll Workbench Sections"><kbd>1–3</kbd> Switch View</span>`
+          }
+        </div>
       </div>
       <div class="uo-quick-dock-right">
-        <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
+        <span style="color:var(--text-gold);">Gates: 7/7 PASS · 0 Polygons · ±5–8% Parity</span>
         <a href="${prefix}samurai-skill-tree.html?mode=mode_b" style="color:#ff9b93;text-decoration:none;font-weight:600;">⚡ SM Mode B</a>
         <a href="${prefix}ninja-skill-tree.html?mode=mode_b" style="color:#7ce8b4;text-decoration:none;font-weight:600;">⚡ NJ Mode B</a>
       </div>
@@ -560,10 +723,10 @@ export function renderStatDistributionStrip(cls: ClassDefinition): string {
   const pInt = 100 - pStr - pDex;
   return `
     <div class="stat-ratio-strip">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;">
-        <span style="color:#ff9b93;">STR ${cls.baseStats.str} (${pStr}%)</span>
-        <span style="color:#7ce8b4;">DEX ${cls.baseStats.dex} (${pDex}%)</span>
-        <span style="color:#9ec9ff;">INT ${cls.baseStats.int} (${pInt}%)</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;">
+        <span style="color:#ff9b93;">STR ${cls.baseStats.str} <small style="font-weight:400;opacity:0.8;">(${pStr}%)</small></span>
+        <span style="color:#7ce8b4;">DEX ${cls.baseStats.dex} <small style="font-weight:400;opacity:0.8;">(${pDex}%)</small></span>
+        <span style="color:#9ec9ff;">INT ${cls.baseStats.int} <small style="font-weight:400;opacity:0.8;">(${pInt}%)</small></span>
       </div>
       <div class="stat-ratio-bar" title="Stat Allocation: ${cls.baseStats.str} STR / ${cls.baseStats.dex} DEX / ${cls.baseStats.int} INT (Sum = ${sum})">
         <div class="stat-seg-str" style="width:${pStr}%;"></div>
@@ -571,8 +734,8 @@ export function renderStatDistributionStrip(cls: ClassDefinition): string {
         <div class="stat-seg-int" style="width:${pInt}%;"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-secondary);">
-        <span>Swing Floor: 2,000ms</span>
-        <span>Reagents: 0 · Ammo: 0</span>
+        <span>Primary: ${escapeHtml(cls.resourceProfile.primaryResource.toUpperCase())} (${cls.resourceProfile.startingManaMax} / Med ${cls.resourceProfile.meditationCap})</span>
+        <span>2.0s Floor · 0 Reag/Ammo</span>
       </div>
     </div>
   `;
@@ -587,19 +750,18 @@ export function renderStarterSkillCards(cls: ClassDefinition): string {
         color: '#c9a227',
       };
       return `
-        <div class="skill-mastery-card">
+        <div class="skill-mastery-card" title="${escapeHtml(meta.label)} (Skill #${sk.skillId}) — ${escapeHtml(meta.role)} · Starts at ${sk.initialValue}.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
-            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
-              ${escapeHtml(meta.label)} <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#${sk.skillId})</small>
+            <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              ${escapeHtml(meta.label)} <small class="mono" style="color:var(--text-secondary);font-size:9px;">#${sk.skillId}</small>
             </span>
-            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">${sk.initialValue}.0</span>
+            <span class="mono" style="color:var(--text-gold);font-size:10.5px;font-weight:700;">${sk.initialValue}</span>
           </div>
           <div class="skill-mastery-bar-bg">
             <div class="skill-mastery-bar-fill" style="width:${sk.initialValue}%;background:${meta.color};"></div>
           </div>
-          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
-            <span>${escapeHtml(meta.role)}</span>
-            <span>GM Cap 100.0</span>
+          <div class="mono" style="font-size:8.2px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${escapeHtml(meta.role)}
           </div>
         </div>
       `;
@@ -608,13 +770,7 @@ export function renderStarterSkillCards(cls: ClassDefinition): string {
 }
 
 export function renderAbilityPowerMeter(abilityId: string): string {
-  const m = ABILITY_POWER_MAP[abilityId] ?? {
-    basePct: 55,
-    burstPct: 80,
-    modeBPct: 90,
-    labelLeft: '1.15x–1.25x Base',
-    labelRight: 'Mode B Hook Ready',
-  };
+  const m = getAbilityPowerMetric(abilityId);
   const seg1 = m.basePct;
   const seg2 = Math.max(5, m.burstPct - m.basePct);
   const seg3 = Math.max(4, m.modeBPct - m.burstPct);
@@ -673,8 +829,8 @@ export function renderLiveCombatTickerComponent(cls: ClassDefinition): string {
       <div class="ticker-head">
         <div style="display:flex;align-items:center;gap:6px;">
           <i class="live-pulse-dot"></i>
-          <strong style="font-family:'Cinzel',serif;font-size:11px;color:var(--text-gold);text-transform:uppercase;">
-            Live 100ms Tick Combat Loop Preview
+          <strong style="font-family:'Cinzel',serif;font-size:10.5px;color:var(--text-gold);text-transform:uppercase;">
+            Live 100ms Tick Combat Loop
           </strong>
         </div>
         <div style="display:flex;gap:4px;">
@@ -715,12 +871,21 @@ export function renderExecutiveClassKpiStrip(
       ? baselineClasses.reduce((acc, s) => acc + s.sustainedDps, 0) / baselineClasses.length
       : 375.0;
 
+  const badgeMap: Record<string, string> = {
+    warrior: 'WR',
+    mage: 'MG',
+    ranger: 'RG',
+    samurai: 'SM',
+    ninja: 'NJ',
+  };
+
   return `<div class="exec-kpi-strip" id="sim-exec-kpi-strip">
     ${scenarios
       .map((s) => {
         const col = classColors[s.classId] ?? '#c9a227';
         const deltaPct = (((s.sustainedDps - meanDps) / meanDps) * 100).toFixed(1);
         const deltaStr = Number(deltaPct) >= 0 ? `+${deltaPct}%` : `${deltaPct}%`;
+        const bCode = badgeMap[s.classId] ?? 'CL';
         const mitLabel =
           s.classId === 'samurai'
             ? `${s.parryCount} Bushido Parries`
@@ -728,22 +893,29 @@ export function renderExecutiveClassKpiStrip(
               ? `${s.cloneInterceptions > 0 ? s.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil'}`
               : `${s.parryCount} Shield Parries`;
         return `
-          <div class="exec-kpi-card" data-kpi-class="${escapeHtml(s.classId)}" onclick="window.spotlightSimClass && window.spotlightSimClass('${escapeHtml(s.classId)}')" style="border-top-color:${col};" title="Click to spotlight ${escapeHtml(s.classId.toUpperCase())} across telemetry table, SVG curves &amp; 5-channel breakdown">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-family:'Cinzel',serif;font-size:12px;color:${col};text-transform:uppercase;">${escapeHtml(s.classId)}</strong>
-              <span class="mono" style="font-size:9.5px;color:#82d5b0;">${deltaStr} vs Mean</span>
+          <div class="exec-kpi-card" data-kpi-class="${escapeHtml(s.classId)}" data-spot-class="${escapeHtml(s.classId)}" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:${col};" title="Click to spotlight ${escapeHtml(s.classId.toUpperCase())} across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, ${col}, #0c0f0b 82%);border-color:${col};">${bCode}</span>
+                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">${escapeHtml(s.classId)}</strong>
+              </div>
+              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS ${deltaStr}</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
-              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">${s.sustainedDps.toFixed(1)} <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11px;color:#9ec9ff;">${s.ehpPerSec.toFixed(1)} EHP/s</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
+              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">${s.sustainedDps.toFixed(1)} <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">${s.ehpPerSec.toFixed(1)} EHP/s</span>
             </div>
-            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
+              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="${col}" stroke-width="2" opacity="0.88" />
+              <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="${col}" stroke-width="1.5" />
+            </svg>
+            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>${escapeHtml(mitLabel)}</span>
-              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
+              <span style="color:var(--text-gold);">Spotlight ▸</span>
             </div>
           </div>
         `;
       })
-      .join('')}
+      .join('\n')}
   </div>`;
 }

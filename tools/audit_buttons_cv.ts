@@ -479,6 +479,50 @@ async function runAudit(phase: 'before' | 'after'): Promise<void> {
       )
     );
 
+    // E2. Progression Chart Metric Pill Buttons & Clickable SVG Bracket Column
+    records.push(
+      await testButtonInteraction(
+        page,
+        'sim',
+        phaseDir,
+        'chart_metric_ttk',
+        'Progression Chart Metric: Trash TTK Speed',
+        '[data-chart-metric="trashTtkSec"]',
+        'sim-filter',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 480));
+        }
+      )
+    );
+    records.push(
+      await testButtonInteraction(
+        page,
+        'sim',
+        phaseDir,
+        'chart_metric_parity',
+        'Progression Chart Metric: Parity Envelope %',
+        '[data-chart-metric="parityDelta"]',
+        'sim-filter',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 480));
+        }
+      )
+    );
+    records.push(
+      await testButtonInteraction(
+        page,
+        'sim',
+        phaseDir,
+        'chart_svg_bracket_l25',
+        'Progression Chart SVG Bracket Column: L25',
+        '[data-svg-bracket="L25"]',
+        'sim-filter',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 480));
+        }
+      )
+    );
+
     // F. Quick-Dock & Header Saldo Pills on Sim
     records.push(
       await testButtonInteraction(
@@ -573,7 +617,7 @@ async function runAudit(phase: 'before' | 'after'): Promise<void> {
       )
     );
 
-    // Cobra L60 Capstone Node (should select AND scroll to L60 card if needed)
+    // Cobra L60 Capstone Node (updates progression strip + path illumination + inspector in-place)
     records.push(
       await testButtonInteraction(
         page,
@@ -582,7 +626,81 @@ async function runAudit(phase: 'before' | 'after'): Promise<void> {
         'cobra_l60_node',
         '[Arvore Cobra Node: L60 Capstone (Kensei)',
         '.arvore-cobra .arvore-col >> nth=11',
-        'scroll-nav',
+        'tree-interaction',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      )
+    );
+
+    // Cobra Progression Chart Tier Filter & Step Buttons
+    records.push(
+      await testButtonInteraction(
+        page,
+        'samurai',
+        phaseDir,
+        'cobra_tier_gm',
+        '[Arvore Progression Tier: Grandmaster L40–L60',
+        '[data-cobra-tier="master"]',
+        'tree-interaction',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      )
+    );
+    records.push(
+      await testButtonInteraction(
+        page,
+        'samurai',
+        phaseDir,
+        'cobra_step_next',
+        '[Arvore Progression Step: Next Milestone ▶',
+        '[data-cobra-step="next"]',
+        'tree-interaction',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      )
+    );
+    records.push(
+      await testButtonInteraction(
+        page,
+        'samurai',
+        phaseDir,
+        'cobra_tier_all',
+        '[Arvore Progression Tier: All L1–L60',
+        '[data-cobra-tier="all"]',
+        'tree-interaction',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      )
+    );
+
+    // Inspector Progressive Disclosure Tabs
+    records.push(
+      await testButtonInteraction(
+        page,
+        'samurai',
+        phaseDir,
+        'insp_tab_json',
+        'Inspector Progressive Disclosure Tab: Drop-In JSON Schema',
+        '[data-insp-tab="schema"]',
+        'tree-interaction',
+        async () => {
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      )
+    );
+    records.push(
+      await testButtonInteraction(
+        page,
+        'samurai',
+        phaseDir,
+        'insp_tab_overview',
+        'Inspector Progressive Disclosure Tab: Overview',
+        '[data-insp-tab="overview"]',
+        'tree-interaction',
         async () => {
           await page.evaluate(() => window.scrollTo(0, 0));
         }
