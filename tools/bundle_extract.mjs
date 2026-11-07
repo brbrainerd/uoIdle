@@ -243,7 +243,7 @@ export function redactText(text) {
     .replace(/\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g, '<REDACTED>')
     .replace(/(Set-Cookie|Cookie)\s*:\s*[^\s;"'`]{8,}/gi, '$1: <REDACTED>')
     .replace(
-      /"(uo-idle-token|idToken|password|access_token|refresh_token|client_secret)"\s*:\s*"[^"]*"/g,
+      /"(uo-idle-token|idToken|password|access_token|refresh_token|client_secret)"\s*:\s*"(?:\\.|[^"\\])*"/gi,
       '"$1": "<REDACTED>"'
     )
     .replace(/\b[A-Za-z0-9._%+-]+@(?!example\.com\b)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'redacted@example.com');
