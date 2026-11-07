@@ -10,19 +10,25 @@
       --bg-canvas: #0b0d0a;
       --bg-panel: #121510;
       --bg-card: #181c16;
-      --bg-card-hover: #20261d;
+      --bg-card-hover: #21271e;
       --border-subtle: #2a3026;
       --border-gold: #c9a227;
       --border-gold-bright: #e5c158;
       --text-primary: #e8e4d9;
       --text-secondary: #a39e90;
       --text-gold: #d4af37;
-      --samurai-accent: #c83e37;
-      --ninja-accent: #2e9e6b;
+      --samurai-accent: #d9483b;
+      --ninja-accent: #34b37a;
       --mana-blue: #4a90e2;
       --stamina-amber: #e2a04a;
       --cd-purple: #9b6be2;
+      --kind-passive: #63b3ed;
+      --kind-skill: #f6ad55;
+      --kind-spell: #b794f4;
+      --kind-mechanic: #4fd1c5;
+      --kind-capstone: #f6e05e;
       --class-accent: var(--border-gold);
+      --class-glow: rgba(201, 162, 39, 0.14);
     }
 
     * {
@@ -32,7 +38,10 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      background:
+        radial-gradient(circle at 18% 0%, var(--class-glow) 0%, transparent 44%),
+        radial-gradient(circle at 82% 8%, rgba(201, 162, 39, 0.08) 0%, transparent 48%),
+        var(--bg-canvas);
       color: var(--text-primary);
       font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 13px;
@@ -227,7 +236,7 @@
 
     .workbench-grid {
       display: grid;
-      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      grid-template-columns: 356px minmax(0, 1fr) 396px;
       gap: 12px;
       align-items: start;
     }
@@ -245,20 +254,20 @@
     /* Portrait & Identity */
     .identity-hero {
       display: grid;
-      grid-template-columns: 116px minmax(0, 1fr);
-      gap: 12px;
+      grid-template-columns: 94px minmax(0, 1fr);
+      gap: 10px;
       align-items: center;
     }
 
     .portrait-frame {
       position: relative;
-      width: 116px;
-      height: 116px;
-      border: 2px solid var(--border-gold);
+      width: 94px;
+      height: 94px;
+      border: 2px solid var(--class-accent);
       border-radius: 6px;
       overflow: hidden;
       background: #080907;
-      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 18px var(--class-glow);
     }
 
     .portrait-frame img.main-portrait {
@@ -436,7 +445,18 @@
       text-overflow: ellipsis;
     }
 
-    /* 12 Milestone Cards Grid */
+    /* 12 Unified Milestone + Catalog Cards Grid (De-Duplicated v2.0) */
+    .filter-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: #10140f;
+    }
+
     .milestone-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -446,36 +466,43 @@
 
     .milestone-card {
       display: grid;
-      grid-template-columns: 52px minmax(0, 1fr);
-      gap: 10px;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 9px;
       padding: 8px 10px;
-      background: var(--bg-card);
+      background: linear-gradient(180deg, #1a1f18 0%, #131712 100%);
       border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--border-gold);
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
 
-    .milestone-card:hover, .milestone-card.is-selected {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    .milestone-card[data-kind="passive"] { border-left-color: var(--kind-passive); }
+    .milestone-card[data-kind="skill"]   { border-left-color: var(--kind-skill); }
+    .milestone-card[data-kind="spell"]   { border-left-color: var(--kind-spell); }
+    .milestone-card[data-kind="mechanic"] { border-left-color: var(--kind-mechanic); }
+    .milestone-card[data-kind="feature"] {
+      border-color: var(--kind-capstone);
+      border-left: 4px solid var(--kind-capstone);
+      background: linear-gradient(180deg, #272113 0%, #161812 100%);
     }
 
-    .milestone-card.is-capstone {
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
       border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #241f14, #171a14);
+      box-shadow: 0 0 14px var(--class-glow);
+      transform: translateY(-1px);
     }
 
     .milestone-icon-box {
       position: relative;
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
     }
 
     .milestone-icon-box img {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
       border-radius: 4px;
       border: 1px solid var(--border-gold);
       display: block;
@@ -499,10 +526,32 @@
       border-radius: 3px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
+      font-weight: 700;
       text-transform: uppercase;
       border: 1px solid #3c4436;
       background: #121611;
       color: var(--text-secondary);
+    }
+    .type-pill.kind-passive  { color: var(--kind-passive); border-color: rgba(99, 179, 237, 0.45); background: rgba(99, 179, 237, 0.10); }
+    .type-pill.kind-skill    { color: var(--kind-skill); border-color: rgba(246, 173, 85, 0.45); background: rgba(246, 173, 85, 0.10); }
+    .type-pill.kind-spell    { color: var(--kind-spell); border-color: rgba(183, 148, 244, 0.45); background: rgba(183, 148, 244, 0.10); }
+    .type-pill.kind-mechanic { color: var(--kind-mechanic); border-color: rgba(79, 209, 197, 0.45); background: rgba(79, 209, 197, 0.10); }
+    .type-pill.kind-feature  { color: var(--kind-capstone); border-color: rgba(246, 224, 94, 0.65); background: rgba(246, 224, 94, 0.14); }
+
+    .schema-drawer {
+      margin-top: 5px;
+      border-top: 1px dashed #2b3227;
+      padding-top: 4px;
+    }
+    .schema-drawer summary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-gold);
+      cursor: pointer;
+      user-select: none;
+    }
+    .schema-drawer summary:hover {
+      color: #fff2bf;
     }
 
     .dual-unlock-banner {
@@ -851,832 +900,23 @@
         </div>
       </header>
 
-      <!-- SECTION 1: 5-Class L1-L60 Structural Parity Matrix -->
-      <section class="arvore-secao">
-        <h2 class="arvore-secao-titulo">
-          <span class="title-left">1. 5-Class L1–L60 Progression Structural Parity Matrix</span>
-          <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
-        </h2>
-        <div class="panel-body" style="overflow-x:auto;">
-          <table class="comp-table">
-            <thead>
-              <tr>
-                <th style="width:54px;">Tier</th>
-                
-        <th>
-          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
-            
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">warrior (WR)</div>
-              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 101 · Hue 1816 · 60/20/10</div>
-            </div>
-          </div>
-        </th>
-      
-
-        <th>
-          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
-            
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">mage (MG)</div>
-              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 103 · Hue 1253 · 20/20/50</div>
-            </div>
-          </div>
-        </th>
-      
-
-        <th>
-          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
-            
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">ranger (RG)</div>
-              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 102 · Hue 1837 · 40/40/10</div>
-            </div>
-          </div>
-        </th>
-      
-
-        <th>
-          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
-            <img src="assets/icons/samurai/portrait-samurai-64.png" alt="samurai" style="width:32px;height:32px;border-radius:4px;border:1px solid var(--border-gold);" />
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">samurai (SM)</div>
-              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 114 · Hue 1884 · 50/30/10</div>
-            </div>
-          </div>
-        </th>
-      
-
-        <th>
-          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
-            <img src="assets/icons/ninja/portrait-ninja-64.png" alt="ninja" style="width:32px;height:32px;border-radius:4px;border:1px solid var(--border-gold);" />
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">ninja (NJ)</div>
-              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 115 · Hue 1175 · 30/50/10</div>
-            </div>
-          </div>
-        </th>
-      
-              </tr>
-            </thead>
-            <tbody>
-              
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L1</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Slash</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_slash · passive</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Heal</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_heal · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Arrow</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_arrow · passive</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_way@48.png" alt="Way of the Blade" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Way of the Blade</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_way · passive</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_shadowjump@48.png" alt="Shadowjump" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Shadowjump</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_shadowjump · passive</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L5</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Provocar</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_provoke · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Harm</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_harm · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Rapid Shot</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_rapid_shot · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_lightning@48.png" alt="Lightning Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_lightning · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_focus@48.png" alt="Focus Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Focus Attack</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_focus · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L10</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Shield Bash</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_shield_bash · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Fireball</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_fireball · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Aimed Shot</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_aimed_shot · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_perfection@48.png" alt="Honor &amp; Perfection" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Honor &amp; Perfection</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_perfection · mechanic</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_mirror@48.png" alt="Mirror Image" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Mirror Image</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_mirror · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L15</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Armor Break</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_armor_break · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_lightning · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Force Arrow</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_force_arrow · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_honorable@48.png" alt="Honorable Execution" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Honorable Execution</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_honorable · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_backstab@48.png" alt="Backstab" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Backstab</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_backstab · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L20</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Heavy Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_heavy_strike · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-<td>—</td>
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Piercing Arrow</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_piercing · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_confidence@48.png" alt="Confidence" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Confidence</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_confidence · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_death@48.png" alt="Death Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Death Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_death · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L25</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Whirlwind</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_whirlwind · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Magic Reflect</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_magic_reflect · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Serpent Arrow</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_serpent_arrow · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_counter@48.png" alt="Counter Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Counter Attack</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_counter · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_animal_form@48.png" alt="Animal Form" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Animal Form</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_animal_form · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L30</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Brace</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_brace · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Energy Bolt</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_energy_bolt · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Moving Shot</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_moving_shot · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_double_strike@48.png" alt="Double Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Double Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_double_strike · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_infectious_strike@48.png" alt="Infectious Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Infectious Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_infectious_strike · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L35</td>
-          <td>—</td>
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Explosion</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_explosion · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning Arrow</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_lightning_arrow · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_evasion@48.png" alt="Evasion" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Evasion</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_evasion · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_smoke_bomb@48.png" alt="Smoke Bomb" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Smoke Bomb</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_smoke_bomb · mechanic</span>
-                  <div class="mono" style="font-size:9px;color:#68d391;margin-top:2px;">+ ninja_shuriken (Dual L35)</div>
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L40</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Disarm</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_disarm · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Chain Lightning</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_chain_lightning · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Multishot</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_multishot · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_momentum_strike@48.png" alt="Momentum Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Momentum Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_momentum_strike · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_ki_attack@48.png" alt="Ki Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Ki Attack</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_ki_attack · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L45</td>
-          <td>—</td>
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Flame Strike</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_flamestrike · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Armor Pierce</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_armor_pierce · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_armor_ignore@48.png" alt="Armor Ignore" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Armor Ignore</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_armor_ignore · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_surprise_attack@48.png" alt="Surprise Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Surprise Attack</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_surprise_attack · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L50</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Bulwark</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_bulwark · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Fire Elemental</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_fire_elemental · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Charged Shot</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_charged_shot · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_frenzied_whirlwind@48.png" alt="Frenzied Whirlwind" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Frenzied Whirlwind</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_frenzied_whirlwind · skill</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_fukiya_barrage@48.png" alt="Fukiya &amp; Egg Bomb Barrage" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Fukiya &amp; Egg Bomb Barrage</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_fukiya_barrage · spell</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-
-        <tr>
-          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L60</td>
-          
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Execution</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_execution · feature</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Meteor Swarm</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_meteor · feature</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Bolt Volley</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_bolt_volley · feature</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/samurai/samurai_kensei_judgment@48.png" alt="Kensei: Amakura&#39;s Judgment" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Kensei: Amakura&#39;s Judgment</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_kensei_judgment · feature</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-
-            <td>
-              <div style="display:flex;align-items:center;gap:7px;">
-                <img src="assets/icons/ninja/ninja_twin_shadow@48.png" alt="Kage Bunshin: Twin Shadow Execution" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
-                <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">Kage Bunshin: Twin Shadow Execution</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_twin_shadow · feature</span>
-                  
-                </div>
-              </div>
-            </td>
-          
-        </tr>
-      
-            </tbody>
-          </table>
+      <!-- Interactive Workbench Sub-Tab Navigation -->
+      <div class="filter-bar" style="margin-bottom:0;background:linear-gradient(180deg,#1a1f18,#10140f);border-color:#5d4a2b;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <span class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;">WORKBENCH VIEW:</span>
+          <button type="button" class="beta-btn is-active" data-comp-tab="all" onclick="switchCompTab('all')">All Sections (Complete Executive Sheet)</button>
+          <button type="button" class="beta-btn" data-comp-tab="sim" onclick="switchCompTab('sim')">1. Combat Simulator &amp; Visual Charts</button>
+          <button type="button" class="beta-btn" data-comp-tab="matrix" onclick="switchCompTab('matrix')">2. 5-Class L1–L60 Progression Matrix</button>
+          <button type="button" class="beta-btn" data-comp-tab="armaments" onclick="switchCompTab('armaments')">3. Tokuno Armaments &amp; C# Server Hooks</button>
         </div>
-      </section>
+        <span class="mono" style="font-size:10px;color:var(--text-secondary);">Progressive Disclosure enabled on Secondary Tables</span>
+      </div>
 
-      <!-- SECTION 2: Interactive 5-Class Combat Parity Telemetry + Visual SVG Progression Curves -->
-      <section class="arvore-secao">
+      <!-- SECTION 1: Interactive 5-Class Combat Parity Telemetry + Visual SVG Progression Curves -->
+      <section class="arvore-secao" data-comp-section="sim">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">2. Deterministic 5-Class Combat Simulation Telemetry &amp; Visual Charts (100ms Tick Engine)</span>
-          <span class="arvore-secao-sub">Sources: parity-5class-v0.99.0.json &amp; gear-and-waves-v1.1.json</span>
+          <span class="title-left">1. Deterministic 5-Class Combat Simulation Telemetry &amp; Visual Charts (100ms Tick Engine)</span>
+          <span class="arvore-secao-sub">Sources: parity-5class-v0.99.0.json &amp; gear-and-waves-v1.1.json · 11/11 Unit Suites</span>
         </h2>
         <div class="panel-body">
           <div class="filter-bar">
@@ -2056,20 +1296,12 @@
       </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- SECTION 3: Material Tier (Iron -> Valorite) & 10-Wave Continuous Dungeon Endurance -->
-      <section class="arvore-secao">
-        <h2 class="arvore-secao-titulo">
-          <span class="title-left">3. Material Tier Scaling (Iron → Valorite) &amp; 10-Wave Dungeon Endurance</span>
-          <span class="arvore-secao-sub">Source: data/sim-baselines/gear-and-waves-v1.1.json · 11/11 Deterministic Test Suites</span>
-        </h2>
-        <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
-            <div>
+          <!-- Consolidated Material Tier (Iron -> Valorite) & 10-Wave Dungeon Endurance -->
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;margin-top:12px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
-                9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Strictly Monotonic DPS &amp; EHP/s)
+                9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Monotonic DPS &amp; EHP/s)
               </div>
               <table class="comp-table">
                 <thead>
@@ -2122,7 +1354,7 @@
                 </tbody>
               </table>
             </div>
-            <div>
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
                 10-Wave Continuous Dungeon Pull Endurance (8 Trash + 2 Boss Waves, Zero Reset)
               </div>
@@ -2200,14 +1432,1006 @@
         </div>
       </section>
 
-      <!-- SECTION 4: Tokuno Armaments, Consumables & Affix Showcase -->
-      <section class="arvore-secao">
+      <!-- SECTION 2: 5-Class L1-L60 Structural Parity Matrix -->
+      <section class="arvore-secao" data-comp-section="matrix">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">4. Authentic UO Tokuno Armaments, Ninjitsu Consumables &amp; Affix Pools</span>
-          <span class="arvore-secao-sub">Source: design/drop-in/items-bushido-ninjitsu.json &amp; mockups/assets/items/</span>
+          <span class="title-left">2. 5-Class L1–L60 Progression Structural Parity Matrix</span>
+          <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
+        </h2>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th style="width:54px;">Tier</th>
+                
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">warrior (WR)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 101 · Hue 1816 · 60/20/10</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">mage (MG)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 103 · Hue 1253 · 20/20/50</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">ranger (RG)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 102 · Hue 1837 · 40/40/10</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            <img src="assets/icons/samurai/portrait-samurai-64.png" alt="samurai" style="width:32px;height:32px;border-radius:4px;border:1px solid var(--border-gold);" />
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">samurai (SM)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 114 · Hue 1884 · 50/30/10</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            <img src="assets/icons/ninja/portrait-ninja-64.png" alt="ninja" style="width:32px;height:32px;border-radius:4px;border:1px solid var(--border-gold);" />
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">ninja (NJ)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 115 · Hue 1175 · 30/50/10</div>
+            </div>
+          </div>
+        </th>
+      
+              </tr>
+            </thead>
+            <tbody>
+              
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L1</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Slash</strong>
+                    <span class="type-pill kind-passive" style="font-size:8px;padding:0 4px;">passive</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_slash</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Heal</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_heal</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Arrow</strong>
+                    <span class="type-pill kind-passive" style="font-size:8px;padding:0 4px;">passive</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_arrow</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_way@48.png" alt="Way of the Blade" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Way of the Blade</strong>
+                    <span class="type-pill kind-passive" style="font-size:8px;padding:0 4px;">passive</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_way</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_shadowjump@48.png" alt="Shadowjump" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Shadowjump</strong>
+                    <span class="type-pill kind-passive" style="font-size:8px;padding:0 4px;">passive</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_shadowjump</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L5</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Provocar</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_provoke</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Harm</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_harm</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Rapid Shot</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_rapid_shot</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_lightning@48.png" alt="Lightning Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Lightning Strike</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_lightning</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_focus@48.png" alt="Focus Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Focus Attack</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_focus</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L10</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Shield Bash</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_shield_bash</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Fireball</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_fireball</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Aimed Shot</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_aimed_shot</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_perfection@48.png" alt="Honor &amp; Perfection" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Honor &amp; Perfection</strong>
+                    <span class="type-pill kind-mechanic" style="font-size:8px;padding:0 4px;">mechanic</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_perfection</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_mirror@48.png" alt="Mirror Image" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Mirror Image</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_mirror</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L15</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Armor Break</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_armor_break</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Lightning</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_lightning</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Force Arrow</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_force_arrow</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_honorable@48.png" alt="Honorable Execution" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Honorable Execution</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_honorable</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_backstab@48.png" alt="Backstab" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Backstab</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_backstab</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L20</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Heavy Strike</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_heavy_strike</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+<td>—</td>
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Piercing Arrow</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_piercing</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_confidence@48.png" alt="Confidence" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Confidence</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_confidence</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_death@48.png" alt="Death Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Death Strike</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_death</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L25</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Whirlwind</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_whirlwind</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Magic Reflect</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_magic_reflect</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Serpent Arrow</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_serpent_arrow</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_counter@48.png" alt="Counter Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Counter Attack</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_counter</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_animal_form@48.png" alt="Animal Form" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Animal Form</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_animal_form</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L30</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Brace</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_brace</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Energy Bolt</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_energy_bolt</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Moving Shot</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_moving_shot</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_double_strike@48.png" alt="Double Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Double Strike</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_double_strike</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_infectious_strike@48.png" alt="Infectious Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Infectious Strike</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_infectious_strike</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L35</td>
+          <td>—</td>
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Explosion</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_explosion</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Lightning Arrow</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_lightning_arrow</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_evasion@48.png" alt="Evasion" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Evasion</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_evasion</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_smoke_bomb@48.png" alt="Smoke Bomb" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Smoke Bomb</strong>
+                    <span class="type-pill kind-mechanic" style="font-size:8px;padding:0 4px;">mechanic</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_smoke_bomb</span>
+                  <div class="mono" style="font-size:9px;color:#68d391;margin-top:2px;">+ ninja_shuriken (Dual L35)</div>
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L40</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Disarm</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_disarm</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Chain Lightning</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_chain_lightning</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Multishot</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_multishot</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_momentum_strike@48.png" alt="Momentum Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Momentum Strike</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_momentum_strike</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_ki_attack@48.png" alt="Ki Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Ki Attack</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_ki_attack</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L45</td>
+          <td>—</td>
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Flame Strike</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_flamestrike</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Armor Pierce</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_armor_pierce</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_armor_ignore@48.png" alt="Armor Ignore" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Armor Ignore</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_armor_ignore</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_surprise_attack@48.png" alt="Surprise Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Surprise Attack</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_surprise_attack</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L50</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Bulwark</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_bulwark</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Fire Elemental</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_fire_elemental</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Charged Shot</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_charged_shot</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_frenzied_whirlwind@48.png" alt="Frenzied Whirlwind" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Frenzied Whirlwind</strong>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">skill</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_frenzied_whirlwind</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_fukiya_barrage@48.png" alt="Fukiya &amp; Egg Bomb Barrage" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Fukiya &amp; Egg Bomb Barrage</strong>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">spell</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_fukiya_barrage</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L60</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Execution</strong>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">feature</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_execution</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Meteor Swarm</strong>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">feature</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_meteor</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Bolt Volley</strong>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">feature</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_bolt_volley</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_kensei_judgment@48.png" alt="Kensei: Amakura&#39;s Judgment" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Kensei: Amakura&#39;s Judgment</strong>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">feature</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_kensei_judgment</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_twin_shadow@48.png" alt="Kage Bunshin: Twin Shadow Execution" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">Kage Bunshin: Twin Shadow Execution</strong>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">feature</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_twin_shadow</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Tokuno Armaments, Consumables & C# Server Hooks (Consolidated) -->
+      <section class="arvore-secao" data-comp-section="armaments">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">3. Authentic UO Tokuno Armaments, Ninjitsu Tools &amp; &lt;20 LOC C# Server Hooks</span>
+          <span class="arvore-secao-sub">design/drop-in/items-bushido-ninjitsu.json · classes-patch.js · BaseWeapon.cs</span>
         </h2>
         <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
             <div>
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Authentic art.png Sprites · Iron → Valorite)</div>
               <div class="kv-grid">
@@ -2444,22 +2668,67 @@
     
               </div>
             </div>
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Drop-In Tokuno Weapon Definitions</div>
-              <table class="comp-table" style="margin-bottom:10px;">
-                <thead>
-                  <tr>
-                    <th>Weapon</th>
-                    <th>Item ID</th>
-                    <th>Skill / Layer</th>
-                    <th>Spd</th>
-                    <th>Dmg</th>
-                    <th>Primary / Secondary</th>
-                    <th>Synergy</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div>
+                <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:4px;">
+                  Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
+                </div>
+                <pre class="code-card" style="margin:0;"><code>// Mode B Server Hook (17 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+// 1. OnWeaponHit: Auto-Perfection Streak &amp; On-Kill Vital Recovery (9 LOC)
+if (attacker is PlayerMobile sm &amp;&amp; sm.ClassId == 114 &amp;&amp; sm.Skills.Bushido.Value &gt;= 50.0) {
+    if (sm.PerfectionTarget != defender) { sm.PerfectionTarget = defender; sm.PerfectionBonus = 0; }
+    sm.PerfectionBonus = Math.Min(15, sm.PerfectionBonus + (int)(sm.Skills.Bushido.Value / 25));
+    percentageBonus += sm.PerfectionBonus;
+    if (!defender.Alive) { sm.Hits += 8; sm.Stam += 8; sm.Mana += 8; sm.PerfectionBonus = 0; }
+}
+// 2. OnWeaponMiss: Perfection Streak Decay (2 LOC)
+if (attacker is PlayerMobile smMiss &amp;&amp; smMiss.ClassId == 114 &amp;&amp; smMiss.PerfectionTarget == defender)
+    smMiss.PerfectionBonus = Math.Max(0, smMiss.PerfectionBonus - 5);
+// 3. OnParrySuccess (inside AbsorbDamageAOS when CheckParry == true): 2.0s ICD Counter &amp; Confidence (6 LOC)
+if (blocked &amp;&amp; Core.TickCount - defender.NextBushidoParryProc &gt;= 2000) {
+    defender.NextBushidoParryProc = Core.TickCount;
+    if (CounterAttack.IsCountering(defender) &amp;&amp; defender.Weapon is BaseWeapon bw) bw.OnSwing(defender, attacker);
+    if (Confidence.IsConfident(defender)) { defender.Hits += 2; defender.Stam += 2; }
+}</code></pre>
+              </div>
+              <div>
+                <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:4px;">
+                  Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
+                </div>
+                <pre class="code-card" style="margin:0;"><code>// Mode B Server Hook (16 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+// 1. OnIncomingHit: Ablative Mirror Image Clone Interception with 1.5s ICD (8 LOC)
+if (MirrorImage.HasClone(defender) &amp;&amp; Core.TickCount - defender.NextCloneIntercept &gt;= 1500
+    &amp;&amp; defender.Skills.Ninjitsu.Value / 150.0 &gt; Utility.RandomDouble()) {
+    defender.NextCloneIntercept = Core.TickCount;
+    MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone &amp; decrements cloneStacks
+    damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
+}
+// 2. OnWeaponSwingHit: 3-Swing DeathStrike Detonation, Kitsune 3rd-Swing Claw &amp; Stealth Opener (8 LOC)
+if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
+    DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
+    if (nj.CombatStealthUntil &gt; Core.TickCount &amp;&amp; (move is Backstab || move is SurpriseAttack)) {
+        nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
+        damage = (int)(damage * 1.15);
+    }
+}</code></pre>
+              </div>
+              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+                <summary style="font-size:10.5px;">Expand Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools</summary>
+                <div style="margin-top:8px;">
+                  <table class="comp-table" style="margin-bottom:8px;">
+                    <thead>
+                      <tr>
+                        <th>Weapon</th>
+                        <th>Item ID</th>
+                        <th>Skill / Layer</th>
+                        <th>Spd</th>
+                        <th>Dmg</th>
+                        <th>Primary / Secondary</th>
+                        <th>Synergy</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
           <img src="assets/items/bokuto.png" alt="Bokuto" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
@@ -2571,12 +2840,10 @@
         <td class="mono">samurai, ninja</td>
       </tr>
     
-                </tbody>
-              </table>
-
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">9 Material Tiers (1.00x Iron → 1.85x Valorite)</div>
-              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">
-                
+                    </tbody>
+                  </table>
+                  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
+                    
       <span class="badge-meta" style="padding:3px 7px;">
         T1 <strong style="color:#fff2bf;">Iron</strong> (Lv.1): 1.00x Dmg / +0% Res
       </span>
@@ -2621,11 +2888,9 @@
         T9 <strong style="color:#fff2bf;">Valorite</strong> (Lv.100): 1.85x Dmg / +96% Res
       </span>
     
-              </div>
-
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">10 Bushido &amp; Ninjitsu Equipment Affix Pools</div>
-              <div class="kv-grid">
-                
+                  </div>
+                  <div class="kv-grid">
+                    
       <div class="kv-item">
         <div>
           <strong style="color:#fff2bf;">bushido</strong>
@@ -2715,62 +2980,9 @@
         <span class="v">Cap +50 (samurai)</span>
       </div>
     
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 5: Mode A vs Mode B Implementation & <20 LOC C# Server Hook Inspector -->
-      <section class="arvore-secao">
-        <h2 class="arvore-secao-titulo">
-          <span class="title-left">5. Mode A (Zero Engine Changes) vs Mode B (&lt;20 LOC C# Server Hooks)</span>
-          <span class="arvore-secao-sub">design/drop-in/classes-patch.js · BaseWeapon.cs</span>
-        </h2>
-        <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:6px;">
-                Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
-              </div>
-              <pre class="code-card"><code>// Mode B Server Hook (17 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
-// 1. OnWeaponHit: Auto-Perfection Streak &amp; On-Kill Vital Recovery (9 LOC)
-if (attacker is PlayerMobile sm &amp;&amp; sm.ClassId == 114 &amp;&amp; sm.Skills.Bushido.Value &gt;= 50.0) {
-    if (sm.PerfectionTarget != defender) { sm.PerfectionTarget = defender; sm.PerfectionBonus = 0; }
-    sm.PerfectionBonus = Math.Min(15, sm.PerfectionBonus + (int)(sm.Skills.Bushido.Value / 25));
-    percentageBonus += sm.PerfectionBonus;
-    if (!defender.Alive) { sm.Hits += 8; sm.Stam += 8; sm.Mana += 8; sm.PerfectionBonus = 0; }
-}
-// 2. OnWeaponMiss: Perfection Streak Decay (2 LOC)
-if (attacker is PlayerMobile smMiss &amp;&amp; smMiss.ClassId == 114 &amp;&amp; smMiss.PerfectionTarget == defender)
-    smMiss.PerfectionBonus = Math.Max(0, smMiss.PerfectionBonus - 5);
-// 3. OnParrySuccess (inside AbsorbDamageAOS when CheckParry == true): 2.0s ICD Counter &amp; Confidence (6 LOC)
-if (blocked &amp;&amp; Core.TickCount - defender.NextBushidoParryProc &gt;= 2000) {
-    defender.NextBushidoParryProc = Core.TickCount;
-    if (CounterAttack.IsCountering(defender) &amp;&amp; defender.Weapon is BaseWeapon bw) bw.OnSwing(defender, attacker);
-    if (Confidence.IsConfident(defender)) { defender.Hits += 2; defender.Stam += 2; }
-}</code></pre>
-            </div>
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:6px;">
-                Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
-              </div>
-              <pre class="code-card"><code>// Mode B Server Hook (16 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
-// 1. OnIncomingHit: Ablative Mirror Image Clone Interception with 1.5s ICD (8 LOC)
-if (MirrorImage.HasClone(defender) &amp;&amp; Core.TickCount - defender.NextCloneIntercept &gt;= 1500
-    &amp;&amp; defender.Skills.Ninjitsu.Value / 150.0 &gt; Utility.RandomDouble()) {
-    defender.NextCloneIntercept = Core.TickCount;
-    MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone &amp; decrements cloneStacks
-    damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
-}
-// 2. OnWeaponSwingHit: 3-Swing DeathStrike Detonation, Kitsune 3rd-Swing Claw &amp; Stealth Opener (8 LOC)
-if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
-    DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
-    if (nj.CombatStealthUntil &gt; Core.TickCount &amp;&amp; (move is Backstab || move is SurpriseAttack)) {
-        nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
-        damage = (int)(damage * 1.15);
-    }
-}</code></pre>
+                  </div>
+                </div>
+              </details>
             </div>
           </div>
           <div style="margin-top:8px;padding:8px 10px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;color:var(--text-secondary);">
@@ -2788,6 +3000,18 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
       var payload = JSON.parse(document.getElementById('mockup-data').textContent);
       var parityData = payload.parity;
       var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss' };
+
+      window.switchCompTab = function(tabId) {
+        var btns = document.querySelectorAll('[data-comp-tab]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-comp-tab') === tabId);
+        }
+        var secs = document.querySelectorAll('[data-comp-section]');
+        for (var j = 0; j < secs.length; j++) {
+          var s = secs[j].getAttribute('data-comp-section');
+          secs[j].style.display = (tabId === 'all' || s === tabId) ? 'block' : 'none';
+        }
+      };
 
       window.updateSimFilter = function(kind, val) {
         state[kind] = val;

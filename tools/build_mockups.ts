@@ -806,25 +806,31 @@ const PASSIVE_BADGES: Record<
   ],
 };
 
-function buildSharedStyles(accentVar: string): string {
+function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0.14)'): string {
   return `
     :root {
       --bg-canvas: #0b0d0a;
       --bg-panel: #121510;
       --bg-card: #181c16;
-      --bg-card-hover: #20261d;
+      --bg-card-hover: #21271e;
       --border-subtle: #2a3026;
       --border-gold: #c9a227;
       --border-gold-bright: #e5c158;
       --text-primary: #e8e4d9;
       --text-secondary: #a39e90;
       --text-gold: #d4af37;
-      --samurai-accent: #c83e37;
-      --ninja-accent: #2e9e6b;
+      --samurai-accent: #d9483b;
+      --ninja-accent: #34b37a;
       --mana-blue: #4a90e2;
       --stamina-amber: #e2a04a;
       --cd-purple: #9b6be2;
+      --kind-passive: #63b3ed;
+      --kind-skill: #f6ad55;
+      --kind-spell: #b794f4;
+      --kind-mechanic: #4fd1c5;
+      --kind-capstone: #f6e05e;
       --class-accent: ${accentVar};
+      --class-glow: ${accentGlow};
     }
 
     * {
@@ -834,7 +840,10 @@ function buildSharedStyles(accentVar: string): string {
     html, body {
       margin: 0;
       padding: 0;
-      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      background:
+        radial-gradient(circle at 18% 0%, var(--class-glow) 0%, transparent 44%),
+        radial-gradient(circle at 82% 8%, rgba(201, 162, 39, 0.08) 0%, transparent 48%),
+        var(--bg-canvas);
       color: var(--text-primary);
       font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 13px;
@@ -1029,7 +1038,7 @@ function buildSharedStyles(accentVar: string): string {
 
     .workbench-grid {
       display: grid;
-      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      grid-template-columns: 356px minmax(0, 1fr) 396px;
       gap: 12px;
       align-items: start;
     }
@@ -1047,20 +1056,20 @@ function buildSharedStyles(accentVar: string): string {
     /* Portrait & Identity */
     .identity-hero {
       display: grid;
-      grid-template-columns: 116px minmax(0, 1fr);
-      gap: 12px;
+      grid-template-columns: 94px minmax(0, 1fr);
+      gap: 10px;
       align-items: center;
     }
 
     .portrait-frame {
       position: relative;
-      width: 116px;
-      height: 116px;
-      border: 2px solid var(--border-gold);
+      width: 94px;
+      height: 94px;
+      border: 2px solid var(--class-accent);
       border-radius: 6px;
       overflow: hidden;
       background: #080907;
-      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 18px var(--class-glow);
     }
 
     .portrait-frame img.main-portrait {
@@ -1238,7 +1247,18 @@ function buildSharedStyles(accentVar: string): string {
       text-overflow: ellipsis;
     }
 
-    /* 12 Milestone Cards Grid */
+    /* 12 Unified Milestone + Catalog Cards Grid (De-Duplicated v2.0) */
+    .filter-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: #10140f;
+    }
+
     .milestone-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1248,36 +1268,43 @@ function buildSharedStyles(accentVar: string): string {
 
     .milestone-card {
       display: grid;
-      grid-template-columns: 52px minmax(0, 1fr);
-      gap: 10px;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 9px;
       padding: 8px 10px;
-      background: var(--bg-card);
+      background: linear-gradient(180deg, #1a1f18 0%, #131712 100%);
       border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--border-gold);
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
 
-    .milestone-card:hover, .milestone-card.is-selected {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    .milestone-card[data-kind="passive"] { border-left-color: var(--kind-passive); }
+    .milestone-card[data-kind="skill"]   { border-left-color: var(--kind-skill); }
+    .milestone-card[data-kind="spell"]   { border-left-color: var(--kind-spell); }
+    .milestone-card[data-kind="mechanic"] { border-left-color: var(--kind-mechanic); }
+    .milestone-card[data-kind="feature"] {
+      border-color: var(--kind-capstone);
+      border-left: 4px solid var(--kind-capstone);
+      background: linear-gradient(180deg, #272113 0%, #161812 100%);
     }
 
-    .milestone-card.is-capstone {
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
       border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #241f14, #171a14);
+      box-shadow: 0 0 14px var(--class-glow);
+      transform: translateY(-1px);
     }
 
     .milestone-icon-box {
       position: relative;
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
     }
 
     .milestone-icon-box img {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
       border-radius: 4px;
       border: 1px solid var(--border-gold);
       display: block;
@@ -1301,10 +1328,32 @@ function buildSharedStyles(accentVar: string): string {
       border-radius: 3px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
+      font-weight: 700;
       text-transform: uppercase;
       border: 1px solid #3c4436;
       background: #121611;
       color: var(--text-secondary);
+    }
+    .type-pill.kind-passive  { color: var(--kind-passive); border-color: rgba(99, 179, 237, 0.45); background: rgba(99, 179, 237, 0.10); }
+    .type-pill.kind-skill    { color: var(--kind-skill); border-color: rgba(246, 173, 85, 0.45); background: rgba(246, 173, 85, 0.10); }
+    .type-pill.kind-spell    { color: var(--kind-spell); border-color: rgba(183, 148, 244, 0.45); background: rgba(183, 148, 244, 0.10); }
+    .type-pill.kind-mechanic { color: var(--kind-mechanic); border-color: rgba(79, 209, 197, 0.45); background: rgba(79, 209, 197, 0.10); }
+    .type-pill.kind-feature  { color: var(--kind-capstone); border-color: rgba(246, 224, 94, 0.65); background: rgba(246, 224, 94, 0.14); }
+
+    .schema-drawer {
+      margin-top: 5px;
+      border-top: 1px dashed #2b3227;
+      padding-top: 4px;
+    }
+    .schema-drawer summary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-gold);
+      cursor: pointer;
+      user-select: none;
+    }
+    .schema-drawer summary:hover {
+      color: #fff2bf;
     }
 
     .dual-unlock-banner {
@@ -1572,6 +1621,7 @@ function buildClassSkillTreeHtml(
   const isSamurai = cls.id === 'samurai';
   const classTitle = isSamurai ? 'Samurai (Bushido)' : 'Ninja (Ninjitsu)';
   const accentVar = isSamurai ? 'var(--samurai-accent)' : 'var(--ninja-accent)';
+  const accentGlow = isSamurai ? 'rgba(217, 72, 59, 0.22)' : 'rgba(52, 179, 122, 0.22)';
   const robeLabel = isSamurai ? 'Hue 1884 (Crimson Lacquer)' : 'Hue 1175 (Midnight Shinobi)';
   const portraitRel = `assets/icons/${cls.id}/portrait-${cls.id}.png`;
   const portrait64Rel = `assets/icons/${cls.id}/portrait-${cls.id}-64.png`;
@@ -1598,6 +1648,23 @@ function buildClassSkillTreeHtml(
       const ability = cls.abilities.find((a) => a.id === m.id);
       const icon64 = `assets/icons/${cls.id}/${m.id}@64.png`;
       const isCapstone = m.level === 60;
+      const modeInfo = ability
+        ? MODE_DESCRIPTIONS[ability.id] ?? {
+            modeA: ability.scalingFormula.summary,
+            modeB: ability.scalingFormula.summary,
+            qCEstimator: ability.scalingFormula.summary,
+          }
+        : null;
+      const refBadge = ability
+        ? ability.spellId !== null
+          ? `spellId: ${ability.spellId}`
+          : ability.weaponAbilityRef !== null
+            ? `weaponRef: ${ability.weaponAbilityRef}`
+            : ability.itemId !== null
+              ? `itemId: ${ability.itemId}`
+              : 'innate'
+        : 'innate';
+
       const dualUnlockHtml =
         !isSamurai && m.level === 35 && shurikenAbility
           ? `
@@ -1605,21 +1672,40 @@ function buildClassSkillTreeHtml(
               <img src="assets/icons/ninja/ninja_shuriken@48.png" alt="Shuriken &amp; Fukiya Volley" />
               <div>
                 <strong>+ Dual L35 Unlock: <span data-en="${escapeHtml(shurikenAbility.name)}" data-pt="${escapeHtml(shurikenAbility.namePtBr)}">${escapeHtml(shurikenAbility.name)}</span></strong>
-                <div class="mono" style="font-size:9px;color:#a39e90;">id: ninja_shuriken | CD: ${shurikenAbility.cooldownMs}ms | Mana: ${shurikenAbility.manaCost} | gump: ${shurikenAbility.gumpIcon}</div>
+                <div class="mono" style="font-size:9px;color:#a39e90;">id: ninja_shuriken | CD: ${shurikenAbility.cooldownMs}ms | Mana: ${shurikenAbility.manaCost} | Stam: ${shurikenAbility.staminaCost} | gump: ${shurikenAbility.gumpIcon}</div>
               </div>
             </div>
           `
           : '';
 
+      const schemaDrawerHtml =
+        ability && modeInfo
+          ? `
+            <details class="schema-drawer" onclick="event.stopPropagation()">
+              <summary>Engine Schema &amp; Mode A/B Spec (<code>${escapeHtml(ability.id)}</code> · ${escapeHtml(refBadge)} · gump ${ability.gumpIcon})</summary>
+              <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
+                kind: <strong style="color:#fff2bf;">${escapeHtml(ability.kind)}</strong> · tab: ${escapeHtml(ability.tab)} · scope: ${escapeHtml(ability.mapScope)} · effect: ${escapeHtml(ability.effectType)} · iconKey: ${escapeHtml(ability.iconKey)} (${escapeHtml(`assets/icons/${cls.id}/${ability.id}@48.png`)})
+                ${ability.customCooldownMs > 0 ? ` · customCD: ${ability.customCooldownMs}ms (&gt;=2000ms)` : ''}
+              </div>
+              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="${escapeHtml(modeInfo.modeA)}" data-mode-b="${escapeHtml(modeInfo.modeB)}">
+                ${escapeHtml(modeInfo.modeA)}
+              </div>
+            </details>
+          `
+          : '';
+
       return `
-        <div class="milestone-card ${idx === 0 ? 'is-selected' : ''} ${isCapstone ? 'is-capstone' : ''}" data-milestone-id="${escapeHtml(m.id)}" onclick="selectAbility('${escapeHtml(m.id)}')">
+        <div class="milestone-card ${idx === 0 ? 'is-selected' : ''} ${isCapstone ? 'is-capstone' : ''}" data-milestone-id="${escapeHtml(m.id)}" data-kind="${escapeHtml(m.type)}" onclick="selectAbility('${escapeHtml(m.id)}')">
           <div class="milestone-icon-box">
             <img src="${escapeHtml(icon64)}" alt="${escapeHtml(m.nameEn)}" />
           </div>
           <div>
             <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <span class="lv-pill">L${m.level}</span>
-              <span class="type-pill">${escapeHtml(m.type)}</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span class="lv-pill">L${m.level}</span>
+                <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">${escapeHtml(m.id)}</code>
+              </div>
+              <span class="type-pill kind-${escapeHtml(m.type)}">${escapeHtml(isCapstone ? 'capstone · feature' : m.type)}</span>
             </div>
             <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="${escapeHtml(m.nameEn)}" data-pt="${escapeHtml(m.namePtBr)}">${escapeHtml(m.nameEn)}</div>
             <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">${escapeHtml(m.namePtBr)}</div>
@@ -1630,54 +1716,12 @@ function buildClassSkillTreeHtml(
                     <span class="badge-cd">CD ${ability.cooldownMs}ms</span>
                     <span class="badge-mana">Mana ${ability.manaCost}</span>
                     <span class="badge-stamina">Stam ${ability.staminaCost}</span>
+                    <span class="badge-meta">${escapeHtml(refBadge)}</span>
                   </div>`
                 : ''
             }
             ${dualUnlockHtml}
-          </div>
-        </div>
-      `;
-    })
-    .join('\n');
-
-  const catalogCardsHtml = cls.abilities
-    .map((ab) => {
-      const icon48 = `assets/icons/${cls.id}/${ab.id}@48.png`;
-      const modeInfo = MODE_DESCRIPTIONS[ab.id] ?? {
-        modeA: ab.scalingFormula.summary,
-        modeB: ab.scalingFormula.summary,
-        qCEstimator: ab.scalingFormula.summary,
-      };
-      const refBadge =
-        ab.spellId !== null
-          ? `spellId: ${ab.spellId}`
-          : ab.weaponAbilityRef !== null
-            ? `weaponRef: ${ab.weaponAbilityRef}`
-            : ab.itemId !== null
-              ? `itemId: ${ab.itemId}`
-              : 'innate';
-
-      return `
-        <div class="catalog-card" data-ability-card="${escapeHtml(ab.id)}" onclick="selectAbility('${escapeHtml(ab.id)}')">
-          <img src="${escapeHtml(icon48)}" alt="${escapeHtml(ab.name)}" />
-          <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <strong style="color:#fff2bf;font-size:12px;" data-en="${escapeHtml(ab.name)}" data-pt="${escapeHtml(ab.namePtBr)}">${escapeHtml(ab.name)}</strong>
-              <span class="lv-pill">Tree L${ab.progressionTreeLevel} / Raw ${ab.unlockLevel}</span>
-            </div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
-              id: <code>${escapeHtml(ab.id)}</code> · kind: ${escapeHtml(ab.kind)} · tab: ${escapeHtml(ab.tab)} · ${escapeHtml(refBadge)} · scope: ${escapeHtml(ab.mapScope)} · gump: ${escapeHtml(ab.gumpIcon)} (${escapeHtml(ab.iconKey)})
-            </div>
-            <div class="cost-badges">
-              <span class="badge-cd">cooldownMs: ${ab.cooldownMs}ms</span>
-              ${ab.customCooldownMs > 0 ? `<span class="badge-cd">customCD: ${ab.customCooldownMs}ms (&gt;=2000ms)</span>` : ''}
-              <span class="badge-mana">manaCost: ${ab.manaCost}</span>
-              <span class="badge-stamina">staminaCost: ${ab.staminaCost}</span>
-              <span class="badge-meta">${escapeHtml(ab.effectType)}</span>
-            </div>
-            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="${escapeHtml(modeInfo.modeA)}" data-mode-b="${escapeHtml(modeInfo.modeB)}">
-              ${escapeHtml(modeInfo.modeA)}
-            </div>
+            ${schemaDrawerHtml}
           </div>
         </div>
       `;
@@ -1761,7 +1805,7 @@ function buildClassSkillTreeHtml(
               })
               .join('');
       return `
-        <div class="hotbar-slot">
+        <div class="hotbar-slot" style="cursor:pointer;" onclick="selectAbility('${escapeHtml(slot.abilityId)}')" title="Click to inspect ${escapeHtml(slot.abilityId)}">
           <div class="slot-num">${slot.slotIndex + 1}</div>
           <div>
             <div style="font-weight:600;color:#fff2bf;font-size:11px;">${escapeHtml(slot.label)} <code style="color:var(--text-secondary);font-size:10px;">(${escapeHtml(slot.abilityId)})</code></div>
@@ -1804,7 +1848,7 @@ function buildClassSkillTreeHtml(
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UO Idle v0.99.0 Beta — ${escapeHtml(classTitle)} [Arvore Skill Tree &amp; Hotbar Workbench</title>
-  <style>${buildSharedStyles(accentVar)}</style>
+  <style>${buildSharedStyles(accentVar, accentGlow)}</style>
 </head>
 <body>
   <div class="beta-shell">
@@ -1861,9 +1905,9 @@ function buildClassSkillTreeHtml(
         </div>
       </header>
 
-      <!-- 3-Column Beta Workbench -->
+      <!-- 3-Column Beta Workbench (Consolidated v2.0 — Zero Duplication) -->
       <div class="workbench-grid">
-        <!-- LEFT COLUMN: Character Identity, 8 Starter Skills, Tokuno Paperdoll & 5-Slot Seeded Hotbar -->
+        <!-- LEFT COLUMN: Character Profile, 8 Starter Skills & Interactive Tokuno Paperdoll -->
         <div class="col-stack">
           <section class="arvore-secao">
             <h2 class="arvore-secao-titulo">
@@ -1878,8 +1922,8 @@ function buildClassSkillTreeHtml(
                 </div>
                 <div>
                   <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">${escapeHtml(classTitle)}</div>
-                  <div class="mono" style="font-size:11px;color:var(--text-secondary);">classId: "${escapeHtml(cls.id)}" · numericId: ${cls.classNumericId} · badge: "${escapeHtml(cls.badge)}"</div>
-                  <div class="mono" style="font-size:10px;color:var(--text-gold);margin-top:3px;">
+                  <div class="mono" style="font-size:10.5px;color:var(--text-secondary);">classId: "${escapeHtml(cls.id)}" · numericId: ${cls.classNumericId} · badge: "${escapeHtml(cls.badge)}"</div>
+                  <div class="mono" style="font-size:10px;color:var(--text-gold);margin-top:2px;">
                     Primary: ${escapeHtml(cls.resourceProfile.primaryResource)} | StartMana: ${cls.resourceProfile.startingManaMax} | MedCap: ${cls.resourceProfile.meditationCap} | Reagents: false | Ammo: false
                   </div>
                   <div class="stat-chips">
@@ -1901,17 +1945,19 @@ function buildClassSkillTreeHtml(
               <div class="kv-grid">
                 ${starterSkillsHtml}
               </div>
-              <div style="margin-top:6px;font-size:10px;color:var(--text-secondary);">
+              <div style="margin-top:5px;font-size:10px;color:var(--text-secondary);">
                 ${
                   isSamurai
                     ? 'Shieldless Bushido Weapon Parry scales via Parrying (50) × Bushido (50) ÷ 48,000 (1H) or 41,140 (2H).'
                     : 'Synergizes with Poisoning (#30) for Infectious Strike, Shuriken, and Fukiya virulent toxin application.'
                 }
               </div>
-              <div style="margin-top:8px;font-size:10px;font-weight:700;color:var(--text-gold);text-transform:uppercase;">Legacy Template Weights (FE = 100%)</div>
-              <div class="kv-grid" style="margin-top:4px;">
-                ${legacyWeightsHtml}
-              </div>
+              <details class="schema-drawer" style="margin-top:6px;">
+                <summary>Legacy Template Weights (FE = 100% Sum)</summary>
+                <div class="kv-grid" style="margin-top:4px;">
+                  ${legacyWeightsHtml}
+                </div>
+              </details>
             </div>
           </section>
 
@@ -1969,8 +2015,8 @@ function buildClassSkillTreeHtml(
                 </div>
               </div>
 
-              <details style="margin-top:6px;">
-                <summary class="mono" style="font-size:9px;color:var(--text-secondary);cursor:pointer;">
+              <details class="schema-drawer" style="margin-top:6px;">
+                <summary>
                   Raw Bundle Starter Layer IDs (kitTokens: [${cls.starterEquipment.kitTokens.map((t) => `"${escapeHtml(t)}"`).join(', ')}])
                 </summary>
                 <div class="kv-grid" style="margin-top:4px;">
@@ -1979,26 +2025,14 @@ function buildClassSkillTreeHtml(
               </details>
             </div>
           </section>
-
-          <section class="arvore-secao">
-            <h2 class="arvore-secao-titulo">
-              <span class="title-left">5-Slot Seeded Hotbar Queue</span>
-              <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
-            </h2>
-            <div class="panel-body">
-              <div class="hotbar-slots">
-                ${hotbarHtml}
-              </div>
-            </div>
-          </section>
         </div>
 
-        <!-- CENTER COLUMN: Winding .arvore-cobra Path & 12 L1-L60 Progression Milestones -->
+        <!-- CENTER COLUMN: Unified L1-L60 [Arvore Progression & Schema Cards (De-Duplicated) -->
         <div class="col-stack">
           <section class="arvore-secao">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">L1–L60 [Arvore Progression Timeline (12 Milestones)</span>
-              <span class="arvore-secao-sub">gE.${escapeHtml(cls.id)} · Click any node to inspect</span>
+              <span class="title-left">Unified L1–L60 [Arvore Progression &amp; Ability Cards (12 Milestones)</span>
+              <span class="arvore-secao-sub">gE.${escapeHtml(cls.id)} &amp; b Catalog · Click any card or expand ▸ Schema</span>
             </h2>
 
             <!-- Live .arvore-cobra 12-node ribbon -->
@@ -2008,28 +2042,31 @@ function buildClassSkillTreeHtml(
               </div>
             </div>
 
-            <!-- 12 Interactive Milestone Cards -->
+            <!-- Semantic Ability-Kind Filter Strip -->
+            <div class="filter-strip">
+              <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+                <span class="mono" style="font-size:10px;color:var(--text-gold);">Filter Kind:</span>
+                <button type="button" class="beta-btn is-active" data-kind-btn="all" onclick="filterAbilityKind('all')">All (12)</button>
+                <button type="button" class="beta-btn" data-kind-btn="passive" onclick="filterAbilityKind('passive')" style="color:var(--kind-passive);">Passive</button>
+                <button type="button" class="beta-btn" data-kind-btn="skill" onclick="filterAbilityKind('skill')" style="color:var(--kind-skill);">Skills</button>
+                <button type="button" class="beta-btn" data-kind-btn="spell" onclick="filterAbilityKind('spell')" style="color:var(--kind-spell);">Spells</button>
+                <button type="button" class="beta-btn" data-kind-btn="special" onclick="filterAbilityKind('special')" style="color:var(--kind-capstone);">Mechanic &amp; Capstone</button>
+              </div>
+              <button type="button" class="beta-btn" onclick="toggleAllSchemaDrawers()">Toggle All ▸ Schema Drawers</button>
+            </div>
+
+            <!-- 12 Unified Interactive Milestone & Schema Cards -->
             <div class="milestone-grid">
               ${milestoneCardsHtml}
             </div>
           </section>
-
-          <section class="arvore-secao">
-            <h2 class="arvore-secao-titulo">
-              <span class="title-left">Class Mastery &amp; Passive Milestone Badges</span>
-              <span class="arvore-secao-sub">Custom 64×64 Beveled Gump Seals</span>
-            </h2>
-            <div class="passive-badges-row">
-              ${passiveBadgesHtml}
-            </div>
-          </section>
         </div>
 
-        <!-- RIGHT COLUMN: Pinned .arvore-dica Tooltip Inspector & Complete Catalog -->
+        <!-- RIGHT COLUMN: Sticky .arvore-dica Inspector, 5-Slot Seeded Hotbar & Mastery Seals -->
         <div class="col-stack">
           <section class="arvore-secao">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Pinned .arvore-dica Tooltip Inspector</span>
+              <span class="title-left">Active Ability Deep-Dive Inspector</span>
               <span class="arvore-secao-sub" id="inspector-mode-pill">Mode A (100% Existing Engine)</span>
             </h2>
             <div class="panel-body">
@@ -2039,14 +2076,14 @@ function buildClassSkillTreeHtml(
                   <div>
                     <div style="display:flex;gap:6px;align-items:center;">
                       <span class="lv-pill" id="insp-level">L${firstAbility.progressionTreeLevel}</span>
-                      <span class="type-pill" id="insp-kind">${escapeHtml(firstAbility.kind)}</span>
+                      <span class="type-pill kind-passive" id="insp-kind">${escapeHtml(firstAbility.kind)}</span>
                       <code style="font-size:10px;color:var(--text-secondary);" id="insp-id">${escapeHtml(firstAbility.id)}</code>
                     </div>
-                    <strong style="display:block;font-size:15px;color:#fff2bf;margin-top:3px;" id="insp-name">${escapeHtml(firstAbility.name)} / ${escapeHtml(firstAbility.namePtBr)}</strong>
+                    <strong style="display:block;font-size:14px;color:#fff2bf;margin-top:3px;" id="insp-name">${escapeHtml(firstAbility.name)} / ${escapeHtml(firstAbility.namePtBr)}</strong>
                     <div class="mono" style="font-size:10px;color:var(--text-gold);" id="insp-qC">qC Estimator: ${escapeHtml(firstMode.qCEstimator)}</div>
                   </div>
                 </div>
-                <p id="insp-desc" data-en="${escapeHtml(firstMilestone.descEn)}" data-pt="${escapeHtml(firstMilestone.descPtBr)}" style="margin:0 0 8px;font-size:12px;color:var(--text-primary);">${escapeHtml(firstMilestone.descEn)}</p>
+                <p id="insp-desc" data-en="${escapeHtml(firstMilestone.descEn)}" data-pt="${escapeHtml(firstMilestone.descPtBr)}" style="margin:0 0 8px;font-size:11.5px;color:var(--text-primary);">${escapeHtml(firstMilestone.descEn)}</p>
                 <div class="cost-badges" id="insp-badges" style="margin-bottom:8px;">
                   <span class="badge-cd">CD: ${firstAbility.cooldownMs}ms</span>
                   <span class="badge-cd">CustomCD: ${firstAbility.customCooldownMs}ms</span>
@@ -2069,17 +2106,33 @@ function buildClassSkillTreeHtml(
                     <span id="insp-mode-b" style="color:var(--text-secondary);">${escapeHtml(firstMode.modeB)}</span>
                   </div>
                 </div>
+                <details class="schema-drawer" style="margin-top:7px;">
+                  <summary>View Live Drop-In JSON Payload (<code>design/drop-in/${escapeHtml(cls.id)}.json</code>)</summary>
+                  <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">${escapeHtml(JSON.stringify(firstAbility, null, 2))}</pre>
+                </details>
               </div>
             </div>
           </section>
 
           <section class="arvore-secao">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Complete Ability Catalog (${cls.abilities.length} Entries)</span>
-              <span class="arvore-secao-sub">48×48 Icons · 1:1 Schema Fields</span>
+              <span class="title-left">5-Slot Seeded Hotbar Queue</span>
+              <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
             </h2>
-            <div class="catalog-list">
-              ${catalogCardsHtml}
+            <div class="panel-body">
+              <div class="hotbar-slots">
+                ${hotbarHtml}
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Class Mastery &amp; Passive Seals</span>
+              <span class="arvore-secao-sub">Oil-Painted 64×64 Gump Badges</span>
+            </h2>
+            <div class="passive-badges-row">
+              ${passiveBadgesHtml}
             </div>
           </section>
         </div>
@@ -2222,6 +2275,37 @@ function buildClassSkillTreeHtml(
         }
         document.getElementById('insp-mode-a').textContent = mInfo.modeA;
         document.getElementById('insp-mode-b').textContent = mInfo.modeB;
+        var jsonEl = document.getElementById('insp-json');
+        if (jsonEl) jsonEl.textContent = JSON.stringify(ab, null, 2);
+      };
+
+      window.filterAbilityKind = function(kindFilter) {
+        var btns = document.querySelectorAll('[data-kind-btn]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-kind-btn') === kindFilter);
+        }
+        var cards = document.querySelectorAll('.milestone-card');
+        for (var j = 0; j < cards.length; j++) {
+          var k = cards[j].getAttribute('data-kind');
+          var show =
+            kindFilter === 'all' ||
+            k === kindFilter ||
+            (kindFilter === 'special' && (k === 'mechanic' || k === 'feature'));
+          cards[j].style.display = show ? 'grid' : 'none';
+        }
+      };
+
+      var drawersOpen = false;
+      window.toggleAllSchemaDrawers = function() {
+        drawersOpen = !drawersOpen;
+        var details = document.querySelectorAll('.milestone-card details.schema-drawer');
+        for (var i = 0; i < details.length; i++) {
+          if (drawersOpen) {
+            details[i].setAttribute('open', 'open');
+          } else {
+            details[i].removeAttribute('open');
+          }
+        }
       };
     })();
   </script>
@@ -2450,8 +2534,11 @@ function buildClassComparisonHtml(
               <div style="display:flex;align-items:center;gap:7px;">
                 ${iconHtml}
                 <div>
-                  <strong style="color:#fff2bf;font-size:11px;display:block;">${escapeHtml(m.nameEn)}</strong>
-                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">${escapeHtml(m.id)} · ${escapeHtml(m.type)}</span>
+                  <div style="display:flex;align-items:center;gap:4px;">
+                    <strong style="color:#fff2bf;font-size:11px;">${escapeHtml(m.nameEn)}</strong>
+                    <span class="type-pill kind-${escapeHtml(m.type)}" style="font-size:8px;padding:0 4px;">${escapeHtml(m.type)}</span>
+                  </div>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">${escapeHtml(m.id)}</span>
                   ${dualNote}
                 </div>
               </div>
@@ -2730,32 +2817,23 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         </div>
       </header>
 
-      <!-- SECTION 1: 5-Class L1-L60 Structural Parity Matrix -->
-      <section class="arvore-secao">
-        <h2 class="arvore-secao-titulo">
-          <span class="title-left">1. 5-Class L1–L60 Progression Structural Parity Matrix</span>
-          <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
-        </h2>
-        <div class="panel-body" style="overflow-x:auto;">
-          <table class="comp-table">
-            <thead>
-              <tr>
-                <th style="width:54px;">Tier</th>
-                ${classHeadersHtml}
-              </tr>
-            </thead>
-            <tbody>
-              ${matrixRowsHtml}
-            </tbody>
-          </table>
+      <!-- Interactive Workbench Sub-Tab Navigation -->
+      <div class="filter-bar" style="margin-bottom:0;background:linear-gradient(180deg,#1a1f18,#10140f);border-color:#5d4a2b;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <span class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;">WORKBENCH VIEW:</span>
+          <button type="button" class="beta-btn is-active" data-comp-tab="all" onclick="switchCompTab('all')">All Sections (Complete Executive Sheet)</button>
+          <button type="button" class="beta-btn" data-comp-tab="sim" onclick="switchCompTab('sim')">1. Combat Simulator &amp; Visual Charts</button>
+          <button type="button" class="beta-btn" data-comp-tab="matrix" onclick="switchCompTab('matrix')">2. 5-Class L1–L60 Progression Matrix</button>
+          <button type="button" class="beta-btn" data-comp-tab="armaments" onclick="switchCompTab('armaments')">3. Tokuno Armaments &amp; C# Server Hooks</button>
         </div>
-      </section>
+        <span class="mono" style="font-size:10px;color:var(--text-secondary);">Progressive Disclosure enabled on Secondary Tables</span>
+      </div>
 
-      <!-- SECTION 2: Interactive 5-Class Combat Parity Telemetry + Visual SVG Progression Curves -->
-      <section class="arvore-secao">
+      <!-- SECTION 1: Interactive 5-Class Combat Parity Telemetry + Visual SVG Progression Curves -->
+      <section class="arvore-secao" data-comp-section="sim">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">2. Deterministic 5-Class Combat Simulation Telemetry &amp; Visual Charts (100ms Tick Engine)</span>
-          <span class="arvore-secao-sub">Sources: parity-5class-v0.99.0.json &amp; gear-and-waves-v1.1.json</span>
+          <span class="title-left">1. Deterministic 5-Class Combat Simulation Telemetry &amp; Visual Charts (100ms Tick Engine)</span>
+          <span class="arvore-secao-sub">Sources: parity-5class-v0.99.0.json &amp; gear-and-waves-v1.1.json · 11/11 Unit Suites</span>
         </h2>
         <div class="panel-body">
           <div class="filter-bar">
@@ -2843,20 +2921,12 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               ${rotationStripsHtml}
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- SECTION 3: Material Tier (Iron -> Valorite) & 10-Wave Continuous Dungeon Endurance -->
-      <section class="arvore-secao">
-        <h2 class="arvore-secao-titulo">
-          <span class="title-left">3. Material Tier Scaling (Iron → Valorite) &amp; 10-Wave Dungeon Endurance</span>
-          <span class="arvore-secao-sub">Source: data/sim-baselines/gear-and-waves-v1.1.json · 11/11 Deterministic Test Suites</span>
-        </h2>
-        <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
-            <div>
+          <!-- Consolidated Material Tier (Iron -> Valorite) & 10-Wave Dungeon Endurance -->
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;margin-top:12px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
-                9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Strictly Monotonic DPS &amp; EHP/s)
+                9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Monotonic DPS &amp; EHP/s)
               </div>
               <table class="comp-table">
                 <thead>
@@ -2874,7 +2944,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 </tbody>
               </table>
             </div>
-            <div>
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
                 10-Wave Continuous Dungeon Pull Endurance (8 Trash + 2 Boss Waves, Zero Reset)
               </div>
@@ -2903,14 +2973,35 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         </div>
       </section>
 
-      <!-- SECTION 4: Tokuno Armaments, Consumables & Affix Showcase -->
-      <section class="arvore-secao">
+      <!-- SECTION 2: 5-Class L1-L60 Structural Parity Matrix -->
+      <section class="arvore-secao" data-comp-section="matrix">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">4. Authentic UO Tokuno Armaments, Ninjitsu Consumables &amp; Affix Pools</span>
-          <span class="arvore-secao-sub">Source: design/drop-in/items-bushido-ninjitsu.json &amp; mockups/assets/items/</span>
+          <span class="title-left">2. 5-Class L1–L60 Progression Structural Parity Matrix</span>
+          <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
+        </h2>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th style="width:54px;">Tier</th>
+                ${classHeadersHtml}
+              </tr>
+            </thead>
+            <tbody>
+              ${matrixRowsHtml}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Tokuno Armaments, Consumables & C# Server Hooks (Consolidated) -->
+      <section class="arvore-secao" data-comp-section="armaments">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">3. Authentic UO Tokuno Armaments, Ninjitsu Tools &amp; &lt;20 LOC C# Server Hooks</span>
+          <span class="arvore-secao-sub">design/drop-in/items-bushido-ninjitsu.json · classes-patch.js · BaseWeapon.cs</span>
         </h2>
         <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
             <div>
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Authentic art.png Sprites · Iron → Valorite)</div>
               <div class="kv-grid">
@@ -2921,58 +3012,46 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 ${consumablesHtml}
               </div>
             </div>
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Drop-In Tokuno Weapon Definitions</div>
-              <table class="comp-table" style="margin-bottom:10px;">
-                <thead>
-                  <tr>
-                    <th>Weapon</th>
-                    <th>Item ID</th>
-                    <th>Skill / Layer</th>
-                    <th>Spd</th>
-                    <th>Dmg</th>
-                    <th>Primary / Secondary</th>
-                    <th>Synergy</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${weaponsTableHtml}
-                </tbody>
-              </table>
-
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">9 Material Tiers (1.00x Iron → 1.85x Valorite)</div>
-              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">
-                ${materialTiersHtml}
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div>
+                <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:4px;">
+                  Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
+                </div>
+                <pre class="code-card" style="margin:0;"><code>${escapeHtml(samuraiCSharp)}</code></pre>
               </div>
-
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">10 Bushido &amp; Ninjitsu Equipment Affix Pools</div>
-              <div class="kv-grid">
-                ${affixHtml}
+              <div>
+                <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:4px;">
+                  Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
+                </div>
+                <pre class="code-card" style="margin:0;"><code>${escapeHtml(ninjaCSharp)}</code></pre>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 5: Mode A vs Mode B Implementation & <20 LOC C# Server Hook Inspector -->
-      <section class="arvore-secao">
-        <h2 class="arvore-secao-titulo">
-          <span class="title-left">5. Mode A (Zero Engine Changes) vs Mode B (&lt;20 LOC C# Server Hooks)</span>
-          <span class="arvore-secao-sub">design/drop-in/classes-patch.js · BaseWeapon.cs</span>
-        </h2>
-        <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:6px;">
-                Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
-              </div>
-              <pre class="code-card"><code>${escapeHtml(samuraiCSharp)}</code></pre>
-            </div>
-            <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:6px;">
-                Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
-              </div>
-              <pre class="code-card"><code>${escapeHtml(ninjaCSharp)}</code></pre>
+              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+                <summary style="font-size:10.5px;">Expand Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools</summary>
+                <div style="margin-top:8px;">
+                  <table class="comp-table" style="margin-bottom:8px;">
+                    <thead>
+                      <tr>
+                        <th>Weapon</th>
+                        <th>Item ID</th>
+                        <th>Skill / Layer</th>
+                        <th>Spd</th>
+                        <th>Dmg</th>
+                        <th>Primary / Secondary</th>
+                        <th>Synergy</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${weaponsTableHtml}
+                    </tbody>
+                  </table>
+                  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
+                    ${materialTiersHtml}
+                  </div>
+                  <div class="kv-grid">
+                    ${affixHtml}
+                  </div>
+                </div>
+              </details>
             </div>
           </div>
           <div style="margin-top:8px;padding:8px 10px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;color:var(--text-secondary);">
@@ -2990,6 +3069,18 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       var payload = JSON.parse(document.getElementById('mockup-data').textContent);
       var parityData = payload.parity;
       var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss' };
+
+      window.switchCompTab = function(tabId) {
+        var btns = document.querySelectorAll('[data-comp-tab]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-comp-tab') === tabId);
+        }
+        var secs = document.querySelectorAll('[data-comp-section]');
+        for (var j = 0; j < secs.length; j++) {
+          var s = secs[j].getAttribute('data-comp-section');
+          secs[j].style.display = (tabId === 'all' || s === tabId) ? 'block' : 'none';
+        }
+      };
 
       window.updateSimFilter = function(kind, val) {
         state[kind] = val;
@@ -3382,10 +3473,10 @@ function captureScreenshots(): void {
     return;
   }
   const targets = [
-    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png' },
-    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png' },
-    { html: 'class-comparison.html', png: 'class-comparison.png' },
-    { html: 'index.html', png: 'portal-index.png' },
+    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 1840 },
+    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 1880 },
+    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3420 },
+    { html: 'index.html', png: 'portal-index.png', height: 1460 },
   ];
 
   for (const t of targets) {
@@ -3398,7 +3489,7 @@ function captureScreenshots(): void {
         '--headless=new',
         '--disable-gpu',
         '--hide-scrollbars',
-        '--window-size=1600,1400',
+        `--window-size=1600,${t.height}`,
         '--device-scale-factor=2',
         `--screenshot=${pngPath}`,
         fileUrl,

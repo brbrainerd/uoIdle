@@ -10,19 +10,25 @@
       --bg-canvas: #0b0d0a;
       --bg-panel: #121510;
       --bg-card: #181c16;
-      --bg-card-hover: #20261d;
+      --bg-card-hover: #21271e;
       --border-subtle: #2a3026;
       --border-gold: #c9a227;
       --border-gold-bright: #e5c158;
       --text-primary: #e8e4d9;
       --text-secondary: #a39e90;
       --text-gold: #d4af37;
-      --samurai-accent: #c83e37;
-      --ninja-accent: #2e9e6b;
+      --samurai-accent: #d9483b;
+      --ninja-accent: #34b37a;
       --mana-blue: #4a90e2;
       --stamina-amber: #e2a04a;
       --cd-purple: #9b6be2;
+      --kind-passive: #63b3ed;
+      --kind-skill: #f6ad55;
+      --kind-spell: #b794f4;
+      --kind-mechanic: #4fd1c5;
+      --kind-capstone: #f6e05e;
       --class-accent: var(--border-gold);
+      --class-glow: rgba(201, 162, 39, 0.14);
     }
 
     * {
@@ -32,7 +38,10 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      background:
+        radial-gradient(circle at 18% 0%, var(--class-glow) 0%, transparent 44%),
+        radial-gradient(circle at 82% 8%, rgba(201, 162, 39, 0.08) 0%, transparent 48%),
+        var(--bg-canvas);
       color: var(--text-primary);
       font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 13px;
@@ -227,7 +236,7 @@
 
     .workbench-grid {
       display: grid;
-      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      grid-template-columns: 356px minmax(0, 1fr) 396px;
       gap: 12px;
       align-items: start;
     }
@@ -245,20 +254,20 @@
     /* Portrait & Identity */
     .identity-hero {
       display: grid;
-      grid-template-columns: 116px minmax(0, 1fr);
-      gap: 12px;
+      grid-template-columns: 94px minmax(0, 1fr);
+      gap: 10px;
       align-items: center;
     }
 
     .portrait-frame {
       position: relative;
-      width: 116px;
-      height: 116px;
-      border: 2px solid var(--border-gold);
+      width: 94px;
+      height: 94px;
+      border: 2px solid var(--class-accent);
       border-radius: 6px;
       overflow: hidden;
       background: #080907;
-      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 18px var(--class-glow);
     }
 
     .portrait-frame img.main-portrait {
@@ -436,7 +445,18 @@
       text-overflow: ellipsis;
     }
 
-    /* 12 Milestone Cards Grid */
+    /* 12 Unified Milestone + Catalog Cards Grid (De-Duplicated v2.0) */
+    .filter-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: #10140f;
+    }
+
     .milestone-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -446,36 +466,43 @@
 
     .milestone-card {
       display: grid;
-      grid-template-columns: 52px minmax(0, 1fr);
-      gap: 10px;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 9px;
       padding: 8px 10px;
-      background: var(--bg-card);
+      background: linear-gradient(180deg, #1a1f18 0%, #131712 100%);
       border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--border-gold);
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
 
-    .milestone-card:hover, .milestone-card.is-selected {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    .milestone-card[data-kind="passive"] { border-left-color: var(--kind-passive); }
+    .milestone-card[data-kind="skill"]   { border-left-color: var(--kind-skill); }
+    .milestone-card[data-kind="spell"]   { border-left-color: var(--kind-spell); }
+    .milestone-card[data-kind="mechanic"] { border-left-color: var(--kind-mechanic); }
+    .milestone-card[data-kind="feature"] {
+      border-color: var(--kind-capstone);
+      border-left: 4px solid var(--kind-capstone);
+      background: linear-gradient(180deg, #272113 0%, #161812 100%);
     }
 
-    .milestone-card.is-capstone {
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
       border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #241f14, #171a14);
+      box-shadow: 0 0 14px var(--class-glow);
+      transform: translateY(-1px);
     }
 
     .milestone-icon-box {
       position: relative;
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
     }
 
     .milestone-icon-box img {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
       border-radius: 4px;
       border: 1px solid var(--border-gold);
       display: block;
@@ -499,10 +526,32 @@
       border-radius: 3px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
+      font-weight: 700;
       text-transform: uppercase;
       border: 1px solid #3c4436;
       background: #121611;
       color: var(--text-secondary);
+    }
+    .type-pill.kind-passive  { color: var(--kind-passive); border-color: rgba(99, 179, 237, 0.45); background: rgba(99, 179, 237, 0.10); }
+    .type-pill.kind-skill    { color: var(--kind-skill); border-color: rgba(246, 173, 85, 0.45); background: rgba(246, 173, 85, 0.10); }
+    .type-pill.kind-spell    { color: var(--kind-spell); border-color: rgba(183, 148, 244, 0.45); background: rgba(183, 148, 244, 0.10); }
+    .type-pill.kind-mechanic { color: var(--kind-mechanic); border-color: rgba(79, 209, 197, 0.45); background: rgba(79, 209, 197, 0.10); }
+    .type-pill.kind-feature  { color: var(--kind-capstone); border-color: rgba(246, 224, 94, 0.65); background: rgba(246, 224, 94, 0.14); }
+
+    .schema-drawer {
+      margin-top: 5px;
+      border-top: 1px dashed #2b3227;
+      padding-top: 4px;
+    }
+    .schema-drawer summary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-gold);
+      cursor: pointer;
+      user-select: none;
+    }
+    .schema-drawer summary:hover {
+      color: #fff2bf;
     }
 
     .dual-unlock-banner {
