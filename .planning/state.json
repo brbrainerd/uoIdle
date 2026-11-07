@@ -31,13 +31,13 @@
     {
       "number": "6",
       "name": "Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging",
-      "status": "pending"
+      "status": "complete"
     }
   ],
   "next": {
-    "command": "/gsd-progress --next",
-    "label": "Advance to the next step (plan phase 6)",
-    "reason": "Phase 6 of 6 — needs a plan"
+    "command": "/gsd-new-milestone",
+    "label": "Start a new milestone",
+    "reason": "All phases complete — start a new milestone"
   },
-  "updated_at": "2026-11-07T07:33:29.898Z"
+  "updated_at": "2026-11-07T08:17:03.588Z"
 }
