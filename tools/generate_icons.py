@@ -22,6 +22,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -37,11 +38,15 @@ MANIFEST_PATH = ICONS_DIR / "manifest.json"
 SAMURAI_JSON = ROOT_DIR / "design" / "drop-in" / "samurai.json"
 NINJA_JSON = ROOT_DIR / "design" / "drop-in" / "ninja.json"
 
-AI_PORTRAIT_SAMURAI = Path(
-    "/Users/brbrainerd/.gemini/antigravity/brain/2086db53-463a-4907-9d06-57f5fa8496e9/portrait_samurai_base_1794037728508.jpg"
+AI_PORTRAIT_SAMURAI = (
+    Path(os.environ["AI_PORTRAIT_SAMURAI"])
+    if os.environ.get("AI_PORTRAIT_SAMURAI")
+    else None
 )
-AI_PORTRAIT_NINJA = Path(
-    "/Users/brbrainerd/.gemini/antigravity/brain/2086db53-463a-4907-9d06-57f5fa8496e9/portrait_ninja_base_1794037736954.jpg"
+AI_PORTRAIT_NINJA = (
+    Path(os.environ["AI_PORTRAIT_NINJA"])
+    if os.environ.get("AI_PORTRAIT_NINJA")
+    else None
 )
 
 CANVAS_SIZE = 256
@@ -720,7 +725,7 @@ def build_class_portraits() -> None:
     ]
 
     for is_samurai, ai_src, out_256, out_64, accent in configs:
-        if ai_src.exists():
+        if ai_src is not None and ai_src.exists():
             raw = Image.open(ai_src).convert("RGBA")
             raw_256 = raw.resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
             framed_256 = draw_uo_beveled_frame(raw_256, accent, is_rank2=False, is_badge=True)

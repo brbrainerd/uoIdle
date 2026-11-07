@@ -8,7 +8,9 @@ const ROOT_DIR = process.cwd();
 const MOCKUPS_DIR = path.join(ROOT_DIR, 'mockups');
 const SCREENSHOTS_DIR = path.join(MOCKUPS_DIR, 'screenshots');
 const ICONS_DIR = path.join(MOCKUPS_DIR, 'assets', 'icons');
-const CHROME_BIN = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_BIN =
+  process.env.CHROME_BIN ??
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 interface ItemsDataset {
   version: string;
@@ -2078,6 +2080,9 @@ function compileAllMockups(): {
 
 function captureScreenshots(): void {
   fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
+  if (!fs.existsSync(CHROME_BIN)) {
+    return;
+  }
   const targets = [
     { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png' },
     { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png' },
