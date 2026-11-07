@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline** - Private repo verification, adapted `kb.py` claim linter with credential sanitization, formatted/AST-sliced UO Idle bundle extracts, and canonical ModernUO C# source snapshots. (completed 2026-11-06)
 - [x] **Phase 2: Core UO Idle Engine & Systems Knowledgebase** - Claim-verified KB pages for combat tick loops, hit/crit/mitigation math, resource regen, status opcodes, progression/equipment systems, and the Engine Capability Matrix. (completed 2026-11-07)
-- [ ] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules.
+- [x] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules. (completed 2026-11-07)
 - [ ] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines.
 - [ ] **Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code** - Numerically balanced Samurai and Ninja skill lines, Tokuno equipment affixes, Mode A/Mode B drop-in JSON/JS payloads, formal specs, and automated parity proof.
 - [ ] **Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging** - Custom dark-fantasy UO class portraits and skill icons rendered inside self-contained, pixel-accurate `uoidle.com/beta` HTML/CSS skill tree mockups.
@@ -85,7 +85,7 @@ Plans:
   2. Developer can inspect `mechanics/topics/class-structural-parity.md` and `mechanics/topics/combat-niches.md` defining the exact unlock level tier brackets, active/passive slot ratios, and combat role boundaries across all live classes.
   3. Developer can run schema validation against `schemas/{class,skill,effect}.schema.json` (and TypeScript `zod` definitions) and verify that the extracted live Warrior, Mage, and Ranger JSON payloads pass 100% validation.
 
-**Plans**: 2 plans
+**Plans**: 2/2 plans executed
 
 Plans:
 **Wave 1**
@@ -94,7 +94,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 03-02-PLAN.md — Canonical JSON Schemas (`schemas/{effect,skill,class}.schema.json`), TypeScript `zod` validator (`src/schemas/skill.schema.ts`), extracted live class JSON definitions (`data/live-classes/{warrior,mage,ranger}.json`), and CLI verification (`tools/validate_skills.ts`) (`INDEX-04`)
+- [x] 03-02-PLAN.md — Canonical JSON Schemas (`schemas/{effect,skill,class}.schema.json`), TypeScript `zod` validator (`src/schemas/skill.schema.ts`), extracted live class JSON definitions (`data/live-classes/{warrior,mage,ranger}.json`), and CLI verification (`tools/validate_skills.ts`) (`INDEX-04`)
 
 ### Phase 4: ModernUO Reference KB & Baseline Combat Simulator
 
@@ -165,7 +165,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
 | 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete    | 2026-11-07 |
-| 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 1/2 | In progress | - |
+| 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 2/2 | Complete    | 2026-11-07 |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |
 | 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 0/2 | Not started | - |
