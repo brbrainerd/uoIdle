@@ -958,8 +958,33 @@ export function applyDropInClassPatch(bundleTables = {}) {
     ];
   }
 
-  target.qC = COMBAT_ESTIMATOR_PATCH.estimateBushidoNinjitsuAbility;
-  target.i18n = { ...(target.i18n || {}), ...I18N_LOCALE_PATCH };
+  const prevEstimator = typeof target.qC === 'function' ? target.qC : null;
+  target.qC = function patchedCombatEstimator(abilityId, tacticsOrSkill, rank) {
+    const res = COMBAT_ESTIMATOR_PATCH.estimateBushidoNinjitsuAbility(
+      abilityId,
+      tacticsOrSkill,
+      rank
+    );
+    return res !== null ? res : prevEstimator ? prevEstimator(abilityId, tacticsOrSkill, rank) : null;
+  };
+
+  const prevI18n = target.i18n || {};
+  target.i18n = {
+    ...prevI18n,
+    en: {
+      ...(prevI18n.en || {}),
+      classes: { ...(prevI18n.en?.classes || {}), ...I18N_LOCALE_PATCH.en.classes },
+      abilities: { ...(prevI18n.en?.abilities || {}), ...I18N_LOCALE_PATCH.en.abilities },
+    },
+    'pt-BR': {
+      ...(prevI18n['pt-BR'] || {}),
+      classes: { ...(prevI18n['pt-BR']?.classes || {}), ...I18N_LOCALE_PATCH['pt-BR'].classes },
+      abilities: {
+        ...(prevI18n['pt-BR']?.abilities || {}),
+        ...I18N_LOCALE_PATCH['pt-BR'].abilities,
+      },
+    },
+  };
   return target;
 }
 
