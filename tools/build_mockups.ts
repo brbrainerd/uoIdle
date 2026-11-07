@@ -2868,7 +2868,8 @@ function buildClassComparisonHtml(
       .map((cid) => {
         const col = classColors[cid] ?? '#c9a227';
         const pts = brackets.map((b, idx) => {
-          const rec = parity.mode_b.scenarios.find(
+          const scenarios = parity.mode_a?.scenarios ?? parity.mode_b.scenarios;
+          const rec = scenarios.find(
             (s) => s.classId === cid && s.bracketId === b && s.archetypeId === 'low_def_boss'
           );
           const v = rec ? rec[metricKey] : 0;
@@ -2894,13 +2895,17 @@ function buildClassComparisonHtml(
     </svg>`;
   };
 
-  const dpsProgressionSvg = buildProgressionSvg('sustainedDps', 350, 'DPS');
-  const ehpProgressionSvg = buildProgressionSvg('ehpPerSec', 320, 'EHP/s');
+  const dpsProgressionSvg = buildProgressionSvg('sustainedDps', 420, 'DPS');
+  const ehpProgressionSvg = buildProgressionSvg('ehpPerSec', 350, 'EHP/s');
 
-  // 5-Channel Damage Breakdown Stacked Horizontal Bars (L60 low_def_boss Mode B)
-  const breakdownL60 = gearWaves.damageBreakdowns.filter(
-    (d) => d.bracketId === 'L60' && d.archetypeId === 'low_def_boss'
+  // 5-Channel Damage Breakdown Stacked Horizontal Bars (L60 low_def_boss Mode A with Mode B fallback)
+  const breakdownModeA = gearWaves.damageBreakdowns.filter(
+    (d) => d.bracketId === 'L60' && d.archetypeId === 'low_def_boss' && (!d.mode || d.mode === 'mode_a')
   );
+  const breakdownL60 =
+    breakdownModeA.length > 0
+      ? breakdownModeA
+      : gearWaves.damageBreakdowns.filter((d) => d.bracketId === 'L60' && d.archetypeId === 'low_def_boss');
   const breakdownBarsHtml = breakdownL60
     .map((d) => {
       const tot = Math.max(d.totalDps, 0.01);
