@@ -111,9 +111,13 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
+**Wave 1**
 
-- [ ] 04-01: Claim-verified ModernUO Bushido & Ninjitsu KB pages and side-by-side idle adaptation matrix (`design/MODERNUO_MAPPING.md`) (`SIM-01`)
-- [ ] 04-02: Deterministic tick-accurate combat simulator (`tools/sim_balance.ts` / `sim/`) and live Warrior, Mage, and Ranger baseline curves (`SIM-02`)
+- [ ] 04-01-PLAN.md — Claim-verified ModernUO Bushido & Ninjitsu KB pages (`mechanics/modernuo/*.md`, `mechanics/classes/modernuo-{bushido,ninjitsu}.md`) and side-by-side idle adaptation matrix (`design/MODERNUO_MAPPING.md`) (`SIM-01`)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-02-PLAN.md — Deterministic tick-accurate combat simulator (`src/sim/`, `tools/sim_balance.ts`) and live Warrior, Mage, and Ranger baseline curves (`data/sim-baselines/baseline-v0.99.0.json`) (`SIM-02`)
 
 ### Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code
 
