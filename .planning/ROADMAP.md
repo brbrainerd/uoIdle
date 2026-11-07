@@ -90,7 +90,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — Claim-verified KB pages for live Warrior, Mage, and Ranger skill lines (`mechanics/classes/{warrior,mage,ranger}.md`) and cross-class structural parity & combat niches (`mechanics/topics/{class-structural-parity,combat-niches}.md`) (`INDEX-03`, `INDEX-04`)
+- [x] 03-01-PLAN.md — Claim-verified KB pages for live Warrior, Mage, and Ranger skill lines (`mechanics/classes/{warrior,mage,ranger}.md`) and cross-class structural parity & combat niches (`mechanics/topics/{class-structural-parity,combat-niches}.md`) (`INDEX-03`, `INDEX-04`)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -165,7 +165,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
 | 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete    | 2026-11-07 |
-| 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 0/2 | Not started | - |
+| 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 1/2 | In progress | - |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |
 | 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 0/2 | Not started | - |
