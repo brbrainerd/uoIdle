@@ -37,6 +37,7 @@
     html, body {
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 18% 0%, var(--class-glow) 0%, transparent 44%),
         radial-gradient(circle at 82% 8%, rgba(201, 162, 39, 0.08) 0%, transparent 48%),
@@ -51,9 +52,11 @@
     .mono, code, pre, .num {
       font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
       font-variant-numeric: tabular-nums;
+      overflow-wrap: break-word;
     }
 
     .beta-shell {
+      width: 100%;
       max-width: 1560px;
       margin: 0 auto;
       padding: 12px 16px 24px;
@@ -64,6 +67,7 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+      min-width: 0;
       color: #f6ecd4;
       gap: 10px;
     }
@@ -86,12 +90,13 @@
 
     .arvore-nivel {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 8px 10px;
       min-height: 36px;
       padding-right: 12px;
       border-right: 1px solid #725b31;
-      white-space: nowrap;
+      min-width: 0;
     }
 
     .arvore-nivel strong {
@@ -99,14 +104,16 @@
       font-family: 'Cinzel', Georgia, serif;
       font-size: 15px;
       letter-spacing: 0.04em;
+      overflow-wrap: break-word;
     }
 
     .arvore-saldos {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 6px;
       flex: 1 1 auto;
       justify-content: center;
+      min-width: 0;
     }
 
     .arvore-saldo {
@@ -116,7 +123,8 @@
       gap: 8px;
       padding: 2px 10px;
       border-left: 1px solid #725b31;
-      white-space: nowrap;
+      flex: 1 1 150px;
+      min-width: 140px;
     }
 
     .arvore-saldo strong {
@@ -185,6 +193,7 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .hue-swatch {
@@ -194,10 +203,12 @@
       background: var(--class-accent);
       border: 1px solid #fff2bf;
       display: inline-block;
+      flex-shrink: 0;
     }
 
     .arvore-secao {
       min-width: 0;
+      max-width: 100%;
       border: 1px solid #5d4a2b;
       border-radius: 4px;
       background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
@@ -206,7 +217,8 @@
 
     .arvore-secao-titulo {
       display: flex;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 4px 8px;
       align-items: center;
       justify-content: space-between;
       margin: 0;
@@ -218,6 +230,12 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      min-width: 0;
+    }
+
+    .arvore-secao-titulo .title-left {
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .arvore-secao-titulo .title-left::before {
@@ -231,6 +249,8 @@
       color: var(--text-secondary);
       font-weight: 400;
       text-transform: none;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .workbench-grid {
@@ -238,16 +258,19 @@
       grid-template-columns: 356px minmax(0, 1fr) 396px;
       gap: 12px;
       align-items: start;
+      min-width: 0;
     }
 
     .col-stack {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      min-width: 0;
     }
 
     .panel-body {
       padding: 10px 12px;
+      min-width: 0;
     }
 
     /* Portrait & Identity */
@@ -256,6 +279,11 @@
       grid-template-columns: 94px minmax(0, 1fr);
       gap: 10px;
       align-items: center;
+      min-width: 0;
+    }
+
+    .identity-hero > div {
+      min-width: 0;
     }
 
     .portrait-frame {
@@ -267,6 +295,7 @@
       overflow: hidden;
       background: #080907;
       box-shadow: 0 0 18px var(--class-glow);
+      flex-shrink: 0;
     }
 
     .portrait-frame img.main-portrait {
@@ -278,18 +307,18 @@
 
     .portrait-mini-badge {
       position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 28px;
-      height: 28px;
+      bottom: 2px;
+      right: 2px;
+      width: 22px;
+      height: 22px;
       border: 1px solid var(--border-gold-bright);
-      border-radius: 4px;
+      border-radius: 3px;
       background: #0b0d0a;
     }
 
     .stat-chips {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
@@ -300,6 +329,7 @@
       border-radius: 4px;
       padding: 4px 6px;
       text-align: center;
+      min-width: 0;
     }
 
     .stat-chip span {
@@ -320,22 +350,32 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 5px;
+      min-width: 0;
     }
 
     .kv-item {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 4px 8px;
       padding: 4px 8px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 3px;
       font-size: 11px;
+      min-width: 0;
+    }
+
+    .kv-item > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .kv-item .k {
       color: var(--text-primary);
       text-transform: capitalize;
+      min-width: 0;
     }
 
     .kv-item .v {
@@ -348,6 +388,7 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      min-width: 0;
     }
 
     .hotbar-slot {
@@ -360,6 +401,12 @@
       border: 1px solid var(--border-subtle);
       border-left: 3px solid var(--class-accent);
       border-radius: 4px;
+      min-width: 0;
+    }
+
+    .hotbar-slot > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .slot-num {
@@ -373,9 +420,10 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       color: var(--text-gold);
+      flex-shrink: 0;
     }
 
-    /* Winding .arvore-cobra ribbon */
+    /* Winding .arvore-cobra ribbon (2 rows x 6 milestones — zero circle/label overlap) */
     .arvore-cobra-wrap {
       padding: 10px 12px;
       border-bottom: 1px solid #2a3026;
@@ -384,9 +432,9 @@
 
     .arvore-cobra {
       display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 4px;
-      align-items: center;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px 8px;
+      align-items: start;
     }
 
     .arvore-col {
@@ -395,6 +443,8 @@
       align-items: center;
       gap: 4px;
       cursor: pointer;
+      min-width: 0;
+      width: 100%;
     }
 
     .arvore-lv {
@@ -413,6 +463,7 @@
       border-radius: 50%;
       background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
       overflow: hidden;
+      flex-shrink: 0;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -435,13 +486,15 @@
 
     .arvore-nome {
       color: #f6ecd4;
-      font-size: 9px;
-      line-height: 1.1;
+      font-size: 9.5px;
+      line-height: 1.2;
       text-align: center;
-      max-width: 64px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width: 100%;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      padding: 0 2px;
     }
 
     /* 12 Unified Milestone + Catalog Cards Grid (De-Duplicated v2.0) */
@@ -461,6 +514,7 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 10px 12px;
+      min-width: 0;
     }
 
     .milestone-card {
@@ -474,6 +528,21 @@
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
+      min-width: 0;
+    }
+
+    .milestone-card > div {
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+
+    .milestone-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px 6px;
+      min-width: 0;
     }
 
     .milestone-card[data-kind="passive"] { border-left-color: var(--kind-passive); }
@@ -497,6 +566,7 @@
       position: relative;
       width: 50px;
       height: 50px;
+      flex-shrink: 0;
     }
 
     .milestone-icon-box img {
@@ -517,6 +587,7 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .type-pill {
@@ -530,6 +601,7 @@
       border: 1px solid #3c4436;
       background: #121611;
       color: var(--text-secondary);
+      white-space: nowrap;
     }
     .type-pill.kind-passive  { color: var(--kind-passive); border-color: rgba(99, 179, 237, 0.45); background: rgba(99, 179, 237, 0.10); }
     .type-pill.kind-skill    { color: var(--kind-skill); border-color: rgba(246, 173, 85, 0.45); background: rgba(246, 173, 85, 0.10); }
@@ -541,13 +613,17 @@
       margin-top: 5px;
       border-top: 1px dashed #2b3227;
       padding-top: 4px;
+      min-width: 0;
     }
     .schema-drawer summary {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
+      line-height: 1.35;
       color: var(--text-gold);
       cursor: pointer;
       user-select: none;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .schema-drawer summary:hover {
       color: #fff2bf;
@@ -564,6 +640,12 @@
       gap: 7px;
       font-size: 10px;
       color: #b8f5d8;
+      min-width: 0;
+    }
+
+    .dual-unlock-banner > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .dual-unlock-banner img {
@@ -571,6 +653,7 @@
       height: 28px;
       border-radius: 3px;
       border: 1px solid var(--border-gold);
+      flex-shrink: 0;
     }
 
     /* Pinned Live Tooltip Inspector (.arvore-dica) */
@@ -581,6 +664,7 @@
       background: #0c0e0cf7;
       color: #f6ecd4;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+      min-width: 0;
     }
 
     .dica-header {
@@ -591,6 +675,12 @@
       padding-bottom: 8px;
       border-bottom: 1px solid #3c3425;
       margin-bottom: 8px;
+      min-width: 0;
+    }
+
+    .dica-header > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .dica-header img {
@@ -598,37 +688,15 @@
       height: 56px;
       border-radius: 4px;
       border: 1px solid var(--border-gold-bright);
+      flex-shrink: 0;
     }
 
-    /* Ability Catalog Cards */
-    .catalog-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      padding: 10px 12px;
-    }
-
-    .catalog-card {
+    .inspector-modes-grid {
       display: grid;
-      grid-template-columns: 48px minmax(0, 1fr);
-      gap: 10px;
-      padding: 7px 9px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .catalog-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-    }
-
-    .catalog-card img {
-      width: 48px;
-      height: 48px;
-      border-radius: 4px;
-      display: block;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      font-size: 10px;
+      min-width: 0;
     }
 
     .cost-badges {
@@ -680,9 +748,10 @@
 
     .passive-badges-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 6px;
       padding: 8px 12px 12px;
+      min-width: 0;
     }
 
     .passive-badge-item {
@@ -693,6 +762,12 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
+      min-width: 0;
+    }
+
+    .passive-badge-item > div {
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .passive-badge-item img {
@@ -702,13 +777,14 @@
       flex-shrink: 0;
     }
 
-    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01) */
+    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01 — Non-Occluding Slot Tags) */
     .paperdoll-stage {
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr) 58px;
+      grid-template-columns: 60px minmax(0, 1fr) 60px;
       gap: 8px;
       align-items: center;
       margin-top: 6px;
+      min-width: 0;
     }
     .paperdoll-rack-col {
       display: flex;
@@ -718,13 +794,18 @@
     }
     .gear-slot-tile {
       position: relative;
-      width: 54px;
-      height: 54px;
+      width: 58px;
+      min-height: 62px;
       border-radius: 4px;
       border: 1px solid #5d4a2b;
       background: #10130e;
       cursor: pointer;
-      padding: 2px;
+      padding: 3px 2px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2px;
       transition: all 0.14s ease;
     }
     .gear-slot-tile:hover, .gear-slot-tile.is-active {
@@ -733,22 +814,27 @@
       transform: translateY(-1px);
     }
     .gear-slot-tile img {
-      width: 100%;
-      height: 100%;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
       display: block;
+      flex-shrink: 0;
     }
     .gear-slot-tag {
-      position: absolute;
-      bottom: 1px;
-      right: 2px;
-      padding: 0 3px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 1px 2px;
       border-radius: 2px;
-      background: rgba(8, 10, 8, 0.88);
+      background: rgba(16, 20, 14, 0.96);
+      border-top: 1px solid #262c22;
       color: var(--text-gold);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 8px;
-      line-height: 1.2;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .paperdoll-figure-box {
       position: relative;
@@ -759,6 +845,7 @@
       border-radius: 5px;
       padding: 4px;
       overflow: hidden;
+      min-width: 0;
     }
     .paperdoll-figure-box img {
       width: 100%;
@@ -769,13 +856,13 @@
     }
     .weapon-rack-strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
     .weapon-rack-strip .gear-slot-tile {
       width: 100%;
-      height: 52px;
+      min-height: 60px;
     }
     .tier-pill-bar {
       display: flex;
@@ -806,6 +893,83 @@
       border-radius: 4px;
       background: linear-gradient(180deg, #161a14, #0d100c);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+    .table-scroll-wrap {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Multi-Resolution Responsive Breakpoints (Zero Overflow & Zero Occlusion) */
+    @media (max-width: 1460px) {
+      .workbench-grid {
+        grid-template-columns: 344px minmax(0, 1fr);
+      }
+      .workbench-grid > .col-stack:nth-child(3) {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 12px;
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .workbench-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .workbench-grid > .col-stack:nth-child(3) {
+        grid-column: auto;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-nivel {
+        border-right: none;
+        padding-right: 0;
+      }
+      .arvore-saldos {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .beta-shell {
+        padding: 8px 10px 18px;
+      }
+      .milestone-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-cobra {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .kv-grid, .passive-badges-row, .inspector-modes-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-head-acoes {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .hotbar-slot {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+      .hotbar-slot > .badge-cd {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .arvore-cobra {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .weapon-rack-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .identity-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   </style>
 </head>
@@ -1079,7 +1243,7 @@
 
               <!-- Live Mouseover Gear Stat Card (#paperdoll-gear-tooltip) -->
               <div class="gear-mouseover-card" id="paperdoll-gear-tooltip">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 6px;">
                   <strong style="color:#fff2bf;font-size:12px;" id="gear-tt-name">Venom-Edged Tekagi Claws</strong>
                   <span class="lv-pill" id="gear-tt-slot">Primary Claws (2H)</span>
                 </div>
@@ -1305,8 +1469,8 @@
             <img src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L1</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_shadowjump</code>
               </div>
@@ -1343,8 +1507,8 @@
             <img src="assets/icons/ninja/ninja_focus@64.png" alt="Focus Attack" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L5</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_focus</code>
               </div>
@@ -1381,8 +1545,8 @@
             <img src="assets/icons/ninja/ninja_mirror@64.png" alt="Mirror Image" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L10</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_mirror</code>
               </div>
@@ -1419,8 +1583,8 @@
             <img src="assets/icons/ninja/ninja_backstab@64.png" alt="Backstab" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L15</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_backstab</code>
               </div>
@@ -1457,8 +1621,8 @@
             <img src="assets/icons/ninja/ninja_death@64.png" alt="Death Strike" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L20</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_death</code>
               </div>
@@ -1495,8 +1659,8 @@
             <img src="assets/icons/ninja/ninja_animal_form@64.png" alt="Animal Form" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L25</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_animal_form</code>
               </div>
@@ -1533,8 +1697,8 @@
             <img src="assets/icons/ninja/ninja_infectious_strike@64.png" alt="Infectious Strike" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L30</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_infectious_strike</code>
               </div>
@@ -1571,8 +1735,8 @@
             <img src="assets/icons/ninja/ninja_smoke_bomb@64.png" alt="Smoke Bomb" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L35</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_smoke_bomb</code>
               </div>
@@ -1617,8 +1781,8 @@
             <img src="assets/icons/ninja/ninja_ki_attack@64.png" alt="Ki Attack" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L40</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_ki_attack</code>
               </div>
@@ -1655,8 +1819,8 @@
             <img src="assets/icons/ninja/ninja_surprise_attack@64.png" alt="Surprise Attack" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L45</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_surprise_attack</code>
               </div>
@@ -1693,8 +1857,8 @@
             <img src="assets/icons/ninja/ninja_fukiya_barrage@64.png" alt="Fukiya &amp; Egg Bomb Barrage" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L50</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_fukiya_barrage</code>
               </div>
@@ -1731,8 +1895,8 @@
             <img src="assets/icons/ninja/ninja_twin_shadow@64.png" alt="Kage Bunshin: Twin Shadow Execution" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L60</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">ninja_twin_shadow</code>
               </div>
@@ -1779,7 +1943,7 @@
                 <div class="dica-header">
                   <img id="insp-icon" src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
                   <div>
-                    <div style="display:flex;gap:6px;align-items:center;">
+                    <div style="display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;">
                       <span class="lv-pill" id="insp-level">L1</span>
                       <span class="type-pill kind-passive" id="insp-kind">Passive</span>
                       <code style="font-size:10px;color:var(--text-secondary);" id="insp-id">ninja_shadowjump</code>
@@ -1801,12 +1965,12 @@
                   <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">UO Shadowjump (ref 506): innate shadow-step positioning and 100% Fencing/Ninjitsu auto-attack loop</div>
                   <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px;">
-                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;">
+                <div class="inspector-modes-grid">
+                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;min-width:0;">
                     <strong style="color:#fff2bf;display:block;">Mode A (Drop-In JSON)</strong>
                     <span id="insp-mode-a" style="color:var(--text-secondary);">Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</span>
                   </div>
-                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;">
+                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;min-width:0;">
                     <strong style="color:#fff2bf;display:block;">Mode B (&lt;20 LOC C# Hook)</strong>
                     <span id="insp-mode-b" style="color:var(--text-secondary);">Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.</span>
                   </div>

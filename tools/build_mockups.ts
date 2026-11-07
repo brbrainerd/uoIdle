@@ -840,6 +840,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
     html, body {
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 18% 0%, var(--class-glow) 0%, transparent 44%),
         radial-gradient(circle at 82% 8%, rgba(201, 162, 39, 0.08) 0%, transparent 48%),
@@ -854,9 +855,11 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
     .mono, code, pre, .num {
       font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
       font-variant-numeric: tabular-nums;
+      overflow-wrap: break-word;
     }
 
     .beta-shell {
+      width: 100%;
       max-width: 1560px;
       margin: 0 auto;
       padding: 12px 16px 24px;
@@ -867,6 +870,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       display: flex;
       flex-direction: column;
       width: 100%;
+      min-width: 0;
       color: #f6ecd4;
       gap: 10px;
     }
@@ -889,12 +893,13 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
 
     .arvore-nivel {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 8px 10px;
       min-height: 36px;
       padding-right: 12px;
       border-right: 1px solid #725b31;
-      white-space: nowrap;
+      min-width: 0;
     }
 
     .arvore-nivel strong {
@@ -902,14 +907,16 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       font-family: 'Cinzel', Georgia, serif;
       font-size: 15px;
       letter-spacing: 0.04em;
+      overflow-wrap: break-word;
     }
 
     .arvore-saldos {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 6px;
       flex: 1 1 auto;
       justify-content: center;
+      min-width: 0;
     }
 
     .arvore-saldo {
@@ -919,7 +926,8 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       gap: 8px;
       padding: 2px 10px;
       border-left: 1px solid #725b31;
-      white-space: nowrap;
+      flex: 1 1 150px;
+      min-width: 140px;
     }
 
     .arvore-saldo strong {
@@ -988,6 +996,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .hue-swatch {
@@ -997,10 +1006,12 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       background: var(--class-accent);
       border: 1px solid #fff2bf;
       display: inline-block;
+      flex-shrink: 0;
     }
 
     .arvore-secao {
       min-width: 0;
+      max-width: 100%;
       border: 1px solid #5d4a2b;
       border-radius: 4px;
       background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
@@ -1009,7 +1020,8 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
 
     .arvore-secao-titulo {
       display: flex;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 4px 8px;
       align-items: center;
       justify-content: space-between;
       margin: 0;
@@ -1021,6 +1033,12 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      min-width: 0;
+    }
+
+    .arvore-secao-titulo .title-left {
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .arvore-secao-titulo .title-left::before {
@@ -1034,6 +1052,8 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       color: var(--text-secondary);
       font-weight: 400;
       text-transform: none;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .workbench-grid {
@@ -1041,16 +1061,19 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       grid-template-columns: 356px minmax(0, 1fr) 396px;
       gap: 12px;
       align-items: start;
+      min-width: 0;
     }
 
     .col-stack {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      min-width: 0;
     }
 
     .panel-body {
       padding: 10px 12px;
+      min-width: 0;
     }
 
     /* Portrait & Identity */
@@ -1059,6 +1082,11 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       grid-template-columns: 94px minmax(0, 1fr);
       gap: 10px;
       align-items: center;
+      min-width: 0;
+    }
+
+    .identity-hero > div {
+      min-width: 0;
     }
 
     .portrait-frame {
@@ -1070,6 +1098,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       overflow: hidden;
       background: #080907;
       box-shadow: 0 0 18px var(--class-glow);
+      flex-shrink: 0;
     }
 
     .portrait-frame img.main-portrait {
@@ -1081,18 +1110,18 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
 
     .portrait-mini-badge {
       position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 28px;
-      height: 28px;
+      bottom: 2px;
+      right: 2px;
+      width: 22px;
+      height: 22px;
       border: 1px solid var(--border-gold-bright);
-      border-radius: 4px;
+      border-radius: 3px;
       background: #0b0d0a;
     }
 
     .stat-chips {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
@@ -1103,6 +1132,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border-radius: 4px;
       padding: 4px 6px;
       text-align: center;
+      min-width: 0;
     }
 
     .stat-chip span {
@@ -1123,22 +1153,32 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 5px;
+      min-width: 0;
     }
 
     .kv-item {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 4px 8px;
       padding: 4px 8px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 3px;
       font-size: 11px;
+      min-width: 0;
+    }
+
+    .kv-item > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .kv-item .k {
       color: var(--text-primary);
       text-transform: capitalize;
+      min-width: 0;
     }
 
     .kv-item .v {
@@ -1151,6 +1191,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       display: flex;
       flex-direction: column;
       gap: 6px;
+      min-width: 0;
     }
 
     .hotbar-slot {
@@ -1163,6 +1204,12 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border: 1px solid var(--border-subtle);
       border-left: 3px solid var(--class-accent);
       border-radius: 4px;
+      min-width: 0;
+    }
+
+    .hotbar-slot > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .slot-num {
@@ -1176,9 +1223,10 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       color: var(--text-gold);
+      flex-shrink: 0;
     }
 
-    /* Winding .arvore-cobra ribbon */
+    /* Winding .arvore-cobra ribbon (2 rows x 6 milestones — zero circle/label overlap) */
     .arvore-cobra-wrap {
       padding: 10px 12px;
       border-bottom: 1px solid #2a3026;
@@ -1187,9 +1235,9 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
 
     .arvore-cobra {
       display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 4px;
-      align-items: center;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px 8px;
+      align-items: start;
     }
 
     .arvore-col {
@@ -1198,6 +1246,8 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       align-items: center;
       gap: 4px;
       cursor: pointer;
+      min-width: 0;
+      width: 100%;
     }
 
     .arvore-lv {
@@ -1216,6 +1266,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border-radius: 50%;
       background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
       overflow: hidden;
+      flex-shrink: 0;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -1238,13 +1289,15 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
 
     .arvore-nome {
       color: #f6ecd4;
-      font-size: 9px;
-      line-height: 1.1;
+      font-size: 9.5px;
+      line-height: 1.2;
       text-align: center;
-      max-width: 64px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width: 100%;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      padding: 0 2px;
     }
 
     /* 12 Unified Milestone + Catalog Cards Grid (De-Duplicated v2.0) */
@@ -1264,6 +1317,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 10px 12px;
+      min-width: 0;
     }
 
     .milestone-card {
@@ -1277,6 +1331,21 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
+      min-width: 0;
+    }
+
+    .milestone-card > div {
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+
+    .milestone-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px 6px;
+      min-width: 0;
     }
 
     .milestone-card[data-kind="passive"] { border-left-color: var(--kind-passive); }
@@ -1300,6 +1369,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       position: relative;
       width: 50px;
       height: 50px;
+      flex-shrink: 0;
     }
 
     .milestone-icon-box img {
@@ -1320,6 +1390,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .type-pill {
@@ -1333,6 +1404,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border: 1px solid #3c4436;
       background: #121611;
       color: var(--text-secondary);
+      white-space: nowrap;
     }
     .type-pill.kind-passive  { color: var(--kind-passive); border-color: rgba(99, 179, 237, 0.45); background: rgba(99, 179, 237, 0.10); }
     .type-pill.kind-skill    { color: var(--kind-skill); border-color: rgba(246, 173, 85, 0.45); background: rgba(246, 173, 85, 0.10); }
@@ -1344,13 +1416,17 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       margin-top: 5px;
       border-top: 1px dashed #2b3227;
       padding-top: 4px;
+      min-width: 0;
     }
     .schema-drawer summary {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
+      line-height: 1.35;
       color: var(--text-gold);
       cursor: pointer;
       user-select: none;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .schema-drawer summary:hover {
       color: #fff2bf;
@@ -1367,6 +1443,12 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       gap: 7px;
       font-size: 10px;
       color: #b8f5d8;
+      min-width: 0;
+    }
+
+    .dual-unlock-banner > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .dual-unlock-banner img {
@@ -1374,6 +1456,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       height: 28px;
       border-radius: 3px;
       border: 1px solid var(--border-gold);
+      flex-shrink: 0;
     }
 
     /* Pinned Live Tooltip Inspector (.arvore-dica) */
@@ -1384,6 +1467,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       background: #0c0e0cf7;
       color: #f6ecd4;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+      min-width: 0;
     }
 
     .dica-header {
@@ -1394,6 +1478,12 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       padding-bottom: 8px;
       border-bottom: 1px solid #3c3425;
       margin-bottom: 8px;
+      min-width: 0;
+    }
+
+    .dica-header > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .dica-header img {
@@ -1401,37 +1491,15 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       height: 56px;
       border-radius: 4px;
       border: 1px solid var(--border-gold-bright);
+      flex-shrink: 0;
     }
 
-    /* Ability Catalog Cards */
-    .catalog-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      padding: 10px 12px;
-    }
-
-    .catalog-card {
+    .inspector-modes-grid {
       display: grid;
-      grid-template-columns: 48px minmax(0, 1fr);
-      gap: 10px;
-      padding: 7px 9px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .catalog-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-    }
-
-    .catalog-card img {
-      width: 48px;
-      height: 48px;
-      border-radius: 4px;
-      display: block;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      font-size: 10px;
+      min-width: 0;
     }
 
     .cost-badges {
@@ -1483,9 +1551,10 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
 
     .passive-badges-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 6px;
       padding: 8px 12px 12px;
+      min-width: 0;
     }
 
     .passive-badge-item {
@@ -1496,6 +1565,12 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
+      min-width: 0;
+    }
+
+    .passive-badge-item > div {
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .passive-badge-item img {
@@ -1505,13 +1580,14 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       flex-shrink: 0;
     }
 
-    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01) */
+    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01 — Non-Occluding Slot Tags) */
     .paperdoll-stage {
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr) 58px;
+      grid-template-columns: 60px minmax(0, 1fr) 60px;
       gap: 8px;
       align-items: center;
       margin-top: 6px;
+      min-width: 0;
     }
     .paperdoll-rack-col {
       display: flex;
@@ -1521,13 +1597,18 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
     }
     .gear-slot-tile {
       position: relative;
-      width: 54px;
-      height: 54px;
+      width: 58px;
+      min-height: 62px;
       border-radius: 4px;
       border: 1px solid #5d4a2b;
       background: #10130e;
       cursor: pointer;
-      padding: 2px;
+      padding: 3px 2px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2px;
       transition: all 0.14s ease;
     }
     .gear-slot-tile:hover, .gear-slot-tile.is-active {
@@ -1536,22 +1617,27 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       transform: translateY(-1px);
     }
     .gear-slot-tile img {
-      width: 100%;
-      height: 100%;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
       display: block;
+      flex-shrink: 0;
     }
     .gear-slot-tag {
-      position: absolute;
-      bottom: 1px;
-      right: 2px;
-      padding: 0 3px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 1px 2px;
       border-radius: 2px;
-      background: rgba(8, 10, 8, 0.88);
+      background: rgba(16, 20, 14, 0.96);
+      border-top: 1px solid #262c22;
       color: var(--text-gold);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 8px;
-      line-height: 1.2;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .paperdoll-figure-box {
       position: relative;
@@ -1562,6 +1648,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border-radius: 5px;
       padding: 4px;
       overflow: hidden;
+      min-width: 0;
     }
     .paperdoll-figure-box img {
       width: 100%;
@@ -1572,13 +1659,13 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
     }
     .weapon-rack-strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
     .weapon-rack-strip .gear-slot-tile {
       width: 100%;
-      height: 52px;
+      min-height: 60px;
     }
     .tier-pill-bar {
       display: flex;
@@ -1609,6 +1696,83 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       border-radius: 4px;
       background: linear-gradient(180deg, #161a14, #0d100c);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+    .table-scroll-wrap {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Multi-Resolution Responsive Breakpoints (Zero Overflow & Zero Occlusion) */
+    @media (max-width: 1460px) {
+      .workbench-grid {
+        grid-template-columns: 344px minmax(0, 1fr);
+      }
+      .workbench-grid > .col-stack:nth-child(3) {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 12px;
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .workbench-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .workbench-grid > .col-stack:nth-child(3) {
+        grid-column: auto;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-nivel {
+        border-right: none;
+        padding-right: 0;
+      }
+      .arvore-saldos {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .beta-shell {
+        padding: 8px 10px 18px;
+      }
+      .milestone-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-cobra {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .kv-grid, .passive-badges-row, .inspector-modes-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-head-acoes {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .hotbar-slot {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+      .hotbar-slot > .badge-cd {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .arvore-cobra {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .weapon-rack-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .identity-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   `;
 }
@@ -1700,8 +1864,8 @@ function buildClassSkillTreeHtml(
             <img src="${escapeHtml(icon64)}" alt="${escapeHtml(m.nameEn)}" />
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
-              <div style="display:flex;align-items:center;gap:5px;">
+            <div class="milestone-card-head">
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0;">
                 <span class="lv-pill">L${m.level}</span>
                 <code class="mono" style="font-size:9.5px;color:var(--text-secondary);">${escapeHtml(m.id)}</code>
               </div>
@@ -1997,7 +2161,7 @@ function buildClassSkillTreeHtml(
 
               <!-- Live Mouseover Gear Stat Card (#paperdoll-gear-tooltip) -->
               <div class="gear-mouseover-card" id="paperdoll-gear-tooltip">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 6px;">
                   <strong style="color:#fff2bf;font-size:12px;" id="gear-tt-name">${escapeHtml(defaultGear.nameEn)}</strong>
                   <span class="lv-pill" id="gear-tt-slot">${escapeHtml(defaultGear.slotLabel)}</span>
                 </div>
@@ -2074,7 +2238,7 @@ function buildClassSkillTreeHtml(
                 <div class="dica-header">
                   <img id="insp-icon" src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(firstAbility.id)}@64.png" alt="${escapeHtml(firstAbility.name)}" />
                   <div>
-                    <div style="display:flex;gap:6px;align-items:center;">
+                    <div style="display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;">
                       <span class="lv-pill" id="insp-level">L${firstAbility.progressionTreeLevel}</span>
                       <span class="type-pill kind-passive" id="insp-kind">${escapeHtml(firstAbility.kind)}</span>
                       <code style="font-size:10px;color:var(--text-secondary);" id="insp-id">${escapeHtml(firstAbility.id)}</code>
@@ -2096,12 +2260,12 @@ function buildClassSkillTreeHtml(
                   <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">${escapeHtml(firstAbility.scalingFormula.summary)}</div>
                   <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px;">
-                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;">
+                <div class="inspector-modes-grid">
+                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;min-width:0;">
                     <strong style="color:#fff2bf;display:block;">Mode A (Drop-In JSON)</strong>
                     <span id="insp-mode-a" style="color:var(--text-secondary);">${escapeHtml(firstMode.modeA)}</span>
                   </div>
-                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;">
+                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;min-width:0;">
                     <strong style="color:#fff2bf;display:block;">Mode B (&lt;20 LOC C# Hook)</strong>
                     <span id="insp-mode-b" style="color:var(--text-secondary);">${escapeHtml(firstMode.modeB)}</span>
                   </div>
@@ -2597,9 +2761,9 @@ function buildClassComparisonHtml(
       const valorite = arm.damageByMaterialTier['Valorite'] ?? arm.baseDamageRange;
       return `
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/${escapeHtml(arm.id)}.png" alt="${escapeHtml(arm.name)}" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/${escapeHtml(arm.id)}.png" alt="${escapeHtml(arm.name)}" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">${escapeHtml(arm.name)} <code style="font-size:10px;color:var(--text-secondary);">(${escapeHtml(arm.id)})</code></strong>
               <span class="type-pill">${escapeHtml(arm.classTheme)} · ${escapeHtml(arm.skill)}</span>
             </div>
@@ -2623,7 +2787,7 @@ function buildClassComparisonHtml(
       (w) => `
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/${escapeHtml(w.id)}.png" alt="${escapeHtml(w.name)}" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/${escapeHtml(w.id)}.png" alt="${escapeHtml(w.name)}" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">${escapeHtml(w.name)}</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(${escapeHtml(w.id)})</code></div>
         </td>
         <td class="mono">${w.itemId} (${escapeHtml(w.graphicHex)})</td>
@@ -2641,9 +2805,9 @@ function buildClassComparisonHtml(
     .map(
       (c) => `
       <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-        <img src="assets/items/${escapeHtml(c.id)}.png" alt="${escapeHtml(c.name)}" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-        <div>
-          <div style="display:flex;justify-content:space-between;width:100%;">
+        <img src="assets/items/${escapeHtml(c.id)}.png" alt="${escapeHtml(c.name)}" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+        <div style="min-width:0;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;gap:4px;">
             <strong style="color:#fff2bf;">${escapeHtml(c.name)} / ${escapeHtml(c.namePtBr)}</strong>
             <span class="lv-pill">itemId: ${c.itemId}</span>
           </div>
@@ -2683,7 +2847,7 @@ function buildClassComparisonHtml(
     )
     .join('\n');
 
-  const samuraiCSharp = `// Mode B Server Hook (17 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+  const samuraiCSharp = `// Mode B Server Hook (17 LOC in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
 // 1. OnWeaponHit: Auto-Perfection Streak & On-Kill Vital Recovery (9 LOC)
 if (attacker is PlayerMobile sm && sm.ClassId == 114 && sm.Skills.Bushido.Value >= 50.0) {
     if (sm.PerfectionTarget != defender) { sm.PerfectionTarget = defender; sm.PerfectionBonus = 0; }
@@ -2694,14 +2858,15 @@ if (attacker is PlayerMobile sm && sm.ClassId == 114 && sm.Skills.Bushido.Value 
 // 2. OnWeaponMiss: Perfection Streak Decay (2 LOC)
 if (attacker is PlayerMobile smMiss && smMiss.ClassId == 114 && smMiss.PerfectionTarget == defender)
     smMiss.PerfectionBonus = Math.Max(0, smMiss.PerfectionBonus - 5);
-// 3. OnParrySuccess (inside AbsorbDamageAOS when CheckParry == true): 2.0s ICD Counter & Confidence (6 LOC)
+// 3. OnParrySuccess (CheckParry == true): 2.0s ICD Counter & Confidence (6 LOC)
 if (blocked && Core.TickCount - defender.NextBushidoParryProc >= 2000) {
     defender.NextBushidoParryProc = Core.TickCount;
-    if (CounterAttack.IsCountering(defender) && defender.Weapon is BaseWeapon bw) bw.OnSwing(defender, attacker);
+    if (CounterAttack.IsCountering(defender) && defender.Weapon is BaseWeapon bw)
+        bw.OnSwing(defender, attacker);
     if (Confidence.IsConfident(defender)) { defender.Hits += 2; defender.Stam += 2; }
 }`;
 
-  const ninjaCSharp = `// Mode B Server Hook (16 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+  const ninjaCSharp = `// Mode B Server Hook (16 LOC in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
 // 1. OnIncomingHit: Ablative Mirror Image Clone Interception with 1.5s ICD (8 LOC)
 if (MirrorImage.HasClone(defender) && Core.TickCount - defender.NextCloneIntercept >= 1500
     && defender.Skills.Ninjitsu.Value / 150.0 > Utility.RandomDouble()) {
@@ -2709,7 +2874,7 @@ if (MirrorImage.HasClone(defender) && Core.TickCount - defender.NextCloneInterce
     MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone & decrements cloneStacks
     damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
 }
-// 2. OnWeaponSwingHit: 3-Swing DeathStrike Detonation, Kitsune 3rd-Swing Claw & Stealth Opener (8 LOC)
+// 2. OnWeaponSwingHit: 3-Swing DeathStrike, Kitsune Claw & Stealth Opener (8 LOC)
 if (attacker is PlayerMobile nj && nj.ClassId == 115) {
     DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
     if (nj.CombatStealthUntil > Core.TickCount && (move is Backstab || move is SurpriseAttack)) {
@@ -2737,6 +2902,14 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       background: var(--bg-card);
       vertical-align: middle;
     }
+    .comp-table td.mono, .comp-table th {
+      white-space: nowrap;
+    }
+    .sim-tables-grid .comp-table th,
+    .sim-tables-grid .comp-table td {
+      padding: 4px 5px;
+      font-size: 9.5px;
+    }
     .comp-table th {
       background: #141812;
       color: var(--text-gold);
@@ -2761,9 +2934,12 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       border-radius: 4px;
       padding: 10px;
       overflow-x: auto;
-      font-size: 11px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      font-size: 10.5px;
       line-height: 1.45;
       color: #e8e4d9;
+      max-width: 100%;
     }
     .chart-legend {
       display: flex;
@@ -2780,6 +2956,42 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       border-radius: 50%;
       margin-right: 4px;
       vertical-align: middle;
+    }
+    .sim-charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+      min-width: 0;
+    }
+    .sim-tables-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+      min-width: 0;
+    }
+    .armaments-hooks-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+      gap: 12px;
+      min-width: 0;
+    }
+    .arm-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 6px;
+      min-width: 0;
+    }
+    @media (max-width: 1460px) {
+      .sim-tables-grid, .armaments-hooks-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 1120px) {
+      .sim-charts-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   </style>
 </head>
@@ -2837,19 +3049,19 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         </h2>
         <div class="panel-body">
           <div class="filter-bar">
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <span class="mono" style="font-size:11px;color:var(--text-gold);">Mode:</span>
               <button type="button" class="beta-btn is-active" data-sim-mode="mode_a" onclick="updateSimFilter('mode', 'mode_a')">Mode A (100% Existing Engine)</button>
               <button type="button" class="beta-btn" data-sim-mode="mode_b" onclick="updateSimFilter('mode', 'mode_b')">Mode B (&lt;20 LOC C# Hook)</button>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <span class="mono" style="font-size:11px;color:var(--text-gold);">Bracket:</span>
               <button type="button" class="beta-btn" data-sim-bracket="L10" onclick="updateSimFilter('bracket', 'L10')">L10</button>
               <button type="button" class="beta-btn" data-sim-bracket="L25" onclick="updateSimFilter('bracket', 'L25')">L25</button>
               <button type="button" class="beta-btn" data-sim-bracket="L45" onclick="updateSimFilter('bracket', 'L45')">L45</button>
               <button type="button" class="beta-btn is-active" data-sim-bracket="L60" onclick="updateSimFilter('bracket', 'L60')">L60</button>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <span class="mono" style="font-size:11px;color:var(--text-gold);">Archetype:</span>
               <button type="button" class="beta-btn is-active" data-sim-arch="low_def_boss" onclick="updateSimFilter('arch', 'low_def_boss')">low_def_boss</button>
               <button type="button" class="beta-btn" data-sim-arch="high_def_boss" onclick="updateSimFilter('arch', 'high_def_boss')">high_def_boss</button>
@@ -2858,31 +3070,33 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
             </div>
           </div>
 
-          <table class="comp-table" style="margin-bottom:12px;">
-            <thead>
-              <tr>
-                <th>Class</th>
-                <th>Sustained DPS</th>
-                <th>Relative DPS Bar</th>
-                <th>Trash TTK (s)</th>
-                <th>EHP / sec</th>
-                <th>Overkill Waste %</th>
-                <th>Net Mana / min</th>
-                <th>Net Stam / min</th>
-                <th>Parries / Clones</th>
-                <th>OOM Ticks</th>
-                <th>Parity Gate</th>
-              </tr>
-            </thead>
-            <tbody id="sim-telemetry-tbody">
-              ${initialTelemetryRowsHtml}
-            </tbody>
-          </table>
+          <div class="table-scroll-wrap" style="margin-bottom:12px;">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Sustained DPS</th>
+                  <th>Relative DPS Bar</th>
+                  <th>Trash TTK (s)</th>
+                  <th>EHP / sec</th>
+                  <th>Overkill Waste %</th>
+                  <th>Net Mana / min</th>
+                  <th>Net Stam / min</th>
+                  <th>Parries / Clones</th>
+                  <th>OOM Ticks</th>
+                  <th>Parity Gate</th>
+                </tr>
+              </thead>
+              <tbody id="sim-telemetry-tbody">
+                ${initialTelemetryRowsHtml}
+              </tbody>
+            </table>
+          </div>
 
           <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div class="sim-charts-grid">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
                 <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Sustained DPS Curve (L10 → L60)
                 </strong>
@@ -2895,7 +3109,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 </div>
               </div>
               ${dpsProgressionSvg}
-              <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:10px 0 6px;">
                 <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60)
                 </strong>
@@ -2904,8 +3118,8 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               ${ehpProgressionSvg}
             </div>
 
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
                 <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   5-Channel Damage Source Breakdown (L60 Boss)
                 </strong>
@@ -2923,48 +3137,52 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           </div>
 
           <!-- Consolidated Material Tier (Iron -> Valorite) & 10-Wave Dungeon Endurance -->
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;margin-top:12px;">
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
+          <div class="sim-tables-grid">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
                 9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Monotonic DPS &amp; EHP/s)
               </div>
-              <table class="comp-table">
-                <thead>
-                  <tr>
-                    <th>Material Tier</th>
-                    <th>Warrior</th>
-                    <th>Mage</th>
-                    <th>Ranger</th>
-                    <th>Samurai (SM)</th>
-                    <th>Ninja (NJ)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${matTierRowsHtml}
-                </tbody>
-              </table>
+              <div class="table-scroll-wrap">
+                <table class="comp-table">
+                  <thead>
+                    <tr>
+                      <th>Material Tier</th>
+                      <th>Warrior</th>
+                      <th>Mage</th>
+                      <th>Ranger</th>
+                      <th>Samurai (SM)</th>
+                      <th>Ninja (NJ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${matTierRowsHtml}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
                 10-Wave Continuous Dungeon Pull Endurance (8 Trash + 2 Boss Waves, Zero Reset)
               </div>
-              <table class="comp-table">
-                <thead>
-                  <tr>
-                    <th>Class</th>
-                    <th>Clear Time</th>
-                    <th>Avg Wave DPS</th>
-                    <th>Min HP</th>
-                    <th>Min Mana</th>
-                    <th>W1 → W10 DPS</th>
-                    <th>Mitigation</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${multiWaveRowsHtml}
-                </tbody>
-              </table>
+              <div class="table-scroll-wrap">
+                <table class="comp-table">
+                  <thead>
+                    <tr>
+                      <th>Class</th>
+                      <th>Clear Time</th>
+                      <th>Avg Wave DPS</th>
+                      <th>Min HP</th>
+                      <th>Min Mana</th>
+                      <th>W1 → W10 DPS</th>
+                      <th>Mitigation</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${multiWaveRowsHtml}
+                  </tbody>
+                </table>
+              </div>
               <div style="margin-top:8px;padding:8px 10px;background:#121611;border:1px solid #2a3026;border-radius:4px;font-size:11px;color:var(--text-secondary);">
                 <strong style="color:#82d5b0;">Idle Sustainability Proof:</strong> Across 10 consecutive waves without out-of-combat resets, <strong style="color:#fff2bf;">Samurai</strong> parries <strong>44</strong> attacks (fueling <em>Confidence</em> Inner Calm HP/Stam recovery and <em>Evasion</em> Iaido Flash Riposte), while <strong style="color:#fff2bf;">Ninja</strong> intercepts <strong>16</strong> boss blows via <em>Mirror Image</em> &amp; <em>Egg Bomb</em> clones and triggers <em>Smoke Bomb</em> Vanish &amp; Volley with <strong>0 OOM ticks</strong>.
               </div>
@@ -2979,18 +3197,20 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           <span class="title-left">2. 5-Class L1–L60 Progression Structural Parity Matrix</span>
           <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
         </h2>
-        <div class="panel-body" style="overflow-x:auto;">
-          <table class="comp-table">
-            <thead>
-              <tr>
-                <th style="width:54px;">Tier</th>
-                ${classHeadersHtml}
-              </tr>
-            </thead>
-            <tbody>
-              ${matrixRowsHtml}
-            </tbody>
-          </table>
+        <div class="panel-body">
+          <div class="table-scroll-wrap">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th style="width:54px;">Tier</th>
+                  ${classHeadersHtml}
+                </tr>
+              </thead>
+              <tbody>
+                ${matrixRowsHtml}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -3001,53 +3221,55 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           <span class="arvore-secao-sub">design/drop-in/items-bushido-ninjitsu.json · classes-patch.js · BaseWeapon.cs</span>
         </h2>
         <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
-            <div>
+          <div class="armaments-hooks-grid">
+            <div style="min-width:0;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Authentic art.png Sprites · Iron → Valorite)</div>
-              <div class="kv-grid">
+              <div class="arm-card-grid">
                 ${iconicArmamentsHtml}
               </div>
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin:10px 0 6px;text-transform:uppercase;">4 Cooldown-Gated Ninjitsu Consumables &amp; Projectiles</div>
-              <div class="kv-grid">
+              <div class="arm-card-grid">
                 ${consumablesHtml}
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div>
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0;">
+              <div style="min-width:0;">
                 <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:4px;">
                   Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
                 </div>
                 <pre class="code-card" style="margin:0;"><code>${escapeHtml(samuraiCSharp)}</code></pre>
               </div>
-              <div>
+              <div style="min-width:0;">
                 <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:4px;">
                   Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
                 </div>
                 <pre class="code-card" style="margin:0;"><code>${escapeHtml(ninjaCSharp)}</code></pre>
               </div>
-              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;min-width:0;">
                 <summary style="font-size:10.5px;">Expand Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools</summary>
-                <div style="margin-top:8px;">
-                  <table class="comp-table" style="margin-bottom:8px;">
-                    <thead>
-                      <tr>
-                        <th>Weapon</th>
-                        <th>Item ID</th>
-                        <th>Skill / Layer</th>
-                        <th>Spd</th>
-                        <th>Dmg</th>
-                        <th>Primary / Secondary</th>
-                        <th>Synergy</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${weaponsTableHtml}
-                    </tbody>
-                  </table>
+                <div style="margin-top:8px;min-width:0;">
+                  <div class="table-scroll-wrap" style="margin-bottom:8px;">
+                    <table class="comp-table">
+                      <thead>
+                        <tr>
+                          <th>Weapon</th>
+                          <th>Item ID</th>
+                          <th>Skill / Layer</th>
+                          <th>Spd</th>
+                          <th>Dmg</th>
+                          <th>Primary / Secondary</th>
+                          <th>Synergy</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${weaponsTableHtml}
+                      </tbody>
+                    </table>
+                  </div>
                   <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
                     ${materialTiersHtml}
                   </div>
-                  <div class="kv-grid">
+                  <div class="arm-card-grid">
                     ${affixHtml}
                   </div>
                 </div>
@@ -3151,11 +3373,20 @@ function buildPortalIndexHtml(isRoot: boolean): string {
       border-radius: 5px;
       background: linear-gradient(180deg, #1d211a 0%, #0f120e 100%);
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
+      min-width: 0;
+    }
+    .portal-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 290px;
+      gap: 18px;
+      align-items: center;
+      min-width: 0;
     }
     .launch-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
+      min-width: 0;
     }
     .launch-card {
       display: flex;
@@ -3167,6 +3398,7 @@ function buildPortalIndexHtml(isRoot: boolean): string {
       text-decoration: none;
       color: var(--text-primary);
       transition: all 0.16s ease;
+      min-width: 0;
     }
     .launch-card:hover {
       border-color: var(--border-gold-bright);
@@ -3187,14 +3419,24 @@ function buildPortalIndexHtml(isRoot: boolean): string {
       flex-direction: column;
       gap: 6px;
       flex: 1;
+      min-width: 0;
     }
     .tour-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
+      min-width: 0;
+    }
+    .contact-sheets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+      min-width: 0;
     }
     .file-row {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
@@ -3202,6 +3444,12 @@ function buildPortalIndexHtml(isRoot: boolean): string {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
+      min-width: 0;
+    }
+    .file-row > div {
+      min-width: 0;
+      flex: 1 1 200px;
+      overflow-wrap: break-word;
     }
     .file-row a {
       color: #fff2bf;
@@ -3209,10 +3457,22 @@ function buildPortalIndexHtml(isRoot: boolean): string {
       font-size: 11px;
       font-weight: 600;
       text-decoration: none;
+      overflow-wrap: anywhere;
     }
     .file-row a:hover {
       color: var(--border-gold-bright);
       text-decoration: underline;
+    }
+    @media (max-width: 1120px) {
+      .portal-hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .launch-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .tour-grid, .contact-sheets-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   </style>
 </head>
@@ -3253,8 +3513,8 @@ function buildPortalIndexHtml(isRoot: boolean): string {
 
       <!-- Executive Introduction for the Lead Developer -->
       <section class="portal-hero">
-        <div style="display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:center;">
-          <div>
+        <div class="portal-hero-grid">
+          <div style="min-width:0;">
             <div class="mono" style="font-size:11px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.06em;">
               Commissioned Technical Package for the Lead Developer of UO Idle (https://uoidle.com/beta)
             </div>
@@ -3409,7 +3669,7 @@ function buildPortalIndexHtml(isRoot: boolean): string {
           </div>
 
           <!-- Contact Sheets Preview Row -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+          <div class="contact-sheets-grid">
             <a class="launch-card" href="${prefix}assets/icons/contact-sheet.png" target="_blank" rel="noopener">
               <img class="launch-thumb" src="${prefix}assets/icons/contact-sheet.png" alt="Ability Icons Contact Sheet" style="height:175px;" />
               <div class="launch-body">
@@ -3473,9 +3733,9 @@ function captureScreenshots(): void {
     return;
   }
   const targets = [
-    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 1840 },
-    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 1880 },
-    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3420 },
+    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 1940 },
+    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 1960 },
+    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3700 },
     { html: 'index.html', png: 'portal-index.png', height: 1460 },
   ];
 

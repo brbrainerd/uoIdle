@@ -38,6 +38,7 @@
     html, body {
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 18% 0%, var(--class-glow) 0%, transparent 44%),
         radial-gradient(circle at 82% 8%, rgba(201, 162, 39, 0.08) 0%, transparent 48%),
@@ -52,9 +53,11 @@
     .mono, code, pre, .num {
       font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
       font-variant-numeric: tabular-nums;
+      overflow-wrap: break-word;
     }
 
     .beta-shell {
+      width: 100%;
       max-width: 1560px;
       margin: 0 auto;
       padding: 12px 16px 24px;
@@ -65,6 +68,7 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+      min-width: 0;
       color: #f6ecd4;
       gap: 10px;
     }
@@ -87,12 +91,13 @@
 
     .arvore-nivel {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 8px 10px;
       min-height: 36px;
       padding-right: 12px;
       border-right: 1px solid #725b31;
-      white-space: nowrap;
+      min-width: 0;
     }
 
     .arvore-nivel strong {
@@ -100,14 +105,16 @@
       font-family: 'Cinzel', Georgia, serif;
       font-size: 15px;
       letter-spacing: 0.04em;
+      overflow-wrap: break-word;
     }
 
     .arvore-saldos {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 6px;
       flex: 1 1 auto;
       justify-content: center;
+      min-width: 0;
     }
 
     .arvore-saldo {
@@ -117,7 +124,8 @@
       gap: 8px;
       padding: 2px 10px;
       border-left: 1px solid #725b31;
-      white-space: nowrap;
+      flex: 1 1 150px;
+      min-width: 140px;
     }
 
     .arvore-saldo strong {
@@ -186,6 +194,7 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .hue-swatch {
@@ -195,10 +204,12 @@
       background: var(--class-accent);
       border: 1px solid #fff2bf;
       display: inline-block;
+      flex-shrink: 0;
     }
 
     .arvore-secao {
       min-width: 0;
+      max-width: 100%;
       border: 1px solid #5d4a2b;
       border-radius: 4px;
       background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
@@ -207,7 +218,8 @@
 
     .arvore-secao-titulo {
       display: flex;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 4px 8px;
       align-items: center;
       justify-content: space-between;
       margin: 0;
@@ -219,6 +231,12 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      min-width: 0;
+    }
+
+    .arvore-secao-titulo .title-left {
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .arvore-secao-titulo .title-left::before {
@@ -232,6 +250,8 @@
       color: var(--text-secondary);
       font-weight: 400;
       text-transform: none;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .workbench-grid {
@@ -239,16 +259,19 @@
       grid-template-columns: 356px minmax(0, 1fr) 396px;
       gap: 12px;
       align-items: start;
+      min-width: 0;
     }
 
     .col-stack {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      min-width: 0;
     }
 
     .panel-body {
       padding: 10px 12px;
+      min-width: 0;
     }
 
     /* Portrait & Identity */
@@ -257,6 +280,11 @@
       grid-template-columns: 94px minmax(0, 1fr);
       gap: 10px;
       align-items: center;
+      min-width: 0;
+    }
+
+    .identity-hero > div {
+      min-width: 0;
     }
 
     .portrait-frame {
@@ -268,6 +296,7 @@
       overflow: hidden;
       background: #080907;
       box-shadow: 0 0 18px var(--class-glow);
+      flex-shrink: 0;
     }
 
     .portrait-frame img.main-portrait {
@@ -279,18 +308,18 @@
 
     .portrait-mini-badge {
       position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 28px;
-      height: 28px;
+      bottom: 2px;
+      right: 2px;
+      width: 22px;
+      height: 22px;
       border: 1px solid var(--border-gold-bright);
-      border-radius: 4px;
+      border-radius: 3px;
       background: #0b0d0a;
     }
 
     .stat-chips {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
@@ -301,6 +330,7 @@
       border-radius: 4px;
       padding: 4px 6px;
       text-align: center;
+      min-width: 0;
     }
 
     .stat-chip span {
@@ -321,22 +351,32 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 5px;
+      min-width: 0;
     }
 
     .kv-item {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 4px 8px;
       padding: 4px 8px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 3px;
       font-size: 11px;
+      min-width: 0;
+    }
+
+    .kv-item > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .kv-item .k {
       color: var(--text-primary);
       text-transform: capitalize;
+      min-width: 0;
     }
 
     .kv-item .v {
@@ -349,6 +389,7 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      min-width: 0;
     }
 
     .hotbar-slot {
@@ -361,6 +402,12 @@
       border: 1px solid var(--border-subtle);
       border-left: 3px solid var(--class-accent);
       border-radius: 4px;
+      min-width: 0;
+    }
+
+    .hotbar-slot > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .slot-num {
@@ -374,9 +421,10 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       color: var(--text-gold);
+      flex-shrink: 0;
     }
 
-    /* Winding .arvore-cobra ribbon */
+    /* Winding .arvore-cobra ribbon (2 rows x 6 milestones — zero circle/label overlap) */
     .arvore-cobra-wrap {
       padding: 10px 12px;
       border-bottom: 1px solid #2a3026;
@@ -385,9 +433,9 @@
 
     .arvore-cobra {
       display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 4px;
-      align-items: center;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px 8px;
+      align-items: start;
     }
 
     .arvore-col {
@@ -396,6 +444,8 @@
       align-items: center;
       gap: 4px;
       cursor: pointer;
+      min-width: 0;
+      width: 100%;
     }
 
     .arvore-lv {
@@ -414,6 +464,7 @@
       border-radius: 50%;
       background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
       overflow: hidden;
+      flex-shrink: 0;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -436,13 +487,15 @@
 
     .arvore-nome {
       color: #f6ecd4;
-      font-size: 9px;
-      line-height: 1.1;
+      font-size: 9.5px;
+      line-height: 1.2;
       text-align: center;
-      max-width: 64px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width: 100%;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      padding: 0 2px;
     }
 
     /* 12 Unified Milestone + Catalog Cards Grid (De-Duplicated v2.0) */
@@ -462,6 +515,7 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 10px 12px;
+      min-width: 0;
     }
 
     .milestone-card {
@@ -475,6 +529,21 @@
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
+      min-width: 0;
+    }
+
+    .milestone-card > div {
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+
+    .milestone-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px 6px;
+      min-width: 0;
     }
 
     .milestone-card[data-kind="passive"] { border-left-color: var(--kind-passive); }
@@ -498,6 +567,7 @@
       position: relative;
       width: 50px;
       height: 50px;
+      flex-shrink: 0;
     }
 
     .milestone-icon-box img {
@@ -518,6 +588,7 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .type-pill {
@@ -531,6 +602,7 @@
       border: 1px solid #3c4436;
       background: #121611;
       color: var(--text-secondary);
+      white-space: nowrap;
     }
     .type-pill.kind-passive  { color: var(--kind-passive); border-color: rgba(99, 179, 237, 0.45); background: rgba(99, 179, 237, 0.10); }
     .type-pill.kind-skill    { color: var(--kind-skill); border-color: rgba(246, 173, 85, 0.45); background: rgba(246, 173, 85, 0.10); }
@@ -542,13 +614,17 @@
       margin-top: 5px;
       border-top: 1px dashed #2b3227;
       padding-top: 4px;
+      min-width: 0;
     }
     .schema-drawer summary {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 9px;
+      line-height: 1.35;
       color: var(--text-gold);
       cursor: pointer;
       user-select: none;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .schema-drawer summary:hover {
       color: #fff2bf;
@@ -565,6 +641,12 @@
       gap: 7px;
       font-size: 10px;
       color: #b8f5d8;
+      min-width: 0;
+    }
+
+    .dual-unlock-banner > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .dual-unlock-banner img {
@@ -572,6 +654,7 @@
       height: 28px;
       border-radius: 3px;
       border: 1px solid var(--border-gold);
+      flex-shrink: 0;
     }
 
     /* Pinned Live Tooltip Inspector (.arvore-dica) */
@@ -582,6 +665,7 @@
       background: #0c0e0cf7;
       color: #f6ecd4;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+      min-width: 0;
     }
 
     .dica-header {
@@ -592,6 +676,12 @@
       padding-bottom: 8px;
       border-bottom: 1px solid #3c3425;
       margin-bottom: 8px;
+      min-width: 0;
+    }
+
+    .dica-header > div {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .dica-header img {
@@ -599,37 +689,15 @@
       height: 56px;
       border-radius: 4px;
       border: 1px solid var(--border-gold-bright);
+      flex-shrink: 0;
     }
 
-    /* Ability Catalog Cards */
-    .catalog-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      padding: 10px 12px;
-    }
-
-    .catalog-card {
+    .inspector-modes-grid {
       display: grid;
-      grid-template-columns: 48px minmax(0, 1fr);
-      gap: 10px;
-      padding: 7px 9px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .catalog-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-    }
-
-    .catalog-card img {
-      width: 48px;
-      height: 48px;
-      border-radius: 4px;
-      display: block;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      font-size: 10px;
+      min-width: 0;
     }
 
     .cost-badges {
@@ -681,9 +749,10 @@
 
     .passive-badges-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 6px;
       padding: 8px 12px 12px;
+      min-width: 0;
     }
 
     .passive-badge-item {
@@ -694,6 +763,12 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
+      min-width: 0;
+    }
+
+    .passive-badge-item > div {
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .passive-badge-item img {
@@ -703,13 +778,14 @@
       flex-shrink: 0;
     }
 
-    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01) */
+    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01 — Non-Occluding Slot Tags) */
     .paperdoll-stage {
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr) 58px;
+      grid-template-columns: 60px minmax(0, 1fr) 60px;
       gap: 8px;
       align-items: center;
       margin-top: 6px;
+      min-width: 0;
     }
     .paperdoll-rack-col {
       display: flex;
@@ -719,13 +795,18 @@
     }
     .gear-slot-tile {
       position: relative;
-      width: 54px;
-      height: 54px;
+      width: 58px;
+      min-height: 62px;
       border-radius: 4px;
       border: 1px solid #5d4a2b;
       background: #10130e;
       cursor: pointer;
-      padding: 2px;
+      padding: 3px 2px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2px;
       transition: all 0.14s ease;
     }
     .gear-slot-tile:hover, .gear-slot-tile.is-active {
@@ -734,22 +815,27 @@
       transform: translateY(-1px);
     }
     .gear-slot-tile img {
-      width: 100%;
-      height: 100%;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
       display: block;
+      flex-shrink: 0;
     }
     .gear-slot-tag {
-      position: absolute;
-      bottom: 1px;
-      right: 2px;
-      padding: 0 3px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 1px 2px;
       border-radius: 2px;
-      background: rgba(8, 10, 8, 0.88);
+      background: rgba(16, 20, 14, 0.96);
+      border-top: 1px solid #262c22;
       color: var(--text-gold);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 8px;
-      line-height: 1.2;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .paperdoll-figure-box {
       position: relative;
@@ -760,6 +846,7 @@
       border-radius: 5px;
       padding: 4px;
       overflow: hidden;
+      min-width: 0;
     }
     .paperdoll-figure-box img {
       width: 100%;
@@ -770,13 +857,13 @@
     }
     .weapon-rack-strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 6px;
       margin-top: 8px;
     }
     .weapon-rack-strip .gear-slot-tile {
       width: 100%;
-      height: 52px;
+      min-height: 60px;
     }
     .tier-pill-bar {
       display: flex;
@@ -807,6 +894,83 @@
       border-radius: 4px;
       background: linear-gradient(180deg, #161a14, #0d100c);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+    .table-scroll-wrap {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Multi-Resolution Responsive Breakpoints (Zero Overflow & Zero Occlusion) */
+    @media (max-width: 1460px) {
+      .workbench-grid {
+        grid-template-columns: 344px minmax(0, 1fr);
+      }
+      .workbench-grid > .col-stack:nth-child(3) {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 12px;
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .workbench-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .workbench-grid > .col-stack:nth-child(3) {
+        grid-column: auto;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-nivel {
+        border-right: none;
+        padding-right: 0;
+      }
+      .arvore-saldos {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .beta-shell {
+        padding: 8px 10px 18px;
+      }
+      .milestone-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-cobra {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .kv-grid, .passive-badges-row, .inspector-modes-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .arvore-head-acoes {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .hotbar-slot {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+      .hotbar-slot > .badge-cd {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .arvore-cobra {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .weapon-rack-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .identity-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   
     .comp-table {
@@ -819,6 +983,14 @@
       padding: 6px 8px;
       background: var(--bg-card);
       vertical-align: middle;
+    }
+    .comp-table td.mono, .comp-table th {
+      white-space: nowrap;
+    }
+    .sim-tables-grid .comp-table th,
+    .sim-tables-grid .comp-table td {
+      padding: 4px 5px;
+      font-size: 9.5px;
     }
     .comp-table th {
       background: #141812;
@@ -844,9 +1016,12 @@
       border-radius: 4px;
       padding: 10px;
       overflow-x: auto;
-      font-size: 11px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      font-size: 10.5px;
       line-height: 1.45;
       color: #e8e4d9;
+      max-width: 100%;
     }
     .chart-legend {
       display: flex;
@@ -863,6 +1038,42 @@
       border-radius: 50%;
       margin-right: 4px;
       vertical-align: middle;
+    }
+    .sim-charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+      min-width: 0;
+    }
+    .sim-tables-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+      min-width: 0;
+    }
+    .armaments-hooks-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+      gap: 12px;
+      min-width: 0;
+    }
+    .arm-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 6px;
+      min-width: 0;
+    }
+    @media (max-width: 1460px) {
+      .sim-tables-grid, .armaments-hooks-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 1120px) {
+      .sim-charts-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   </style>
 </head>
@@ -920,19 +1131,19 @@
         </h2>
         <div class="panel-body">
           <div class="filter-bar">
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <span class="mono" style="font-size:11px;color:var(--text-gold);">Mode:</span>
               <button type="button" class="beta-btn is-active" data-sim-mode="mode_a" onclick="updateSimFilter('mode', 'mode_a')">Mode A (100% Existing Engine)</button>
               <button type="button" class="beta-btn" data-sim-mode="mode_b" onclick="updateSimFilter('mode', 'mode_b')">Mode B (&lt;20 LOC C# Hook)</button>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <span class="mono" style="font-size:11px;color:var(--text-gold);">Bracket:</span>
               <button type="button" class="beta-btn" data-sim-bracket="L10" onclick="updateSimFilter('bracket', 'L10')">L10</button>
               <button type="button" class="beta-btn" data-sim-bracket="L25" onclick="updateSimFilter('bracket', 'L25')">L25</button>
               <button type="button" class="beta-btn" data-sim-bracket="L45" onclick="updateSimFilter('bracket', 'L45')">L45</button>
               <button type="button" class="beta-btn is-active" data-sim-bracket="L60" onclick="updateSimFilter('bracket', 'L60')">L60</button>
             </div>
-            <div style="display:flex;gap:6px;align-items:center;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <span class="mono" style="font-size:11px;color:var(--text-gold);">Archetype:</span>
               <button type="button" class="beta-btn is-active" data-sim-arch="low_def_boss" onclick="updateSimFilter('arch', 'low_def_boss')">low_def_boss</button>
               <button type="button" class="beta-btn" data-sim-arch="high_def_boss" onclick="updateSimFilter('arch', 'high_def_boss')">high_def_boss</button>
@@ -941,24 +1152,25 @@
             </div>
           </div>
 
-          <table class="comp-table" style="margin-bottom:12px;">
-            <thead>
-              <tr>
-                <th>Class</th>
-                <th>Sustained DPS</th>
-                <th>Relative DPS Bar</th>
-                <th>Trash TTK (s)</th>
-                <th>EHP / sec</th>
-                <th>Overkill Waste %</th>
-                <th>Net Mana / min</th>
-                <th>Net Stam / min</th>
-                <th>Parries / Clones</th>
-                <th>OOM Ticks</th>
-                <th>Parity Gate</th>
-              </tr>
-            </thead>
-            <tbody id="sim-telemetry-tbody">
-              
+          <div class="table-scroll-wrap" style="margin-bottom:12px;">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Sustained DPS</th>
+                  <th>Relative DPS Bar</th>
+                  <th>Trash TTK (s)</th>
+                  <th>EHP / sec</th>
+                  <th>Overkill Waste %</th>
+                  <th>Net Mana / min</th>
+                  <th>Net Stam / min</th>
+                  <th>Parries / Clones</th>
+                  <th>OOM Ticks</th>
+                  <th>Parity Gate</th>
+                </tr>
+              </thead>
+              <tbody id="sim-telemetry-tbody">
+                
         <tr>
           <td><strong style="text-transform:uppercase;color:#fff2bf;">warrior</strong></td>
           <td class="mono">351.58</td>
@@ -1053,13 +1265,14 @@
           <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>
         </tr>
       
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div class="sim-charts-grid">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
                 <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Sustained DPS Curve (L10 → L60)
                 </strong>
@@ -1096,7 +1309,7 @@
 <polyline fill="none" stroke="#c83e37" stroke-width="2.8" points="48,185 251,164 453,100 656,20" /><circle cx="48" cy="185" r="4" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 7.3 DPS</title></circle><circle cx="251" cy="164" r="4" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 49.6 DPS</title></circle><circle cx="453" cy="100" r="4" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 183.1 DPS</title></circle><circle cx="656" cy="20" r="4" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 391.9 DPS</title></circle>
 <polyline fill="none" stroke="#2e9e6b" stroke-width="2.8" points="48,185 251,163 453,100 656,20" /><circle cx="48" cy="185" r="4" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 7.3 DPS</title></circle><circle cx="251" cy="163" r="4" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 51.7 DPS</title></circle><circle cx="453" cy="100" r="4" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 184.0 DPS</title></circle><circle cx="656" cy="20" r="4" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 367.4 DPS</title></circle>
     </svg>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:10px 0 6px;">
                 <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60)
                 </strong>
@@ -1129,8 +1342,8 @@
     </svg>
             </div>
 
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
                 <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
                   5-Channel Damage Source Breakdown (L60 Boss)
                 </strong>
@@ -1298,24 +1511,25 @@
           </div>
 
           <!-- Consolidated Material Tier (Iron -> Valorite) & 10-Wave Dungeon Endurance -->
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;margin-top:12px;">
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
+          <div class="sim-tables-grid">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
                 9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Monotonic DPS &amp; EHP/s)
               </div>
-              <table class="comp-table">
-                <thead>
-                  <tr>
-                    <th>Material Tier</th>
-                    <th>Warrior</th>
-                    <th>Mage</th>
-                    <th>Ranger</th>
-                    <th>Samurai (SM)</th>
-                    <th>Ninja (NJ)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
+              <div class="table-scroll-wrap">
+                <table class="comp-table">
+                  <thead>
+                    <tr>
+                      <th>Material Tier</th>
+                      <th>Warrior</th>
+                      <th>Mage</th>
+                      <th>Ranger</th>
+                      <th>Samurai (SM)</th>
+                      <th>Ninja (NJ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
         <td class="mono"><strong style="color:#fff2bf;">Iron</strong> <small style="color:var(--text-secondary);">(Lv.1)</small></td>
         <td class="mono">77.1 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">170.9 EHP/s</span></td><td class="mono">127.9 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">136.5 EHP/s</span></td><td class="mono">56.1 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">87.8 EHP/s</span></td><td class="mono">60.1 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">148.7 EHP/s</span></td><td class="mono">61.9 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">103.4 EHP/s</span></td>
       </tr>
@@ -1351,28 +1565,30 @@
         <td class="mono"><strong style="color:#fff2bf;">Valorite</strong> <small style="color:var(--text-secondary);">(Lv.60)</small></td>
         <td class="mono">351.6 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">317.6 EHP/s</span></td><td class="mono">387.9 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">366.3 EHP/s</span></td><td class="mono">383.9 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">321.1 EHP/s</span></td><td class="mono">391.9 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">318.9 EHP/s</span></td><td class="mono">367.4 <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">330.4 EHP/s</span></td>
       </tr>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
                 10-Wave Continuous Dungeon Pull Endurance (8 Trash + 2 Boss Waves, Zero Reset)
               </div>
-              <table class="comp-table">
-                <thead>
-                  <tr>
-                    <th>Class</th>
-                    <th>Clear Time</th>
-                    <th>Avg Wave DPS</th>
-                    <th>Min HP</th>
-                    <th>Min Mana</th>
-                    <th>W1 → W10 DPS</th>
-                    <th>Mitigation</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
+              <div class="table-scroll-wrap">
+                <table class="comp-table">
+                  <thead>
+                    <tr>
+                      <th>Class</th>
+                      <th>Clear Time</th>
+                      <th>Avg Wave DPS</th>
+                      <th>Min HP</th>
+                      <th>Min Mana</th>
+                      <th>W1 → W10 DPS</th>
+                      <th>Mitigation</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
         <td><strong style="text-transform:uppercase;color:#d97706;">warrior</strong></td>
         <td class="mono">116.6s</td>
         <td class="mono">292.83 DPS</td>
@@ -1422,8 +1638,9 @@
         <td class="mono">7 Parries / 6 Clones</td>
         <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">10/10 WAVES CLEARED</span></td>
       </tr>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
               <div style="margin-top:8px;padding:8px 10px;background:#121611;border:1px solid #2a3026;border-radius:4px;font-size:11px;color:var(--text-secondary);">
                 <strong style="color:#82d5b0;">Idle Sustainability Proof:</strong> Across 10 consecutive waves without out-of-combat resets, <strong style="color:#fff2bf;">Samurai</strong> parries <strong>44</strong> attacks (fueling <em>Confidence</em> Inner Calm HP/Stam recovery and <em>Evasion</em> Iaido Flash Riposte), while <strong style="color:#fff2bf;">Ninja</strong> intercepts <strong>16</strong> boss blows via <em>Mirror Image</em> &amp; <em>Egg Bomb</em> clones and triggers <em>Smoke Bomb</em> Vanish &amp; Volley with <strong>0 OOM ticks</strong>.
               </div>
@@ -1438,12 +1655,13 @@
           <span class="title-left">2. 5-Class L1–L60 Progression Structural Parity Matrix</span>
           <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
         </h2>
-        <div class="panel-body" style="overflow-x:auto;">
-          <table class="comp-table">
-            <thead>
-              <tr>
-                <th style="width:54px;">Tier</th>
-                
+        <div class="panel-body">
+          <div class="table-scroll-wrap">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th style="width:54px;">Tier</th>
+                  
         <th>
           <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
             
@@ -1498,10 +1716,10 @@
           </div>
         </th>
       
-              </tr>
-            </thead>
-            <tbody>
-              
+                </tr>
+              </thead>
+              <tbody>
+                
         <tr>
           <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L1</td>
           
@@ -2419,8 +2637,9 @@
           
         </tr>
       
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -2431,15 +2650,15 @@
           <span class="arvore-secao-sub">design/drop-in/items-bushido-ninjitsu.json · classes-patch.js · BaseWeapon.cs</span>
         </h2>
         <div class="panel-body">
-          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
-            <div>
+          <div class="armaments-hooks-grid">
+            <div style="min-width:0;">
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Authentic art.png Sprites · Iron → Valorite)</div>
-              <div class="kv-grid">
+              <div class="arm-card-grid">
                 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/katana.png" alt="Katana" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/katana.png" alt="Katana" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Katana <code style="font-size:10px;color:var(--text-secondary);">(katana)</code></strong>
               <span class="type-pill">samurai · swords</span>
             </div>
@@ -2457,9 +2676,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/no_dachi.png" alt="No-Dachi" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/no_dachi.png" alt="No-Dachi" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">No-Dachi <code style="font-size:10px;color:var(--text-secondary);">(no_dachi)</code></strong>
               <span class="type-pill">samurai · swords</span>
             </div>
@@ -2477,9 +2696,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/wakizashi.png" alt="Wakizashi" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/wakizashi.png" alt="Wakizashi" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Wakizashi <code style="font-size:10px;color:var(--text-secondary);">(wakizashi)</code></strong>
               <span class="type-pill">samurai · swords</span>
             </div>
@@ -2497,9 +2716,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/lajatang.png" alt="Lajatang" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/lajatang.png" alt="Lajatang" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Lajatang <code style="font-size:10px;color:var(--text-secondary);">(lajatang)</code></strong>
               <span class="type-pill">samurai · fencing</span>
             </div>
@@ -2517,9 +2736,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/tekagi.png" alt="Tekagi" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/tekagi.png" alt="Tekagi" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Tekagi <code style="font-size:10px;color:var(--text-secondary);">(tekagi)</code></strong>
               <span class="type-pill">ninja · fencing</span>
             </div>
@@ -2537,9 +2756,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/kama.png" alt="Kama" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/kama.png" alt="Kama" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Kama <code style="font-size:10px;color:var(--text-secondary);">(kama)</code></strong>
               <span class="type-pill">ninja · fencing</span>
             </div>
@@ -2557,9 +2776,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/fukiya.png" alt="Fukiya" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/fukiya.png" alt="Fukiya" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Fukiya <code style="font-size:10px;color:var(--text-secondary);">(fukiya)</code></strong>
               <span class="type-pill">ninja · ninjitsu</span>
             </div>
@@ -2577,9 +2796,9 @@
       
 
         <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-          <img src="assets/items/tessen.png" alt="Tessen" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-          <div>
-            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <img src="assets/items/tessen.png" alt="Tessen" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+          <div style="min-width:0;">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;align-items:center;gap:4px;">
               <strong style="color:#fff2bf;font-size:12px;">Tessen <code style="font-size:10px;color:var(--text-secondary);">(tessen)</code></strong>
               <span class="type-pill">ninja · macing</span>
             </div>
@@ -2597,12 +2816,12 @@
       
               </div>
               <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin:10px 0 6px;text-transform:uppercase;">4 Cooldown-Gated Ninjitsu Consumables &amp; Projectiles</div>
-              <div class="kv-grid">
+              <div class="arm-card-grid">
                 
       <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-        <img src="assets/items/smoke_bomb.png" alt="Smoke Bomb" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-        <div>
-          <div style="display:flex;justify-content:space-between;width:100%;">
+        <img src="assets/items/smoke_bomb.png" alt="Smoke Bomb" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+        <div style="min-width:0;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;gap:4px;">
             <strong style="color:#fff2bf;">Smoke Bomb / Bomba de Fumaça</strong>
             <span class="lv-pill">itemId: 10248</span>
           </div>
@@ -2617,9 +2836,9 @@
     
 
       <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-        <img src="assets/items/egg_bomb.png" alt="Egg Bomb" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-        <div>
-          <div style="display:flex;justify-content:space-between;width:100%;">
+        <img src="assets/items/egg_bomb.png" alt="Egg Bomb" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+        <div style="min-width:0;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;gap:4px;">
             <strong style="color:#fff2bf;">Egg Bomb / Bomba de Ovo</strong>
             <span class="lv-pill">itemId: 10249</span>
           </div>
@@ -2634,9 +2853,9 @@
     
 
       <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-        <img src="assets/items/fukiya.png" alt="Fukiya" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-        <div>
-          <div style="display:flex;justify-content:space-between;width:100%;">
+        <img src="assets/items/fukiya.png" alt="Fukiya" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+        <div style="min-width:0;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;gap:4px;">
             <strong style="color:#fff2bf;">Fukiya / Zarabatana Fukiya</strong>
             <span class="lv-pill">itemId: 10154</span>
           </div>
@@ -2651,9 +2870,9 @@
     
 
       <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
-        <img src="assets/items/shuriken.png" alt="Shuriken" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
-        <div>
-          <div style="display:flex;justify-content:space-between;width:100%;">
+        <img src="assets/items/shuriken.png" alt="Shuriken" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+        <div style="min-width:0;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;width:100%;gap:4px;">
             <strong style="color:#fff2bf;">Shuriken / Shuriken</strong>
             <span class="lv-pill">itemId: 10156</span>
           </div>
@@ -2668,12 +2887,12 @@
     
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div>
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0;">
+              <div style="min-width:0;">
                 <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:4px;">
                   Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
                 </div>
-                <pre class="code-card" style="margin:0;"><code>// Mode B Server Hook (17 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+                <pre class="code-card" style="margin:0;"><code>// Mode B Server Hook (17 LOC in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
 // 1. OnWeaponHit: Auto-Perfection Streak &amp; On-Kill Vital Recovery (9 LOC)
 if (attacker is PlayerMobile sm &amp;&amp; sm.ClassId == 114 &amp;&amp; sm.Skills.Bushido.Value &gt;= 50.0) {
     if (sm.PerfectionTarget != defender) { sm.PerfectionTarget = defender; sm.PerfectionBonus = 0; }
@@ -2684,18 +2903,19 @@ if (attacker is PlayerMobile sm &amp;&amp; sm.ClassId == 114 &amp;&amp; sm.Skill
 // 2. OnWeaponMiss: Perfection Streak Decay (2 LOC)
 if (attacker is PlayerMobile smMiss &amp;&amp; smMiss.ClassId == 114 &amp;&amp; smMiss.PerfectionTarget == defender)
     smMiss.PerfectionBonus = Math.Max(0, smMiss.PerfectionBonus - 5);
-// 3. OnParrySuccess (inside AbsorbDamageAOS when CheckParry == true): 2.0s ICD Counter &amp; Confidence (6 LOC)
+// 3. OnParrySuccess (CheckParry == true): 2.0s ICD Counter &amp; Confidence (6 LOC)
 if (blocked &amp;&amp; Core.TickCount - defender.NextBushidoParryProc &gt;= 2000) {
     defender.NextBushidoParryProc = Core.TickCount;
-    if (CounterAttack.IsCountering(defender) &amp;&amp; defender.Weapon is BaseWeapon bw) bw.OnSwing(defender, attacker);
+    if (CounterAttack.IsCountering(defender) &amp;&amp; defender.Weapon is BaseWeapon bw)
+        bw.OnSwing(defender, attacker);
     if (Confidence.IsConfident(defender)) { defender.Hits += 2; defender.Stam += 2; }
 }</code></pre>
               </div>
-              <div>
+              <div style="min-width:0;">
                 <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:4px;">
                   Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
                 </div>
-                <pre class="code-card" style="margin:0;"><code>// Mode B Server Hook (16 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+                <pre class="code-card" style="margin:0;"><code>// Mode B Server Hook (16 LOC in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
 // 1. OnIncomingHit: Ablative Mirror Image Clone Interception with 1.5s ICD (8 LOC)
 if (MirrorImage.HasClone(defender) &amp;&amp; Core.TickCount - defender.NextCloneIntercept &gt;= 1500
     &amp;&amp; defender.Skills.Ninjitsu.Value / 150.0 &gt; Utility.RandomDouble()) {
@@ -2703,7 +2923,7 @@ if (MirrorImage.HasClone(defender) &amp;&amp; Core.TickCount - defender.NextClon
     MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone &amp; decrements cloneStacks
     damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
 }
-// 2. OnWeaponSwingHit: 3-Swing DeathStrike Detonation, Kitsune 3rd-Swing Claw &amp; Stealth Opener (8 LOC)
+// 2. OnWeaponSwingHit: 3-Swing DeathStrike, Kitsune Claw &amp; Stealth Opener (8 LOC)
 if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
     DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
     if (nj.CombatStealthUntil &gt; Core.TickCount &amp;&amp; (move is Backstab || move is SurpriseAttack)) {
@@ -2712,26 +2932,27 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
     }
 }</code></pre>
               </div>
-              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+              <details class="schema-drawer" style="padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;min-width:0;">
                 <summary style="font-size:10.5px;">Expand Full 8-Weapon Drop-In Table, 9 Material Multipliers &amp; 10 Affix Pools</summary>
-                <div style="margin-top:8px;">
-                  <table class="comp-table" style="margin-bottom:8px;">
-                    <thead>
-                      <tr>
-                        <th>Weapon</th>
-                        <th>Item ID</th>
-                        <th>Skill / Layer</th>
-                        <th>Spd</th>
-                        <th>Dmg</th>
-                        <th>Primary / Secondary</th>
-                        <th>Synergy</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
+                <div style="margin-top:8px;min-width:0;">
+                  <div class="table-scroll-wrap" style="margin-bottom:8px;">
+                    <table class="comp-table">
+                      <thead>
+                        <tr>
+                          <th>Weapon</th>
+                          <th>Item ID</th>
+                          <th>Skill / Layer</th>
+                          <th>Spd</th>
+                          <th>Dmg</th>
+                          <th>Primary / Secondary</th>
+                          <th>Synergy</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/bokuto.png" alt="Bokuto" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/bokuto.png" alt="Bokuto" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Bokuto</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(bokuto)</code></div>
         </td>
         <td class="mono">10232 (0x27F8)</td>
@@ -2745,7 +2966,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/daisho.png" alt="Daisho" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/daisho.png" alt="Daisho" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Daisho</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(daisho)</code></div>
         </td>
         <td class="mono">10229 (0x27F5)</td>
@@ -2759,7 +2980,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/lajatang.png" alt="Lajatang" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/lajatang.png" alt="Lajatang" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Lajatang</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(lajatang)</code></div>
         </td>
         <td class="mono">10247 (0x2807)</td>
@@ -2773,7 +2994,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/no_dachi.png" alt="No-Dachi" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/no_dachi.png" alt="No-Dachi" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">No-Dachi</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(no_dachi)</code></div>
         </td>
         <td class="mono">10226 (0x27F2)</td>
@@ -2787,7 +3008,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/sai.png" alt="Sai" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/sai.png" alt="Sai" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Sai</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(sai)</code></div>
         </td>
         <td class="mono">10239 (0x27FF)</td>
@@ -2801,7 +3022,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/tekagi.png" alt="Tekagi" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/tekagi.png" alt="Tekagi" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Tekagi</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(tekagi)</code></div>
         </td>
         <td class="mono">10244 (0x2804)</td>
@@ -2815,7 +3036,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/tessen.png" alt="Tessen" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/tessen.png" alt="Tessen" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Tessen</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(tessen)</code></div>
         </td>
         <td class="mono">10243 (0x2803)</td>
@@ -2829,7 +3050,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
 
       <tr>
         <td style="display:flex;align-items:center;gap:6px;">
-          <img src="assets/items/wakizashi.png" alt="Wakizashi" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <img src="assets/items/wakizashi.png" alt="Wakizashi" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;flex-shrink:0;" />
           <div><strong style="color:#fff2bf;">Wakizashi</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(wakizashi)</code></div>
         </td>
         <td class="mono">10228 (0x27F4)</td>
@@ -2840,8 +3061,9 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         <td class="mono">samurai, ninja</td>
       </tr>
     
-                    </tbody>
-                  </table>
+                      </tbody>
+                    </table>
+                  </div>
                   <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
                     
       <span class="badge-meta" style="padding:3px 7px;">
@@ -2889,7 +3111,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
       </span>
     
                   </div>
-                  <div class="kv-grid">
+                  <div class="arm-card-grid">
                     
       <div class="kv-item">
         <div>
