@@ -13,7 +13,7 @@ This roadmap delivers a 100% source-verified mechanics knowledgebase of **UO Idl
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline** - Private repo verification, adapted `kb.py` claim linter with credential sanitization, formatted/AST-sliced UO Idle bundle extracts, and canonical ModernUO C# source snapshots.
+- [x] **Phase 1: Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline** - Private repo verification, adapted `kb.py` claim linter with credential sanitization, formatted/AST-sliced UO Idle bundle extracts, and canonical ModernUO C# source snapshots. (completed 2026-11-06)
 - [ ] **Phase 2: Core UO Idle Engine & Systems Knowledgebase** - Claim-verified KB pages for combat tick loops, hit/crit/mitigation math, resource regen, status opcodes, progression/equipment systems, and the Engine Capability Matrix.
 - [ ] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules.
 - [ ] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines.
@@ -155,7 +155,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | In Progress|  |
+| 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
 | 2. Core UO Idle Engine & Systems Knowledgebase | 0/2 | Not started | - |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 0/2 | Not started | - |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
