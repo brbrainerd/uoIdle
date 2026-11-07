@@ -1,19 +1,19 @@
 ---
 gsd_state_version: "1.0"
-milestone: v1.2
-status: Complete — Phase 16 Verified & Shipped
-stopped_at: Phase 16 complete (UI De-duplication, Progressive Disclosure, 48x48 Square Level-Line Sockets & Concept-Art CV Flywheel 46/46 passing)
-last_updated: "2026-11-07T23:00:00.000Z"
+milestone: v1.3
+status: Complete — Milestone v1.3 Archived & Shipped
+stopped_at: Milestone v1.3 archived & tagged (v1.3)
+last_updated: "2026-11-07T23:42:00.000Z"
 last_activity: 2026-11-07
-last_activity_desc: Completed Phase 16 (UI De-duplication, Progressive Disclosure, Square Level-Line Sockets & Concept-Art CV Flywheel — 46/46 passed)
-state_head: f3c583d
+last_activity_desc: Archived Milestone v1.3 (Phases 15–16, 46/46 Playwright + CV audit, 4/4 code review fixes)
+state_head: 1d727d9
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 6
-  completed_plans: 6
+  total_phases: 2
+  completed_phases: 2
+  total_plans: 2
+  completed_plans: 2
   percent: 100
-milestone_name: Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledgebase Verification Audit
+milestone_name: Smooth-Scroll Navigation, Sim Button Reactivity, Progressive Disclosure & Concept-Art CV Flywheel
 ---
 
 # Project State
@@ -23,20 +23,20 @@ milestone_name: Live-Codebase Simulator Fidelity, Unified Tick Engine & Knowledg
 See: .planning/PROJECT.md (updated 2026-11-07)
 
 **Core value:** Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerically balanced (parity-tested against live Warrior, Mage, and Ranger formulae), and implementation-ready Ninja and Samurai skill lines backed by a 100% source-verified UO Idle mechanics knowledgebase.
-**Current focus:** Phase 16 Shipped (`46/46` Playwright + CV button audit checks passing)
+**Current focus:** Milestone `v1.3` Shipped & Archived (`7/7` verification gates + `46/46` Playwright + CV checks passing)
 
 ## Current Position
 
 Phase: 16 of 16 (UI De-duplication, Progressive Disclosure, Control Clustering & Concept-Art CV Flywheel)
 Plan: 16-01
-Status: Complete
-Last activity: 2026-11-07 — Completed Phase 16 (`16-01-SUMMARY.md`) and verified `46/46` interactive button & progression chart checks via Playwright + CV before/after diffing
+Status: Milestone v1.3 Archived & Tagged
+Last activity: 2026-11-07 — Completed `/gsd-code-review --fix` (`4/4` fixed), `/gsd-complete-milestone` (`v1.3`), and `/gsd-cleanup`
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed (v1.0–v1.2): 22
+- Total plans completed (v1.0–v1.3): 24
 - Average duration: 6.5 min
 
 ## Accumulated Context
@@ -44,35 +44,21 @@ Last activity: 2026-11-07 — Completed Phase 16 (`16-01-SUMMARY.md`) and verifi
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- [v1.2 Init]: Enforce live `v0.99.0` stat caps (`SDI <= 50%`, `DI <= 100%`, gear `SSI <= 60%` + tree `Speed`, `LMC <= 40%`), `[huntpostura` postures (`agressivo`/`equilibrado`/`defensivo`), `+8%/+12%` material ladder, secondary-target `splashRatio`, 1H/2H/Shield `CheckParry`, `ro(e)` hotbar triggers, and a unified single/multi-wave tick kernel
-- [v1.2 Init]: Audit `mechanics/` to promote multi-source corroborated claims (`bundle:` + `wiki:`/`modernuo:`/`live:`) to `[verified]` and cover `bestiary-and-wiki.js`, `hunt-and-bot-config.js`, `progression-tree-ui.js`, and `simulator-fidelity-audit.md`
-
-### Roadmap Evolution
-
-- Phase 15 added: Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-None yet.
-
-## Deferred Items
-
-| Category | Item | Status | Deferred At | Milestone |
-|----------|------|--------|-------------|-----------|
-| *(none)* | | | | |
+None.
 
 ## Session Continuity
 
-Last session: 2026-11-07T17:35:00.000Z
-Stopped at: Milestone v1.2 archived & tagged (`v1.2`)
+Last session: 2026-11-07T23:42:00.000Z
+Stopped at: Milestone v1.3 archived, tagged (`v1.3`), and phase directories cleaned up into `.planning/milestones/v1.3-phases/`
 Resume file: None
 
 ## Operator Next Steps
 
-- Run `/gsd-new-milestone` when ready to start the next milestone cycle
+- Run `/gsd-new-milestone` when ready to start a future milestone cycle

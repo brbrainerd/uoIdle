@@ -2083,7 +2083,7 @@ function buildClassSkillTreeHtml(
       ${cls.seededHotbar
         .map((slot, sIdx) => {
           const iconAbId = hotbarIconMap[sIdx] ?? cls.abilities[0]!.id;
-          const shortLbl = slot.label.split(' ')[0] ?? slot.label;
+          const shortLbl = slot.label.replace(/^Lesser\s+/i, '').split(' ')[0] ?? slot.label;
           return `
             <div class="hotbar-slot hotbar-icon-socket ${slot.slotIndex === 0 ? 'is-selected-seal' : ''}" data-hotbar-idx="${slot.slotIndex}" onclick="selectHotbarSlot(${slot.slotIndex}, '${escapeHtml(slot.abilityId)}')" title="Slot ${slot.slotIndex + 1}: ${escapeHtml(slot.label)} (${escapeHtml(slot.abilityId)}) — 2,000ms CD Floor">
               <span class="hotbar-key-badge">${slot.slotIndex + 1}</span>
@@ -2135,6 +2135,7 @@ function buildClassSkillTreeHtml(
     classData: cls,
     modeDescriptions: MODE_DESCRIPTIONS,
     gearCatalog: gearSlots,
+    passiveBadges: PASSIVE_BADGES[cls.id as 'samurai' | 'ninja'],
   };
 
   return `<!DOCTYPE html>
@@ -2571,12 +2572,24 @@ function buildClassSkillTreeHtml(
       var cls = payload.classData;
       var modeMap = payload.modeDescriptions;
       var gearList = payload.gearCatalog || [];
+      var sealList = payload.passiveBadges || [];
       var currentLocale = 'en';
       var currentMode = 'mode_a';
       var selectedAbilityId = cls.abilities[0].id;
       var selectedGearId = gearList.length > 6 ? gearList[6].id : (gearList[0] ? gearList[0].id : '');
+      var selectedSealIdx = 0;
       var currentTier = { id: 'Valorite', mult: 1.85, res: 96 };
       var dockMilestoneIdx = 0;
+
+      function updateSealReadout(idx) {
+        var b = sealList[idx];
+        var el = document.getElementById('seal-active-readout');
+        if (!b || !el) return;
+        var nm = currentLocale === 'pt' ? b.namePtBr : b.nameEn;
+        var ds = currentLocale === 'pt' ? b.descPtBr : b.descEn;
+        el.innerHTML = '<strong style="color:#fff2bf;">' + escHtml(b.tier) + ' — ' + escHtml(nm) + ':</strong> ' +
+          '<span style="color:var(--text-secondary);">' + escHtml(ds) + '</span>';
+      }
 
       window.scrollToTreeSection = function(secId) {
         var el = document.getElementById(secId);
@@ -2750,6 +2763,7 @@ function buildClassSkillTreeHtml(
         }
         window.selectAbility(selectedAbilityId, false);
         if (selectedGearId) window.inspectGear(selectedGearId);
+        updateSealReadout(selectedSealIdx);
       };
 
       window.setExecMode = function(mode) {
@@ -2938,6 +2952,13 @@ function buildClassSkillTreeHtml(
         for (var i = 0; i < slots.length; i++) {
           slots[i].classList.toggle('is-selected-seal', parseInt(slots[i].getAttribute('data-hotbar-idx'), 10) === slotIdx);
         }
+        var hbTriggers = ['self.hp <= 50%', 'self.hp <= 75%', 'self.poisoned == true', 'self.stam <= 45%', 'target.inRange (Primary Opener)'];
+        var hbSlotObj = cls.seededHotbar && cls.seededHotbar[slotIdx] ? cls.seededHotbar[slotIdx] : null;
+        var hbReadoutEl = document.getElementById('hotbar-active-readout');
+        if (hbReadoutEl && hbSlotObj) {
+          hbReadoutEl.innerHTML = '<strong style="color:#fff2bf;">Slot ' + (slotIdx + 1) + ' (' + escHtml(hbSlotObj.label) + '):</strong> ' +
+            '<span style="color:var(--text-secondary);">' + escHtml(hbTriggers[slotIdx] || 'ro(e) Priority') + ' · ' + hbSlotObj.customCooldownMs + 'ms CD Floor · Ability: ' + escHtml(hbSlotObj.abilityId) + '</span>';
+        }
         var foundAb = null;
         for (var j = 0; j < cls.abilities.length; j++) {
           if (cls.abilities[j].id === targetAbilityId) {
@@ -2953,10 +2974,12 @@ function buildClassSkillTreeHtml(
       };
 
       window.selectPassiveSeal = function(sealIdx, targetAbilityId) {
+        selectedSealIdx = sealIdx;
         var seals = document.querySelectorAll('[data-seal-idx]');
         for (var i = 0; i < seals.length; i++) {
           seals[i].classList.toggle('is-selected-seal', parseInt(seals[i].getAttribute('data-seal-idx'), 10) === sealIdx);
         }
+        updateSealReadout(sealIdx);
         window.selectAbility(targetAbilityId, true);
       };
 
@@ -3005,6 +3028,7 @@ function buildClassSkillTreeHtml(
           dockMilestoneIdx = (dockMilestoneIdx + 3) % cls.progression.length;
           window.selectAbility(cls.progression[dockMilestoneIdx].id, true);
         } else if (action === 'ticker') {
+          window.switchInspectorTab('ticker');
           window.stepCombatTicker();
           window.scrollToTreeSection('sec-ability-inspector');
         }

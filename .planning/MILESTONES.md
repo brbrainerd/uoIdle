@@ -1,5 +1,16 @@
 # Milestones
 
+## v1.3 Smooth-Scroll Navigation, Sim Button Reactivity, Progressive Disclosure & Concept-Art CV Flywheel (Shipped: 2026-11-07)
+
+**Phases completed:** 2 phases (Phases 15–16), 2 plans, 8/8 requirements (`UI-SCROLL-01`, `SIM-BUTTONS-01`, `PW-CV-AUDIT-01`, `UI-DEDUP-01`, `UI-PROG-DISC-01`, `UI-CLUSTER-01`, `UI-ANIM-01`, `UI-CONCEPT-CV-01`)
+
+**Key accomplishments:**
+
+- **Smooth-Scroll Navigation Overhaul, Full Simulator Reactivity & 46-Check Playwright + CV Harness (`Phase 15`)**: Replaced all `display: none` section hiding across `class-comparison.html`, `samurai-skill-tree.html`, `ninja-skill-tree.html`, and `index.html` with smooth scrolling (`window.scrollTo` / `scrollIntoView`) and `.is-focused-section` spotlight highlighting, wired dynamic `Mode A/B` + `Bracket` + `Archetype` re-rendering across all SVG progression curves and 5-channel breakdown bars, and built `tools/audit_buttons_cv.ts` verifying `46/46` interactive buttons via headless Chromium (`playwright`) + Pillow (`PIL.ImageChops`) pixel-diffing.
+- **UI De-duplication, Progressive Disclosure, Full-Bleed `48×48` Square Level-Line Sockets & Concept-Art CV Convergence (`Phase 16`)**: Generated dark-fantasy UI Concept Art (`mockups/concept-art/concept-skill-tree-workbench.jpg` & `concept-sim-workbench.jpg`), fixed circular `.arvore-circulo` edge clipping on square icons by introducing full-bleed `48×48` beveled square sockets over an SVG golden constellation lattice (`.cobra-constellation-svg`), moved the Tokuno Paperdoll Alcove and 2×2 Simulator Telemetry Quadrant Grid into the primary `1600×1000` above-the-fold viewport, refactored the Inspector into 4 progressive-disclosure tabs (`Overview`, `Mode A/B`, `100ms Sim`, `JSON`) with horizontal hotbar/seal strips (`.hotbar-icon-strip`, `.seal-medallion-strip`), and resolved all 4/4 `16-REVIEW.md` findings (`16-FIX-SUMMARY.md`).
+
+---
+
 ## v1.2 Live-Codebase Simulator Fidelity, Weapon Swing Speed Archetypes, Unified Tick Engine & Knowledgebase Verification Audit (Shipped: 2026-11-07)
 
 **Phases completed:** 4 phases (Phases 11–14), 4 plans, 7/7 requirements (`KB-05..06`, `SIM-06..09`, `UI-04`)

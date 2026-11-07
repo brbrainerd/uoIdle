@@ -8,7 +8,7 @@ A comprehensive reverse-engineering knowledgebase of **UO Idle** (`https://uoidl
 
 Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerically balanced (parity-tested against live Warrior, Mage, and Ranger formulae), and implementation-ready Ninja and Samurai skill lines backed by a 100% source-verified UO Idle mechanics knowledgebase.
 
-## Current State: Milestones v1.0, v1.1 & v1.2 Shipped (2026-11-07)
+## Current State: Milestones v1.0, v1.1, v1.2 & v1.3 Shipped (2026-11-07)
 
 **Status:** Complete and deployed live to GitHub Pages (`https://brbrainerd.github.io/uoIdle/`). Run `/gsd-new-milestone` to begin a future milestone if needed.
 
@@ -50,10 +50,18 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 - ✓ **SIM-08**: Unified Tick-Step Kernel Refactor in `src/sim/engine.ts` eliminating the 340-line loop duplication between `simulateScenarioDetailed` and `simulateMultiWavePull` while recalibrating 5-class Mode A & Mode B parity within $\pm 5\text{–}8\%$ across all scenarios — v1.2
 - ✓ **SIM-09**: Expanded Automated Unit Test Suite (`tools/test_sim.ts`, `16/16` passing) verifying all live caps (`SDI`, `DI`, `SSI`, `LMC`), `[huntpostura` incoming/outgoing multipliers, `+8%/+12%` material ladder, `splashRatio`, 1H/2H/Shield parry divisors, `ro(e)` potion/heal/AoE triggers, single-wave vs. multi-wave kernel equivalence, and weapon swing speed archetypes — v1.2
 - ✓ **UI-04**: Synchronized Workbench UI, Design Specs (`BALANCE_REPORT.md`, `SAMURAI_SPEC.md`, `NINJA_SPEC.md`, `README.md`), Retina Screenshots, and Live GitHub Pages Redeployment (`https://brbrainerd.github.io/uoIdle/`) reflecting `v1.2` simulator telemetry — v1.2
+- ✓ **UI-SCROLL-01**: Smooth-scroll section navigation (`window.scrollTo` / `scrollIntoView`) and `.is-focused-section` spotlight highlighting across all 4 workbench surfaces (zero `display: none` section hiding) — v1.3
+- ✓ **SIM-BUTTONS-01**: Full interactive reactivity across all Simulator (`Mode A/B`, `Bracket`, `Archetype`, `Chart Metric`, `Curve Focus`, clickable SVG bracket markers, Executive KPI cards) and Skill Tree (`Chart Tier`, `Prev / Next Milestone`, `Kind Spotlight`, `Inspector Tabs`, `Paperdoll Material Tiers`, `Hotbar Slots`, `Mastery Seals`) controls — v1.3
+- ✓ **PW-CV-AUDIT-01**: Automated 46-check Playwright + Pillow (`PIL.ImageChops`) Computer Vision verification harness (`tools/audit_buttons_cv.ts`, `46/46` passing) — v1.3
+- ✓ **UI-DEDUP-01**: De-duplicated information across all 4 workbench surfaces into single-source interactive components — v1.3
+- ✓ **UI-PROG-DISC-01**: Progressive-disclosure Inspector tabs (`Overview`, `Mode A/B`, `100ms Sim`, `JSON`) and collapsible `<details>` schema drawers — v1.3
+- ✓ **UI-CLUSTER-01**: Semantic `.command-cluster` control pills and compact horizontal icon/medallion strips (`.hotbar-icon-strip`, `.seal-medallion-strip`) — v1.3
+- ✓ **UI-ANIM-01**: Purposeful dark-fantasy micro-animations and full-bleed `48×48` beveled square `.arvore-circulo` level-line sockets over an SVG golden constellation lattice (`.cobra-constellation-svg`) — v1.3
+- ✓ **UI-CONCEPT-CV-01**: High-resolution dark-fantasy UI Concept Art (`mockups/concept-art/*.jpg`) and above-the-fold (`1600×1000`) visual convergence verified via Playwright + CV before/after captures — v1.3
 
 ### Active
 
-*(None — Milestones `v1.0`, `v1.1`, and `v1.2` shipped 100% of requirements)*
+*(None — Milestones `v1.0`, `v1.1`, `v1.2`, and `v1.3` shipped 100% of requirements)*
 
 ### Out of Scope
 
@@ -88,6 +96,7 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 | Extract real UO gump/item sprites from `uoidle.com/packs/` + AI raster art (`v1.1`) | Replaces procedural Pillow polygons with authentic Ultima Online gump/item art and oil-painted dark-fantasy icons | ✓ Good (`zeroPolygons: true`, 140 ability PNGs + 37 item/paperdoll PNGs verified with `stdDev >= 12.0` and SHA-256) |
 | Consolidate UI into v2.1 Component Architecture (`tools/ui_components.ts`) | Eliminates duplicate ability catalogs, adds progressive-disclosure schema drawers, live Mode A/B interactivity, and a 100ms tick combat preview across all breakpoints (`1600px`..`500px`) | ✓ Good (Verified via multi-resolution CV flywheel) |
 | Enforce live `v0.99.0` stat caps, `[huntpostura` postures, `+8%/+12%` material ladder, `splashRatio`, weapon swing speed archetypes (`2.25s / 2.50s / 3.25s`), and unified tick kernel (`v1.2`) | Eliminates simulator drift at L45/L60/Valorite tiers and guarantees 1:1 behavioral parity between single-wave and multi-wave simulations | ✓ Good (`overallPass: true`, `16/16` unit tests, `4/4` code review fixes applied) |
+| Smooth-scroll navigation, full-bleed `48×48` square level-line sockets over an SVG golden constellation lattice, above-the-fold 2×2 Simulator Telemetry Quadrant Grid, and 46-check Playwright + CV audit (`v1.3`) | Eliminates circular corner clipping on square icons, brings the Tokuno Paperdoll Alcove and 2×2 Simulator Telemetry Grid into the primary `1600×1000` viewport, and verifies 100% button reactivity via CV pixel-diffing | ✓ Good (`46/46` Playwright + CV checks passing, `4/4` Phase 16 code review fixes applied) |
 
 ## Evolution
 
