@@ -1036,6 +1036,407 @@
         grid-template-columns: minmax(0, 1fr);
       }
     }
+    
+    /* ==========================================================================
+       v2.1 Component Architecture & Dark-Fantasy Animation System
+       ========================================================================== */
+    @keyframes auraPulse {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50% { opacity: 0.92; transform: scale(1.04); }
+    }
+    @keyframes railFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @keyframes nodeHaloPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(230, 195, 106, 0.55), 0 0 14px var(--class-glow); }
+      50% { box-shadow: 0 0 0 5px rgba(230, 195, 106, 0), 0 0 22px var(--border-gold-bright); }
+    }
+    @keyframes modeFlash {
+      0% { filter: brightness(1.35); transform: translateY(-1px); }
+      100% { filter: brightness(1); transform: translateY(0); }
+    }
+    @keyframes tickerSweep {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    @keyframes floatUpBadge {
+      0% { opacity: 0; transform: translateY(4px) scale(0.96); }
+      20% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* 1. Global Quick Command & Shortcut Bar Component (<uo-quick-dock>) */
+    .uo-quick-dock {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px 12px;
+      padding: 6px 14px;
+      background: linear-gradient(90deg, #0d100c 0%, #171c15 50%, #0d100c 100%);
+      border-bottom: 1px solid #352d1d;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+    .uo-quick-dock-left, .uo-quick-dock-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+    }
+    .kbd-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #141812;
+      border: 1px solid #3c3425;
+      color: #d6e4ca;
+      font-size: 9.5px;
+    }
+    .kbd-chip kbd {
+      padding: 0 4px;
+      border-radius: 2px;
+      background: #282112;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .live-pulse-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #48bb78;
+      box-shadow: 0 0 8px #48bb78;
+      animation: auraPulse 2.2s infinite ease-in-out;
+    }
+
+    /* 2. Segmented Stat Distribution & Resource Bar Component (<uo-stat-bar>) */
+    .stat-ratio-strip {
+      margin-top: 8px;
+      padding: 6px 8px;
+      background: #10140f;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+    }
+    .stat-ratio-bar {
+      display: flex;
+      height: 7px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #090b08;
+      border: 1px solid #2a3026;
+      margin: 4px 0;
+    }
+    .stat-seg-str { background: linear-gradient(90deg, #c83e37, #e05a47); transition: width 0.3s ease; }
+    .stat-seg-dex { background: linear-gradient(90deg, #2e9e6b, #48bb78); transition: width 0.3s ease; }
+    .stat-seg-int { background: linear-gradient(90deg, #3b82f6, #63b3ed); transition: width 0.3s ease; }
+
+    /* 3. Starter Skill Mastery Progress Card Component */
+    .skill-mastery-card {
+      padding: 5px 8px;
+      background: linear-gradient(180deg, #171c15 0%, #111510 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .skill-mastery-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-1px);
+    }
+    .skill-mastery-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+    .skill-mastery-bar-bg {
+      height: 4px;
+      border-radius: 2px;
+      background: #090b08;
+      overflow: hidden;
+    }
+    .skill-mastery-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* 4. Connected [Arvore Progression Rail & Halo Nodes */
+    .arvore-cobra-wrap {
+      position: relative;
+      padding: 12px 14px;
+      border-bottom: 1px solid #2a3026;
+      background:
+        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 70%),
+        rgba(11, 13, 10, 0.72);
+    }
+    .arvore-tier-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed #262c22;
+    }
+    .arvore-col {
+      position: relative;
+      z-index: 1;
+    }
+    .arvore-col::after {
+      content: '';
+      position: absolute;
+      top: 37px;
+      left: 55%;
+      width: 90%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(201, 162, 39, 0.2) 50%, var(--border-gold) 100%);
+      background-size: 200% 100%;
+      animation: railFlow 5s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .arvore-col:nth-child(6n)::after,
+    .arvore-col:last-child::after {
+      display: none;
+    }
+    .arvore-circulo.is-selected-node {
+      border-color: #fff2bf !important;
+      animation: nodeHaloPulse 2s infinite ease-in-out;
+      transform: scale(1.08);
+    }
+    .arvore-circulo[data-node-kind="passive"] { border-color: var(--kind-passive); }
+    .arvore-circulo[data-node-kind="skill"]   { border-color: var(--kind-skill); }
+    .arvore-circulo[data-node-kind="spell"]   { border-color: var(--kind-spell); }
+    .arvore-circulo[data-node-kind="mechanic"] { border-color: var(--kind-mechanic); }
+    .arvore-circulo[data-node-kind="feature"] {
+      border-color: var(--kind-capstone);
+      box-shadow: 0 0 14px rgba(246, 224, 94, 0.45);
+    }
+
+    /* 5. Ability Power & Scaling Meter Component (<uo-power-meter>) */
+    .uo-power-meter {
+      margin-top: 5px;
+      padding: 4px 6px;
+      background: #0e120d;
+      border: 1px solid #252b21;
+      border-radius: 3px;
+    }
+    .uo-power-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+    }
+    .uo-power-track {
+      position: relative;
+      height: 5px;
+      border-radius: 3px;
+      background: #080a07;
+      overflow: hidden;
+      display: flex;
+    }
+    .uo-power-seg-base {
+      height: 100%;
+      background: linear-gradient(90deg, #8b6f1e, #d4af37);
+      transition: width 0.25s ease;
+    }
+    .uo-power-seg-burst {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), #f6ad55);
+      transition: width 0.25s ease;
+    }
+    .uo-power-seg-modeb {
+      height: 100%;
+      background: #68d391;
+      opacity: 0.35;
+      transition: width 0.25s ease, opacity 0.25s ease;
+    }
+    .is-mode-b-active .uo-power-seg-modeb {
+      opacity: 1;
+      box-shadow: 0 0 8px #68d391;
+    }
+
+    /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
+    .uo-combat-ticker {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      border: 1px solid #4a3c24;
+      background: linear-gradient(180deg, #151913 0%, #0b0e0a 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.08);
+    }
+    .ticker-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .ticker-progress-bg {
+      position: relative;
+      height: 6px;
+      border-radius: 3px;
+      background: #070907;
+      border: 1px solid #2a3026;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .ticker-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
+      width: 65%;
+      transition: width 0.18s linear;
+    }
+    .posture-pips-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .posture-pips {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+    .posture-pip {
+      width: 12px;
+      height: 8px;
+      border-radius: 2px;
+      background: #141812;
+      border: 1px solid #3c3425;
+      transition: all 0.15s ease;
+    }
+    .posture-pip.is-lit {
+      background: var(--border-gold-bright);
+      border-color: #fff2bf;
+      box-shadow: 0 0 6px var(--border-gold);
+    }
+    .posture-pip.is-crimson {
+      background: var(--class-accent);
+      border-color: #ffb3a7;
+      box-shadow: 0 0 6px var(--class-accent);
+    }
+    .ticker-log-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ticker-log-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      border-radius: 3px;
+      background: #10140f;
+      border-left: 2px solid var(--border-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      animation: floatUpBadge 0.22s ease-out;
+    }
+
+    /* 7. Paperdoll Ambient Torchlight & Weapon Telemetry Bars */
+    .paperdoll-figure-box {
+      background:
+        radial-gradient(circle at 50% 35%, var(--class-glow), transparent 62%),
+        radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.16), #090b08 78%) !important;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.75);
+    }
+    .paperdoll-aura-ring {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px dashed rgba(201, 162, 39, 0.22);
+      pointer-events: none;
+      animation: auraPulse 4s infinite ease-in-out;
+    }
+    .weapon-stat-bars {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px dashed #2a3026;
+    }
+    .w-stat-col {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-secondary);
+    }
+    .w-stat-track {
+      height: 4px;
+      background: #080a07;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .w-stat-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
+      transition: width 0.25s ease;
+    }
+
+    /* 8. 5-Class Executive KPI Comparison Strip (class-comparison.html) */
+    .exec-kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .exec-kpi-card {
+      padding: 8px 10px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #181d16 0%, #10140f 100%);
+      border: 1px solid #2a3026;
+      border-top: 3px solid var(--border-gold);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .exec-kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-gold-bright);
+    }
+    @media (max-width: 1120px) {
+      .exec-kpi-strip {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .arvore-col::after {
+        display: none;
+      }
+    }
+  
   
     .portal-hero {
       padding: 18px 20px;
@@ -1048,10 +1449,40 @@
     }
     .portal-hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 290px;
+      grid-template-columns: minmax(0, 1fr) 330px;
       gap: 18px;
       align-items: center;
       min-width: 0;
+    }
+    .hero-paperdoll-alcove {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      background: #0d100c;
+      padding: 10px;
+      border: 1px solid #3c3425;
+      border-radius: 5px;
+    }
+    .alcove-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      border-radius: 4px;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.14), #090b08 75%);
+      border: 1px solid #2e3429;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .alcove-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-2px);
+    }
+    .alcove-card img {
+      width: 112px;
+      height: auto;
+      border-radius: 3px;
     }
     .launch-grid {
       display: grid;
@@ -1150,6 +1581,23 @@
 <body>
   <div class="beta-shell">
     <div class="personagem-arvore">
+      
+    <nav class="uo-quick-dock" aria-label="Developer Quick Command Bar">
+      <div class="uo-quick-dock-left">
+        <span style="display:inline-flex;align-items:center;gap:5px;color:#fff2bf;font-weight:600;">
+          <i class="live-pulse-dot"></i>
+          UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
+        </span>
+        <span class="kbd-chip"><kbd>M</kbd> Mode A/B</span>
+        <span class="kbd-chip"><kbd>1–3</kbd> Switch View</span>
+      </div>
+      <div class="uo-quick-dock-right">
+        <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
+        <a href="mockups/samurai-skill-tree.html?mode=mode_b" style="color:#ff9b93;text-decoration:none;font-weight:600;">⚡ SM Mode B</a>
+        <a href="mockups/ninja-skill-tree.html?mode=mode_b" style="color:#7ce8b4;text-decoration:none;font-weight:600;">⚡ NJ Mode B</a>
+      </div>
+    </nav>
+  
       <header class="arvore-head">
         <div class="arvore-nivel">
           <span class="class-badge-pill">UO IDLE v0.99.0 · MILESTONE v1.1</span>
@@ -1202,9 +1650,19 @@
               <a class="beta-btn" href="design/drop-in/classes-patch.js">View Drop-In JS Patch (applyDropInClassPatch)</a>
             </div>
           </div>
-          <div style="display:flex;gap:10px;justify-content:center;align-items:center;background:#10140f;padding:10px;border:1px solid #3c3425;border-radius:5px;">
-            <img src="mockups/assets/items/paperdoll-samurai.png" alt="Samurai Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
-            <img src="mockups/assets/items/paperdoll-ninja.png" alt="Ninja Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
+          <div class="hero-paperdoll-alcove">
+            <a class="alcove-card" href="mockups/samurai-skill-tree.html" style="border-top:2px solid var(--samurai-accent);">
+              <span class="mono" style="font-size:9px;color:#ff9b93;font-weight:700;">SM · ID 114 · HUE 1884</span>
+              <img src="mockups/assets/items/paperdoll-samurai.png" alt="Samurai Paperdoll" />
+              <span class="mono" style="font-size:9.5px;color:#fff2bf;font-weight:700;">363.2 / 391.9 DPS</span>
+              <span class="mono" style="font-size:8.5px;color:#82d5b0;">29.3% Parry · 44/10w</span>
+            </a>
+            <a class="alcove-card" href="mockups/ninja-skill-tree.html" style="border-top:2px solid var(--ninja-accent);">
+              <span class="mono" style="font-size:9px;color:#7ce8b4;font-weight:700;">NJ · ID 115 · HUE 1175</span>
+              <img src="mockups/assets/items/paperdoll-ninja.png" alt="Ninja Paperdoll" />
+              <span class="mono" style="font-size:9.5px;color:#fff2bf;font-weight:700;">374.5 / 367.4 DPS</span>
+              <span class="mono" style="font-size:8.5px;color:#82d5b0;">70% Clone · 16/10w</span>
+            </a>
           </div>
         </div>
       </section>
@@ -1226,8 +1684,13 @@
                 </div>
                 <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">Samurai (Bushido) Skill Tree &amp; Paperdoll</strong>
                 <p style="margin:0;font-size:12px;color:var(--text-secondary);">
-                  Interactive <code>[Arvore</code> progression, layered UO paperdoll with mouseover gear stats (<code>Iron..Valorite</code>), 5-slot seeded hotbar, EN/PT-BR toggle, and <em>Kensei: Amakura's Judgment</em> capstone.
+                  Interactive <code>[Arvore</code> progression, layered UO paperdoll with mouseover gear stats (<code>Iron..Valorite</code>), 5-slot seeded hotbar, live 100ms combat ticker, and <em>Kensei: Amakura's Judgment</em> capstone.
                 </p>
+                <div class="cost-badges" style="margin-top:auto;padding-top:4px;">
+                  <span class="badge-cd">363.2 DPS (A)</span>
+                  <span class="badge-stamina">391.9 DPS (B)</span>
+                  <span class="badge-mana">44 Wave Parries</span>
+                </div>
               </div>
             </a>
 
@@ -1242,6 +1705,11 @@
                 <p style="margin:0;font-size:12px;color:var(--text-secondary);">
                   Interactive <code>[Arvore</code> progression, Dual L35 <em>Smoke Bomb</em> + <em>Shuriken Volley</em> unlock, layered shinobi paperdoll with mouseover gear stats, and <em>Kage Bunshin: Twin Shadow Execution</em> capstone.
                 </p>
+                <div class="cost-badges" style="margin-top:auto;padding-top:4px;">
+                  <span class="badge-cd">374.5 DPS (A)</span>
+                  <span class="badge-mana">330.4 EHP/s (B)</span>
+                  <span class="badge-stamina">16 Clone Absorbs</span>
+                </div>
               </div>
             </a>
 
@@ -1254,8 +1722,13 @@
                 </div>
                 <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">5-Class Parity, SVG Telemetry &amp; Armaments</strong>
                 <p style="margin:0;font-size:12px;color:var(--text-secondary);">
-                  Multi-bracket DPS &amp; EHP/s SVG curves, 5-channel damage breakdown stacked bars, 9-tier material scaling, 10-wave dungeon endurance, and <code>&lt;20 LOC</code> C# server hooks.
+                  Executive KPI strip, multi-bracket DPS &amp; EHP/s SVG curves, 5-channel damage breakdown stacked bars, 9-tier material scaling, 10-wave dungeon endurance, and <code>&lt;20 LOC</code> C# server hooks.
                 </p>
+                <div class="cost-badges" style="margin-top:auto;padding-top:4px;">
+                  <span class="badge-cd">±5–8% Gate</span>
+                  <span class="badge-mana">9 Material Tiers</span>
+                  <span class="badge-stamina">10/10 Waves</span>
+                </div>
               </div>
             </a>
           </div>
@@ -1276,28 +1749,40 @@
               </div>
               <div class="file-row">
                 <div>
-                  <a href="design/drop-in/samurai.json">design/drop-in/samurai.json</a>
-                  <div style="font-size:11px;color:var(--text-secondary);">Validated Samurai class definition (ID 114, 12 milestones, 12 skills, hotbar, EN/PT-BR).</div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="design/drop-in/samurai.json">design/drop-in/samurai.json</a>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">JSON SCHEMA · ID 114</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Samurai class definition (12 milestones, 12 skills, hotbar, EN/PT-BR).</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/samurai.json" target="_blank" rel="noopener">GitHub ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="design/drop-in/ninja.json">design/drop-in/ninja.json</a>
-                  <div style="font-size:11px;color:var(--text-secondary);">Validated Ninja class definition (ID 115, 12 milestones, 13 skills incl. Dual L35 Shuriken).</div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="design/drop-in/ninja.json">design/drop-in/ninja.json</a>
+                    <span class="type-pill kind-mechanic" style="font-size:8px;padding:0 4px;">JSON SCHEMA · ID 115</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Ninja class definition (12 milestones, 13 skills incl. Dual L35 Shuriken).</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/ninja.json" target="_blank" rel="noopener">GitHub ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="design/drop-in/classes-patch.js">design/drop-in/classes-patch.js</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="design/drop-in/classes-patch.js">design/drop-in/classes-patch.js</a>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">ES MODULE · 9 TABLES</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">Idempotent ES module <code>applyDropInClassPatch(tables)</code> wiring all 9 client bundle tables.</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/classes-patch.js" target="_blank" rel="noopener">GitHub ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="design/drop-in/items-bushido-ninjitsu.json">design/drop-in/items-bushido-ninjitsu.json</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="design/drop-in/items-bushido-ninjitsu.json">design/drop-in/items-bushido-ninjitsu.json</a>
+                    <span class="type-pill kind-passive" style="font-size:8px;padding:0 4px;">8 WEAPONS · 9 TIERS</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">8 Tokuno weapons, 4 cooldown-gated shinobi tools, 9 material tiers, and 10 affix pools.</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/items-bushido-ninjitsu.json" target="_blank" rel="noopener">GitHub ↗</a>
@@ -1310,28 +1795,40 @@
               </div>
               <div class="file-row">
                 <div>
-                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/SAMURAI_SPEC.md" target="_blank" rel="noopener">design/SAMURAI_SPEC.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/SAMURAI_SPEC.md" target="_blank" rel="noopener">design/SAMURAI_SPEC.md</a>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">17-LOC C# HOOK</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">Complete Samurai &amp; Bushido specification, ModernUO citations, and 17-LOC C# server hook.</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/SAMURAI_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/NINJA_SPEC.md" target="_blank" rel="noopener">design/NINJA_SPEC.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/NINJA_SPEC.md" target="_blank" rel="noopener">design/NINJA_SPEC.md</a>
+                    <span class="type-pill kind-mechanic" style="font-size:8px;padding:0 4px;">16-LOC C# HOOK</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">Complete Ninja &amp; Ninjitsu specification, idle adaptations, and 16-LOC C# server hook.</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/NINJA_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/BALANCE_REPORT.md" target="_blank" rel="noopener">design/BALANCE_REPORT.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/BALANCE_REPORT.md" target="_blank" rel="noopener">design/BALANCE_REPORT.md</a>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">80 SCENARIOS PASS</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">5-class parity proofs, 5-channel damage breakdowns, material curves, and 10-wave endurance.</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/BALANCE_REPORT.md" target="_blank" rel="noopener">Read Report ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/mechanics/INDEX.md" target="_blank" rel="noopener">mechanics/INDEX.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="https://github.com/brbrainerd/uoIdle/blob/main/mechanics/INDEX.md" target="_blank" rel="noopener">mechanics/INDEX.md</a>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">56 PAGES · 649 CLAIMS</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">56-page claim-verified UO Idle v0.99.0 + ModernUO knowledgebase (649 verbatim claims).</div>
                 </div>
                 <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/mechanics/INDEX.md" target="_blank" rel="noopener">Browse KB ↗</a>

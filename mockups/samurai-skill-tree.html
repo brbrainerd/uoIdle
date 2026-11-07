@@ -1035,11 +1035,431 @@
         grid-template-columns: minmax(0, 1fr);
       }
     }
+    
+    /* ==========================================================================
+       v2.1 Component Architecture & Dark-Fantasy Animation System
+       ========================================================================== */
+    @keyframes auraPulse {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50% { opacity: 0.92; transform: scale(1.04); }
+    }
+    @keyframes railFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @keyframes nodeHaloPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(230, 195, 106, 0.55), 0 0 14px var(--class-glow); }
+      50% { box-shadow: 0 0 0 5px rgba(230, 195, 106, 0), 0 0 22px var(--border-gold-bright); }
+    }
+    @keyframes modeFlash {
+      0% { filter: brightness(1.35); transform: translateY(-1px); }
+      100% { filter: brightness(1); transform: translateY(0); }
+    }
+    @keyframes tickerSweep {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    @keyframes floatUpBadge {
+      0% { opacity: 0; transform: translateY(4px) scale(0.96); }
+      20% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* 1. Global Quick Command & Shortcut Bar Component (<uo-quick-dock>) */
+    .uo-quick-dock {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px 12px;
+      padding: 6px 14px;
+      background: linear-gradient(90deg, #0d100c 0%, #171c15 50%, #0d100c 100%);
+      border-bottom: 1px solid #352d1d;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+    .uo-quick-dock-left, .uo-quick-dock-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+    }
+    .kbd-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #141812;
+      border: 1px solid #3c3425;
+      color: #d6e4ca;
+      font-size: 9.5px;
+    }
+    .kbd-chip kbd {
+      padding: 0 4px;
+      border-radius: 2px;
+      background: #282112;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .live-pulse-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #48bb78;
+      box-shadow: 0 0 8px #48bb78;
+      animation: auraPulse 2.2s infinite ease-in-out;
+    }
+
+    /* 2. Segmented Stat Distribution & Resource Bar Component (<uo-stat-bar>) */
+    .stat-ratio-strip {
+      margin-top: 8px;
+      padding: 6px 8px;
+      background: #10140f;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+    }
+    .stat-ratio-bar {
+      display: flex;
+      height: 7px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #090b08;
+      border: 1px solid #2a3026;
+      margin: 4px 0;
+    }
+    .stat-seg-str { background: linear-gradient(90deg, #c83e37, #e05a47); transition: width 0.3s ease; }
+    .stat-seg-dex { background: linear-gradient(90deg, #2e9e6b, #48bb78); transition: width 0.3s ease; }
+    .stat-seg-int { background: linear-gradient(90deg, #3b82f6, #63b3ed); transition: width 0.3s ease; }
+
+    /* 3. Starter Skill Mastery Progress Card Component */
+    .skill-mastery-card {
+      padding: 5px 8px;
+      background: linear-gradient(180deg, #171c15 0%, #111510 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .skill-mastery-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-1px);
+    }
+    .skill-mastery-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+    .skill-mastery-bar-bg {
+      height: 4px;
+      border-radius: 2px;
+      background: #090b08;
+      overflow: hidden;
+    }
+    .skill-mastery-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* 4. Connected [Arvore Progression Rail & Halo Nodes */
+    .arvore-cobra-wrap {
+      position: relative;
+      padding: 12px 14px;
+      border-bottom: 1px solid #2a3026;
+      background:
+        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 70%),
+        rgba(11, 13, 10, 0.72);
+    }
+    .arvore-tier-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed #262c22;
+    }
+    .arvore-col {
+      position: relative;
+      z-index: 1;
+    }
+    .arvore-col::after {
+      content: '';
+      position: absolute;
+      top: 37px;
+      left: 55%;
+      width: 90%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(201, 162, 39, 0.2) 50%, var(--border-gold) 100%);
+      background-size: 200% 100%;
+      animation: railFlow 5s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .arvore-col:nth-child(6n)::after,
+    .arvore-col:last-child::after {
+      display: none;
+    }
+    .arvore-circulo.is-selected-node {
+      border-color: #fff2bf !important;
+      animation: nodeHaloPulse 2s infinite ease-in-out;
+      transform: scale(1.08);
+    }
+    .arvore-circulo[data-node-kind="passive"] { border-color: var(--kind-passive); }
+    .arvore-circulo[data-node-kind="skill"]   { border-color: var(--kind-skill); }
+    .arvore-circulo[data-node-kind="spell"]   { border-color: var(--kind-spell); }
+    .arvore-circulo[data-node-kind="mechanic"] { border-color: var(--kind-mechanic); }
+    .arvore-circulo[data-node-kind="feature"] {
+      border-color: var(--kind-capstone);
+      box-shadow: 0 0 14px rgba(246, 224, 94, 0.45);
+    }
+
+    /* 5. Ability Power & Scaling Meter Component (<uo-power-meter>) */
+    .uo-power-meter {
+      margin-top: 5px;
+      padding: 4px 6px;
+      background: #0e120d;
+      border: 1px solid #252b21;
+      border-radius: 3px;
+    }
+    .uo-power-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+    }
+    .uo-power-track {
+      position: relative;
+      height: 5px;
+      border-radius: 3px;
+      background: #080a07;
+      overflow: hidden;
+      display: flex;
+    }
+    .uo-power-seg-base {
+      height: 100%;
+      background: linear-gradient(90deg, #8b6f1e, #d4af37);
+      transition: width 0.25s ease;
+    }
+    .uo-power-seg-burst {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), #f6ad55);
+      transition: width 0.25s ease;
+    }
+    .uo-power-seg-modeb {
+      height: 100%;
+      background: #68d391;
+      opacity: 0.35;
+      transition: width 0.25s ease, opacity 0.25s ease;
+    }
+    .is-mode-b-active .uo-power-seg-modeb {
+      opacity: 1;
+      box-shadow: 0 0 8px #68d391;
+    }
+
+    /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
+    .uo-combat-ticker {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      border: 1px solid #4a3c24;
+      background: linear-gradient(180deg, #151913 0%, #0b0e0a 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.08);
+    }
+    .ticker-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .ticker-progress-bg {
+      position: relative;
+      height: 6px;
+      border-radius: 3px;
+      background: #070907;
+      border: 1px solid #2a3026;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .ticker-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
+      width: 65%;
+      transition: width 0.18s linear;
+    }
+    .posture-pips-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .posture-pips {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+    .posture-pip {
+      width: 12px;
+      height: 8px;
+      border-radius: 2px;
+      background: #141812;
+      border: 1px solid #3c3425;
+      transition: all 0.15s ease;
+    }
+    .posture-pip.is-lit {
+      background: var(--border-gold-bright);
+      border-color: #fff2bf;
+      box-shadow: 0 0 6px var(--border-gold);
+    }
+    .posture-pip.is-crimson {
+      background: var(--class-accent);
+      border-color: #ffb3a7;
+      box-shadow: 0 0 6px var(--class-accent);
+    }
+    .ticker-log-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ticker-log-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      border-radius: 3px;
+      background: #10140f;
+      border-left: 2px solid var(--border-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      animation: floatUpBadge 0.22s ease-out;
+    }
+
+    /* 7. Paperdoll Ambient Torchlight & Weapon Telemetry Bars */
+    .paperdoll-figure-box {
+      background:
+        radial-gradient(circle at 50% 35%, var(--class-glow), transparent 62%),
+        radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.16), #090b08 78%) !important;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.75);
+    }
+    .paperdoll-aura-ring {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px dashed rgba(201, 162, 39, 0.22);
+      pointer-events: none;
+      animation: auraPulse 4s infinite ease-in-out;
+    }
+    .weapon-stat-bars {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px dashed #2a3026;
+    }
+    .w-stat-col {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-secondary);
+    }
+    .w-stat-track {
+      height: 4px;
+      background: #080a07;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .w-stat-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
+      transition: width 0.25s ease;
+    }
+
+    /* 8. 5-Class Executive KPI Comparison Strip (class-comparison.html) */
+    .exec-kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .exec-kpi-card {
+      padding: 8px 10px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #181d16 0%, #10140f 100%);
+      border: 1px solid #2a3026;
+      border-top: 3px solid var(--border-gold);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .exec-kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-gold-bright);
+    }
+    @media (max-width: 1120px) {
+      .exec-kpi-strip {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .arvore-col::after {
+        display: none;
+      }
+    }
+  
   </style>
 </head>
 <body>
   <div class="beta-shell">
     <div class="personagem-arvore" data-personagem-conteudo="arvore">
+      
+    <nav class="uo-quick-dock" aria-label="Developer Quick Command Bar">
+      <div class="uo-quick-dock-left">
+        <span style="display:inline-flex;align-items:center;gap:5px;color:#fff2bf;font-weight:600;">
+          <i class="live-pulse-dot"></i>
+          UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
+        </span>
+        <span class="kbd-chip"><kbd>M</kbd> Mode A/B</span>
+        <span class="kbd-chip"><kbd>L</kbd> EN / PT-BR</span>
+               <span class="kbd-chip"><kbd>1–9</kbd> Select Tier</span>
+               <span class="kbd-chip"><kbd>Space</kbd> Combat Sim</span>
+      </div>
+      <div class="uo-quick-dock-right">
+        <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
+        <a href="samurai-skill-tree.html?mode=mode_b" style="color:#ff9b93;text-decoration:none;font-weight:600;">⚡ SM Mode B</a>
+        <a href="ninja-skill-tree.html?mode=mode_b" style="color:#7ce8b4;text-decoration:none;font-weight:600;">⚡ NJ Mode B</a>
+      </div>
+    </nav>
+  
       <!-- Top Header Bar (.arvore-head) -->
       <header class="arvore-head">
         <div class="arvore-nivel">
@@ -1118,6 +1538,24 @@
                     <div class="stat-chip"><span>DEX</span><strong>30</strong></div>
                     <div class="stat-chip"><span>INT</span><strong>10</strong></div>
                   </div>
+                  
+    <div class="stat-ratio-strip">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;">
+        <span style="color:#ff9b93;">STR 50 (56%)</span>
+        <span style="color:#7ce8b4;">DEX 30 (33%)</span>
+        <span style="color:#9ec9ff;">INT 10 (11%)</span>
+      </div>
+      <div class="stat-ratio-bar" title="Stat Allocation: 50 STR / 30 DEX / 10 INT (Sum = 90)">
+        <div class="stat-seg-str" style="width:56%;"></div>
+        <div class="stat-seg-dex" style="width:33%;"></div>
+        <div class="stat-seg-int" style="width:11%;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-secondary);">
+        <span>Swing Floor: 2,000ms</span>
+        <span>Reagents: 0 · Ammo: 0</span>
+      </div>
+    </div>
+  
                 </div>
               </div>
             </div>
@@ -1131,53 +1569,141 @@
             <div class="panel-body">
               <div class="kv-grid">
                 
-      <div class="kv-item">
-        <span class="k">bushido <small class="mono" style="color:var(--text-secondary)">(#52)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Bushido <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#52)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#e05a47;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Core Scaling &amp; Parry</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">swords <small class="mono" style="color:var(--text-secondary)">(#40)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Swords <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#40)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#e6c36a;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Primary Katana/No-Dachi</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">tactics <small class="mono" style="color:var(--text-secondary)">(#27)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Tactics <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#27)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#f6ad55;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Base Damage Multiplier</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">parry <small class="mono" style="color:var(--text-secondary)">(#5)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Parry <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#5)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#63b3ed;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Shieldless Weapon Ward</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">anatomy <small class="mono" style="color:var(--text-secondary)">(#1)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Anatomy <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#1)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#fc8181;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Physical Bonus &amp; Stagger</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">healing <small class="mono" style="color:var(--text-secondary)">(#17)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Healing <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#17)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#68d391;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Bandage &amp; Confidence Syn</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">magicResist <small class="mono" style="color:var(--text-secondary)">(#26)</small></span>
-        <span class="v">30.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              MagicResist <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#26)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">30.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:30%;background:#b794f4;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Evasion &amp; Spell Ward</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
 
-      <div class="kv-item">
-        <span class="k">focus <small class="mono" style="color:var(--text-secondary)">(#50)</small></span>
-        <span class="v">50.0</span>
-      </div>
-    
+        <div class="skill-mastery-card">
+          <div class="skill-mastery-top">
+            <span style="font-weight:600;color:#fff2bf;font-size:11px;">
+              Focus <small class="mono" style="color:var(--text-secondary);font-size:9.5px;">(#50)</small>
+            </span>
+            <span class="mono" style="color:var(--text-gold);font-size:11px;font-weight:700;">50.0</span>
+          </div>
+          <div class="skill-mastery-bar-bg">
+            <div class="skill-mastery-bar-fill" style="width:50%;background:#4fd1c5;"></div>
+          </div>
+          <div class="mono" style="font-size:8.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <span>Stamina &amp; Mana Sustain</span>
+            <span>GM Cap 100.0</span>
+          </div>
+        </div>
+      
               </div>
               <div style="margin-top:5px;font-size:10px;color:var(--text-secondary);">
                 Shieldless Bushido Weapon Parry scales via Parrying (50) × Bushido (50) ÷ 48,000 (1H) or 41,140 (2H).
@@ -1250,6 +1776,7 @@
   
                 </div>
                 <div class="paperdoll-figure-box">
+                  <div class="paperdoll-aura-ring"></div>
                   <img src="assets/items/paperdoll-samurai.png" alt="Samurai (Bushido) Layered UO Paperdoll" />
                 </div>
                 <div class="paperdoll-rack-col">
@@ -1317,7 +1844,21 @@
                 <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:4px;" id="gear-tt-stats">
                   Valorite Weapon: 24–28 Dmg · Speed 40 · Feint (#8) / Double Strike (#7)
                 </div>
-                <div class="cost-badges" id="gear-tt-affixes" style="margin-top:4px;">
+                <div class="weapon-stat-bars">
+                  <div class="w-stat-col">
+                    <span id="gear-bar-lbl-1">Power (1.85x)</span>
+                    <div class="w-stat-track"><div class="w-stat-fill" id="gear-bar-fill-1" style="width:92%;"></div></div>
+                  </div>
+                  <div class="w-stat-col">
+                    <span id="gear-bar-lbl-2">Speed 40</span>
+                    <div class="w-stat-track"><div class="w-stat-fill" id="gear-bar-fill-2" style="width:82%;"></div></div>
+                  </div>
+                  <div class="w-stat-col">
+                    <span id="gear-bar-lbl-3">Bushido +15</span>
+                    <div class="w-stat-track"><div class="w-stat-fill" id="gear-bar-fill-3" style="width:100%;"></div></div>
+                  </div>
+                </div>
+                <div class="cost-badges" id="gear-tt-affixes" style="margin-top:5px;">
                   <span class="badge-mana">Damage +40%</span><span class="badge-mana">Swing Speed +20%</span><span class="badge-mana">Bushido +15</span>
                 </div>
                 <div style="font-size:10px;color:var(--text-primary);margin-top:4px;" id="gear-tt-lore">
@@ -1394,11 +1935,15 @@
 
             <!-- Live .arvore-cobra 12-node ribbon -->
             <div class="arvore-cobra-wrap">
+              <div class="arvore-tier-banner">
+                <span><strong style="color:var(--text-gold);">ROW 1 (L1–L25):</strong> Initiate → Adept Foundation</span>
+                <span><strong style="color:var(--text-gold);">ROW 2 (L30–L60):</strong> Master → Grandmaster Capstone</span>
+              </div>
               <div class="arvore-cobra">
                 
         <div class="arvore-col" onclick="selectAbility('samurai_way')" title="L1: Way of the Blade / Caminho da Lâmina">
           <span class="arvore-lv">L1</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on is-selected-node" data-cobra-id="samurai_way" data-node-kind="passive">
             <img src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
           </div>
           <span class="arvore-nome" data-en="Way of the Blade" data-pt="Caminho da Lâmina">Way of the Blade</span>
@@ -1407,7 +1952,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_lightning')" title="L5: Lightning Strike / Golpe Relâmpago">
           <span class="arvore-lv">L5</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_lightning" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_lightning@64.png" alt="Lightning Strike" />
           </div>
           <span class="arvore-nome" data-en="Lightning Strike" data-pt="Golpe Relâmpago">Lightning Strike</span>
@@ -1416,7 +1961,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_perfection')" title="L10: Honor &amp; Perfection / Honra e Perfeição">
           <span class="arvore-lv">L10</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_perfection" data-node-kind="mechanic">
             <img src="assets/icons/samurai/samurai_perfection@64.png" alt="Honor &amp; Perfection" />
           </div>
           <span class="arvore-nome" data-en="Honor &amp; Perfection" data-pt="Honra e Perfeição">Honor &amp; Perfection</span>
@@ -1425,7 +1970,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_honorable')" title="L15: Honorable Execution / Execução Honrosa">
           <span class="arvore-lv">L15</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_honorable" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_honorable@64.png" alt="Honorable Execution" />
           </div>
           <span class="arvore-nome" data-en="Honorable Execution" data-pt="Execução Honrosa">Honorable Execution</span>
@@ -1434,7 +1979,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_confidence')" title="L20: Confidence / Confiança">
           <span class="arvore-lv">L20</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_confidence" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_confidence@64.png" alt="Confidence" />
           </div>
           <span class="arvore-nome" data-en="Confidence" data-pt="Confiança">Confidence</span>
@@ -1443,7 +1988,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_counter')" title="L25: Counter Attack / Contra-Ataque">
           <span class="arvore-lv">L25</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_counter" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_counter@64.png" alt="Counter Attack" />
           </div>
           <span class="arvore-nome" data-en="Counter Attack" data-pt="Contra-Ataque">Counter Attack</span>
@@ -1452,7 +1997,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_double_strike')" title="L30: Double Strike / Golpe Duplo">
           <span class="arvore-lv">L30</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_double_strike" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_double_strike@64.png" alt="Double Strike" />
           </div>
           <span class="arvore-nome" data-en="Double Strike" data-pt="Golpe Duplo">Double Strike</span>
@@ -1461,7 +2006,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_evasion')" title="L35: Evasion / Evasão">
           <span class="arvore-lv">L35</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_evasion" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_evasion@64.png" alt="Evasion" />
           </div>
           <span class="arvore-nome" data-en="Evasion" data-pt="Evasão">Evasion</span>
@@ -1470,7 +2015,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_momentum_strike')" title="L40: Momentum Strike / Golpe de Ímpeto">
           <span class="arvore-lv">L40</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_momentum_strike" data-node-kind="spell">
             <img src="assets/icons/samurai/samurai_momentum_strike@64.png" alt="Momentum Strike" />
           </div>
           <span class="arvore-nome" data-en="Momentum Strike" data-pt="Golpe de Ímpeto">Momentum Strike</span>
@@ -1479,7 +2024,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_armor_ignore')" title="L45: Armor Ignore / Ignorar Armadura">
           <span class="arvore-lv">L45</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_armor_ignore" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_armor_ignore@64.png" alt="Armor Ignore" />
           </div>
           <span class="arvore-nome" data-en="Armor Ignore" data-pt="Ignorar Armadura">Armor Ignore</span>
@@ -1488,7 +2033,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_frenzied_whirlwind')" title="L50: Frenzied Whirlwind / Turbilhão Frenético">
           <span class="arvore-lv">L50</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_frenzied_whirlwind" data-node-kind="skill">
             <img src="assets/icons/samurai/samurai_frenzied_whirlwind@64.png" alt="Frenzied Whirlwind" />
           </div>
           <span class="arvore-nome" data-en="Frenzied Whirlwind" data-pt="Turbilhão Frenético">Frenzied Whirlwind</span>
@@ -1497,7 +2042,7 @@
 
         <div class="arvore-col" onclick="selectAbility('samurai_kensei_judgment')" title="L60: Kensei: Amakura&#39;s Judgment / Kensei: Julgamento de Amakura">
           <span class="arvore-lv">L60</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on " data-cobra-id="samurai_kensei_judgment" data-node-kind="feature">
             <img src="assets/icons/samurai/samurai_kensei_judgment@64.png" alt="Kensei: Amakura&#39;s Judgment" />
           </div>
           <span class="arvore-nome" data-en="Kensei: Amakura&#39;s Judgment" data-pt="Kensei: Julgamento de Amakura">Kensei: Amakura&#39;s Judgment</span>
@@ -1520,7 +2065,7 @@
             </div>
 
             <!-- 12 Unified Interactive Milestone & Schema Cards -->
-            <div class="milestone-grid">
+            <div class="milestone-grid" id="milestone-cards-container">
               
         <div class="milestone-card is-selected " data-milestone-id="samurai_way" data-kind="passive" onclick="selectAbility('samurai_way')">
           <div class="milestone-icon-box">
@@ -1543,6 +2088,19 @@
                     <span class="badge-stamina">Stam 0</span>
                     <span class="badge-meta">innate</span>
                   </div>
+            
+    <div class="uo-power-meter" data-power-meter="samurai_way">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.00x Auto + 25.8%–29.3% Parry</span>
+        <span style="color:var(--text-gold);">Shieldless 1H/2H Parry</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:45%;"></div>
+        <div class="uo-power-seg-burst" style="width:23%;"></div>
+        <div class="uo-power-seg-modeb" style="width:14%;"></div>
+      </div>
+    </div>
+  
             
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
@@ -1585,6 +2143,19 @@
                     <span class="badge-meta">spellId: 404</span>
                   </div>
             
+    <div class="uo-power-meter" data-power-meter="samurai_lightning">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.10x–1.20x Strike +50 Acc</span>
+        <span style="color:var(--text-gold);">Bushido²/72k Crit Roll</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:55%;"></div>
+        <div class="uo-power-seg-burst" style="width:21%;"></div>
+        <div class="uo-power-seg-modeb" style="width:12%;"></div>
+      </div>
+    </div>
+  
+            
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
               <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff." data-mode-b="Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll, full scaling).">Sole single-rank SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.</span>
@@ -1625,6 +2196,19 @@
                     <span class="badge-stamina">Stam 0</span>
                     <span class="badge-meta">innate</span>
                   </div>
+            
+    <div class="uo-power-meter" data-power-meter="samurai_perfection">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ +10% Mode A Streak Buff</span>
+        <span style="color:var(--text-gold);">+15% Mode B + Vital Restore</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:50%;"></div>
+        <div class="uo-power-seg-burst" style="width:22%;"></div>
+        <div class="uo-power-seg-modeb" style="width:18%;"></div>
+      </div>
+    </div>
+  
             
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
@@ -1667,6 +2251,19 @@
                     <span class="badge-meta">spellId: 400</span>
                   </div>
             
+    <div class="uo-power-meter" data-power-meter="samurai_honorable">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.35x–1.45x Base Strike</span>
+        <span style="color:var(--text-gold);">1.85x Execute (&lt;=35% HP)</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:65%;"></div>
+        <div class="uo-power-seg-burst" style="width:27%;"></div>
+        <div class="uo-power-seg-modeb" style="width:4%;"></div>
+      </div>
+    </div>
+  
+            
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
               <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed." data-mode-b="HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.">Sole single-rank SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed.</span>
@@ -1707,6 +2304,19 @@
                     <span class="badge-stamina">Stam 0</span>
                     <span class="badge-meta">spellId: 401</span>
                   </div>
+            
+    <div class="uo-power-meter" data-power-meter="samurai_confidence">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 15 + Bushido²/576 Heal</span>
+        <span style="color:var(--text-gold);">+On-Parry HP/Stam Regen</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:48%;"></div>
+        <div class="uo-power-seg-burst" style="width:27%;"></div>
+        <div class="uo-power-seg-modeb" style="width:17%;"></div>
+      </div>
+    </div>
+  
             
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
@@ -1749,6 +2359,19 @@
                     <span class="badge-meta">spellId: 403</span>
                   </div>
             
+    <div class="uo-power-meter" data-power-meter="samurai_counter">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.50x–1.60x + 18% Stance</span>
+        <span style="color:var(--text-gold);">Free 2.0s ICD Parry Swing</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:68%;"></div>
+        <div class="uo-power-seg-burst" style="width:16%;"></div>
+        <div class="uo-power-seg-modeb" style="width:11%;"></div>
+      </div>
+    </div>
+  
+            
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
               <span class="mode-text" data-mode-a="Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s." data-mode-b="CounterAttack posture: +18% damage + instant free BaseWeapon.OnSwing counter-attack on parry (2.0s ICD).">Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s.</span>
@@ -1789,6 +2412,19 @@
                     <span class="badge-stamina">Stam 0</span>
                     <span class="badge-meta">weaponRef: 7</span>
                   </div>
+            
+    <div class="uo-power-meter" data-power-meter="samurai_double_strike">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 2 × 90% Rapid Slash (1.80x)</span>
+        <span style="color:var(--text-gold);">2x Perfection Stack Gain</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:74%;"></div>
+        <div class="uo-power-seg-burst" style="width:14%;"></div>
+        <div class="uo-power-seg-modeb" style="width:6%;"></div>
+      </div>
+    </div>
+  
             
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
@@ -1831,6 +2467,19 @@
                     <span class="badge-meta">spellId: 402</span>
                   </div>
             
+    <div class="uo-power-meter" data-power-meter="samurai_evasion">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ -18% Dmg Taken + Spell Ward</span>
+        <span style="color:var(--text-gold);">0.85x Iaido Flash Riposte</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:60%;"></div>
+        <div class="uo-power-seg-burst" style="width:25%;"></div>
+        <div class="uo-power-seg-modeb" style="width:8%;"></div>
+      </div>
+    </div>
+  
+            
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
               <span class="mode-text" data-mode-a="Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection." data-mode-b="Evasion posture: 1.32x Bushido parry multiplier + spell interception for 8.0s (20s CD).">Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection.</span>
@@ -1871,6 +2520,19 @@
                     <span class="badge-stamina">Stam 0</span>
                     <span class="badge-meta">spellId: 405</span>
                   </div>
+            
+    <div class="uo-power-meter" data-power-meter="samurai_momentum_strike">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.15x–1.25x Primary Hit</span>
+        <span style="color:var(--text-gold);">+115%–150% 2-Target Cleave</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:64%;"></div>
+        <div class="uo-power-seg-burst" style="width:26%;"></div>
+        <div class="uo-power-seg-modeb" style="width:4%;"></div>
+      </div>
+    </div>
+  
             
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
@@ -1913,6 +2575,19 @@
                     <span class="badge-meta">weaponRef: 1</span>
                   </div>
             
+    <div class="uo-power-meter" data-power-meter="samurai_armor_ignore">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.25x–1.35x Direct Pierce</span>
+        <span style="color:var(--text-gold);">100% Bypass + -18% Shred</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:66%;"></div>
+        <div class="uo-power-seg-burst" style="width:23%;"></div>
+        <div class="uo-power-seg-modeb" style="width:6%;"></div>
+      </div>
+    </div>
+  
+            
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
               <span class="mode-text" data-mode-a="WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred." data-mode-b="ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.">WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred.</span>
@@ -1954,6 +2629,19 @@
                     <span class="badge-meta">weaponRef: 6</span>
                   </div>
             
+    <div class="uo-power-meter" data-power-meter="samurai_frenzied_whirlwind">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.15x–1.25x + 50% Splash</span>
+        <span style="color:var(--text-gold);">25% Bypass + 4-Tick Bleed</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:70%;"></div>
+        <div class="uo-power-seg-burst" style="width:22%;"></div>
+        <div class="uo-power-seg-modeb" style="width:4%;"></div>
+      </div>
+    </div>
+  
+            
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
               <span class="mode-text" data-mode-a="WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed." data-mode-b="ModernUO FrenziedWhirlwind (ref: 6) multi-target Tokuno blade gale with 25% armor bypass and bleed ticks.">WeaponAbility (ref: 6, Wakizashi/Tetsubo) 1.15x-1.25x cyclone strike + 50% splash + 4-tick Frenzied Gale bleed.</span>
@@ -1994,6 +2682,19 @@
                     <span class="badge-stamina">Stam 15</span>
                     <span class="badge-meta">spellId: 400</span>
                   </div>
+            
+    <div class="uo-power-meter" data-power-meter="samurai_kensei_judgment">
+      <div class="uo-power-labels">
+        <span style="color:#f6ecd4;">⚡ 1.25x Base + Kensei Stance</span>
+        <span style="color:var(--text-gold);">1.95x Grandmaster Execute</span>
+      </div>
+      <div class="uo-power-track" title="Gold: Base Scaling | Accent: Execute/Crit/Splash Ceiling | Emerald: Mode B C# Hook Boost">
+        <div class="uo-power-seg-base" style="width:75%;"></div>
+        <div class="uo-power-seg-burst" style="width:23%;"></div>
+        <div class="uo-power-seg-modeb" style="width:4%;"></div>
+      </div>
+    </div>
+  
             
             <div class="active-mode-strip" data-mode-strip>
               <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
@@ -2078,6 +2779,50 @@
                     <span id="insp-mode-b" style="color:var(--text-primary);">Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.</span>
                   </div>
                 </div>
+                
+    <div class="uo-combat-ticker" id="live-combat-ticker">
+      <div class="ticker-head">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <i class="live-pulse-dot"></i>
+          <strong style="font-family:'Cinzel',serif;font-size:11px;color:var(--text-gold);text-transform:uppercase;">
+            Live 100ms Tick Combat Loop Preview
+          </strong>
+        </div>
+        <div style="display:flex;gap:4px;">
+          <button type="button" class="beta-btn" id="btn-ticker-toggle" onclick="toggleCombatTicker()" style="padding:1px 6px;font-size:9px;">Pause</button>
+          <button type="button" class="beta-btn" onclick="stepCombatTicker()" style="padding:1px 6px;font-size:9px;">Step +2.0s</button>
+        </div>
+      </div>
+      <div class="ticker-progress-bg" title="2,000ms Custom Cooldown & Swing Cadence Floor">
+        <div class="ticker-progress-fill" id="ticker-bar-fill"></div>
+      </div>
+      <div class="posture-pips-row">
+        <span class="mono" style="font-size:9px;color:var(--text-secondary);" id="ticker-posture-label">Bushido Perfection Streak (10-Stack Cap · +15% Dmg)</span>
+        <div class="posture-pips" id="ticker-pips-box">
+          <span class="posture-pip is-lit" data-ticker-pip="0"></span><span class="posture-pip is-lit" data-ticker-pip="1"></span><span class="posture-pip is-lit" data-ticker-pip="2"></span><span class="posture-pip is-lit" data-ticker-pip="3"></span><span class="posture-pip is-lit" data-ticker-pip="4"></span><span class="posture-pip is-lit" data-ticker-pip="5"></span><span class="posture-pip is-lit" data-ticker-pip="6"></span><span class="posture-pip " data-ticker-pip="7"></span><span class="posture-pip " data-ticker-pip="8"></span><span class="posture-pip " data-ticker-pip="9"></span>
+        </div>
+      </div>
+      <div class="ticker-log-feed" id="ticker-log-feed">
+        
+      <div class="ticker-log-item" style="border-left-color:#e05a47;">
+        <div><strong style="color:#fff2bf;">t=0.0s</strong> <span style="color:#e05a47;font-weight:700;">[CAST]</span> Armor Ignore · 279 dmg (100% Pierce)</div>
+      </div>
+    
+      <div class="ticker-log-item" style="border-left-color:#f6e05e;">
+        <div><strong style="color:#fff2bf;">t=2.0s</strong> <span style="color:#f6e05e;font-weight:700;">[PARRY]</span> Shieldless Daisho Parry → 0.85x Riposte +18 HP</div>
+      </div>
+    
+      <div class="ticker-log-item" style="border-left-color:#63b3ed;">
+        <div><strong style="color:#fff2bf;">t=4.0s</strong> <span style="color:#63b3ed;font-weight:700;">[SKILL]</span> Double Strike (2×90%) · 312 dmg (+8% Streak)</div>
+      </div>
+    
+      <div class="ticker-log-item" style="border-left-color:#b794f4;">
+        <div><strong style="color:#fff2bf;">t=6.0s</strong> <span style="color:#b794f4;font-weight:700;">[EXEC]</span> Kensei: Amakura&#39;s Judgment · 498 dmg ★</div>
+      </div>
+    
+      </div>
+    </div>
+  
                 <details class="schema-drawer" style="margin-top:7px;">
                   <summary>View Live Drop-In JSON Payload (<code>design/drop-in/samurai.json</code>)</summary>
                   <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">{
@@ -2280,11 +3025,30 @@
           var maxD = Math.round(g.baseDmg[1] * currentTier.mult);
           document.getElementById('gear-tt-stats').textContent =
             currentTier.id + ' Weapon: ' + minD + '–' + maxD + ' Dmg · Speed ' + g.speed + ' · ' + g.primaryAbility + ' / ' + g.secondaryAbility;
+          var pwrPct = Math.min(100, Math.round((maxD / 34) * 100));
+          var spdPct = Math.min(100, Math.round(((g.speed || 45) / 55) * 100));
+          var lbl1 = document.getElementById('gear-bar-lbl-1');
+          var lbl2 = document.getElementById('gear-bar-lbl-2');
+          var fill1 = document.getElementById('gear-bar-fill-1');
+          var fill2 = document.getElementById('gear-bar-fill-2');
+          if (lbl1) lbl1.textContent = 'Power (' + currentTier.mult.toFixed(2) + 'x)';
+          if (lbl2) lbl2.textContent = 'Speed ' + g.speed;
+          if (fill1) fill1.style.width = pwrPct + '%';
+          if (fill2) fill2.style.width = spdPct + '%';
         } else {
           var baseRes = g.baseArmorResist || 10;
           var scaledRes = Math.round(baseRes * (1 + currentTier.res / 100));
           document.getElementById('gear-tt-stats').textContent =
             currentTier.id + ' Armor: +' + scaledRes + ' Physical/Elem Defense (Base ' + baseRes + ', +' + currentTier.res + '% Tier Bonus)';
+          var resPct = Math.min(100, Math.round((scaledRes / 36) * 100));
+          var lblA1 = document.getElementById('gear-bar-lbl-1');
+          var lblA2 = document.getElementById('gear-bar-lbl-2');
+          var fillA1 = document.getElementById('gear-bar-fill-1');
+          var fillA2 = document.getElementById('gear-bar-fill-2');
+          if (lblA1) lblA1.textContent = 'Mitigation (+' + scaledRes + ')';
+          if (lblA2) lblA2.textContent = 'Tier +' + currentTier.res + '%';
+          if (fillA1) fillA1.style.width = resPct + '%';
+          if (fillA2) fillA2.style.width = Math.max(15, currentTier.res) + '%';
         }
         var affs = currentLocale === 'pt' ? g.affixesPtBr : g.affixesEn;
         document.getElementById('gear-tt-affixes').innerHTML = affs
@@ -2313,6 +3077,11 @@
         document.getElementById('btn-mode-b').classList.toggle('is-active', isModeB);
         document.getElementById('inspector-mode-pill').textContent =
           isModeB ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+
+        var cardsContainer = document.getElementById('milestone-cards-container');
+        if (cardsContainer) {
+          cardsContainer.classList.toggle('is-mode-b-active', isModeB);
+        }
 
         var strips = document.querySelectorAll('[data-mode-strip]');
         for (var s = 0; s < strips.length; s++) {
@@ -2389,6 +3158,10 @@
         for (var k = 0; k < cards.length; k++) {
           cards[k].classList.toggle('is-selected', cards[k].getAttribute('data-milestone-id') === abilityId);
         }
+        var cobraCircles = document.querySelectorAll('[data-cobra-id]');
+        for (var c = 0; c < cobraCircles.length; c++) {
+          cobraCircles[c].classList.toggle('is-selected-node', cobraCircles[c].getAttribute('data-cobra-id') === abilityId);
+        }
         var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
         document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
         document.getElementById('insp-level').textContent = 'L' + ab.progressionTreeLevel;
@@ -2456,6 +3229,83 @@
           }
         }
       };
+
+      // Live 100ms Tick Combat Loop Preview Component Logic
+      var tickerRunning = true;
+      var tickerStepIdx = 0;
+      var tickerPct = 65;
+      var samuraiEvents = [
+        { t: 't=0.0s', tag: 'CAST', col: '#e05a47', txt: 'Armor Ignore · 279 dmg (100% Armor Pierce)' },
+        { t: 't=2.0s', tag: 'PARRY', col: '#f6e05e', txt: 'Shieldless Daisho Parry → 0.85x Riposte +18 HP' },
+        { t: 't=4.0s', tag: 'SKILL', col: '#63b3ed', txt: 'Double Strike (2×90%) · 312 dmg (+8% Streak)' },
+        { t: 't=6.0s', tag: 'AOE', col: '#4fd1c5', txt: 'Frenzied Whirlwind · 335 dmg + 4-Tick Bleed' },
+        { t: 't=8.0s', tag: 'COUNTER', col: '#f6ad55', txt: 'Counter Attack Stance + Free Parry Swing (284 dmg)' },
+        { t: 't=10.0s', tag: 'EXEC', col: '#b794f4', txt: "Kensei: Amakura's Judgment · 498 dmg ★" }
+      ];
+      var ninjaEvents = [
+        { t: 't=0.0s', tag: 'VEIL', col: '#4fd1c5', txt: 'Smoke Bomb + Shuriken Volley · 205 dmg' },
+        { t: 't=2.0s', tag: 'AMBUSH', col: '#e05a47', txt: 'Surprise Attack · 298 dmg (-8% Boss Def)' },
+        { t: 't=4.0s', tag: 'VENOM', col: '#68d391', txt: 'Infectious Strike · 343 dmg + Deadly Poison DoT' },
+        { t: 't=6.0s', tag: 'CLONE', col: '#63b3ed', txt: 'Mirror Image Clone Intercepted Boss Hit (-70%)' },
+        { t: 't=8.0s', tag: 'KI', col: '#f6ad55', txt: 'Ki Attack Gap-Closer · 361 dmg + 85% Splash' },
+        { t: 't=10.0s', tag: 'DETONATE', col: '#b794f4', txt: '5th Swing Death Strike + Twin Shadow · 514 dmg ★' }
+      ];
+
+      window.stepCombatTicker = function() {
+        tickerStepIdx = (tickerStepIdx + 1) % 6;
+        var pool = cls.id === 'samurai' ? samuraiEvents : ninjaEvents;
+        var feedEl = document.getElementById('ticker-log-feed');
+        if (feedEl) {
+          var slice = [];
+          for (var i = 0; i < 4; i++) {
+            slice.push(pool[(tickerStepIdx + i) % pool.length]);
+          }
+          feedEl.innerHTML = slice.map(function(f) {
+            return '<div class="ticker-log-item" style="border-left-color:' + f.col + ';"><div><strong style="color:#fff2bf;">' + f.t + '</strong> <span style="color:' + f.col + ';font-weight:700;">[' + f.tag + ']</span> ' + f.txt + '</div></div>';
+          }).join('');
+        }
+        var pips = document.querySelectorAll('[data-ticker-pip]');
+        var activeCount = cls.id === 'samurai' ? ((tickerStepIdx * 2) % 10) + 2 : (tickerStepIdx % 5) + 1;
+        for (var p = 0; p < pips.length; p++) {
+          var isOn = p < activeCount;
+          pips[p].classList.toggle('is-lit', cls.id === 'samurai' && isOn);
+          pips[p].classList.toggle('is-crimson', cls.id !== 'samurai' && isOn);
+        }
+      };
+
+      window.toggleCombatTicker = function() {
+        tickerRunning = !tickerRunning;
+        var btn = document.getElementById('btn-ticker-toggle');
+        if (btn) btn.textContent = tickerRunning ? 'Pause' : 'Play';
+      };
+
+      setInterval(function() {
+        if (!tickerRunning) return;
+        tickerPct += 10;
+        if (tickerPct > 100) {
+          tickerPct = 10;
+          window.stepCombatTicker();
+        }
+        var bar = document.getElementById('ticker-bar-fill');
+        if (bar) bar.style.width = tickerPct + '%';
+      }, 280);
+
+      document.addEventListener('keydown', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        if (e.key === 'm' || e.key === 'M') {
+          window.setExecMode(currentMode === 'mode_a' ? 'mode_b' : 'mode_a');
+        } else if (e.key === 'l' || e.key === 'L') {
+          window.setLocale(currentLocale === 'en' ? 'pt' : 'en');
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          window.toggleCombatTicker();
+        } else if (e.key >= '1' && e.key <= '9') {
+          var idx = parseInt(e.key, 10) - 1;
+          if (cls.progression[idx]) {
+            window.selectAbility(cls.progression[idx].id);
+          }
+        }
+      });
 
       if (window.location.search.indexOf('mode=mode_b') !== -1) {
         window.setExecMode('mode_b');

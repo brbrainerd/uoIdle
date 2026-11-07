@@ -164,9 +164,14 @@ NINJA_ALIAS_IDS = [
 #   (0,0): Shadowjump (Twilight Tekagi Blur)     (1,0): Focus Attack (Ki Needle Blade)         (2,0): Mirror Image (Moonlight Shadow Clones)
 #   (0,1): Death Strike (5-Point Dim-Mak Heart)  (1,1): Infectious Strike (Venomous Kryss)     (2,1): Shadow Discipline (Kuji-Kiri Mudra)
 #   (0,2): Lethal Toxins (Vial + Kryss + Star)   (1,2): Master Assassin (Tekagi Moon Crest)    (2,2): Bushido Master (Kensei Sun & Daisho)
+# Tokuno Fixes Sheet (2 cols x 2 rows):
+#   (0,0): Way of the Blade (Exact 3-Sword Katana/Wakizashi/No-Dachi Fan + Golden Parry Ward)
+#   (1,0): Crushing Blow (No-Dachi Vertical Cleave)
+#   (0,1): Bladeweave (Gold & Crimson Katana Ribbon Spiral)
+#   (1,1): Shadow Strike (Tekagi & Wakizashi Twilight Emerald Strike)
 STEM_SOURCE_MAP: dict[str, dict[str, object]] = {
     # Samurai Canonical (12) — 100% thematically matched to weapon & blurb
-    "samurai_way": {"type": "ai_samurai_thematic", "cell": (0, 0), "badge": True},
+    "samurai_way": {"type": "ai_tokuno_fixes", "cell": (0, 0), "badge": True},
     "samurai_lightning": {"type": "ai_samurai_thematic", "cell": (1, 0)},
     "samurai_perfection": {"type": "ai_bushido", "cell": (1, 1), "badge": True},
     "samurai_honorable": {"type": "ai_samurai_thematic", "cell": (2, 0)},
@@ -183,8 +188,8 @@ STEM_SOURCE_MAP: dict[str, dict[str, object]] = {
     "samurai_honorable_exec": {"type": "ai_samurai_thematic", "cell": (2, 0), "tint": (1.06, 1.0, 1.0)},
     "samurai_counter_attack": {"type": "ai_samurai_thematic", "cell": (0, 1), "tint": (1.06, 1.0, 1.0)},
     "samurai_whirlwind_attack": {"type": "ai_samurai_thematic", "cell": (0, 2), "tint": (1.05, 0.98, 0.95)},
-    "samurai_bladeweave": {"type": "atlas", "key": "gump_21015"},
-    "samurai_crushing_blow": {"type": "atlas", "key": "gump_20995"},
+    "samurai_bladeweave": {"type": "ai_tokuno_fixes", "cell": (0, 1)},
+    "samurai_crushing_blow": {"type": "ai_tokuno_fixes", "cell": (1, 0)},
     "samurai_honorable_exec_r2": {"type": "ai_bushido", "cell": (0, 2), "capstone": True, "tint": (1.1, 1.02, 0.95)},
     "samurai_bushido_initiate": {"type": "ai_samurai_thematic", "cell": (1, 2), "badge": True},
     "samurai_inner_calm": {"type": "ai_samurai_thematic", "cell": (2, 2), "badge": True},
@@ -207,7 +212,7 @@ STEM_SOURCE_MAP: dict[str, dict[str, object]] = {
     # Ninja Aliases & Badges (9)
     "ninja_focus_attack": {"type": "ai_ninja_thematic", "cell": (1, 0), "tint": (0.96, 1.06, 1.02)},
     "ninja_mirror_image": {"type": "ai_ninja_thematic", "cell": (2, 0), "tint": (0.96, 1.06, 1.02)},
-    "ninja_shadow_strike": {"type": "atlas", "key": "gump_21003"},
+    "ninja_shadow_strike": {"type": "ai_tokuno_fixes", "cell": (1, 1)},
     "ninja_double_strike": {"type": "ai_samurai_thematic", "cell": (1, 1), "tint": (0.85, 1.12, 1.08)},
     "ninja_armor_ignore": {"type": "ai_samurai_thematic", "cell": (2, 1), "tint": (0.85, 1.12, 1.08)},
     "ninja_way_of_stealth": {"type": "ai_ninjitsu", "cell": (2, 2), "badge": True},
@@ -345,6 +350,7 @@ def extract_master_icon(
     ninjitsu_sheet: Image.Image,
     samurai_thematic_sheet: Image.Image,
     ninja_thematic_sheet: Image.Image,
+    tokuno_fixes_sheet: Image.Image,
 ) -> Image.Image:
     """Extracts a 256x256 master icon from either ability-icons.png or the AI oil-painted sprite sheets."""
     spec = STEM_SOURCE_MAP[stem]
@@ -415,6 +421,18 @@ def extract_master_icon(
             int((row + 1) * ch - crop_inset),
         )
         master = ninja_thematic_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+    elif src_type == "ai_tokuno_fixes":
+        col, row = spec["cell"]  # type: ignore[misc]
+        fw, fh = tokuno_fixes_sheet.size
+        cw = fw / 2.0
+        ch = fh / 2.0
+        box = (
+            int(col * cw + crop_inset),
+            int(row * ch + crop_inset),
+            int((col + 1) * cw - crop_inset),
+            int((row + 1) * ch - crop_inset),
+        )
+        master = tokuno_fixes_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
     else:
         raise ValueError(f"Unknown icon source spec for {stem}: {spec}")
 
@@ -939,6 +957,7 @@ def generate_all_icons() -> None:
     ninjitsu_sheet = Image.open(SOURCES_DIR / "ninjitsu-sheet.jpg").convert("RGBA")
     samurai_thematic_sheet = Image.open(SOURCES_DIR / "samurai-thematic-sheet.png").convert("RGBA")
     ninja_thematic_sheet = Image.open(SOURCES_DIR / "ninja-thematic-sheet.png").convert("RGBA")
+    tokuno_fixes_sheet = Image.open(SOURCES_DIR / "tokuno-fixes-sheet.png").convert("RGBA")
 
     for stem, _role, _label in SAMURAI_STEMS:
         master = extract_master_icon(
@@ -950,6 +969,7 @@ def generate_all_icons() -> None:
             ninjitsu_sheet,
             samurai_thematic_sheet,
             ninja_thematic_sheet,
+            tokuno_fixes_sheet,
         )
         export_icon_stem(master, SAMURAI_DIR, stem)
 
@@ -963,6 +983,7 @@ def generate_all_icons() -> None:
             ninjitsu_sheet,
             samurai_thematic_sheet,
             ninja_thematic_sheet,
+            tokuno_fixes_sheet,
         )
         export_icon_stem(master, NINJA_DIR, stem)
 

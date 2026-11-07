@@ -2,6 +2,15 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { ClassSchema, type ClassDefinition, type SkillDefinition } from '../src/schemas/skill.schema.js';
+import {
+  buildComponentStyles,
+  renderQuickCommandBar,
+  renderStatDistributionStrip,
+  renderStarterSkillCards,
+  renderAbilityPowerMeter,
+  renderLiveCombatTickerComponent,
+  renderExecutiveClassKpiStrip,
+} from './ui_components.js';
 
 const ROOT_DIR = process.cwd();
 
@@ -1838,6 +1847,7 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
         grid-template-columns: minmax(0, 1fr);
       }
     }
+    ${buildComponentStyles()}
   `;
 }
 
@@ -1857,12 +1867,12 @@ function buildClassSkillTreeHtml(
   const shurikenAbility: SkillDefinition | undefined = cls.abilities.find((a) => a.id === 'ninja_shuriken');
 
   const cobraNodesHtml = cls.progression
-    .map((m) => {
+    .map((m, idx) => {
       const iconRel = `assets/icons/${cls.id}/${m.id}@64.png`;
       return `
         <div class="arvore-col" onclick="selectAbility('${escapeHtml(m.id)}')" title="L${m.level}: ${escapeHtml(m.nameEn)} / ${escapeHtml(m.namePtBr)}">
           <span class="arvore-lv">L${m.level}</span>
-          <div class="arvore-circulo is-on">
+          <div class="arvore-circulo is-on ${idx === 0 ? 'is-selected-node' : ''}" data-cobra-id="${escapeHtml(m.id)}" data-node-kind="${escapeHtml(m.type)}">
             <img src="${escapeHtml(iconRel)}" alt="${escapeHtml(m.nameEn)}" />
           </div>
           <span class="arvore-nome" data-en="${escapeHtml(m.nameEn)}" data-pt="${escapeHtml(m.namePtBr)}">${escapeHtml(m.nameEn)}</span>
@@ -1955,6 +1965,7 @@ function buildClassSkillTreeHtml(
                   </div>`
                 : ''
             }
+            ${renderAbilityPowerMeter(m.id)}
             ${activeModeStripHtml}
             ${dualUnlockHtml}
             ${schemaDrawerHtml}
@@ -1964,16 +1975,7 @@ function buildClassSkillTreeHtml(
     })
     .join('\n');
 
-  const starterSkillsHtml = cls.starterSkills
-    .map(
-      (sk) => `
-      <div class="kv-item">
-        <span class="k">${escapeHtml(sk.skillKey)} <small class="mono" style="color:var(--text-secondary)">(#${sk.skillId})</small></span>
-        <span class="v">${sk.initialValue}.0</span>
-      </div>
-    `
-    )
-    .join('\n');
+  const starterSkillsHtml = renderStarterSkillCards(cls);
 
   const legacyWeightsHtml = cls.legacyTemplateSkills
     .map(
@@ -2089,6 +2091,7 @@ function buildClassSkillTreeHtml(
 <body>
   <div class="beta-shell">
     <div class="personagem-arvore" data-personagem-conteudo="arvore">
+      ${renderQuickCommandBar(isSamurai ? 'samurai' : 'ninja')}
       <!-- Top Header Bar (.arvore-head) -->
       <header class="arvore-head">
         <div class="arvore-nivel">
@@ -2167,6 +2170,7 @@ function buildClassSkillTreeHtml(
                     <div class="stat-chip"><span>DEX</span><strong>${cls.baseStats.dex}</strong></div>
                     <div class="stat-chip"><span>INT</span><strong>${cls.baseStats.int}</strong></div>
                   </div>
+                  ${renderStatDistributionStrip(cls)}
                 </div>
               </div>
             </div>
@@ -2216,6 +2220,7 @@ function buildClassSkillTreeHtml(
                   ${leftRackSlots.map((g) => renderGearTile(g, false)).join('\n')}
                 </div>
                 <div class="paperdoll-figure-box">
+                  <div class="paperdoll-aura-ring"></div>
                   <img src="assets/items/paperdoll-${escapeHtml(cls.id)}.png" alt="${escapeHtml(classTitle)} Layered UO Paperdoll" />
                 </div>
                 <div class="paperdoll-rack-col">
@@ -2243,7 +2248,21 @@ function buildClassSkillTreeHtml(
                 <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:4px;" id="gear-tt-stats">
                   Valorite Weapon: ${Math.round((defaultGear.baseDmg?.[0] ?? 11) * 1.85)}–${Math.round((defaultGear.baseDmg?.[1] ?? 13) * 1.85)} Dmg · Speed ${defaultGear.speed ?? 45} · ${escapeHtml(defaultGear.primaryAbility ?? '')} / ${escapeHtml(defaultGear.secondaryAbility ?? '')}
                 </div>
-                <div class="cost-badges" id="gear-tt-affixes" style="margin-top:4px;">
+                <div class="weapon-stat-bars">
+                  <div class="w-stat-col">
+                    <span id="gear-bar-lbl-1">Power (1.85x)</span>
+                    <div class="w-stat-track"><div class="w-stat-fill" id="gear-bar-fill-1" style="width:92%;"></div></div>
+                  </div>
+                  <div class="w-stat-col">
+                    <span id="gear-bar-lbl-2">Speed ${defaultGear.speed ?? 45}</span>
+                    <div class="w-stat-track"><div class="w-stat-fill" id="gear-bar-fill-2" style="width:82%;"></div></div>
+                  </div>
+                  <div class="w-stat-col">
+                    <span id="gear-bar-lbl-3">${isSamurai ? 'Bushido +15' : 'Ninjitsu +15'}</span>
+                    <div class="w-stat-track"><div class="w-stat-fill" id="gear-bar-fill-3" style="width:100%;"></div></div>
+                  </div>
+                </div>
+                <div class="cost-badges" id="gear-tt-affixes" style="margin-top:5px;">
                   ${defaultGear.affixesEn.map((af) => `<span class="badge-mana">${escapeHtml(af)}</span>`).join('')}
                 </div>
                 <div style="font-size:10px;color:var(--text-primary);margin-top:4px;" id="gear-tt-lore">
@@ -2273,6 +2292,10 @@ function buildClassSkillTreeHtml(
 
             <!-- Live .arvore-cobra 12-node ribbon -->
             <div class="arvore-cobra-wrap">
+              <div class="arvore-tier-banner">
+                <span><strong style="color:var(--text-gold);">ROW 1 (L1–L25):</strong> Initiate → Adept Foundation</span>
+                <span><strong style="color:var(--text-gold);">ROW 2 (L30–L60):</strong> Master → Grandmaster Capstone</span>
+              </div>
               <div class="arvore-cobra">
                 ${cobraNodesHtml}
               </div>
@@ -2292,7 +2315,7 @@ function buildClassSkillTreeHtml(
             </div>
 
             <!-- 12 Unified Interactive Milestone & Schema Cards -->
-            <div class="milestone-grid">
+            <div class="milestone-grid" id="milestone-cards-container">
               ${milestoneCardsHtml}
             </div>
           </section>
@@ -2367,6 +2390,7 @@ function buildClassSkillTreeHtml(
                     <span id="insp-mode-b" style="color:var(--text-primary);">${escapeHtml(firstMode.modeB)}</span>
                   </div>
                 </div>
+                ${renderLiveCombatTickerComponent(cls)}
                 <details class="schema-drawer" style="margin-top:7px;">
                   <summary>View Live Drop-In JSON Payload (<code>design/drop-in/${escapeHtml(cls.id)}.json</code>)</summary>
                   <pre id="insp-json" class="mono" style="margin:4px 0 0;padding:6px;background:#090b08;border:1px solid #2a3026;border-radius:3px;font-size:9.5px;color:#d6e4ca;max-height:170px;overflow:auto;">${escapeHtml(JSON.stringify(firstAbility, null, 2))}</pre>
@@ -2450,11 +2474,30 @@ function buildClassSkillTreeHtml(
           var maxD = Math.round(g.baseDmg[1] * currentTier.mult);
           document.getElementById('gear-tt-stats').textContent =
             currentTier.id + ' Weapon: ' + minD + '–' + maxD + ' Dmg · Speed ' + g.speed + ' · ' + g.primaryAbility + ' / ' + g.secondaryAbility;
+          var pwrPct = Math.min(100, Math.round((maxD / 34) * 100));
+          var spdPct = Math.min(100, Math.round(((g.speed || 45) / 55) * 100));
+          var lbl1 = document.getElementById('gear-bar-lbl-1');
+          var lbl2 = document.getElementById('gear-bar-lbl-2');
+          var fill1 = document.getElementById('gear-bar-fill-1');
+          var fill2 = document.getElementById('gear-bar-fill-2');
+          if (lbl1) lbl1.textContent = 'Power (' + currentTier.mult.toFixed(2) + 'x)';
+          if (lbl2) lbl2.textContent = 'Speed ' + g.speed;
+          if (fill1) fill1.style.width = pwrPct + '%';
+          if (fill2) fill2.style.width = spdPct + '%';
         } else {
           var baseRes = g.baseArmorResist || 10;
           var scaledRes = Math.round(baseRes * (1 + currentTier.res / 100));
           document.getElementById('gear-tt-stats').textContent =
             currentTier.id + ' Armor: +' + scaledRes + ' Physical/Elem Defense (Base ' + baseRes + ', +' + currentTier.res + '% Tier Bonus)';
+          var resPct = Math.min(100, Math.round((scaledRes / 36) * 100));
+          var lblA1 = document.getElementById('gear-bar-lbl-1');
+          var lblA2 = document.getElementById('gear-bar-lbl-2');
+          var fillA1 = document.getElementById('gear-bar-fill-1');
+          var fillA2 = document.getElementById('gear-bar-fill-2');
+          if (lblA1) lblA1.textContent = 'Mitigation (+' + scaledRes + ')';
+          if (lblA2) lblA2.textContent = 'Tier +' + currentTier.res + '%';
+          if (fillA1) fillA1.style.width = resPct + '%';
+          if (fillA2) fillA2.style.width = Math.max(15, currentTier.res) + '%';
         }
         var affs = currentLocale === 'pt' ? g.affixesPtBr : g.affixesEn;
         document.getElementById('gear-tt-affixes').innerHTML = affs
@@ -2483,6 +2526,11 @@ function buildClassSkillTreeHtml(
         document.getElementById('btn-mode-b').classList.toggle('is-active', isModeB);
         document.getElementById('inspector-mode-pill').textContent =
           isModeB ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+
+        var cardsContainer = document.getElementById('milestone-cards-container');
+        if (cardsContainer) {
+          cardsContainer.classList.toggle('is-mode-b-active', isModeB);
+        }
 
         var strips = document.querySelectorAll('[data-mode-strip]');
         for (var s = 0; s < strips.length; s++) {
@@ -2559,6 +2607,10 @@ function buildClassSkillTreeHtml(
         for (var k = 0; k < cards.length; k++) {
           cards[k].classList.toggle('is-selected', cards[k].getAttribute('data-milestone-id') === abilityId);
         }
+        var cobraCircles = document.querySelectorAll('[data-cobra-id]');
+        for (var c = 0; c < cobraCircles.length; c++) {
+          cobraCircles[c].classList.toggle('is-selected-node', cobraCircles[c].getAttribute('data-cobra-id') === abilityId);
+        }
         var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
         document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
         document.getElementById('insp-level').textContent = 'L' + ab.progressionTreeLevel;
@@ -2626,6 +2678,83 @@ function buildClassSkillTreeHtml(
           }
         }
       };
+
+      // Live 100ms Tick Combat Loop Preview Component Logic
+      var tickerRunning = true;
+      var tickerStepIdx = 0;
+      var tickerPct = 65;
+      var samuraiEvents = [
+        { t: 't=0.0s', tag: 'CAST', col: '#e05a47', txt: 'Armor Ignore · 279 dmg (100% Armor Pierce)' },
+        { t: 't=2.0s', tag: 'PARRY', col: '#f6e05e', txt: 'Shieldless Daisho Parry → 0.85x Riposte +18 HP' },
+        { t: 't=4.0s', tag: 'SKILL', col: '#63b3ed', txt: 'Double Strike (2×90%) · 312 dmg (+8% Streak)' },
+        { t: 't=6.0s', tag: 'AOE', col: '#4fd1c5', txt: 'Frenzied Whirlwind · 335 dmg + 4-Tick Bleed' },
+        { t: 't=8.0s', tag: 'COUNTER', col: '#f6ad55', txt: 'Counter Attack Stance + Free Parry Swing (284 dmg)' },
+        { t: 't=10.0s', tag: 'EXEC', col: '#b794f4', txt: "Kensei: Amakura's Judgment · 498 dmg ★" }
+      ];
+      var ninjaEvents = [
+        { t: 't=0.0s', tag: 'VEIL', col: '#4fd1c5', txt: 'Smoke Bomb + Shuriken Volley · 205 dmg' },
+        { t: 't=2.0s', tag: 'AMBUSH', col: '#e05a47', txt: 'Surprise Attack · 298 dmg (-8% Boss Def)' },
+        { t: 't=4.0s', tag: 'VENOM', col: '#68d391', txt: 'Infectious Strike · 343 dmg + Deadly Poison DoT' },
+        { t: 't=6.0s', tag: 'CLONE', col: '#63b3ed', txt: 'Mirror Image Clone Intercepted Boss Hit (-70%)' },
+        { t: 't=8.0s', tag: 'KI', col: '#f6ad55', txt: 'Ki Attack Gap-Closer · 361 dmg + 85% Splash' },
+        { t: 't=10.0s', tag: 'DETONATE', col: '#b794f4', txt: '5th Swing Death Strike + Twin Shadow · 514 dmg ★' }
+      ];
+
+      window.stepCombatTicker = function() {
+        tickerStepIdx = (tickerStepIdx + 1) % 6;
+        var pool = cls.id === 'samurai' ? samuraiEvents : ninjaEvents;
+        var feedEl = document.getElementById('ticker-log-feed');
+        if (feedEl) {
+          var slice = [];
+          for (var i = 0; i < 4; i++) {
+            slice.push(pool[(tickerStepIdx + i) % pool.length]);
+          }
+          feedEl.innerHTML = slice.map(function(f) {
+            return '<div class="ticker-log-item" style="border-left-color:' + f.col + ';"><div><strong style="color:#fff2bf;">' + f.t + '</strong> <span style="color:' + f.col + ';font-weight:700;">[' + f.tag + ']</span> ' + f.txt + '</div></div>';
+          }).join('');
+        }
+        var pips = document.querySelectorAll('[data-ticker-pip]');
+        var activeCount = cls.id === 'samurai' ? ((tickerStepIdx * 2) % 10) + 2 : (tickerStepIdx % 5) + 1;
+        for (var p = 0; p < pips.length; p++) {
+          var isOn = p < activeCount;
+          pips[p].classList.toggle('is-lit', cls.id === 'samurai' && isOn);
+          pips[p].classList.toggle('is-crimson', cls.id !== 'samurai' && isOn);
+        }
+      };
+
+      window.toggleCombatTicker = function() {
+        tickerRunning = !tickerRunning;
+        var btn = document.getElementById('btn-ticker-toggle');
+        if (btn) btn.textContent = tickerRunning ? 'Pause' : 'Play';
+      };
+
+      setInterval(function() {
+        if (!tickerRunning) return;
+        tickerPct += 10;
+        if (tickerPct > 100) {
+          tickerPct = 10;
+          window.stepCombatTicker();
+        }
+        var bar = document.getElementById('ticker-bar-fill');
+        if (bar) bar.style.width = tickerPct + '%';
+      }, 280);
+
+      document.addEventListener('keydown', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        if (e.key === 'm' || e.key === 'M') {
+          window.setExecMode(currentMode === 'mode_a' ? 'mode_b' : 'mode_a');
+        } else if (e.key === 'l' || e.key === 'L') {
+          window.setLocale(currentLocale === 'en' ? 'pt' : 'en');
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          window.toggleCombatTicker();
+        } else if (e.key >= '1' && e.key <= '9') {
+          var idx = parseInt(e.key, 10) - 1;
+          if (cls.progression[idx]) {
+            window.selectAbility(cls.progression[idx].id);
+          }
+        }
+      });
 
       if (window.location.search.indexOf('mode=mode_b') !== -1) {
         window.setExecMode('mode_b');
@@ -3157,6 +3286,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
 <body>
   <div class="beta-shell">
     <div class="personagem-arvore">
+      ${renderQuickCommandBar('comparison')}
       <header class="arvore-head">
         <div class="arvore-nivel">
           <span class="class-badge-pill">v1.1 SIMULATOR &amp; PARITY</span>
@@ -3238,6 +3368,8 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               Simulating 100% Drop-In JSON definitions using existing UO Idle v0.99.0 client/server primitives (timed statusEffect buffs, DoT ticks, and SpecialMove/Spell multipliers with zero C# server modifications).
             </div>
           </div>
+
+          ${renderExecutiveClassKpiStrip(defaultScenarios, classColors)}
 
           <div class="table-scroll-wrap" style="margin-bottom:12px;">
             <table class="comp-table">
@@ -3585,6 +3717,44 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
 
+        // Also update Executive 5-Class KPI Strip
+        var kpiStripEl = document.getElementById('sim-exec-kpi-strip');
+        if (kpiStripEl && list.length > 0) {
+          var baseScens = list.filter(function(s) {
+            return s.classId === 'warrior' || s.classId === 'mage' || s.classId === 'ranger';
+          });
+          var meanD = baseScens.length > 0
+            ? baseScens.reduce(function(a, b) { return a + b.sustainedDps; }, 0) / baseScens.length
+            : 375.0;
+          var kpiHtml = '';
+          for (var ki = 0; ki < list.length; ki++) {
+            var ks = list[ki];
+            var kCol = classCols[ks.classId] || '#c9a227';
+            var dPct = (((ks.sustainedDps - meanD) / meanD) * 100).toFixed(1);
+            var dStr = parseFloat(dPct) >= 0 ? ('+' + dPct + '%') : (dPct + '%');
+            var mLbl = ks.classId === 'samurai'
+              ? (ks.parryCount + ' Bushido Parries')
+              : (ks.classId === 'ninja'
+                ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
+                : (ks.parryCount + ' Shield Parries'));
+            kpiHtml += '<div class="exec-kpi-card" style="border-top-color:' + kCol + ';">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                '<strong style="font-family:\'Cinzel\',serif;font-size:12px;color:' + kCol + ';text-transform:uppercase;">' + ks.classId + '</strong>' +
+                '<span class="mono" style="font-size:9.5px;color:#82d5b0;">' + dStr + ' vs Mean</span>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
+                '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
+                '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
+              '</div>' +
+              '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
+                '<span>' + mLbl + '</span>' +
+                '<span style="color:#82d5b0;">0 OOM</span>' +
+              '</div>' +
+            '</div>';
+          }
+          kpiStripEl.innerHTML = kpiHtml;
+        }
+
         var modeLabel = isModeB ? 'Mode B' : 'Mode A';
         var dpsTitle = document.getElementById('svg-dps-title');
         var ehpTitle = document.getElementById('svg-ehp-title');
@@ -3641,6 +3811,21 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
       };
 
+      document.addEventListener('keydown', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        if (e.key === 'm' || e.key === 'M') {
+          window.updateSimFilter('mode', state.mode === 'mode_a' ? 'mode_b' : 'mode_a');
+        } else if (e.key === '1') {
+          window.switchCompTab('sim');
+        } else if (e.key === '2') {
+          window.switchCompTab('matrix');
+        } else if (e.key === '3') {
+          window.switchCompTab('armaments');
+        } else if (e.key === '0') {
+          window.switchCompTab('all');
+        }
+      });
+
       if (window.location.search.indexOf('mode=mode_b') !== -1) {
         window.updateSimFilter('mode', 'mode_b');
       }
@@ -3674,10 +3859,40 @@ function buildPortalIndexHtml(isRoot: boolean): string {
     }
     .portal-hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 290px;
+      grid-template-columns: minmax(0, 1fr) 330px;
       gap: 18px;
       align-items: center;
       min-width: 0;
+    }
+    .hero-paperdoll-alcove {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      background: #0d100c;
+      padding: 10px;
+      border: 1px solid #3c3425;
+      border-radius: 5px;
+    }
+    .alcove-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      border-radius: 4px;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.14), #090b08 75%);
+      border: 1px solid #2e3429;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .alcove-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-2px);
+    }
+    .alcove-card img {
+      width: 112px;
+      height: auto;
+      border-radius: 3px;
     }
     .launch-grid {
       display: grid;
@@ -3776,6 +3991,7 @@ function buildPortalIndexHtml(isRoot: boolean): string {
 <body>
   <div class="beta-shell">
     <div class="personagem-arvore">
+      ${renderQuickCommandBar('portal', prefix)}
       <header class="arvore-head">
         <div class="arvore-nivel">
           <span class="class-badge-pill">UO IDLE v0.99.0 · MILESTONE v1.1</span>
@@ -3828,9 +4044,19 @@ function buildPortalIndexHtml(isRoot: boolean): string {
               <a class="beta-btn" href="${rootPrefix}design/drop-in/classes-patch.js">View Drop-In JS Patch (applyDropInClassPatch)</a>
             </div>
           </div>
-          <div style="display:flex;gap:10px;justify-content:center;align-items:center;background:#10140f;padding:10px;border:1px solid #3c3425;border-radius:5px;">
-            <img src="${prefix}assets/items/paperdoll-samurai.png" alt="Samurai Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
-            <img src="${prefix}assets/items/paperdoll-ninja.png" alt="Ninja Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
+          <div class="hero-paperdoll-alcove">
+            <a class="alcove-card" href="${prefix}samurai-skill-tree.html" style="border-top:2px solid var(--samurai-accent);">
+              <span class="mono" style="font-size:9px;color:#ff9b93;font-weight:700;">SM · ID 114 · HUE 1884</span>
+              <img src="${prefix}assets/items/paperdoll-samurai.png" alt="Samurai Paperdoll" />
+              <span class="mono" style="font-size:9.5px;color:#fff2bf;font-weight:700;">363.2 / 391.9 DPS</span>
+              <span class="mono" style="font-size:8.5px;color:#82d5b0;">29.3% Parry · 44/10w</span>
+            </a>
+            <a class="alcove-card" href="${prefix}ninja-skill-tree.html" style="border-top:2px solid var(--ninja-accent);">
+              <span class="mono" style="font-size:9px;color:#7ce8b4;font-weight:700;">NJ · ID 115 · HUE 1175</span>
+              <img src="${prefix}assets/items/paperdoll-ninja.png" alt="Ninja Paperdoll" />
+              <span class="mono" style="font-size:9.5px;color:#fff2bf;font-weight:700;">374.5 / 367.4 DPS</span>
+              <span class="mono" style="font-size:8.5px;color:#82d5b0;">70% Clone · 16/10w</span>
+            </a>
           </div>
         </div>
       </section>
@@ -3852,8 +4078,13 @@ function buildPortalIndexHtml(isRoot: boolean): string {
                 </div>
                 <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">Samurai (Bushido) Skill Tree &amp; Paperdoll</strong>
                 <p style="margin:0;font-size:12px;color:var(--text-secondary);">
-                  Interactive <code>[Arvore</code> progression, layered UO paperdoll with mouseover gear stats (<code>Iron..Valorite</code>), 5-slot seeded hotbar, EN/PT-BR toggle, and <em>Kensei: Amakura's Judgment</em> capstone.
+                  Interactive <code>[Arvore</code> progression, layered UO paperdoll with mouseover gear stats (<code>Iron..Valorite</code>), 5-slot seeded hotbar, live 100ms combat ticker, and <em>Kensei: Amakura's Judgment</em> capstone.
                 </p>
+                <div class="cost-badges" style="margin-top:auto;padding-top:4px;">
+                  <span class="badge-cd">363.2 DPS (A)</span>
+                  <span class="badge-stamina">391.9 DPS (B)</span>
+                  <span class="badge-mana">44 Wave Parries</span>
+                </div>
               </div>
             </a>
 
@@ -3868,6 +4099,11 @@ function buildPortalIndexHtml(isRoot: boolean): string {
                 <p style="margin:0;font-size:12px;color:var(--text-secondary);">
                   Interactive <code>[Arvore</code> progression, Dual L35 <em>Smoke Bomb</em> + <em>Shuriken Volley</em> unlock, layered shinobi paperdoll with mouseover gear stats, and <em>Kage Bunshin: Twin Shadow Execution</em> capstone.
                 </p>
+                <div class="cost-badges" style="margin-top:auto;padding-top:4px;">
+                  <span class="badge-cd">374.5 DPS (A)</span>
+                  <span class="badge-mana">330.4 EHP/s (B)</span>
+                  <span class="badge-stamina">16 Clone Absorbs</span>
+                </div>
               </div>
             </a>
 
@@ -3880,8 +4116,13 @@ function buildPortalIndexHtml(isRoot: boolean): string {
                 </div>
                 <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">5-Class Parity, SVG Telemetry &amp; Armaments</strong>
                 <p style="margin:0;font-size:12px;color:var(--text-secondary);">
-                  Multi-bracket DPS &amp; EHP/s SVG curves, 5-channel damage breakdown stacked bars, 9-tier material scaling, 10-wave dungeon endurance, and <code>&lt;20 LOC</code> C# server hooks.
+                  Executive KPI strip, multi-bracket DPS &amp; EHP/s SVG curves, 5-channel damage breakdown stacked bars, 9-tier material scaling, 10-wave dungeon endurance, and <code>&lt;20 LOC</code> C# server hooks.
                 </p>
+                <div class="cost-badges" style="margin-top:auto;padding-top:4px;">
+                  <span class="badge-cd">±5–8% Gate</span>
+                  <span class="badge-mana">9 Material Tiers</span>
+                  <span class="badge-stamina">10/10 Waves</span>
+                </div>
               </div>
             </a>
           </div>
@@ -3902,28 +4143,40 @@ function buildPortalIndexHtml(isRoot: boolean): string {
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${rootPrefix}design/drop-in/samurai.json">design/drop-in/samurai.json</a>
-                  <div style="font-size:11px;color:var(--text-secondary);">Validated Samurai class definition (ID 114, 12 milestones, 12 skills, hotbar, EN/PT-BR).</div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${rootPrefix}design/drop-in/samurai.json">design/drop-in/samurai.json</a>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">JSON SCHEMA · ID 114</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Samurai class definition (12 milestones, 12 skills, hotbar, EN/PT-BR).</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/drop-in/samurai.json" target="_blank" rel="noopener">GitHub ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${rootPrefix}design/drop-in/ninja.json">design/drop-in/ninja.json</a>
-                  <div style="font-size:11px;color:var(--text-secondary);">Validated Ninja class definition (ID 115, 12 milestones, 13 skills incl. Dual L35 Shuriken).</div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${rootPrefix}design/drop-in/ninja.json">design/drop-in/ninja.json</a>
+                    <span class="type-pill kind-mechanic" style="font-size:8px;padding:0 4px;">JSON SCHEMA · ID 115</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Ninja class definition (12 milestones, 13 skills incl. Dual L35 Shuriken).</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/drop-in/ninja.json" target="_blank" rel="noopener">GitHub ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${rootPrefix}design/drop-in/classes-patch.js">design/drop-in/classes-patch.js</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${rootPrefix}design/drop-in/classes-patch.js">design/drop-in/classes-patch.js</a>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">ES MODULE · 9 TABLES</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">Idempotent ES module <code>applyDropInClassPatch(tables)</code> wiring all 9 client bundle tables.</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/drop-in/classes-patch.js" target="_blank" rel="noopener">GitHub ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${rootPrefix}design/drop-in/items-bushido-ninjitsu.json">design/drop-in/items-bushido-ninjitsu.json</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${rootPrefix}design/drop-in/items-bushido-ninjitsu.json">design/drop-in/items-bushido-ninjitsu.json</a>
+                    <span class="type-pill kind-passive" style="font-size:8px;padding:0 4px;">8 WEAPONS · 9 TIERS</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">8 Tokuno weapons, 4 cooldown-gated shinobi tools, 9 material tiers, and 10 affix pools.</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/drop-in/items-bushido-ninjitsu.json" target="_blank" rel="noopener">GitHub ↗</a>
@@ -3936,28 +4189,40 @@ function buildPortalIndexHtml(isRoot: boolean): string {
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${ghRepo}design/SAMURAI_SPEC.md" target="_blank" rel="noopener">design/SAMURAI_SPEC.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${ghRepo}design/SAMURAI_SPEC.md" target="_blank" rel="noopener">design/SAMURAI_SPEC.md</a>
+                    <span class="type-pill kind-skill" style="font-size:8px;padding:0 4px;">17-LOC C# HOOK</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">Complete Samurai &amp; Bushido specification, ModernUO citations, and 17-LOC C# server hook.</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/SAMURAI_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${ghRepo}design/NINJA_SPEC.md" target="_blank" rel="noopener">design/NINJA_SPEC.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${ghRepo}design/NINJA_SPEC.md" target="_blank" rel="noopener">design/NINJA_SPEC.md</a>
+                    <span class="type-pill kind-mechanic" style="font-size:8px;padding:0 4px;">16-LOC C# HOOK</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">Complete Ninja &amp; Ninjitsu specification, idle adaptations, and 16-LOC C# server hook.</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/NINJA_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${ghRepo}design/BALANCE_REPORT.md" target="_blank" rel="noopener">design/BALANCE_REPORT.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${ghRepo}design/BALANCE_REPORT.md" target="_blank" rel="noopener">design/BALANCE_REPORT.md</a>
+                    <span class="type-pill kind-feature" style="font-size:8px;padding:0 4px;">80 SCENARIOS PASS</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">5-class parity proofs, 5-channel damage breakdowns, material curves, and 10-wave endurance.</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}design/BALANCE_REPORT.md" target="_blank" rel="noopener">Read Report ↗</a>
               </div>
               <div class="file-row">
                 <div>
-                  <a href="${ghRepo}mechanics/INDEX.md" target="_blank" rel="noopener">mechanics/INDEX.md</a>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <a href="${ghRepo}mechanics/INDEX.md" target="_blank" rel="noopener">mechanics/INDEX.md</a>
+                    <span class="type-pill kind-spell" style="font-size:8px;padding:0 4px;">56 PAGES · 649 CLAIMS</span>
+                  </div>
                   <div style="font-size:11px;color:var(--text-secondary);">56-page claim-verified UO Idle v0.99.0 + ModernUO knowledgebase (649 verbatim claims).</div>
                 </div>
                 <a class="beta-btn" href="${ghRepo}mechanics/INDEX.md" target="_blank" rel="noopener">Browse KB ↗</a>
@@ -4030,10 +4295,10 @@ function captureScreenshots(): void {
     return;
   }
   const targets = [
-    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 2200 },
-    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 2240 },
-    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3750 },
-    { html: 'index.html', png: 'portal-index.png', height: 1460 },
+    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 2580 },
+    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 2640 },
+    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3900 },
+    { html: 'index.html', png: 'portal-index.png', height: 1580 },
   ];
 
   for (const t of targets) {

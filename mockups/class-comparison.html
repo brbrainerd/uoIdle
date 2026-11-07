@@ -1036,6 +1036,407 @@
         grid-template-columns: minmax(0, 1fr);
       }
     }
+    
+    /* ==========================================================================
+       v2.1 Component Architecture & Dark-Fantasy Animation System
+       ========================================================================== */
+    @keyframes auraPulse {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50% { opacity: 0.92; transform: scale(1.04); }
+    }
+    @keyframes railFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    @keyframes nodeHaloPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(230, 195, 106, 0.55), 0 0 14px var(--class-glow); }
+      50% { box-shadow: 0 0 0 5px rgba(230, 195, 106, 0), 0 0 22px var(--border-gold-bright); }
+    }
+    @keyframes modeFlash {
+      0% { filter: brightness(1.35); transform: translateY(-1px); }
+      100% { filter: brightness(1); transform: translateY(0); }
+    }
+    @keyframes tickerSweep {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    @keyframes floatUpBadge {
+      0% { opacity: 0; transform: translateY(4px) scale(0.96); }
+      20% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* 1. Global Quick Command & Shortcut Bar Component (<uo-quick-dock>) */
+    .uo-quick-dock {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px 12px;
+      padding: 6px 14px;
+      background: linear-gradient(90deg, #0d100c 0%, #171c15 50%, #0d100c 100%);
+      border-bottom: 1px solid #352d1d;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+    .uo-quick-dock-left, .uo-quick-dock-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+    }
+    .kbd-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #141812;
+      border: 1px solid #3c3425;
+      color: #d6e4ca;
+      font-size: 9.5px;
+    }
+    .kbd-chip kbd {
+      padding: 0 4px;
+      border-radius: 2px;
+      background: #282112;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .live-pulse-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #48bb78;
+      box-shadow: 0 0 8px #48bb78;
+      animation: auraPulse 2.2s infinite ease-in-out;
+    }
+
+    /* 2. Segmented Stat Distribution & Resource Bar Component (<uo-stat-bar>) */
+    .stat-ratio-strip {
+      margin-top: 8px;
+      padding: 6px 8px;
+      background: #10140f;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+    }
+    .stat-ratio-bar {
+      display: flex;
+      height: 7px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #090b08;
+      border: 1px solid #2a3026;
+      margin: 4px 0;
+    }
+    .stat-seg-str { background: linear-gradient(90deg, #c83e37, #e05a47); transition: width 0.3s ease; }
+    .stat-seg-dex { background: linear-gradient(90deg, #2e9e6b, #48bb78); transition: width 0.3s ease; }
+    .stat-seg-int { background: linear-gradient(90deg, #3b82f6, #63b3ed); transition: width 0.3s ease; }
+
+    /* 3. Starter Skill Mastery Progress Card Component */
+    .skill-mastery-card {
+      padding: 5px 8px;
+      background: linear-gradient(180deg, #171c15 0%, #111510 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .skill-mastery-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-1px);
+    }
+    .skill-mastery-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+    .skill-mastery-bar-bg {
+      height: 4px;
+      border-radius: 2px;
+      background: #090b08;
+      overflow: hidden;
+    }
+    .skill-mastery-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* 4. Connected [Arvore Progression Rail & Halo Nodes */
+    .arvore-cobra-wrap {
+      position: relative;
+      padding: 12px 14px;
+      border-bottom: 1px solid #2a3026;
+      background:
+        radial-gradient(circle at 50% 0%, var(--class-glow), transparent 70%),
+        rgba(11, 13, 10, 0.72);
+    }
+    .arvore-tier-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed #262c22;
+    }
+    .arvore-col {
+      position: relative;
+      z-index: 1;
+    }
+    .arvore-col::after {
+      content: '';
+      position: absolute;
+      top: 37px;
+      left: 55%;
+      width: 90%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--border-gold) 0%, rgba(201, 162, 39, 0.2) 50%, var(--border-gold) 100%);
+      background-size: 200% 100%;
+      animation: railFlow 5s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .arvore-col:nth-child(6n)::after,
+    .arvore-col:last-child::after {
+      display: none;
+    }
+    .arvore-circulo.is-selected-node {
+      border-color: #fff2bf !important;
+      animation: nodeHaloPulse 2s infinite ease-in-out;
+      transform: scale(1.08);
+    }
+    .arvore-circulo[data-node-kind="passive"] { border-color: var(--kind-passive); }
+    .arvore-circulo[data-node-kind="skill"]   { border-color: var(--kind-skill); }
+    .arvore-circulo[data-node-kind="spell"]   { border-color: var(--kind-spell); }
+    .arvore-circulo[data-node-kind="mechanic"] { border-color: var(--kind-mechanic); }
+    .arvore-circulo[data-node-kind="feature"] {
+      border-color: var(--kind-capstone);
+      box-shadow: 0 0 14px rgba(246, 224, 94, 0.45);
+    }
+
+    /* 5. Ability Power & Scaling Meter Component (<uo-power-meter>) */
+    .uo-power-meter {
+      margin-top: 5px;
+      padding: 4px 6px;
+      background: #0e120d;
+      border: 1px solid #252b21;
+      border-radius: 3px;
+    }
+    .uo-power-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+    }
+    .uo-power-track {
+      position: relative;
+      height: 5px;
+      border-radius: 3px;
+      background: #080a07;
+      overflow: hidden;
+      display: flex;
+    }
+    .uo-power-seg-base {
+      height: 100%;
+      background: linear-gradient(90deg, #8b6f1e, #d4af37);
+      transition: width 0.25s ease;
+    }
+    .uo-power-seg-burst {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), #f6ad55);
+      transition: width 0.25s ease;
+    }
+    .uo-power-seg-modeb {
+      height: 100%;
+      background: #68d391;
+      opacity: 0.35;
+      transition: width 0.25s ease, opacity 0.25s ease;
+    }
+    .is-mode-b-active .uo-power-seg-modeb {
+      opacity: 1;
+      box-shadow: 0 0 8px #68d391;
+    }
+
+    /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
+    .uo-combat-ticker {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      border: 1px solid #4a3c24;
+      background: linear-gradient(180deg, #151913 0%, #0b0e0a 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.08);
+    }
+    .ticker-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .ticker-progress-bg {
+      position: relative;
+      height: 6px;
+      border-radius: 3px;
+      background: #070907;
+      border: 1px solid #2a3026;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .ticker-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
+      width: 65%;
+      transition: width 0.18s linear;
+    }
+    .posture-pips-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .posture-pips {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+    .posture-pip {
+      width: 12px;
+      height: 8px;
+      border-radius: 2px;
+      background: #141812;
+      border: 1px solid #3c3425;
+      transition: all 0.15s ease;
+    }
+    .posture-pip.is-lit {
+      background: var(--border-gold-bright);
+      border-color: #fff2bf;
+      box-shadow: 0 0 6px var(--border-gold);
+    }
+    .posture-pip.is-crimson {
+      background: var(--class-accent);
+      border-color: #ffb3a7;
+      box-shadow: 0 0 6px var(--class-accent);
+    }
+    .ticker-log-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ticker-log-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      border-radius: 3px;
+      background: #10140f;
+      border-left: 2px solid var(--border-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      animation: floatUpBadge 0.22s ease-out;
+    }
+
+    /* 7. Paperdoll Ambient Torchlight & Weapon Telemetry Bars */
+    .paperdoll-figure-box {
+      background:
+        radial-gradient(circle at 50% 35%, var(--class-glow), transparent 62%),
+        radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.16), #090b08 78%) !important;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.75);
+    }
+    .paperdoll-aura-ring {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px dashed rgba(201, 162, 39, 0.22);
+      pointer-events: none;
+      animation: auraPulse 4s infinite ease-in-out;
+    }
+    .weapon-stat-bars {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px dashed #2a3026;
+    }
+    .w-stat-col {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--text-secondary);
+    }
+    .w-stat-track {
+      height: 4px;
+      background: #080a07;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .w-stat-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--class-accent), var(--border-gold-bright));
+      transition: width 0.25s ease;
+    }
+
+    /* 8. 5-Class Executive KPI Comparison Strip (class-comparison.html) */
+    .exec-kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .exec-kpi-card {
+      padding: 8px 10px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #181d16 0%, #10140f 100%);
+      border: 1px solid #2a3026;
+      border-top: 3px solid var(--border-gold);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .exec-kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-gold-bright);
+    }
+    @media (max-width: 1120px) {
+      .exec-kpi-strip {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .arvore-col::after {
+        display: none;
+      }
+    }
+  
   
     .comp-table {
       width: 100%;
@@ -1144,6 +1545,23 @@
 <body>
   <div class="beta-shell">
     <div class="personagem-arvore">
+      
+    <nav class="uo-quick-dock" aria-label="Developer Quick Command Bar">
+      <div class="uo-quick-dock-left">
+        <span style="display:inline-flex;align-items:center;gap:5px;color:#fff2bf;font-weight:600;">
+          <i class="live-pulse-dot"></i>
+          UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
+        </span>
+        <span class="kbd-chip"><kbd>M</kbd> Mode A/B</span>
+        <span class="kbd-chip"><kbd>1–3</kbd> Switch View</span>
+      </div>
+      <div class="uo-quick-dock-right">
+        <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
+        <a href="samurai-skill-tree.html?mode=mode_b" style="color:#ff9b93;text-decoration:none;font-weight:600;">⚡ SM Mode B</a>
+        <a href="ninja-skill-tree.html?mode=mode_b" style="color:#7ce8b4;text-decoration:none;font-weight:600;">⚡ NJ Mode B</a>
+      </div>
+    </nav>
+  
       <header class="arvore-head">
         <div class="arvore-nivel">
           <span class="class-badge-pill">v1.1 SIMULATOR &amp; PARITY</span>
@@ -1225,6 +1643,85 @@
               Simulating 100% Drop-In JSON definitions using existing UO Idle v0.99.0 client/server primitives (timed statusEffect buffs, DoT ticks, and SpecialMove/Spell multipliers with zero C# server modifications).
             </div>
           </div>
+
+          <div class="exec-kpi-strip" id="sim-exec-kpi-strip">
+    
+          <div class="exec-kpi-card" style="border-top-color:#d97706;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#d97706;text-transform:uppercase;">warrior</strong>
+              <span class="mono" style="font-size:9.5px;color:#82d5b0;">-6.1% vs Mean</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
+              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">351.6 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11px;color:#9ec9ff;">212.6 EHP/s</span>
+            </div>
+            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+              <span>12 Shield Parries</span>
+              <span style="color:#82d5b0;">0 OOM</span>
+            </div>
+          </div>
+        
+          <div class="exec-kpi-card" style="border-top-color:#3b82f6;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#3b82f6;text-transform:uppercase;">mage</strong>
+              <span class="mono" style="font-size:9.5px;color:#82d5b0;">+3.6% vs Mean</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
+              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">387.9 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11px;color:#9ec9ff;">244.5 EHP/s</span>
+            </div>
+            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+              <span>5 Shield Parries</span>
+              <span style="color:#82d5b0;">0 OOM</span>
+            </div>
+          </div>
+        
+          <div class="exec-kpi-card" style="border-top-color:#84cc16;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#84cc16;text-transform:uppercase;">ranger</strong>
+              <span class="mono" style="font-size:9.5px;color:#82d5b0;">+2.5% vs Mean</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
+              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">383.9 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11px;color:#9ec9ff;">218.6 EHP/s</span>
+            </div>
+            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+              <span>5 Shield Parries</span>
+              <span style="color:#82d5b0;">0 OOM</span>
+            </div>
+          </div>
+        
+          <div class="exec-kpi-card" style="border-top-color:#c83e37;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#c83e37;text-transform:uppercase;">samurai</strong>
+              <span class="mono" style="font-size:9.5px;color:#82d5b0;">-3.0% vs Mean</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
+              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">363.1 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11px;color:#9ec9ff;">220.2 EHP/s</span>
+            </div>
+            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+              <span>13 Bushido Parries</span>
+              <span style="color:#82d5b0;">0 OOM</span>
+            </div>
+          </div>
+        
+          <div class="exec-kpi-card" style="border-top-color:#2e9e6b;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-family:'Cinzel',serif;font-size:12px;color:#2e9e6b;text-transform:uppercase;">ninja</strong>
+              <span class="mono" style="font-size:9.5px;color:#82d5b0;">+0.0% vs Mean</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">
+              <span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">374.5 <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>
+              <span class="mono" style="font-size:11px;color:#9ec9ff;">221.2 EHP/s</span>
+            </div>
+            <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+              <span>Smoke &amp; Clone Veil</span>
+              <span style="color:#82d5b0;">0 OOM</span>
+            </div>
+          </div>
+        
+  </div>
 
           <div class="table-scroll-wrap" style="margin-bottom:12px;">
             <table class="comp-table">
@@ -3421,6 +3918,44 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
 
+        // Also update Executive 5-Class KPI Strip
+        var kpiStripEl = document.getElementById('sim-exec-kpi-strip');
+        if (kpiStripEl && list.length > 0) {
+          var baseScens = list.filter(function(s) {
+            return s.classId === 'warrior' || s.classId === 'mage' || s.classId === 'ranger';
+          });
+          var meanD = baseScens.length > 0
+            ? baseScens.reduce(function(a, b) { return a + b.sustainedDps; }, 0) / baseScens.length
+            : 375.0;
+          var kpiHtml = '';
+          for (var ki = 0; ki < list.length; ki++) {
+            var ks = list[ki];
+            var kCol = classCols[ks.classId] || '#c9a227';
+            var dPct = (((ks.sustainedDps - meanD) / meanD) * 100).toFixed(1);
+            var dStr = parseFloat(dPct) >= 0 ? ('+' + dPct + '%') : (dPct + '%');
+            var mLbl = ks.classId === 'samurai'
+              ? (ks.parryCount + ' Bushido Parries')
+              : (ks.classId === 'ninja'
+                ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
+                : (ks.parryCount + ' Shield Parries'));
+            kpiHtml += '<div class="exec-kpi-card" style="border-top-color:' + kCol + ';">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                '<strong style="font-family:'Cinzel',serif;font-size:12px;color:' + kCol + ';text-transform:uppercase;">' + ks.classId + '</strong>' +
+                '<span class="mono" style="font-size:9.5px;color:#82d5b0;">' + dStr + ' vs Mean</span>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
+                '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
+                '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
+              '</div>' +
+              '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
+                '<span>' + mLbl + '</span>' +
+                '<span style="color:#82d5b0;">0 OOM</span>' +
+              '</div>' +
+            '</div>';
+          }
+          kpiStripEl.innerHTML = kpiHtml;
+        }
+
         var modeLabel = isModeB ? 'Mode B' : 'Mode A';
         var dpsTitle = document.getElementById('svg-dps-title');
         var ehpTitle = document.getElementById('svg-ehp-title');
@@ -3476,6 +4011,21 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
           }
         }
       };
+
+      document.addEventListener('keydown', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        if (e.key === 'm' || e.key === 'M') {
+          window.updateSimFilter('mode', state.mode === 'mode_a' ? 'mode_b' : 'mode_a');
+        } else if (e.key === '1') {
+          window.switchCompTab('sim');
+        } else if (e.key === '2') {
+          window.switchCompTab('matrix');
+        } else if (e.key === '3') {
+          window.switchCompTab('armaments');
+        } else if (e.key === '0') {
+          window.switchCompTab('all');
+        }
+      });
 
       if (window.location.search.indexOf('mode=mode_b') !== -1) {
         window.updateSimFilter('mode', 'mode_b');
