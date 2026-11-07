@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Developer can inspect `prettier`-formatted and `acorn` AST-sliced domain modules from `/assets/index-CCYN0Dy6.js`, redacted Chrome DevTools runtime/network captures (`_evidence/`), and scraped documentation/wiki extracts under `mechanics/_raw/` tracked with SHA-256 hashes in `mechanics/_raw/manifest.json`.
   4. Developer can inspect verbatim canonical ModernUO C# source files for all Bushido spells (`Projects/UOContent/Spells/Bushido/*.cs`), Ninjitsu spells/items (`Projects/UOContent/Spells/Ninjitsu/*.cs`, `SmokeBomb.cs`), Honor/Perfection (`HonorContext.cs`), and weapon/spell parry (`BaseWeapon.cs`) under `mechanics/_raw/modernuo/`.
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans executed
 
 Plans:
 **Wave 1**
@@ -48,7 +48,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Canonical ModernUO C# Bushido, Ninjitsu, Perfection, and Parry source extraction (`tools/fetch_modernuo.py`) (`KB-04`)
+- [x] 01-03-PLAN.md — Canonical ModernUO C# Bushido, Ninjitsu, Perfection, and Parry source extraction (`tools/fetch_modernuo.py`) (`KB-04`)
 
 ### Phase 2: Core UO Idle Engine & Systems Knowledgebase
 
@@ -155,7 +155,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 2/3 | In Progress|  |
+| 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | In Progress|  |
 | 2. Core UO Idle Engine & Systems Knowledgebase | 0/2 | Not started | - |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 0/2 | Not started | - |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |

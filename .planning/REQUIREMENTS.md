@@ -12,7 +12,7 @@ Requirements for the v1 deliverable package. Each maps to a roadmap phase.
 - [x] **KB-01**: Developer can sync and access all project artifacts in a private GitHub repository (`brbrainerd/uoIdle`) with automated credential/session-token sanitization blocking leaked secrets before commit
 - [x] **KB-02**: Developer or agent can run `python3 mechanics/tools/kb.py build` and `python3 mechanics/tools/kb.py check` (including `--self-test`) to validate frontmatter, verbatim `(raw L<a>-L<b>)` claim quotes, digit-free `## Summary` sections, evidence rank hierarchy (`contradicted < unverified < modernuo-stated < doc-stated < bundle-stated < verified`), and generate `mechanics/INDEX.md`
 - [x] **KB-03**: Developer can inspect deterministically formatted (`prettier`) and AST-sliced (`acorn`) domain modules from the live UO Idle client bundle (`/assets/index-CCYN0Dy6.js`), redacted live Chrome DevTools runtime/network captures (`_evidence/`), and scraped documentation/wiki extracts under `mechanics/_raw/` with SHA-256 provenance in `manifest.json`
-- [ ] **KB-04**: Developer can inspect verbatim canonical ModernUO C# source files for Bushido (`Projects/UOContent/Spells/Bushido/*.cs`), Ninjitsu (`Projects/UOContent/Spells/Ninjitsu/*.cs`, `SmokeBomb.cs`), Honor/Perfection (`HonorContext.cs`), and weapon/spell parry (`BaseWeapon.cs`) under `mechanics/_raw/modernuo/`
+- [x] **KB-04**: Developer can inspect verbatim canonical ModernUO C# source files for Bushido (`Projects/UOContent/Spells/Bushido/*.cs`), Ninjitsu (`Projects/UOContent/Spells/Ninjitsu/*.cs`, `SmokeBomb.cs`), Honor/Perfection (`HonorContext.cs`), and weapon/spell parry (`BaseWeapon.cs`) under `mechanics/_raw/modernuo/`
 
 ### Core Engine & Live Classes Knowledgebase (`INDEX`)
 
@@ -87,7 +87,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | KB-01 | Phase 1 | Complete |
 | KB-02 | Phase 1 | Complete |
 | KB-03 | Phase 1 | Complete |
-| KB-04 | Phase 1 | Pending |
+| KB-04 | Phase 1 | Complete |
 | INDEX-01 | Phase 2 | Pending |
 | INDEX-02 | Phase 2 | Pending |
 | INDEX-03 | Phase 3 | Pending |
