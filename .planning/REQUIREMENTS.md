@@ -23,8 +23,8 @@ Requirements for the v1 deliverable package. Each maps to a roadmap phase.
 
 ### ModernUO Reference & Combat Balance Simulator (`SIM`)
 
-- [ ] **SIM-01**: Developer can consult claim-verified KB pages (`mechanics/classes/modernuo-bushido.md` and `mechanics/classes/modernuo-ninjitsu.md`) and a side-by-side derivation table (`design/MODERNUO_MAPPING.md`) mapping all 8 Bushido mechanics (*Weapon Parry*, *Perfection & Honor*, *Honorable Execution*, *Confidence*, *Counter Attack*, *Lightning Strike*, *Evasion*, *Momentum Strike*) and 9 Ninjitsu mechanics (*Mirror Image*, *Focus Attack*, *Backstab*, *Smoke Bomb & Stealth*, *Shadowjump*, *Surprise Attack*, *Ki Attack*, *Death Strike*, *Animal Form*) from ModernUO C# formulas to automated idle state machines
-- [ ] **SIM-02**: Developer can run a deterministic tick-accurate combat simulator (`tools/sim_balance.ts` / `sim/`) reproducing live **Warrior**, **Mage**, and **Ranger** baseline curves across Early, Mid, Late, and Endgame level brackets and enemy archetypes (fast trash waves vs sustained bosses)
+- [x] **SIM-01**: Developer can consult claim-verified KB pages (`mechanics/classes/modernuo-bushido.md` and `mechanics/classes/modernuo-ninjitsu.md`) and a side-by-side derivation table (`design/MODERNUO_MAPPING.md`) mapping all 8 Bushido mechanics (*Weapon Parry*, *Perfection & Honor*, *Honorable Execution*, *Confidence*, *Counter Attack*, *Lightning Strike*, *Evasion*, *Momentum Strike*) and 9 Ninjitsu mechanics (*Mirror Image*, *Focus Attack*, *Backstab*, *Smoke Bomb & Stealth*, *Shadowjump*, *Surprise Attack*, *Ki Attack*, *Death Strike*, *Animal Form*) from ModernUO C# formulas to automated idle state machines
+- [x] **SIM-02**: Developer can run a deterministic tick-accurate combat simulator (`tools/sim_balance.ts` / `sim/`) reproducing live **Warrior**, **Mage**, and **Ranger** baseline curves across Early, Mid, Late, and Endgame level brackets and enemy archetypes (fast trash waves vs sustained bosses)
 - [ ] **SIM-03**: Developer can verify via automated parity reports (`design/BALANCE_REPORT.md`) that **Samurai** and **Ninja** stay within $\pm 5\text{–}8\%$ of live class benchmarks across Sustained Boss DPS, Trash TTK (accounting for overkill waste), Net Resource Sustainability/min, and Effective HP (EHP)/sec without avoidance-immortality or mana-starvation loops
 
 ### Samurai & Ninja Skill Lines & Drop-In Deliverables (`CLASS`)
@@ -92,8 +92,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INDEX-02 | Phase 2 | Complete |
 | INDEX-03 | Phase 3 | Complete |
 | INDEX-04 | Phase 3 | Complete |
-| SIM-01 | Phase 4 | Pending |
-| SIM-02 | Phase 4 | Pending |
+| SIM-01 | Phase 4 | Complete |
+| SIM-02 | Phase 4 | Complete |
 | SIM-03 | Phase 5 | Pending |
 | CLASS-01 | Phase 5 | Pending |
 | CLASS-02 | Phase 5 | Pending |

@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline** - Private repo verification, adapted `kb.py` claim linter with credential sanitization, formatted/AST-sliced UO Idle bundle extracts, and canonical ModernUO C# source snapshots. (completed 2026-11-06)
 - [x] **Phase 2: Core UO Idle Engine & Systems Knowledgebase** - Claim-verified KB pages for combat tick loops, hit/crit/mitigation math, resource regen, status opcodes, progression/equipment systems, and the Engine Capability Matrix. (completed 2026-11-07)
 - [x] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules. (completed 2026-11-07)
-- [ ] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines.
+- [x] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines. (completed 2026-11-06)
 - [ ] **Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code** - Numerically balanced Samurai and Ninja skill lines, Tokuno equipment affixes, Mode A/Mode B drop-in JSON/JS payloads, formal specs, and automated parity proof.
 - [ ] **Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging** - Custom dark-fantasy UO class portraits and skill icons rendered inside self-contained, pixel-accurate `uoidle.com/beta` HTML/CSS skill tree mockups.
 
@@ -113,11 +113,11 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 04-01-PLAN.md — Claim-verified ModernUO Bushido & Ninjitsu KB pages (`mechanics/modernuo/*.md`, `mechanics/classes/modernuo-{bushido,ninjitsu}.md`) and side-by-side idle adaptation matrix (`design/MODERNUO_MAPPING.md`) (`SIM-01`)
+- [x] 04-01-PLAN.md — Claim-verified ModernUO Bushido & Ninjitsu KB pages (`mechanics/modernuo/*.md`, `mechanics/classes/modernuo-{bushido,ninjitsu}.md`) and side-by-side idle adaptation matrix (`design/MODERNUO_MAPPING.md`) (`SIM-01`)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 04-02-PLAN.md — Deterministic tick-accurate combat simulator (`src/sim/`, `tools/sim_balance.ts`) and live Warrior, Mage, and Ranger baseline curves (`data/sim-baselines/baseline-v0.99.0.json`) (`SIM-02`)
+- [x] 04-02-PLAN.md — Deterministic tick-accurate combat simulator (`src/sim/`, `tools/sim_balance.ts`) and live Warrior, Mage, and Ranger baseline curves (`data/sim-baselines/baseline-v0.99.0.json`) (`SIM-02`)
 
 ### Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code
 
@@ -170,6 +170,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
 | 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete    | 2026-11-07 |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 2/2 | Complete    | 2026-11-07 |
-| 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
+| 4. ModernUO Reference KB & Baseline Combat Simulator | 2/2 | Complete    | 2026-11-06 |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |
 | 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 0/2 | Not started | - |

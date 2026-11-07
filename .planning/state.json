@@ -1,7 +1,7 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": null,
+  "milestone": "v0.99.0",
   "phases": [
     {
       "number": "1",
@@ -21,7 +21,7 @@
     {
       "number": "4",
       "name": "ModernUO Reference KB & Baseline Combat Simulator",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "5",
@@ -36,8 +36,8 @@
   ],
   "next": {
     "command": "/gsd-progress --next",
-    "label": "Advance to the next step (plan phase 4)",
-    "reason": "Phase 4 of 6 — needs a plan"
+    "label": "Advance to the next step (plan phase 5)",
+    "reason": "Phase 5 of 6 — needs a plan"
   },
-  "updated_at": "2026-11-07T05:22:59.764Z"
+  "updated_at": "2026-11-07T06:10:28.045Z"
 }
