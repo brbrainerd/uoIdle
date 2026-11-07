@@ -189,11 +189,20 @@ function crossCheckDropInClassWithCatalog(
         `${cls.id}.json [${rawEntry.id}]: unlockLevel ${String(skill.unlockLevel)} !== catalog unlock ${rawEntry.unlock}`
       );
     }
-    const expectedRef = rawEntry.ref ?? null;
-    if (skill.spellId !== expectedRef) {
-      errors.push(
-        `${cls.id}.json [${rawEntry.id}]: spellId ${String(skill.spellId)} !== catalog ref ${String(expectedRef)}`
-      );
+    if (rawEntry.kind === 'WeaponAbility') {
+      const expectedRef = rawEntry.ref ?? null;
+      if (skill.weaponAbilityRef !== expectedRef) {
+        errors.push(
+          `${cls.id}.json [${rawEntry.id}]: weaponAbilityRef ${String(skill.weaponAbilityRef)} !== catalog ref ${String(expectedRef)}`
+        );
+      }
+    } else if (rawEntry.kind === 'Spell' || rawEntry.kind === 'SpecialMove') {
+      const expectedRef = rawEntry.ref ?? null;
+      if (skill.spellId !== expectedRef) {
+        errors.push(
+          `${cls.id}.json [${rawEntry.id}]: spellId ${String(skill.spellId)} !== catalog ref ${String(expectedRef)}`
+        );
+      }
     }
   }
 }
