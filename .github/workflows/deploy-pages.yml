@@ -27,10 +27,16 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Create .nojekyll
         run: touch .nojekyll
+      - name: Stage static portal assets
+        run: |
+          mkdir -p _site
+          cp index.html .nojekyll README.md _site/
+          cp -R mockups design data schemas mechanics _site/
+          rm -rf _site/mechanics/_raw _site/mechanics/_crawl
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
