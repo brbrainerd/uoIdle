@@ -1502,6 +1502,70 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       min-width: 0;
     }
 
+    .mode-card-box {
+      padding: 6px 8px;
+      background: #141812;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+      min-width: 0;
+      cursor: pointer;
+      opacity: 0.58;
+      transition: all 0.16s ease;
+    }
+
+    .mode-card-box:hover {
+      opacity: 0.88;
+      border-color: var(--border-gold);
+    }
+
+    .mode-card-box.is-active-mode {
+      opacity: 1;
+      background: linear-gradient(180deg, #22261c 0%, #141812 100%);
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 12px var(--class-glow);
+    }
+
+    .active-mode-strip {
+      margin-top: 5px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 162, 39, 0.38);
+      border-left: 3px solid var(--border-gold);
+      background: rgba(201, 162, 39, 0.08);
+      font-size: 10px;
+      line-height: 1.35;
+      color: #efe5c8;
+      transition: all 0.16s ease;
+    }
+
+    .active-mode-strip.is-mode-b {
+      border-color: var(--class-accent);
+      border-left: 3px solid var(--class-accent);
+      background: var(--class-glow);
+      color: #ffffff;
+    }
+
+    .mode-tag-pill {
+      display: inline-block;
+      padding: 0 5px;
+      margin-right: 4px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: #282112;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      vertical-align: baseline;
+    }
+
+    .active-mode-strip.is-mode-b .mode-tag-pill {
+      background: rgba(0, 0, 0, 0.55);
+      border-color: var(--class-accent);
+      color: #fff2bf;
+    }
+
     .cost-badges {
       display: flex;
       flex-wrap: wrap;
@@ -1842,17 +1906,24 @@ function buildClassSkillTreeHtml(
           `
           : '';
 
+      const activeModeStripHtml =
+        ability && modeInfo
+          ? `
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="${escapeHtml(modeInfo.modeA)}" data-mode-b="${escapeHtml(modeInfo.modeB)}">${escapeHtml(modeInfo.modeA)}</span>
+            </div>
+          `
+          : '';
+
       const schemaDrawerHtml =
         ability && modeInfo
           ? `
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>${escapeHtml(ability.id)}</code> · ${escapeHtml(refBadge)} · gump ${ability.gumpIcon})</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>${escapeHtml(ability.id)}</code> · ${escapeHtml(refBadge)} · gump ${ability.gumpIcon})</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">${escapeHtml(ability.kind)}</strong> · tab: ${escapeHtml(ability.tab)} · scope: ${escapeHtml(ability.mapScope)} · effect: ${escapeHtml(ability.effectType)} · iconKey: ${escapeHtml(ability.iconKey)} (${escapeHtml(`assets/icons/${cls.id}/${ability.id}@48.png`)})
                 ${ability.customCooldownMs > 0 ? ` · customCD: ${ability.customCooldownMs}ms (&gt;=2000ms)` : ''}
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="${escapeHtml(modeInfo.modeA)}" data-mode-b="${escapeHtml(modeInfo.modeB)}">
-                ${escapeHtml(modeInfo.modeA)}
               </div>
             </details>
           `
@@ -1884,6 +1955,7 @@ function buildClassSkillTreeHtml(
                   </div>`
                 : ''
             }
+            ${activeModeStripHtml}
             ${dualUnlockHtml}
             ${schemaDrawerHtml}
           </div>
@@ -2235,6 +2307,25 @@ function buildClassSkillTreeHtml(
             </h2>
             <div class="panel-body">
               <div class="arvore-dica-pinned" id="live-inspector">
+                <div id="insp-mode-banner" class="active-mode-strip" style="margin:0 0 8px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <span class="mode-tag-pill" id="insp-banner-tag">MODE A · 100% EXISTING ENGINE</span>
+                    <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="insp-banner-sim">
+                      ${
+                        isSamurai
+                          ? 'L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries · 0 C# Changes'
+                          : 'L60 Boss: 374.50 DPS · 221.23 EHP/s · -8% Clone Veil · 0 C# Changes'
+                      }
+                    </span>
+                  </div>
+                  <div style="font-size:10px;margin-top:2px;color:var(--text-primary);" id="insp-banner-desc">
+                    ${
+                      isSamurai
+                        ? 'Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.'
+                        : 'Zero server C# edits: maps all 13 Ninjitsu skills to existing SpecialMove, Spell, WeaponAbility, DoT ticks, and timed Smoke Veil buffs.'
+                    }
+                  </div>
+                </div>
                 <div class="dica-header">
                   <img id="insp-icon" src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(firstAbility.id)}@64.png" alt="${escapeHtml(firstAbility.name)}" />
                   <div>
@@ -2256,18 +2347,24 @@ function buildClassSkillTreeHtml(
                   <span class="badge-meta">Gump: ${firstAbility.gumpIcon}</span>
                 </div>
                 <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
-                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;">Scaling Formula &amp; Status Effect</strong>
-                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">${escapeHtml(firstAbility.scalingFormula.summary)}</div>
+                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
+                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] ${escapeHtml(firstMode.modeA)}</div>
                   <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
                 </div>
                 <div class="inspector-modes-grid">
-                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;min-width:0;">
-                    <strong style="color:#fff2bf;display:block;">Mode A (Drop-In JSON)</strong>
-                    <span id="insp-mode-a" style="color:var(--text-secondary);">${escapeHtml(firstMode.modeA)}</span>
+                  <div id="mode-card-a" class="mode-card-box is-active-mode" onclick="setExecMode('mode_a')" title="Click to activate Mode A (100% Existing Engine)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                      <strong style="color:#fff2bf;">Mode A (Drop-In JSON)</strong>
+                      <span class="lv-pill" id="mode-pill-a" style="font-size:8.5px;padding:0 4px;">ACTIVE</span>
+                    </div>
+                    <span id="insp-mode-a" style="color:var(--text-primary);">${escapeHtml(firstMode.modeA)}</span>
                   </div>
-                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;min-width:0;">
-                    <strong style="color:#fff2bf;display:block;">Mode B (&lt;20 LOC C# Hook)</strong>
-                    <span id="insp-mode-b" style="color:var(--text-secondary);">${escapeHtml(firstMode.modeB)}</span>
+                  <div id="mode-card-b" class="mode-card-box" onclick="setExecMode('mode_b')" title="Click to activate Mode B (<20 LOC C# Hook)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                      <strong style="color:#fff2bf;">Mode B (&lt;20 LOC C# Hook)</strong>
+                      <span class="lv-pill" id="mode-pill-b" style="font-size:8.5px;padding:0 4px;opacity:0.45;">CLICK TO VIEW</span>
+                    </div>
+                    <span id="insp-mode-b" style="color:var(--text-primary);">${escapeHtml(firstMode.modeB)}</span>
                   </div>
                 </div>
                 <details class="schema-drawer" style="margin-top:7px;">
@@ -2381,15 +2478,64 @@ function buildClassSkillTreeHtml(
 
       window.setExecMode = function(mode) {
         currentMode = mode;
-        document.getElementById('btn-mode-a').classList.toggle('is-active', mode === 'mode_a');
-        document.getElementById('btn-mode-b').classList.toggle('is-active', mode === 'mode_b');
+        var isModeB = mode === 'mode_b';
+        document.getElementById('btn-mode-a').classList.toggle('is-active', !isModeB);
+        document.getElementById('btn-mode-b').classList.toggle('is-active', isModeB);
         document.getElementById('inspector-mode-pill').textContent =
-          mode === 'mode_b' ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+          isModeB ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+
+        var strips = document.querySelectorAll('[data-mode-strip]');
+        for (var s = 0; s < strips.length; s++) {
+          strips[s].classList.toggle('is-mode-b', isModeB);
+        }
+        var tags = document.querySelectorAll('[data-mode-tag]');
+        for (var t = 0; t < tags.length; t++) {
+          tags[t].textContent = isModeB ? 'MODE B · <20 LOC C#' : 'MODE A · 100% ENGINE';
+        }
         var modeNodes = document.querySelectorAll('.mode-text');
         for (var i = 0; i < modeNodes.length; i++) {
           modeNodes[i].textContent =
-            mode === 'mode_b' ? modeNodes[i].getAttribute('data-mode-b') : modeNodes[i].getAttribute('data-mode-a');
+            isModeB ? modeNodes[i].getAttribute('data-mode-b') : modeNodes[i].getAttribute('data-mode-a');
         }
+
+        var bannerEl = document.getElementById('insp-mode-banner');
+        if (bannerEl) bannerEl.classList.toggle('is-mode-b', isModeB);
+        var bannerTag = document.getElementById('insp-banner-tag');
+        var bannerSim = document.getElementById('insp-banner-sim');
+        var bannerDesc = document.getElementById('insp-banner-desc');
+        if (cls.id === 'samurai') {
+          if (bannerTag) bannerTag.textContent = isModeB ? 'MODE B · 17-LOC C# HOOK (BaseWeapon.cs)' : 'MODE A · 100% EXISTING ENGINE';
+          if (bannerSim) bannerSim.textContent = isModeB
+            ? 'L60 Boss: 391.92 DPS (+28.8 Parry/Streak) · 318.88 EHP/s · 44 Wave Parries'
+            : 'L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries · 0 C# Changes';
+          if (bannerDesc) bannerDesc.textContent = isModeB
+            ? 'Active 17-LOC BaseWeapon.cs Hook: Auto-Perfection streak (+4%/hit to +15%, +8 HP/Stam/Mana on kill) + reactive 2.0s ICD CounterAttack swing & Confidence heal on Parry.'
+            : 'Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.';
+        } else {
+          if (bannerTag) bannerTag.textContent = isModeB ? 'MODE B · 16-LOC C# HOOK (BaseWeapon.cs)' : 'MODE A · 100% EXISTING ENGINE';
+          if (bannerSim) bannerSim.textContent = isModeB
+            ? 'L60 Boss: 367.38 DPS · 330.40 EHP/s (+70% Clone Absorb) · 16 Wave Clones'
+            : 'L60 Boss: 374.50 DPS · 221.23 EHP/s · -8% Clone Veil · 0 C# Changes';
+          if (bannerDesc) bannerDesc.textContent = isModeB
+            ? 'Active 16-LOC BaseWeapon.cs Hook: Ablative Mirror Image & Egg Bomb clone interception (70% absorb, 1.5s ICD), 5-swing DeathStrike detonation, and 1.15x Stealth opener.'
+            : 'Zero server C# edits: maps all 13 Ninjitsu skills to existing SpecialMove, Spell, WeaponAbility, DoT ticks, and timed Smoke Veil buffs.';
+        }
+
+        var cardA = document.getElementById('mode-card-a');
+        var cardB = document.getElementById('mode-card-b');
+        var pillA = document.getElementById('mode-pill-a');
+        var pillB = document.getElementById('mode-pill-b');
+        if (cardA) cardA.classList.toggle('is-active-mode', !isModeB);
+        if (cardB) cardB.classList.toggle('is-active-mode', isModeB);
+        if (pillA) {
+          pillA.textContent = isModeB ? 'CLICK TO VIEW' : 'ACTIVE';
+          pillA.style.opacity = isModeB ? '0.45' : '1';
+        }
+        if (pillB) {
+          pillB.textContent = isModeB ? 'ACTIVE' : 'CLICK TO VIEW';
+          pillB.style.opacity = isModeB ? '1' : '0.45';
+        }
+        window.selectAbility(selectedAbilityId);
       };
 
       window.selectAbility = function(abilityId) {
@@ -2429,7 +2575,16 @@ function buildClassSkillTreeHtml(
         inspDescEl.setAttribute('data-en', descEn);
         inspDescEl.setAttribute('data-pt', descPt);
         inspDescEl.textContent = currentLocale === 'pt' ? descPt : descEn;
-        document.getElementById('insp-formula').textContent = ab.scalingFormula.summary;
+        var isModeB = currentMode === 'mode_b';
+        var fHead = document.getElementById('insp-formula-heading');
+        if (fHead) {
+          fHead.textContent = isModeB
+            ? 'Active Mode B (<20 LOC C# Hook) Formula & Status Effect'
+            : 'Active Mode A (100% Engine) Formula & Status Effect';
+        }
+        document.getElementById('insp-formula').textContent =
+          (isModeB ? '[Mode B — C# Hook] ' + mInfo.modeB : '[Mode A — Drop-In JSON] ' + mInfo.modeA) +
+          ' | Base: ' + ab.scalingFormula.summary;
         if (ab.statusEffect) {
           var mods = ab.statusEffect.modifiers.map(function(m) { return m.stat + ': ' + m.value; }).join(', ');
           document.getElementById('insp-status').textContent =
@@ -2471,6 +2626,10 @@ function buildClassSkillTreeHtml(
           }
         }
       };
+
+      if (window.location.search.indexOf('mode=mode_b') !== -1) {
+        window.setExecMode('mode_b');
+      }
     })();
   </script>
 </body>
@@ -3070,6 +3229,16 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
             </div>
           </div>
 
+          <div id="sim-mode-callout" class="active-mode-strip" style="margin:0 0 10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="mode-tag-pill" id="sim-callout-tag">MODE A · 100% EXISTING ENGINE (ZERO C# CHANGES)</span>
+              <span class="mono" style="font-size:10px;color:#82d5b0;" id="sim-callout-meta">Active Filter: mode_a · L60 · low_def_boss</span>
+            </div>
+            <div style="font-size:10.5px;margin-top:3px;color:var(--text-primary);" id="sim-callout-desc">
+              Simulating 100% Drop-In JSON definitions using existing UO Idle v0.99.0 client/server primitives (timed statusEffect buffs, DoT ticks, and SpecialMove/Spell multipliers with zero C# server modifications).
+            </div>
+          </div>
+
           <div class="table-scroll-wrap" style="margin-bottom:12px;">
             <table class="comp-table">
               <thead>
@@ -3097,8 +3266,8 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           <div class="sim-charts-grid">
             <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
-                <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  Multi-Bracket Sustained DPS Curve (L10 → L60)
+                <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                  Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
                 </strong>
                 <div class="chart-legend">
                   <span><i class="legend-dot" style="background:#d97706;"></i>WR</span>
@@ -3108,20 +3277,20 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                   <span><i class="legend-dot" style="background:#2e9e6b;"></i>NJ</span>
                 </div>
               </div>
-              ${dpsProgressionSvg}
+              <div id="svg-dps-wrap">${dpsProgressionSvg}</div>
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:10px 0 6px;">
-                <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60)
+                <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                  Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60 · Mode A · low_def_boss)
                 </strong>
                 <span class="mono" style="font-size:10px;color:#82d5b0;">All 5 classes within ±5–8% envelope</span>
               </div>
-              ${ehpProgressionSvg}
+              <div id="svg-ehp-wrap">${ehpProgressionSvg}</div>
             </div>
 
             <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
-                <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  5-Channel Damage Source Breakdown (L60 Boss)
+                <strong id="breakdown-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                  5-Channel Damage Source Breakdown (L60 · low_def_boss · Mode A)
                 </strong>
                 <div class="chart-legend">
                   <span><i class="legend-dot" style="background:#64748b;"></i>Auto</span>
@@ -3131,7 +3300,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                   <span><i class="legend-dot" style="background:#f59e0b;"></i>Parry/Spirit Proc</span>
                 </div>
               </div>
-              ${breakdownBarsHtml}
+              <div id="breakdown-bars-wrap">${breakdownBarsHtml}</div>
               ${rotationStripsHtml}
             </div>
           </div>
@@ -3285,12 +3454,16 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
     </div>
   </div>
 
-  <script id="mockup-data" type="application/json">${safeJsonEmbed({ parity })}</script>
+  <script id="mockup-data" type="application/json">${safeJsonEmbed({ parity, breakdowns: gearWaves.damageBreakdowns })}</script>
   <script>
     (function() {
       var payload = JSON.parse(document.getElementById('mockup-data').textContent);
       var parityData = payload.parity;
+      var breakdownsData = payload.breakdowns || [];
       var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss' };
+      var orderedClasses = ['warrior', 'mage', 'ranger', 'samurai', 'ninja'];
+      var classCols = { warrior: '#d97706', mage: '#3b82f6', ranger: '#84cc16', samurai: '#c83e37', ninja: '#2e9e6b' };
+      var brackets = ['L10', 'L25', 'L45', 'L60'];
 
       window.switchCompTab = function(tabId) {
         var btns = document.querySelectorAll('[data-comp-tab]');
@@ -3304,8 +3477,54 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
       };
 
+      function renderProgressionSvg(metricKey, maxVal, unitLabel) {
+        var chartW = 680, chartH = 220, padL = 48, padR = 24, padT = 20, padB = 32;
+        var plotW = chartW - padL - padR;
+        var plotH = chartH - padT - padB;
+        var svg = '<svg viewBox="0 0 ' + chartW + ' ' + chartH + '" style="width:100%;height:auto;background:#0c0f0b;border:1px solid #2a3026;border-radius:4px;">';
+        var steps = [0, 0.25, 0.5, 0.75, 1.0];
+        for (var g = 0; g < steps.length; g++) {
+          var f = steps[g];
+          var gy = Math.round(padT + plotH * (1 - f));
+          var gv = Math.round(maxVal * f);
+          svg += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (chartW - padR) + '" y2="' + gy + '" stroke="#252b22" stroke-dasharray="3,3" />';
+          svg += '<text x="' + (padL - 6) + '" y="' + (gy + 3) + '" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">' + gv + '</text>';
+        }
+        for (var b = 0; b < brackets.length; b++) {
+          var bx = Math.round(padL + (b / (brackets.length - 1)) * plotW);
+          svg += '<line x1="' + bx + '" y1="' + padT + '" x2="' + bx + '" y2="' + (padT + plotH) + '" stroke="#1e241b" />';
+          svg += '<text x="' + bx + '" y="' + (chartH - 10) + '" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">' + brackets[b] + '</text>';
+        }
+        var scens = parityData[state.mode].scenarios;
+        for (var c = 0; c < orderedClasses.length; c++) {
+          var cid = orderedClasses[c];
+          var col = classCols[cid] || '#c9a227';
+          var pts = [];
+          var circles = '';
+          for (var bi = 0; bi < brackets.length; bi++) {
+            var brId = brackets[bi];
+            var val = 0;
+            for (var si = 0; si < scens.length; si++) {
+              if (scens[si].classId === cid && scens[si].bracketId === brId && scens[si].archetypeId === state.arch) {
+                val = scens[si][metricKey];
+                break;
+              }
+            }
+            var px = Math.round(padL + (bi / (brackets.length - 1)) * plotW);
+            var py = Math.round(padT + plotH * (1 - Math.min(1, val / maxVal)));
+            pts.push(px + ',' + py);
+            circles += '<circle cx="' + px + '" cy="' + py + '" r="4" fill="' + col + '" stroke="#0b0d0a" stroke-width="1.5"><title>' + cid.toUpperCase() + ': ' + val.toFixed(1) + ' ' + unitLabel + '</title></circle>';
+          }
+          var sw = (cid === 'samurai' || cid === 'ninja') ? '2.8' : '1.8';
+          svg += '<polyline fill="none" stroke="' + col + '" stroke-width="' + sw + '" points="' + pts.join(' ') + '" />' + circles;
+        }
+        svg += '</svg>';
+        return svg;
+      }
+
       window.updateSimFilter = function(kind, val) {
         state[kind] = val;
+        var isModeB = state.mode === 'mode_b';
         var modeBtns = document.querySelectorAll('[data-sim-mode]');
         for (var i = 0; i < modeBtns.length; i++) {
           modeBtns[i].classList.toggle('is-active', modeBtns[i].getAttribute('data-sim-mode') === state.mode);
@@ -3317,6 +3536,25 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         var arBtns = document.querySelectorAll('[data-sim-arch]');
         for (var k = 0; k < arBtns.length; k++) {
           arBtns[k].classList.toggle('is-active', arBtns[k].getAttribute('data-sim-arch') === state.arch);
+        }
+
+        var callout = document.getElementById('sim-mode-callout');
+        if (callout) callout.classList.toggle('is-mode-b', isModeB);
+        var calloutTag = document.getElementById('sim-callout-tag');
+        var calloutMeta = document.getElementById('sim-callout-meta');
+        var calloutDesc = document.getElementById('sim-callout-desc');
+        if (calloutTag) {
+          calloutTag.textContent = isModeB
+            ? 'MODE B · AUTHENTIC <20 LOC C# SERVER HOOKS (BaseWeapon.cs)'
+            : 'MODE A · 100% EXISTING ENGINE (ZERO C# CHANGES)';
+        }
+        if (calloutMeta) {
+          calloutMeta.textContent = 'Active Filter: ' + state.mode + ' · ' + state.bracket + ' · ' + state.arch;
+        }
+        if (calloutDesc) {
+          calloutDesc.textContent = isModeB
+            ? 'Simulating 17-LOC Samurai & 16-LOC Ninja BaseWeapon.cs C# hooks: reactive 2.0s ICD Parry CounterAttack swings + Confidence heal, on-hit Perfection streak (+4%/hit to +15%), ablative Mirror Image clone interception (70% absorb), and 5-swing DeathStrike detonation.'
+            : 'Simulating 100% Drop-In JSON definitions using existing UO Idle v0.99.0 client/server primitives (timed statusEffect buffs, DoT ticks, and SpecialMove/Spell multipliers with zero C# server modifications).';
         }
 
         var list = parityData[state.mode].scenarios.filter(function(s) {
@@ -3346,7 +3584,66 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           '</tr>';
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
+
+        var modeLabel = isModeB ? 'Mode B' : 'Mode A';
+        var dpsTitle = document.getElementById('svg-dps-title');
+        var ehpTitle = document.getElementById('svg-ehp-title');
+        if (dpsTitle) dpsTitle.textContent = 'Multi-Bracket Sustained DPS Curve (L10 → L60 · ' + modeLabel + ' · ' + state.arch + ')';
+        if (ehpTitle) ehpTitle.textContent = 'Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60 · ' + modeLabel + ' · ' + state.arch + ')';
+        var dpsMax = state.arch === 'multi_target_pack' ? 680 : 420;
+        var svgDpsWrap = document.getElementById('svg-dps-wrap');
+        var svgEhpWrap = document.getElementById('svg-ehp-wrap');
+        if (svgDpsWrap) svgDpsWrap.innerHTML = renderProgressionSvg('sustainedDps', dpsMax, 'DPS');
+        if (svgEhpWrap) svgEhpWrap.innerHTML = renderProgressionSvg('ehpPerSec', 350, 'EHP/s');
+
+        var bTitle = document.getElementById('breakdown-title');
+        if (bTitle) bTitle.textContent = '5-Channel Damage Source Breakdown (' + state.bracket + ' · ' + state.arch + ' · ' + modeLabel + ')';
+        var bWrap = document.getElementById('breakdown-bars-wrap');
+        if (bWrap && breakdownsData.length > 0) {
+          var filteredB = breakdownsData.filter(function(d) {
+            return d.bracketId === state.bracket && d.archetypeId === state.arch && (!d.mode || d.mode === state.mode);
+          });
+          if (filteredB.length === 0) {
+            filteredB = breakdownsData.filter(function(d) {
+              return d.bracketId === state.bracket && d.archetypeId === state.arch;
+            });
+          }
+          if (filteredB.length > 0) {
+            var bHtml = '';
+            for (var bi2 = 0; bi2 < filteredB.length; bi2++) {
+              var db = filteredB[bi2];
+              var tot = Math.max(db.totalDps, 0.01);
+              var pAuto = ((db.autoAttackDps / tot) * 100).toFixed(1);
+              var pSpec = ((db.specialMoveDps / tot) * 100).toFixed(1);
+              var pExec = ((db.executeDps / tot) * 100).toFixed(1);
+              var pDot = ((db.dotDps / tot) * 100).toFixed(1);
+              var pProc = ((db.procCounterDps / tot) * 100).toFixed(1);
+              var cCol = classCols[db.classId] || '#fff2bf';
+              bHtml += '<div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">' +
+                  '<strong style="text-transform:uppercase;color:' + cCol + ';letter-spacing:0.04em;">' + db.classId + '</strong>' +
+                  '<span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: ' + db.totalDps.toFixed(2) + ' DPS</span>' +
+                '</div>' +
+                '<div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">' +
+                  'Auto ' + db.autoAttackDps.toFixed(1) + ' (' + pAuto + '%) · Skill ' + db.specialMoveDps.toFixed(1) + ' (' + pSpec + '%) · Exec ' + db.executeDps.toFixed(1) + ' (' + pExec + '%) · DoT ' + db.dotDps.toFixed(1) + ' (' + pDot + '%) · Parry/Proc ' + db.procCounterDps.toFixed(1) + ' (' + pProc + '%)' +
+                '</div>' +
+                '<div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">' +
+                  '<div style="width:' + pAuto + '%;background:#64748b;"></div>' +
+                  '<div style="width:' + pSpec + '%;background:#3b82f6;"></div>' +
+                  '<div style="width:' + pExec + '%;background:#ef4444;"></div>' +
+                  '<div style="width:' + pDot + '%;background:#10b981;"></div>' +
+                  '<div style="width:' + pProc + '%;background:#f59e0b;"></div>' +
+                '</div>' +
+              '</div>';
+            }
+            bWrap.innerHTML = bHtml;
+          }
+        }
       };
+
+      if (window.location.search.indexOf('mode=mode_b') !== -1) {
+        window.updateSimFilter('mode', 'mode_b');
+      }
     })();
   </script>
 </body>
@@ -3733,9 +4030,9 @@ function captureScreenshots(): void {
     return;
   }
   const targets = [
-    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 1940 },
-    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 1960 },
-    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3700 },
+    { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png', height: 2200 },
+    { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png', height: 2240 },
+    { html: 'class-comparison.html', png: 'class-comparison.png', height: 3750 },
     { html: 'index.html', png: 'portal-index.png', height: 1460 },
   ];
 

@@ -147,49 +147,57 @@ NINJA_ALIAS_IDS = [
     "ninja_master_assassin",
 ]
 
-# Mapping of stems to either authentic UO ability-icons.png gump keys OR AI oil-painted grid cells
+# Mapping of stems to authentic UO gump keys & high-detail dark-fantasy Tokuno oil-painted sprite sheets
 # Bushido AI Sheet (2 cols x 3 rows):
 #   (0,0): Confidence   (1,0): Evasion
 #   (0,1): Momentum     (1,1): Bushido Perfection
-#   (0,2): Kensei       (1,2): Way of the Samurai
+#   (0,2): Kensei       (1,2): Way of the Samurai Dojo
+# Samurai Thematic Sheet (3 cols x 3 rows):
+#   (0,0): Way of the Blade (Daisho Parry Ward)  (1,0): Lightning Strike (Katana Thunderbolt)  (2,0): Honorable Execution (Crimson Cleave)
+#   (0,1): Counter Attack (Parry + Riposte)      (1,1): Double Strike (Twin Gold/Crimson Arc)  (2,1): Armor Ignore (Katana Piercing Plate)
+#   (0,2): Frenzied Whirlwind (Blade Tempest)    (1,2): Bushido Initiate (Scroll & Wakizashi)  (2,2): Inner Calm (Golden Lotus & Hilt)
 # Ninjitsu AI Sheet (3 cols x 3 rows):
 #   (0,0): Animal Form  (1,0): Ki Attack        (2,0): Backstab
 #   (0,1): Surprise Atk (1,1): Smoke Bomb       (2,1): Shuriken
 #   (0,2): Fukiya       (1,2): Twin Shadow      (2,2): Shadow Seal
+# Ninja Thematic Sheet (3 cols x 3 rows):
+#   (0,0): Shadowjump (Twilight Tekagi Blur)     (1,0): Focus Attack (Ki Needle Blade)         (2,0): Mirror Image (Moonlight Shadow Clones)
+#   (0,1): Death Strike (5-Point Dim-Mak Heart)  (1,1): Infectious Strike (Venomous Kryss)     (2,1): Shadow Discipline (Kuji-Kiri Mudra)
+#   (0,2): Lethal Toxins (Vial + Kryss + Star)   (1,2): Master Assassin (Tekagi Moon Crest)    (2,2): Bushido Master (Kensei Sun & Daisho)
 STEM_SOURCE_MAP: dict[str, dict[str, object]] = {
-    # Samurai Canonical (12)
-    "samurai_way": {"type": "ai_bushido", "cell": (1, 2), "badge": True},
-    "samurai_lightning": {"type": "atlas", "key": "gump_21540"},
+    # Samurai Canonical (12) — 100% thematically matched to weapon & blurb
+    "samurai_way": {"type": "ai_samurai_thematic", "cell": (0, 0), "badge": True},
+    "samurai_lightning": {"type": "ai_samurai_thematic", "cell": (1, 0)},
     "samurai_perfection": {"type": "ai_bushido", "cell": (1, 1), "badge": True},
-    "samurai_honorable": {"type": "atlas", "key": "gump_21536"},
+    "samurai_honorable": {"type": "ai_samurai_thematic", "cell": (2, 0)},
     "samurai_confidence": {"type": "ai_bushido", "cell": (0, 0)},
-    "samurai_counter": {"type": "atlas", "key": "gump_21539"},
-    "samurai_double_strike": {"type": "atlas", "key": "gump_20998"},
+    "samurai_counter": {"type": "ai_samurai_thematic", "cell": (0, 1)},
+    "samurai_double_strike": {"type": "ai_samurai_thematic", "cell": (1, 1)},
     "samurai_evasion": {"type": "ai_bushido", "cell": (1, 0)},
     "samurai_momentum_strike": {"type": "ai_bushido", "cell": (0, 1)},
-    "samurai_armor_ignore": {"type": "atlas", "key": "gump_20992"},
-    "samurai_frenzied_whirlwind": {"type": "atlas", "key": "gump_20997"},
+    "samurai_armor_ignore": {"type": "ai_samurai_thematic", "cell": (2, 1)},
+    "samurai_frenzied_whirlwind": {"type": "ai_samurai_thematic", "cell": (0, 2)},
     "samurai_kensei_judgment": {"type": "ai_bushido", "cell": (0, 2), "capstone": True},
     # Samurai Aliases & Badges (11)
-    "samurai_lightning_strike": {"type": "atlas", "key": "gump_21540", "tint": (1.08, 1.0, 1.0)},
-    "samurai_honorable_exec": {"type": "atlas", "key": "gump_21536", "tint": (1.08, 1.0, 1.0)},
-    "samurai_counter_attack": {"type": "atlas", "key": "gump_21539", "tint": (1.08, 1.0, 1.0)},
-    "samurai_whirlwind_attack": {"type": "atlas", "key": "gump_21004"},
+    "samurai_lightning_strike": {"type": "ai_samurai_thematic", "cell": (1, 0), "tint": (1.06, 1.0, 1.0)},
+    "samurai_honorable_exec": {"type": "ai_samurai_thematic", "cell": (2, 0), "tint": (1.06, 1.0, 1.0)},
+    "samurai_counter_attack": {"type": "ai_samurai_thematic", "cell": (0, 1), "tint": (1.06, 1.0, 1.0)},
+    "samurai_whirlwind_attack": {"type": "ai_samurai_thematic", "cell": (0, 2), "tint": (1.05, 0.98, 0.95)},
     "samurai_bladeweave": {"type": "atlas", "key": "gump_21015"},
     "samurai_crushing_blow": {"type": "atlas", "key": "gump_20995"},
     "samurai_honorable_exec_r2": {"type": "ai_bushido", "cell": (0, 2), "capstone": True, "tint": (1.1, 1.02, 0.95)},
-    "samurai_bushido_initiate": {"type": "atlas", "key": "idle_samurai_way", "badge": True},
-    "samurai_inner_calm": {"type": "ai_bushido", "cell": (0, 0), "badge": True, "crop_inset": 36},
-    "samurai_way_of_the_blade": {"type": "ai_bushido", "cell": (1, 2), "badge": True, "crop_inset": 36},
-    "samurai_bushido_master": {"type": "ai_bushido", "cell": (1, 1), "badge": True, "crop_inset": 36},
-    # Ninja Canonical (13)
-    "ninja_shadowjump": {"type": "atlas", "key": "gump_21286", "badge": True},
-    "ninja_focus": {"type": "atlas", "key": "gump_21280"},
-    "ninja_mirror": {"type": "atlas", "key": "gump_21287"},
+    "samurai_bushido_initiate": {"type": "ai_samurai_thematic", "cell": (1, 2), "badge": True},
+    "samurai_inner_calm": {"type": "ai_samurai_thematic", "cell": (2, 2), "badge": True},
+    "samurai_way_of_the_blade": {"type": "ai_bushido", "cell": (1, 2), "badge": True},
+    "samurai_bushido_master": {"type": "ai_ninja_thematic", "cell": (2, 2), "badge": True},
+    # Ninja Canonical (13) — 100% thematically matched to weapon & blurb
+    "ninja_shadowjump": {"type": "ai_ninja_thematic", "cell": (0, 0), "badge": True},
+    "ninja_focus": {"type": "ai_ninja_thematic", "cell": (1, 0)},
+    "ninja_mirror": {"type": "ai_ninja_thematic", "cell": (2, 0)},
     "ninja_backstab": {"type": "ai_ninjitsu", "cell": (2, 0)},
-    "ninja_death": {"type": "atlas", "key": "gump_21281"},
+    "ninja_death": {"type": "ai_ninja_thematic", "cell": (0, 1)},
     "ninja_animal_form": {"type": "ai_ninjitsu", "cell": (0, 0)},
-    "ninja_infectious_strike": {"type": "atlas", "key": "gump_20999"},
+    "ninja_infectious_strike": {"type": "ai_ninja_thematic", "cell": (1, 1)},
     "ninja_smoke_bomb": {"type": "ai_ninjitsu", "cell": (1, 1), "badge": True},
     "ninja_shuriken": {"type": "ai_ninjitsu", "cell": (2, 1)},
     "ninja_ki_attack": {"type": "ai_ninjitsu", "cell": (1, 0)},
@@ -197,15 +205,15 @@ STEM_SOURCE_MAP: dict[str, dict[str, object]] = {
     "ninja_fukiya_barrage": {"type": "ai_ninjitsu", "cell": (0, 2)},
     "ninja_twin_shadow": {"type": "ai_ninjitsu", "cell": (1, 2), "capstone": True},
     # Ninja Aliases & Badges (9)
-    "ninja_focus_attack": {"type": "atlas", "key": "gump_21280", "tint": (0.96, 1.08, 1.02)},
-    "ninja_mirror_image": {"type": "atlas", "key": "gump_21287", "tint": (0.96, 1.08, 1.02)},
+    "ninja_focus_attack": {"type": "ai_ninja_thematic", "cell": (1, 0), "tint": (0.96, 1.06, 1.02)},
+    "ninja_mirror_image": {"type": "ai_ninja_thematic", "cell": (2, 0), "tint": (0.96, 1.06, 1.02)},
     "ninja_shadow_strike": {"type": "atlas", "key": "gump_21003"},
-    "ninja_double_strike": {"type": "atlas", "key": "gump_20998", "tint": (0.92, 1.08, 1.05)},
-    "ninja_armor_ignore": {"type": "atlas", "key": "gump_20992", "tint": (0.92, 1.08, 1.05)},
+    "ninja_double_strike": {"type": "ai_samurai_thematic", "cell": (1, 1), "tint": (0.85, 1.12, 1.08)},
+    "ninja_armor_ignore": {"type": "ai_samurai_thematic", "cell": (2, 1), "tint": (0.85, 1.12, 1.08)},
     "ninja_way_of_stealth": {"type": "ai_ninjitsu", "cell": (2, 2), "badge": True},
-    "ninja_shadow_discipline": {"type": "atlas", "key": "idle_assassin_shadow", "badge": True},
-    "ninja_lethal_toxins": {"type": "atlas", "key": "idle_assassin_eviscerate", "badge": True},
-    "ninja_master_assassin": {"type": "ai_ninjitsu", "cell": (2, 2), "badge": True, "crop_inset": 34},
+    "ninja_shadow_discipline": {"type": "ai_ninja_thematic", "cell": (2, 1), "badge": True},
+    "ninja_lethal_toxins": {"type": "ai_ninja_thematic", "cell": (0, 2), "badge": True},
+    "ninja_master_assassin": {"type": "ai_ninja_thematic", "cell": (1, 2), "badge": True},
 }
 
 # Authentic UO Item Sprites to extract from art.png (art.json) for Paperdoll & Armaments Showcase
@@ -335,6 +343,8 @@ def extract_master_icon(
     atlas_frames: dict[str, dict[str, int]],
     bushido_sheet: Image.Image,
     ninjitsu_sheet: Image.Image,
+    samurai_thematic_sheet: Image.Image,
+    ninja_thematic_sheet: Image.Image,
 ) -> Image.Image:
     """Extracts a 256x256 master icon from either ability-icons.png or the AI oil-painted sprite sheets."""
     spec = STEM_SOURCE_MAP[stem]
@@ -381,6 +391,30 @@ def extract_master_icon(
             int((row + 1) * ch - crop_inset),
         )
         master = ninjitsu_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+    elif src_type == "ai_samurai_thematic":
+        col, row = spec["cell"]  # type: ignore[misc]
+        sw, sh = samurai_thematic_sheet.size
+        cw = sw / 3.0
+        ch = sh / 3.0
+        box = (
+            int(col * cw + crop_inset),
+            int(row * ch + crop_inset),
+            int((col + 1) * cw - crop_inset),
+            int((row + 1) * ch - crop_inset),
+        )
+        master = samurai_thematic_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+    elif src_type == "ai_ninja_thematic":
+        col, row = spec["cell"]  # type: ignore[misc]
+        nw, nh = ninja_thematic_sheet.size
+        cw = nw / 3.0
+        ch = nh / 3.0
+        box = (
+            int(col * cw + crop_inset),
+            int(row * ch + crop_inset),
+            int((col + 1) * cw - crop_inset),
+            int((row + 1) * ch - crop_inset),
+        )
+        master = ninja_thematic_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
     else:
         raise ValueError(f"Unknown icon source spec for {stem}: {spec}")
 
@@ -903,13 +937,33 @@ def generate_all_icons() -> None:
     atlas_img, atlas_frames = load_ability_atlas()
     bushido_sheet = Image.open(SOURCES_DIR / "bushido-sheet.jpg").convert("RGBA")
     ninjitsu_sheet = Image.open(SOURCES_DIR / "ninjitsu-sheet.jpg").convert("RGBA")
+    samurai_thematic_sheet = Image.open(SOURCES_DIR / "samurai-thematic-sheet.png").convert("RGBA")
+    ninja_thematic_sheet = Image.open(SOURCES_DIR / "ninja-thematic-sheet.png").convert("RGBA")
 
     for stem, _role, _label in SAMURAI_STEMS:
-        master = extract_master_icon(stem, SAMURAI_CRIMSON, atlas_img, atlas_frames, bushido_sheet, ninjitsu_sheet)
+        master = extract_master_icon(
+            stem,
+            SAMURAI_CRIMSON,
+            atlas_img,
+            atlas_frames,
+            bushido_sheet,
+            ninjitsu_sheet,
+            samurai_thematic_sheet,
+            ninja_thematic_sheet,
+        )
         export_icon_stem(master, SAMURAI_DIR, stem)
 
     for stem, _role, _label in NINJA_STEMS:
-        master = extract_master_icon(stem, NINJA_EMERALD, atlas_img, atlas_frames, bushido_sheet, ninjitsu_sheet)
+        master = extract_master_icon(
+            stem,
+            NINJA_EMERALD,
+            atlas_img,
+            atlas_frames,
+            bushido_sheet,
+            ninjitsu_sheet,
+            samurai_thematic_sheet,
+            ninja_thematic_sheet,
+        )
         export_icon_stem(master, NINJA_DIR, stem)
 
     build_contact_sheet()

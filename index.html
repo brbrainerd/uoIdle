@@ -700,6 +700,70 @@
       min-width: 0;
     }
 
+    .mode-card-box {
+      padding: 6px 8px;
+      background: #141812;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+      min-width: 0;
+      cursor: pointer;
+      opacity: 0.58;
+      transition: all 0.16s ease;
+    }
+
+    .mode-card-box:hover {
+      opacity: 0.88;
+      border-color: var(--border-gold);
+    }
+
+    .mode-card-box.is-active-mode {
+      opacity: 1;
+      background: linear-gradient(180deg, #22261c 0%, #141812 100%);
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 12px var(--class-glow);
+    }
+
+    .active-mode-strip {
+      margin-top: 5px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 162, 39, 0.38);
+      border-left: 3px solid var(--border-gold);
+      background: rgba(201, 162, 39, 0.08);
+      font-size: 10px;
+      line-height: 1.35;
+      color: #efe5c8;
+      transition: all 0.16s ease;
+    }
+
+    .active-mode-strip.is-mode-b {
+      border-color: var(--class-accent);
+      border-left: 3px solid var(--class-accent);
+      background: var(--class-glow);
+      color: #ffffff;
+    }
+
+    .mode-tag-pill {
+      display: inline-block;
+      padding: 0 5px;
+      margin-right: 4px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: #282112;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      vertical-align: baseline;
+    }
+
+    .active-mode-strip.is-mode-b .mode-tag-pill {
+      background: rgba(0, 0, 0, 0.55);
+      border-color: var(--class-accent);
+      color: #fff2bf;
+    }
+
     .cost-badges {
       display: flex;
       flex-wrap: wrap;

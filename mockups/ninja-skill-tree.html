@@ -699,6 +699,70 @@
       min-width: 0;
     }
 
+    .mode-card-box {
+      padding: 6px 8px;
+      background: #141812;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+      min-width: 0;
+      cursor: pointer;
+      opacity: 0.58;
+      transition: all 0.16s ease;
+    }
+
+    .mode-card-box:hover {
+      opacity: 0.88;
+      border-color: var(--border-gold);
+    }
+
+    .mode-card-box.is-active-mode {
+      opacity: 1;
+      background: linear-gradient(180deg, #22261c 0%, #141812 100%);
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 12px var(--class-glow);
+    }
+
+    .active-mode-strip {
+      margin-top: 5px;
+      padding: 4px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 162, 39, 0.38);
+      border-left: 3px solid var(--border-gold);
+      background: rgba(201, 162, 39, 0.08);
+      font-size: 10px;
+      line-height: 1.35;
+      color: #efe5c8;
+      transition: all 0.16s ease;
+    }
+
+    .active-mode-strip.is-mode-b {
+      border-color: var(--class-accent);
+      border-left: 3px solid var(--class-accent);
+      background: var(--class-glow);
+      color: #ffffff;
+    }
+
+    .mode-tag-pill {
+      display: inline-block;
+      padding: 0 5px;
+      margin-right: 4px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: #282112;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      vertical-align: baseline;
+    }
+
+    .active-mode-strip.is-mode-b .mode-tag-pill {
+      background: rgba(0, 0, 0, 0.55);
+      border-color: var(--class-accent);
+      color: #fff2bf;
+    }
+
     .cost-badges {
       display: flex;
       flex-wrap: wrap;
@@ -1486,15 +1550,18 @@
                     <span class="badge-meta">spellId: 506</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling." data-mode-b="Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.">Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_shadowjump</code> · spellId: 506 · gump 21286)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_shadowjump</code> · spellId: 506 · gump 21286)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">Passive</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21286 (assets/icons/ninja/ninja_shadowjump@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling." data-mode-b="Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.">
-                Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.
               </div>
             </details>
           
@@ -1524,15 +1591,18 @@
                     <span class="badge-meta">spellId: 500</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff." data-mode-b="FocusAttack (spellId: 500) shieldless 1H/2H multiplier + +20% on-hit property amplification.">SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_focus</code> · spellId: 500 · gump 21280)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_focus</code> · spellId: 500 · gump 21280)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21280 (assets/icons/ninja/ninja_focus@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff." data-mode-b="FocusAttack (spellId: 500) shieldless 1H/2H multiplier + +20% on-hit property amplification.">
-                SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff.
               </div>
             </details>
           
@@ -1562,15 +1632,18 @@
                     <span class="badge-meta">spellId: 507</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Sole single-rank Spell (spellId: 507) summoning an illusory shadow clone granting -8% damage taken for 8.0s." data-mode-b="MirrorImage clone stack: intercepts incoming hit at Ninjitsu/150 chance (70% ablative absorb, 1.5s ICD).">Sole single-rank Spell (spellId: 507) summoning an illusory shadow clone granting -8% damage taken for 8.0s.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_mirror</code> · spellId: 507 · gump 21287)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_mirror</code> · spellId: 507 · gump 21287)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: self_buff · iconKey: gump_21287 (assets/icons/ninja/ninja_mirror@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Sole single-rank Spell (spellId: 507) summoning an illusory shadow clone granting -8% damage taken for 8.0s." data-mode-b="MirrorImage clone stack: intercepts incoming hit at Ninjitsu/150 chance (70% ablative absorb, 1.5s ICD).">
-                Sole single-rank Spell (spellId: 507) summoning an illusory shadow clone granting -8% damage taken for 8.0s.
               </div>
             </details>
           
@@ -1600,15 +1673,18 @@
                     <span class="badge-meta">spellId: 504</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff." data-mode-b="Backstab consuming CombatStealthUntil window for 1.15x multiplicative stealth opener bonus.">SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_backstab</code> · spellId: 504 · gump 21284)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_backstab</code> · spellId: 504 · gump 21284)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21284 (assets/icons/ninja/ninja_backstab@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff." data-mode-b="Backstab consuming CombatStealthUntil window for 1.15x multiplicative stealth opener bonus.">
-                SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff.
               </div>
             </details>
           
@@ -1638,15 +1714,18 @@
                     <span class="badge-meta">spellId: 501</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s)." data-mode-b="DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.">Sole single-rank SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_death</code> · spellId: 501 · gump 21281)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_death</code> · spellId: 501 · gump 21281)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21281 (assets/icons/ninja/ninja_death@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Sole single-rank SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s)." data-mode-b="DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.">
-                Sole single-rank SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).
               </div>
             </details>
           
@@ -1676,15 +1755,18 @@
                     <span class="badge-meta">spellId: 502</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s." data-mode-b="Combat AnimalForm posture increasing Fencing swing cadence by +10% without polymorph lock.">Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_animal_form</code> · spellId: 502 · gump 21282)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_animal_form</code> · spellId: 502 · gump 21282)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: self_buff · iconKey: gump_21282 (assets/icons/ninja/ninja_animal_form@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s." data-mode-b="Combat AnimalForm posture increasing Fencing swing cadence by +10% without polymorph lock.">
-                Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s.
               </div>
             </details>
           
@@ -1714,15 +1796,18 @@
                     <span class="badge-meta">weaponRef: 11</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s." data-mode-b="InfectiousStrike (ref: 11) applying Poisoning-scaled Deadly/Lethal assassin venom.">WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_infectious_strike</code> · weaponRef: 11 · gump 20999)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_infectious_strike</code> · weaponRef: 11 · gump 20999)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">WeaponAbility</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_20999 (assets/icons/ninja/ninja_infectious_strike@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s." data-mode-b="InfectiousStrike (ref: 11) applying Poisoning-scaled Deadly/Lethal assassin venom.">
-                WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s.
               </div>
             </details>
           
@@ -1752,6 +1837,12 @@
                     <span class="badge-meta">itemId: 10248</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Custom ability (itemId: 10248, customCooldownMs: 20,000ms &gt;= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken)." data-mode-b="Triggers Hiding.CombatOverride = true &amp; sets CombatStealthUntil for Backstab / SurpriseAttack openers.">Custom ability (itemId: 10248, customCooldownMs: 20,000ms &gt;= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken).</span>
+            </div>
+          
+            
             <div class="dual-unlock-banner" onclick="event.stopPropagation(); selectAbility('ninja_shuriken');">
               <img src="assets/icons/ninja/ninja_shuriken@48.png" alt="Shuriken &amp; Fukiya Volley" />
               <div>
@@ -1762,13 +1853,10 @@
           
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_smoke_bomb</code> · itemId: 10248 · gump 10248)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_smoke_bomb</code> · itemId: 10248 · gump 10248)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">Custom</strong> · tab: ability · scope: Idle · effect: self_buff · iconKey: idle_ninja_smoke_bomb (assets/icons/ninja/ninja_smoke_bomb@48.png)
                  · customCD: 20000ms (&gt;=2000ms)
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Custom ability (itemId: 10248, customCooldownMs: 20,000ms &gt;= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken)." data-mode-b="Triggers Hiding.CombatOverride = true &amp; sets CombatStealthUntil for Backstab / SurpriseAttack openers.">
-                Custom ability (itemId: 10248, customCooldownMs: 20,000ms &gt;= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken).
               </div>
             </details>
           
@@ -1798,15 +1886,18 @@
                     <span class="badge-meta">spellId: 503</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy." data-mode-b="KiAttack gap-closer simulating optimal distance bonus in 1D combat with 85% cleave splash.">SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_ki_attack</code> · spellId: 503 · gump 21283)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_ki_attack</code> · spellId: 503 · gump 21283)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: gump_21283 (assets/icons/ninja/ninja_ki_attack@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy." data-mode-b="KiAttack gap-closer simulating optimal distance bonus in 1D combat with 85% cleave splash.">
-                SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy.
               </div>
             </details>
           
@@ -1836,15 +1927,18 @@
                     <span class="badge-meta">spellId: 505</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred." data-mode-b="SurpriseAttack consuming stealth window to apply -8% defense vulnerability before DeathStrike.">SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_surprise_attack</code> · spellId: 505 · gump 21285)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_surprise_attack</code> · spellId: 505 · gump 21285)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: debuff · iconKey: gump_21285 (assets/icons/ninja/ninja_surprise_attack@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred." data-mode-b="SurpriseAttack consuming stealth window to apply -8% defense vulnerability before DeathStrike.">
-                SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred.
               </div>
             </details>
           
@@ -1874,15 +1968,18 @@
                     <span class="badge-meta">spellId: 507</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Spell (spellId: 507, itemId: 10154) Fukiya &amp; Egg Bomb Barrage (-10% dmg taken, +8% dmg dealt for 7.0s)." data-mode-b="Detonates ModernUO EggBomb flash-cloud + 2 ablative decoys (70% hit interception each) + Fukiya poison darts.">Spell (spellId: 507, itemId: 10154) Fukiya &amp; Egg Bomb Barrage (-10% dmg taken, +8% dmg dealt for 7.0s).</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_fukiya_barrage</code> · spellId: 507 · gump 10154)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_fukiya_barrage</code> · spellId: 507 · gump 10154)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">Spell</strong> · tab: spell · scope: UO · effect: self_buff · iconKey: idle_ninja_fukiya_barrage (assets/icons/ninja/ninja_fukiya_barrage@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Spell (spellId: 507, itemId: 10154) Fukiya &amp; Egg Bomb Barrage (-10% dmg taken, +8% dmg dealt for 7.0s)." data-mode-b="Detonates ModernUO EggBomb flash-cloud + 2 ablative decoys (70% hit interception each) + Fukiya poison darts.">
-                Spell (spellId: 507, itemId: 10154) Fukiya &amp; Egg Bomb Barrage (-10% dmg taken, +8% dmg dealt for 7.0s).
               </div>
             </details>
           
@@ -1912,15 +2009,18 @@
                     <span class="badge-meta">spellId: 501</span>
                   </div>
             
+            <div class="active-mode-strip" data-mode-strip>
+              <span class="mode-tag-pill" data-mode-tag>MODE A · 100% ENGINE</span>
+              <span class="mode-text" data-mode-a="Capstone SpecialMove (spellId: 501, 18 Stamina) 1.25x-1.35x (1.95x Execute &lt;= 35% HP) + 4-tick Twin Shadow Mark." data-mode-b="Grandmaster Kage Bunshin: Twin Shadow Execution (1.95x Execute below 35% HP + 5-swing dual-clone detonation).">Capstone SpecialMove (spellId: 501, 18 Stamina) 1.25x-1.35x (1.95x Execute &lt;= 35% HP) + 4-tick Twin Shadow Mark.</span>
+            </div>
+          
+            
             
             <details class="schema-drawer" onclick="event.stopPropagation()">
-              <summary>Engine Schema &amp; Mode A/B Spec (<code>ninja_twin_shadow</code> · spellId: 501 · gump 21281)</summary>
+              <summary>Engine Schema &amp; Raw Spec (<code>ninja_twin_shadow</code> · spellId: 501 · gump 21281)</summary>
               <div class="mono" style="font-size:9.5px;color:var(--text-secondary);margin-top:3px;line-height:1.35;">
                 kind: <strong style="color:#fff2bf;">SpecialMove</strong> · tab: ability · scope: UO · effect: direct_damage · iconKey: idle_ninja_twin_shadow (assets/icons/ninja/ninja_twin_shadow@48.png)
                 
-              </div>
-              <div style="margin-top:3px;font-size:10px;color:#d6e4ca;" class="mode-text" data-mode-a="Capstone SpecialMove (spellId: 501, 18 Stamina) 1.25x-1.35x (1.95x Execute &lt;= 35% HP) + 4-tick Twin Shadow Mark." data-mode-b="Grandmaster Kage Bunshin: Twin Shadow Execution (1.95x Execute below 35% HP + 5-swing dual-clone detonation).">
-                Capstone SpecialMove (spellId: 501, 18 Stamina) 1.25x-1.35x (1.95x Execute &lt;= 35% HP) + 4-tick Twin Shadow Mark.
               </div>
             </details>
           
@@ -1940,6 +2040,17 @@
             </h2>
             <div class="panel-body">
               <div class="arvore-dica-pinned" id="live-inspector">
+                <div id="insp-mode-banner" class="active-mode-strip" style="margin:0 0 8px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <span class="mode-tag-pill" id="insp-banner-tag">MODE A · 100% EXISTING ENGINE</span>
+                    <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="insp-banner-sim">
+                      L60 Boss: 374.50 DPS · 221.23 EHP/s · -8% Clone Veil · 0 C# Changes
+                    </span>
+                  </div>
+                  <div style="font-size:10px;margin-top:2px;color:var(--text-primary);" id="insp-banner-desc">
+                    Zero server C# edits: maps all 13 Ninjitsu skills to existing SpecialMove, Spell, WeaponAbility, DoT ticks, and timed Smoke Veil buffs.
+                  </div>
+                </div>
                 <div class="dica-header">
                   <img id="insp-icon" src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
                   <div>
@@ -1961,18 +2072,24 @@
                   <span class="badge-meta">Gump: 21286</span>
                 </div>
                 <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
-                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;">Scaling Formula &amp; Status Effect</strong>
-                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">UO Shadowjump (ref 506): innate shadow-step positioning and 100% Fencing/Ninjitsu auto-attack loop</div>
+                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
+                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</div>
                   <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
                 </div>
                 <div class="inspector-modes-grid">
-                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;min-width:0;">
-                    <strong style="color:#fff2bf;display:block;">Mode A (Drop-In JSON)</strong>
-                    <span id="insp-mode-a" style="color:var(--text-secondary);">Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</span>
+                  <div id="mode-card-a" class="mode-card-box is-active-mode" onclick="setExecMode('mode_a')" title="Click to activate Mode A (100% Existing Engine)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                      <strong style="color:#fff2bf;">Mode A (Drop-In JSON)</strong>
+                      <span class="lv-pill" id="mode-pill-a" style="font-size:8.5px;padding:0 4px;">ACTIVE</span>
+                    </div>
+                    <span id="insp-mode-a" style="color:var(--text-primary);">Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</span>
                   </div>
-                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;min-width:0;">
-                    <strong style="color:#fff2bf;display:block;">Mode B (&lt;20 LOC C# Hook)</strong>
-                    <span id="insp-mode-b" style="color:var(--text-secondary);">Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.</span>
+                  <div id="mode-card-b" class="mode-card-box" onclick="setExecMode('mode_b')" title="Click to activate Mode B (<20 LOC C# Hook)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                      <strong style="color:#fff2bf;">Mode B (&lt;20 LOC C# Hook)</strong>
+                      <span class="lv-pill" id="mode-pill-b" style="font-size:8.5px;padding:0 4px;opacity:0.45;">CLICK TO VIEW</span>
+                    </div>
+                    <span id="insp-mode-b" style="color:var(--text-primary);">Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.</span>
                   </div>
                 </div>
                 <details class="schema-drawer" style="margin-top:7px;">
@@ -2205,15 +2322,64 @@
 
       window.setExecMode = function(mode) {
         currentMode = mode;
-        document.getElementById('btn-mode-a').classList.toggle('is-active', mode === 'mode_a');
-        document.getElementById('btn-mode-b').classList.toggle('is-active', mode === 'mode_b');
+        var isModeB = mode === 'mode_b';
+        document.getElementById('btn-mode-a').classList.toggle('is-active', !isModeB);
+        document.getElementById('btn-mode-b').classList.toggle('is-active', isModeB);
         document.getElementById('inspector-mode-pill').textContent =
-          mode === 'mode_b' ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+          isModeB ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+
+        var strips = document.querySelectorAll('[data-mode-strip]');
+        for (var s = 0; s < strips.length; s++) {
+          strips[s].classList.toggle('is-mode-b', isModeB);
+        }
+        var tags = document.querySelectorAll('[data-mode-tag]');
+        for (var t = 0; t < tags.length; t++) {
+          tags[t].textContent = isModeB ? 'MODE B · <20 LOC C#' : 'MODE A · 100% ENGINE';
+        }
         var modeNodes = document.querySelectorAll('.mode-text');
         for (var i = 0; i < modeNodes.length; i++) {
           modeNodes[i].textContent =
-            mode === 'mode_b' ? modeNodes[i].getAttribute('data-mode-b') : modeNodes[i].getAttribute('data-mode-a');
+            isModeB ? modeNodes[i].getAttribute('data-mode-b') : modeNodes[i].getAttribute('data-mode-a');
         }
+
+        var bannerEl = document.getElementById('insp-mode-banner');
+        if (bannerEl) bannerEl.classList.toggle('is-mode-b', isModeB);
+        var bannerTag = document.getElementById('insp-banner-tag');
+        var bannerSim = document.getElementById('insp-banner-sim');
+        var bannerDesc = document.getElementById('insp-banner-desc');
+        if (cls.id === 'samurai') {
+          if (bannerTag) bannerTag.textContent = isModeB ? 'MODE B · 17-LOC C# HOOK (BaseWeapon.cs)' : 'MODE A · 100% EXISTING ENGINE';
+          if (bannerSim) bannerSim.textContent = isModeB
+            ? 'L60 Boss: 391.92 DPS (+28.8 Parry/Streak) · 318.88 EHP/s · 44 Wave Parries'
+            : 'L60 Boss: 363.15 DPS · 220.24 EHP/s · 13 Parries · 0 C# Changes';
+          if (bannerDesc) bannerDesc.textContent = isModeB
+            ? 'Active 17-LOC BaseWeapon.cs Hook: Auto-Perfection streak (+4%/hit to +15%, +8 HP/Stam/Mana on kill) + reactive 2.0s ICD CounterAttack swing & Confidence heal on Parry.'
+            : 'Zero server C# edits: maps all 12 Bushido skills to existing SpecialMove, Spell, WeaponAbility, and timed statusEffect primitives.';
+        } else {
+          if (bannerTag) bannerTag.textContent = isModeB ? 'MODE B · 16-LOC C# HOOK (BaseWeapon.cs)' : 'MODE A · 100% EXISTING ENGINE';
+          if (bannerSim) bannerSim.textContent = isModeB
+            ? 'L60 Boss: 367.38 DPS · 330.40 EHP/s (+70% Clone Absorb) · 16 Wave Clones'
+            : 'L60 Boss: 374.50 DPS · 221.23 EHP/s · -8% Clone Veil · 0 C# Changes';
+          if (bannerDesc) bannerDesc.textContent = isModeB
+            ? 'Active 16-LOC BaseWeapon.cs Hook: Ablative Mirror Image & Egg Bomb clone interception (70% absorb, 1.5s ICD), 5-swing DeathStrike detonation, and 1.15x Stealth opener.'
+            : 'Zero server C# edits: maps all 13 Ninjitsu skills to existing SpecialMove, Spell, WeaponAbility, DoT ticks, and timed Smoke Veil buffs.';
+        }
+
+        var cardA = document.getElementById('mode-card-a');
+        var cardB = document.getElementById('mode-card-b');
+        var pillA = document.getElementById('mode-pill-a');
+        var pillB = document.getElementById('mode-pill-b');
+        if (cardA) cardA.classList.toggle('is-active-mode', !isModeB);
+        if (cardB) cardB.classList.toggle('is-active-mode', isModeB);
+        if (pillA) {
+          pillA.textContent = isModeB ? 'CLICK TO VIEW' : 'ACTIVE';
+          pillA.style.opacity = isModeB ? '0.45' : '1';
+        }
+        if (pillB) {
+          pillB.textContent = isModeB ? 'ACTIVE' : 'CLICK TO VIEW';
+          pillB.style.opacity = isModeB ? '1' : '0.45';
+        }
+        window.selectAbility(selectedAbilityId);
       };
 
       window.selectAbility = function(abilityId) {
@@ -2253,7 +2419,16 @@
         inspDescEl.setAttribute('data-en', descEn);
         inspDescEl.setAttribute('data-pt', descPt);
         inspDescEl.textContent = currentLocale === 'pt' ? descPt : descEn;
-        document.getElementById('insp-formula').textContent = ab.scalingFormula.summary;
+        var isModeB = currentMode === 'mode_b';
+        var fHead = document.getElementById('insp-formula-heading');
+        if (fHead) {
+          fHead.textContent = isModeB
+            ? 'Active Mode B (<20 LOC C# Hook) Formula & Status Effect'
+            : 'Active Mode A (100% Engine) Formula & Status Effect';
+        }
+        document.getElementById('insp-formula').textContent =
+          (isModeB ? '[Mode B — C# Hook] ' + mInfo.modeB : '[Mode A — Drop-In JSON] ' + mInfo.modeA) +
+          ' | Base: ' + ab.scalingFormula.summary;
         if (ab.statusEffect) {
           var mods = ab.statusEffect.modifiers.map(function(m) { return m.stat + ': ' + m.value; }).join(', ');
           document.getElementById('insp-status').textContent =
@@ -2295,6 +2470,10 @@
           }
         }
       };
+
+      if (window.location.search.indexOf('mode=mode_b') !== -1) {
+        window.setExecMode('mode_b');
+      }
     })();
   </script>
 </body>
