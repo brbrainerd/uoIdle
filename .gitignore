@@ -20,3 +20,7 @@ __pycache__/
 # Unignore mockups/assets/icons (overrides macOS global Icon? rule on case-insensitive APFS)
 !mockups/assets/icons/
 !mockups/assets/icons/**
+
+# Ignore bulk per-click intermediate CV frame directories (keep JSON telemetry & COMPARISON_REPORT.md tracked)
+mockups/screenshots/cv-audit/before/
+mockups/screenshots/cv-audit/after/

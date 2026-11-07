@@ -42,6 +42,16 @@
 
 </details>
 
+### Phase 15: Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit
+
+**Goal:** Replace all show/hide (`display: none`) tab/filter behavior across the Simulator (`class-comparison.html`), Samurai (`samurai-skill-tree.html`), Ninja (`ninja-skill-tree.html`), and Portal (`index.html`) workbenches with smooth section scrolling (`scrollIntoView`) and spotlight highlighting; ensure every button (including Mode A/B, Bracket L10–L60, Archetype, Material Tier, Quick-Dock chips, Mastery Seals, and Section Anchors) produces a meaningful visual and data update across tables, SVG progression charts, 5-channel breakdowns, and rotation timelines; and verify 100% button functionality via Playwright + screencapture + before/after Computer Vision (CV) pixel-diff and layout analysis.
+**Requirements**: UI-SCROLL-01, SIM-BUTTONS-01, PW-CV-AUDIT-01
+**Depends on:** Phase 14
+**Plans:** 1 plan
+
+Plans:
+- [x] `15-01-PLAN.md` — Smooth-Scroll Navigation Overhaul, Sim View Un-Hiding & Playwright + CV Before/After Verification
+
 ---
 
 ## Progress
@@ -62,3 +72,4 @@
 | 12. Live-Codebase Combat Math & Hotbar Parity | v1.2 | 1/1 | Complete | 2026-11-07 |
 | 13. Unified Tick Kernel & 5-Class Recalibration | v1.2 | 1/1 | Complete | 2026-11-07 |
 | 14. Workbench Sync & GitHub Pages Redeploy | v1.2 | 1/1 | Complete | 2026-11-07 |
+| 15. Smooth-Scroll Navigation, Sim Button Reactivity & Playwright + CV Audit | v1.2 | 1/1 | Complete | 2026-11-07 |

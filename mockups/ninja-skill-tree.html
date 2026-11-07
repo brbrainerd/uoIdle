@@ -1412,11 +1412,72 @@
       flex-direction: column;
       gap: 3px;
       min-width: 0;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
+    }
+    .exec-kpi-card.is-spotlight-class {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #282415 0%, #151912 100%);
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+      transform: translateY(-2px);
+    }
+    tr.is-class-spotlight td {
+      background: rgba(229, 193, 88, 0.14) !important;
+      border-top: 1px solid var(--border-gold-bright) !important;
+      border-bottom: 1px solid var(--border-gold-bright) !important;
+    }
+
+    /* 9. Smooth-Scroll Section Spotlights & Non-Hiding Card Filter States */
+    section.arvore-secao,
+    [data-comp-section],
+    .milestone-card {
+      scroll-margin-top: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+    section.arvore-secao.is-focused-section,
+    [data-comp-section].is-focused-section,
+    .is-focused-section {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 24px rgba(229, 193, 88, 0.36), inset 0 0 14px rgba(229, 193, 88, 0.1) !important;
+    }
+    section.arvore-secao.is-focused-section > .arvore-secao-titulo {
+      background: linear-gradient(90deg, #332913 0%, #1d2219 100%) !important;
+      border-bottom-color: var(--border-gold-bright) !important;
+    }
+    .milestone-card.is-kind-match {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.34), inset 0 0 10px rgba(229, 193, 88, 0.12) !important;
+      background: linear-gradient(180deg, #252216 0%, #141913 100%) !important;
+    }
+    .milestone-card.is-kind-dimmed {
+      opacity: 0.34;
+      filter: grayscale(0.65);
+    }
+    .kbd-chip,
+    .arvore-saldo,
+    .passive-badge-item,
+    .skill-mastery-card {
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+    }
+    .kbd-chip:hover,
+    .arvore-saldo:hover,
+    .passive-badge-item:hover,
+    .skill-mastery-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-1px);
+    }
+    .passive-badge-item.is-selected-seal,
+    .hotbar-slot.is-selected-seal,
+    .arvore-saldo.is-active-saldo,
+    .kbd-chip.is-active-dock {
+      border-color: var(--border-gold-bright) !important;
+      background: linear-gradient(180deg, #292313 0%, #141812 100%) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.35);
     }
     @media (max-width: 1120px) {
       .exec-kpi-strip {
@@ -1439,10 +1500,10 @@
           <i class="live-pulse-dot"></i>
           UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
         </span>
-        <span class="kbd-chip"><kbd>M</kbd> Mode A/B</span>
-        <span class="kbd-chip"><kbd>L</kbd> EN / PT-BR</span>
-               <span class="kbd-chip"><kbd>1–9</kbd> Select Milestone</span>
-               <span class="kbd-chip"><kbd>Space</kbd> Combat Sim</span>
+        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
+        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="locale" onclick="window.handleQuickDock && window.handleQuickDock('locale')" title="Toggle EN / PT-BR Localization"><kbd>L</kbd> EN / PT-BR</span>
+               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="milestone" onclick="window.handleQuickDock && window.handleQuickDock('milestone')" title="Cycle &amp; Scroll to Next Milestone Card"><kbd>1–9</kbd> Select Milestone</span>
+               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="ticker" onclick="window.handleQuickDock && window.handleQuickDock('ticker')" title="Scroll to &amp; Step 100ms Combat Loop Preview"><kbd>Space</kbd> Combat Sim</span>
       </div>
       <div class="uo-quick-dock-right">
         <span style="color:var(--text-gold);">Verify Gates: 7/7 PASS · 0 Polygons · ±5–8% Balance</span>
@@ -1462,33 +1523,33 @@
         </div>
 
         <div class="arvore-saldos">
-          <div class="arvore-saldo">
+          <div class="arvore-saldo" role="button" tabindex="0" onclick="selectAbility('ninja_twin_shadow', true)" title="Scroll to L60 Grandmaster Capstone Milestone">
             <div>
               <strong>Lv. 60</strong>
               <div><small>Grandmaster Cap</small></div>
             </div>
-            <em>12 Milestones</em>
+            <em>12 Milestones ▾</em>
           </div>
-          <div class="arvore-saldo">
+          <div class="arvore-saldo" role="button" tabindex="0" onclick="scrollToTreeSection('sec-starter-skills')" title="Scroll to 8 Starter Skills &amp; Template Weights">
             <div>
               <strong>30/50/10</strong>
               <div><small>STR / DEX / INT</small></div>
             </div>
-            <em>Sum = 90</em>
+            <em>Sum = 90 ▾</em>
           </div>
-          <div class="arvore-saldo">
+          <div class="arvore-saldo" role="button" tabindex="0" onclick="scrollToTreeSection('sec-paperdoll-armory')" title="Scroll to Interactive Tokuno Paperdoll &amp; Armory">
             <div>
               <strong>Hue 1175 (Midnight Shinobi)</strong>
               <div><small>Starter Robe Hue</small></div>
             </div>
-            <em>robeHue: 1175</em>
+            <em>robeHue: 1175 ▾</em>
           </div>
-          <div class="arvore-saldo">
+          <div class="arvore-saldo" role="button" tabindex="0" onclick="scrollToTreeSection('sec-hotbar-queue')" title="Scroll to 5-Slot Seeded Hotbar Queue">
             <div>
               <strong>13 Catalog Skills</strong>
               <div><small>2,000ms Custom Floor</small></div>
             </div>
-            <em>Mana 25 / Med 100</em>
+            <em>Mana 25 / Med 100 ▾</em>
           </div>
         </div>
 
@@ -1552,7 +1613,7 @@
             </div>
           </section>
 
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-starter-skills">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">8 Starter Skills &amp; Template</span>
               <span class="arvore-secao-sub">WE / hE &amp; FE (100%)</span>
@@ -1731,7 +1792,7 @@
             </div>
           </section>
 
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-paperdoll-armory">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">Interactive Tokuno Paperdoll &amp; Armory</span>
               <span class="arvore-secao-sub">yE / mx · Hover or Click Gear</span>
@@ -1924,10 +1985,10 @@
 
         <!-- CENTER COLUMN: Unified L1-L60 [Arvore Progression & Schema Cards (De-Duplicated) -->
         <div class="col-stack">
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-milestone-tree">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">Unified L1–L60 [Arvore Progression &amp; Ability Cards (12 Milestones)</span>
-              <span class="arvore-secao-sub">gE.ninja &amp; b Catalog · Click any card or expand ▸ Schema</span>
+              <span class="arvore-secao-sub" id="filter-kind-status">Showing All 12 Milestones · Click any card or expand ▸ Schema</span>
             </h2>
 
             <!-- Live .arvore-cobra 12-node ribbon -->
@@ -1938,7 +1999,7 @@
               </div>
               <div class="arvore-cobra">
                 
-        <div class="arvore-col" onclick="selectAbility('ninja_shadowjump')" title="L1: Shadowjump / Salto das Sombras">
+        <div class="arvore-col" onclick="selectAbility('ninja_shadowjump', true)" title="L1: Shadowjump / Salto das Sombras (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L1</span>
           <div class="arvore-circulo is-on is-selected-node" data-cobra-id="ninja_shadowjump" data-node-kind="passive">
             <img src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
@@ -1947,7 +2008,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_focus')" title="L5: Focus Attack / Ataque Focado">
+        <div class="arvore-col" onclick="selectAbility('ninja_focus', true)" title="L5: Focus Attack / Ataque Focado (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L5</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_focus" data-node-kind="skill">
             <img src="assets/icons/ninja/ninja_focus@64.png" alt="Focus Attack" />
@@ -1956,7 +2017,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_mirror')" title="L10: Mirror Image / Imagem Espelhada">
+        <div class="arvore-col" onclick="selectAbility('ninja_mirror', true)" title="L10: Mirror Image / Imagem Espelhada (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L10</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_mirror" data-node-kind="spell">
             <img src="assets/icons/ninja/ninja_mirror@64.png" alt="Mirror Image" />
@@ -1965,7 +2026,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_backstab')" title="L15: Backstab / Punhalada pelas Costas">
+        <div class="arvore-col" onclick="selectAbility('ninja_backstab', true)" title="L15: Backstab / Punhalada pelas Costas (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L15</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_backstab" data-node-kind="skill">
             <img src="assets/icons/ninja/ninja_backstab@64.png" alt="Backstab" />
@@ -1974,7 +2035,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_death')" title="L20: Death Strike / Golpe Mortal">
+        <div class="arvore-col" onclick="selectAbility('ninja_death', true)" title="L20: Death Strike / Golpe Mortal (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L20</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_death" data-node-kind="skill">
             <img src="assets/icons/ninja/ninja_death@64.png" alt="Death Strike" />
@@ -1983,7 +2044,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_animal_form')" title="L25: Animal Form / Forma Animal">
+        <div class="arvore-col" onclick="selectAbility('ninja_animal_form', true)" title="L25: Animal Form / Forma Animal (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L25</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_animal_form" data-node-kind="spell">
             <img src="assets/icons/ninja/ninja_animal_form@64.png" alt="Animal Form" />
@@ -1992,7 +2053,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_infectious_strike')" title="L30: Infectious Strike / Golpe Infeccioso">
+        <div class="arvore-col" onclick="selectAbility('ninja_infectious_strike', true)" title="L30: Infectious Strike / Golpe Infeccioso (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L30</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_infectious_strike" data-node-kind="skill">
             <img src="assets/icons/ninja/ninja_infectious_strike@64.png" alt="Infectious Strike" />
@@ -2001,7 +2062,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_smoke_bomb')" title="L35: Smoke Bomb / Bomba de Fumaça">
+        <div class="arvore-col" onclick="selectAbility('ninja_smoke_bomb', true)" title="L35: Smoke Bomb / Bomba de Fumaça (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L35</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_smoke_bomb" data-node-kind="mechanic">
             <img src="assets/icons/ninja/ninja_smoke_bomb@64.png" alt="Smoke Bomb" />
@@ -2010,7 +2071,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_ki_attack')" title="L40: Ki Attack / Ataque de Ki">
+        <div class="arvore-col" onclick="selectAbility('ninja_ki_attack', true)" title="L40: Ki Attack / Ataque de Ki (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L40</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_ki_attack" data-node-kind="skill">
             <img src="assets/icons/ninja/ninja_ki_attack@64.png" alt="Ki Attack" />
@@ -2019,7 +2080,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_surprise_attack')" title="L45: Surprise Attack / Ataque Surpresa">
+        <div class="arvore-col" onclick="selectAbility('ninja_surprise_attack', true)" title="L45: Surprise Attack / Ataque Surpresa (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L45</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_surprise_attack" data-node-kind="skill">
             <img src="assets/icons/ninja/ninja_surprise_attack@64.png" alt="Surprise Attack" />
@@ -2028,7 +2089,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_fukiya_barrage')" title="L50: Fukiya &amp; Egg Bomb Barrage / Barragem de Fukiya e Bomba de Ovo">
+        <div class="arvore-col" onclick="selectAbility('ninja_fukiya_barrage', true)" title="L50: Fukiya &amp; Egg Bomb Barrage / Barragem de Fukiya e Bomba de Ovo (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L50</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_fukiya_barrage" data-node-kind="spell">
             <img src="assets/icons/ninja/ninja_fukiya_barrage@64.png" alt="Fukiya &amp; Egg Bomb Barrage" />
@@ -2037,7 +2098,7 @@
         </div>
       
 
-        <div class="arvore-col" onclick="selectAbility('ninja_twin_shadow')" title="L60: Kage Bunshin: Twin Shadow Execution / Kage Bunshin: Execução das Sombras Gêmeas">
+        <div class="arvore-col" onclick="selectAbility('ninja_twin_shadow', true)" title="L60: Kage Bunshin: Twin Shadow Execution / Kage Bunshin: Execução das Sombras Gêmeas (Click to inspect &amp; scroll to card)">
           <span class="arvore-lv">L60</span>
           <div class="arvore-circulo is-on " data-cobra-id="ninja_twin_shadow" data-node-kind="feature">
             <img src="assets/icons/ninja/ninja_twin_shadow@64.png" alt="Kage Bunshin: Twin Shadow Execution" />
@@ -2051,7 +2112,7 @@
             <!-- Semantic Ability-Kind Filter Strip -->
             <div class="filter-strip">
               <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
-                <span class="mono" style="font-size:10px;color:var(--text-gold);">Filter Kind:</span>
+                <span class="mono" style="font-size:10px;color:var(--text-gold);">Spotlight Kind:</span>
                 <button type="button" class="beta-btn is-active" data-kind-btn="all" onclick="filterAbilityKind('all')">All (12)</button>
                 <button type="button" class="beta-btn" data-kind-btn="passive" onclick="filterAbilityKind('passive')" style="color:var(--kind-passive);">Passive</button>
                 <button type="button" class="beta-btn" data-kind-btn="skill" onclick="filterAbilityKind('skill')" style="color:var(--kind-skill);">Skills</button>
@@ -2725,7 +2786,7 @@
 
         <!-- RIGHT COLUMN: Sticky .arvore-dica Inspector, 5-Slot Seeded Hotbar & Mastery Seals -->
         <div class="col-stack">
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-ability-inspector">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">Active Ability Deep-Dive Inspector</span>
               <span class="arvore-secao-sub" id="inspector-mode-pill">Mode A (100% Existing Engine)</span>
@@ -2867,7 +2928,7 @@
             </div>
           </section>
 
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-hotbar-queue">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">5-Slot Seeded Hotbar Queue</span>
               <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
@@ -2875,7 +2936,7 @@
             <div class="panel-body">
               <div class="hotbar-slots">
                 
-        <div class="hotbar-slot" style="cursor:pointer;" onclick="selectAbility('lesser_heal_potion')" title="Click to inspect lesser_heal_potion">
+        <div class="hotbar-slot is-selected-seal" data-hotbar-idx="0" style="cursor:pointer;" onclick="selectHotbarSlot(0, 'lesser_heal_potion')" title="Click to inspect &amp; scroll to lesser_heal_potion">
           <div class="slot-num">1</div>
           <div>
             <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Heal <code style="color:var(--text-secondary);font-size:10px;">(lesser_heal_potion)</code></div>
@@ -2885,7 +2946,7 @@
         </div>
       
 
-        <div class="hotbar-slot" style="cursor:pointer;" onclick="selectAbility('bandage')" title="Click to inspect bandage">
+        <div class="hotbar-slot " data-hotbar-idx="1" style="cursor:pointer;" onclick="selectHotbarSlot(1, 'bandage')" title="Click to inspect &amp; scroll to bandage">
           <div class="slot-num">2</div>
           <div>
             <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bandage <code style="color:var(--text-secondary);font-size:10px;">(bandage)</code></div>
@@ -2895,7 +2956,7 @@
         </div>
       
 
-        <div class="hotbar-slot" style="cursor:pointer;" onclick="selectAbility('lesser_cure_potion')" title="Click to inspect lesser_cure_potion">
+        <div class="hotbar-slot " data-hotbar-idx="2" style="cursor:pointer;" onclick="selectHotbarSlot(2, 'lesser_cure_potion')" title="Click to inspect &amp; scroll to lesser_cure_potion">
           <div class="slot-num">3</div>
           <div>
             <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Cure <code style="color:var(--text-secondary);font-size:10px;">(lesser_cure_potion)</code></div>
@@ -2905,7 +2966,7 @@
         </div>
       
 
-        <div class="hotbar-slot" style="cursor:pointer;" onclick="selectAbility('lesser_mana_potion')" title="Click to inspect lesser_mana_potion">
+        <div class="hotbar-slot " data-hotbar-idx="3" style="cursor:pointer;" onclick="selectHotbarSlot(3, 'lesser_mana_potion')" title="Click to inspect &amp; scroll to lesser_mana_potion">
           <div class="slot-num">4</div>
           <div>
             <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Mana <code style="color:var(--text-secondary);font-size:10px;">(lesser_mana_potion)</code></div>
@@ -2915,7 +2976,7 @@
         </div>
       
 
-        <div class="hotbar-slot" style="cursor:pointer;" onclick="selectAbility('ninja_focus')" title="Click to inspect ninja_focus">
+        <div class="hotbar-slot " data-hotbar-idx="4" style="cursor:pointer;" onclick="selectHotbarSlot(4, 'ninja_focus')" title="Click to inspect &amp; scroll to ninja_focus">
           <div class="slot-num">5</div>
           <div>
             <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bolt <code style="color:var(--text-secondary);font-size:10px;">(ninja_focus)</code></div>
@@ -2928,14 +2989,14 @@
             </div>
           </section>
 
-          <section class="arvore-secao">
+          <section class="arvore-secao" id="sec-mastery-seals">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">Class Mastery &amp; Passive Seals</span>
-              <span class="arvore-secao-sub">Oil-Painted 64×64 Gump Badges</span>
+              <span class="arvore-secao-sub">Oil-Painted 64×64 Gump Badges · Click to Spotlight</span>
             </h2>
             <div class="passive-badges-row">
               
-      <div class="passive-badge-item">
+      <div class="passive-badge-item is-selected-seal" data-seal-idx="0" onclick="selectPassiveSeal(0, 'ninja_shadowjump')" title="Click to inspect &amp; scroll to Tier I (L1) milestone">
         <img src="assets/icons/ninja/ninja_way_of_stealth@64.png" alt="Way of Stealth" />
         <div>
           <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier I (L1) · <code>ninja_way_of_stealth</code></div>
@@ -2945,7 +3006,7 @@
       </div>
     
 
-      <div class="passive-badge-item">
+      <div class="passive-badge-item " data-seal-idx="1" onclick="selectPassiveSeal(1, 'ninja_death')" title="Click to inspect &amp; scroll to Tier II (L25) milestone">
         <img src="assets/icons/ninja/ninja_shadow_discipline@64.png" alt="Shadow Discipline" />
         <div>
           <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier II (L25) · <code>ninja_shadow_discipline</code></div>
@@ -2955,7 +3016,7 @@
       </div>
     
 
-      <div class="passive-badge-item">
+      <div class="passive-badge-item " data-seal-idx="2" onclick="selectPassiveSeal(2, 'ninja_smoke_bomb')" title="Click to inspect &amp; scroll to Tier III (L30) milestone">
         <img src="assets/icons/ninja/ninja_lethal_toxins@64.png" alt="Lethal Toxins &amp; Tools" />
         <div>
           <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier III (L30) · <code>ninja_lethal_toxins</code></div>
@@ -2965,7 +3026,7 @@
       </div>
     
 
-      <div class="passive-badge-item">
+      <div class="passive-badge-item " data-seal-idx="3" onclick="selectPassiveSeal(3, 'ninja_twin_shadow')" title="Click to inspect &amp; scroll to Tier IV (L60) milestone">
         <img src="assets/icons/ninja/ninja_master_assassin@64.png" alt="Grandmaster Assassin Seal" />
         <div>
           <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier IV (L60) · <code>ninja_master_assassin</code></div>
@@ -3002,6 +3063,19 @@
       var selectedAbilityId = cls.abilities[0].id;
       var selectedGearId = gearList.length > 6 ? gearList[6].id : (gearList[0] ? gearList[0].id : '');
       var currentTier = { id: 'Valorite', mult: 1.85, res: 96 };
+      var dockMilestoneIdx = 0;
+
+      window.scrollToTreeSection = function(secId) {
+        var el = document.getElementById(secId);
+        if (!el) return;
+        var secs = document.querySelectorAll('section.arvore-secao');
+        for (var i = 0; i < secs.length; i++) {
+          secs[i].classList.toggle('is-focused-section', secs[i].id === secId);
+        }
+        var rect = el.getBoundingClientRect();
+        var targetY = Math.max(0, Math.round(rect.top + window.scrollY - 16));
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      };
 
       window.setPaperdollTier = function(tierId, mult, resBonus) {
         currentTier = { id: tierId, mult: mult, res: resBonus };
@@ -3079,7 +3153,7 @@
         for (var i = 0; i < nodes.length; i++) {
           nodes[i].textContent = lang === 'pt' ? nodes[i].getAttribute('data-pt') : nodes[i].getAttribute('data-en');
         }
-        window.selectAbility(selectedAbilityId);
+        window.selectAbility(selectedAbilityId, false);
         if (selectedGearId) window.inspectGear(selectedGearId);
       };
 
@@ -3147,10 +3221,10 @@
           pillB.textContent = isModeB ? 'ACTIVE' : 'CLICK TO VIEW';
           pillB.style.opacity = isModeB ? '1' : '0.45';
         }
-        window.selectAbility(selectedAbilityId);
+        window.selectAbility(selectedAbilityId, false);
       };
 
-      window.selectAbility = function(abilityId) {
+      window.selectAbility = function(abilityId, shouldScroll) {
         var ab = null;
         for (var i = 0; i < cls.abilities.length; i++) {
           if (cls.abilities[i].id === abilityId) {
@@ -3167,13 +3241,18 @@
             break;
           }
         }
+        var cardMilestoneId = abilityId === 'ninja_shuriken' ? 'ninja_smoke_bomb' : abilityId;
         var cards = document.querySelectorAll('.milestone-card');
+        var targetCardEl = null;
         for (var k = 0; k < cards.length; k++) {
-          cards[k].classList.toggle('is-selected', cards[k].getAttribute('data-milestone-id') === abilityId);
+          cards[k].style.display = 'grid';
+          var isMatchCard = cards[k].getAttribute('data-milestone-id') === cardMilestoneId;
+          cards[k].classList.toggle('is-selected', isMatchCard);
+          if (isMatchCard) targetCardEl = cards[k];
         }
         var cobraCircles = document.querySelectorAll('[data-cobra-id]');
         for (var c = 0; c < cobraCircles.length; c++) {
-          cobraCircles[c].classList.toggle('is-selected-node', cobraCircles[c].getAttribute('data-cobra-id') === abilityId);
+          cobraCircles[c].classList.toggle('is-selected-node', cobraCircles[c].getAttribute('data-cobra-id') === cardMilestoneId);
         }
         var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
         document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
@@ -3212,6 +3291,39 @@
         document.getElementById('insp-mode-b').textContent = mInfo.modeB;
         var jsonEl = document.getElementById('insp-json');
         if (jsonEl) jsonEl.textContent = JSON.stringify(ab, null, 2);
+
+        if (shouldScroll && targetCardEl) {
+          var rect = targetCardEl.getBoundingClientRect();
+          var targetY = Math.max(0, Math.round(rect.top + window.scrollY - 90));
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
+      };
+
+      window.selectHotbarSlot = function(slotIdx, targetAbilityId) {
+        var slots = document.querySelectorAll('[data-hotbar-idx]');
+        for (var i = 0; i < slots.length; i++) {
+          slots[i].classList.toggle('is-selected-seal', parseInt(slots[i].getAttribute('data-hotbar-idx'), 10) === slotIdx);
+        }
+        var foundAb = null;
+        for (var j = 0; j < cls.abilities.length; j++) {
+          if (cls.abilities[j].id === targetAbilityId) {
+            foundAb = cls.abilities[j];
+            break;
+          }
+        }
+        var mappedIndices = [1, 3, 5, 7, 11];
+        var resolvedId = foundAb
+          ? targetAbilityId
+          : (cls.progression[mappedIndices[slotIdx] || 1] ? cls.progression[mappedIndices[slotIdx] || 1].id : cls.abilities[0].id);
+        window.selectAbility(resolvedId, true);
+      };
+
+      window.selectPassiveSeal = function(sealIdx, targetAbilityId) {
+        var seals = document.querySelectorAll('[data-seal-idx]');
+        for (var i = 0; i < seals.length; i++) {
+          seals[i].classList.toggle('is-selected-seal', parseInt(seals[i].getAttribute('data-seal-idx'), 10) === sealIdx);
+        }
+        window.selectAbility(targetAbilityId, true);
       };
 
       window.filterAbilityKind = function(kindFilter) {
@@ -3220,13 +3332,47 @@
           btns[i].classList.toggle('is-active', btns[i].getAttribute('data-kind-btn') === kindFilter);
         }
         var cards = document.querySelectorAll('.milestone-card');
+        var firstMatchId = null;
+        var matchCount = 0;
         for (var j = 0; j < cards.length; j++) {
           var k = cards[j].getAttribute('data-kind');
           var show =
             kindFilter === 'all' ||
             k === kindFilter ||
             (kindFilter === 'special' && (k === 'mechanic' || k === 'feature'));
-          cards[j].style.display = show ? 'grid' : 'none';
+          // Never hide cards with display:none! Spotlight matching cards and dim non-matching cards.
+          cards[j].style.display = 'grid';
+          cards[j].classList.toggle('is-kind-match', kindFilter !== 'all' && show);
+          cards[j].classList.toggle('is-kind-dimmed', kindFilter !== 'all' && !show);
+          if (show) {
+            matchCount++;
+            if (!firstMatchId) {
+              firstMatchId = cards[j].getAttribute('data-milestone-id');
+            }
+          }
+        }
+        var statusEl = document.getElementById('filter-kind-status');
+        if (statusEl) {
+          statusEl.textContent = kindFilter === 'all'
+            ? 'Showing All 12 Milestones · Click any card or expand ▸ Schema'
+            : 'Spotlighting ' + matchCount + ' [' + kindFilter.toUpperCase() + '] Milestones (All 12 cards visible inline)';
+        }
+        if (firstMatchId) {
+          window.selectAbility(firstMatchId, false);
+        }
+      };
+
+      window.handleQuickDock = function(action) {
+        if (action === 'mode') {
+          window.setExecMode(currentMode === 'mode_a' ? 'mode_b' : 'mode_a');
+        } else if (action === 'locale') {
+          window.setLocale(currentLocale === 'en' ? 'pt' : 'en');
+        } else if (action === 'milestone') {
+          dockMilestoneIdx = (dockMilestoneIdx + 3) % cls.progression.length;
+          window.selectAbility(cls.progression[dockMilestoneIdx].id, true);
+        } else if (action === 'ticker') {
+          window.stepCombatTicker();
+          window.scrollToTreeSection('sec-ability-inspector');
         }
       };
 

@@ -2043,26 +2043,29 @@ export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArt
   const rotationTimelines: ClassRotationTimeline[] = [];
 
   for (const classDef of classes) {
-    // 1. Damage channel breakdowns across all brackets & archetypes (mode_b) + 20s L60 rotation timeline
-    for (const bracketId of BRACKET_IDS) {
-      for (const archetypeId of ARCHETYPE_IDS) {
-        const captureTimeline = bracketId === 'L60' && archetypeId === 'low_def_boss' ? 20000 : 0;
-        const detailed = simulateScenarioDetailed(
-          classDef,
-          bracketId,
-          archetypeId,
-          'mode_b',
-          undefined,
-          captureTimeline
-        );
-        damageBreakdowns.push(detailed.breakdown);
-        if (captureTimeline > 0) {
-          rotationTimelines.push({
-            classId: classDef.id,
-            bracketId: 'L60',
-            horizonMs: captureTimeline,
-            events: detailed.timelineEvents,
-          });
+    // 1. Damage channel breakdowns across all brackets, archetypes & modes (mode_a + mode_b) + 20s L60 rotation timeline
+    for (const mode of ['mode_a', 'mode_b'] as const) {
+      for (const bracketId of BRACKET_IDS) {
+        for (const archetypeId of ARCHETYPE_IDS) {
+          const captureTimeline =
+            mode === 'mode_b' && bracketId === 'L60' && archetypeId === 'low_def_boss' ? 20000 : 0;
+          const detailed = simulateScenarioDetailed(
+            classDef,
+            bracketId,
+            archetypeId,
+            mode,
+            undefined,
+            captureTimeline
+          );
+          damageBreakdowns.push(detailed.breakdown);
+          if (captureTimeline > 0) {
+            rotationTimelines.push({
+              classId: classDef.id,
+              bracketId: 'L60',
+              horizonMs: captureTimeline,
+              events: detailed.timelineEvents,
+            });
+          }
         }
       }
     }

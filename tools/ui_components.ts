@@ -449,11 +449,72 @@ export function buildComponentStyles(): string {
       flex-direction: column;
       gap: 3px;
       min-width: 0;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
+    }
+    .exec-kpi-card.is-spotlight-class {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #282415 0%, #151912 100%);
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+      transform: translateY(-2px);
+    }
+    tr.is-class-spotlight td {
+      background: rgba(229, 193, 88, 0.14) !important;
+      border-top: 1px solid var(--border-gold-bright) !important;
+      border-bottom: 1px solid var(--border-gold-bright) !important;
+    }
+
+    /* 9. Smooth-Scroll Section Spotlights & Non-Hiding Card Filter States */
+    section.arvore-secao,
+    [data-comp-section],
+    .milestone-card {
+      scroll-margin-top: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+    section.arvore-secao.is-focused-section,
+    [data-comp-section].is-focused-section,
+    .is-focused-section {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 24px rgba(229, 193, 88, 0.36), inset 0 0 14px rgba(229, 193, 88, 0.1) !important;
+    }
+    section.arvore-secao.is-focused-section > .arvore-secao-titulo {
+      background: linear-gradient(90deg, #332913 0%, #1d2219 100%) !important;
+      border-bottom-color: var(--border-gold-bright) !important;
+    }
+    .milestone-card.is-kind-match {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.34), inset 0 0 10px rgba(229, 193, 88, 0.12) !important;
+      background: linear-gradient(180deg, #252216 0%, #141913 100%) !important;
+    }
+    .milestone-card.is-kind-dimmed {
+      opacity: 0.34;
+      filter: grayscale(0.65);
+    }
+    .kbd-chip,
+    .arvore-saldo,
+    .passive-badge-item,
+    .skill-mastery-card {
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+    }
+    .kbd-chip:hover,
+    .arvore-saldo:hover,
+    .passive-badge-item:hover,
+    .skill-mastery-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-1px);
+    }
+    .passive-badge-item.is-selected-seal,
+    .hotbar-slot.is-selected-seal,
+    .arvore-saldo.is-active-saldo,
+    .kbd-chip.is-active-dock {
+      border-color: var(--border-gold-bright) !important;
+      background: linear-gradient(180deg, #292313 0%, #141812 100%) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.35);
     }
     @media (max-width: 1120px) {
       .exec-kpi-strip {
@@ -474,13 +535,13 @@ export function renderQuickCommandBar(activePage: 'portal' | 'samurai' | 'ninja'
           <i class="live-pulse-dot"></i>
           UO IDLE v0.99.0 · TOKUNO EXPANSION WORKBENCH
         </span>
-        <span class="kbd-chip"><kbd>M</kbd> Mode A/B</span>
+        <span class="kbd-chip" role="button" tabindex="0" data-dock-action="mode" onclick="window.handleQuickDock && window.handleQuickDock('mode')" title="Toggle Mode A (100% Existing Engine) vs Mode B (<20 LOC C# Server Hook)"><kbd>M</kbd> Mode A/B</span>
         ${
           activePage === 'samurai' || activePage === 'ninja'
-            ? `<span class="kbd-chip"><kbd>L</kbd> EN / PT-BR</span>
-               <span class="kbd-chip"><kbd>1–9</kbd> Select Milestone</span>
-               <span class="kbd-chip"><kbd>Space</kbd> Combat Sim</span>`
-            : `<span class="kbd-chip"><kbd>1–3</kbd> Switch View</span>`
+            ? `<span class="kbd-chip" role="button" tabindex="0" data-dock-action="locale" onclick="window.handleQuickDock && window.handleQuickDock('locale')" title="Toggle EN / PT-BR Localization"><kbd>L</kbd> EN / PT-BR</span>
+               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="milestone" onclick="window.handleQuickDock && window.handleQuickDock('milestone')" title="Cycle &amp; Scroll to Next Milestone Card"><kbd>1–9</kbd> Select Milestone</span>
+               <span class="kbd-chip" role="button" tabindex="0" data-dock-action="ticker" onclick="window.handleQuickDock && window.handleQuickDock('ticker')" title="Scroll to &amp; Step 100ms Combat Loop Preview"><kbd>Space</kbd> Combat Sim</span>`
+            : `<span class="kbd-chip" role="button" tabindex="0" data-dock-action="view" onclick="window.handleQuickDock && window.handleQuickDock('view')" title="Cycle &amp; Smooth-Scroll Workbench Sections"><kbd>1–3</kbd> Switch View</span>`
         }
       </div>
       <div class="uo-quick-dock-right">
@@ -667,7 +728,7 @@ export function renderExecutiveClassKpiStrip(
               ? `${s.cloneInterceptions > 0 ? s.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil'}`
               : `${s.parryCount} Shield Parries`;
         return `
-          <div class="exec-kpi-card" style="border-top-color:${col};">
+          <div class="exec-kpi-card" data-kpi-class="${escapeHtml(s.classId)}" onclick="window.spotlightSimClass && window.spotlightSimClass('${escapeHtml(s.classId)}')" style="border-top-color:${col};" title="Click to spotlight ${escapeHtml(s.classId.toUpperCase())} across telemetry table, SVG curves &amp; 5-channel breakdown">
             <div style="display:flex;justify-content:space-between;align-items:center;">
               <strong style="font-family:'Cinzel',serif;font-size:12px;color:${col};text-transform:uppercase;">${escapeHtml(s.classId)}</strong>
               <span class="mono" style="font-size:9.5px;color:#82d5b0;">${deltaStr} vs Mean</span>
@@ -678,7 +739,7 @@ export function renderExecutiveClassKpiStrip(
             </div>
             <div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>${escapeHtml(mitLabel)}</span>
-              <span style="color:#82d5b0;">0 OOM</span>
+              <span style="color:#82d5b0;">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         `;
