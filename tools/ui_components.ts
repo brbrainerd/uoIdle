@@ -385,9 +385,17 @@ export function buildComponentStyles(): string {
 
     /* 7. Paperdoll Ambient Torchlight & Weapon Telemetry Bars */
     .paperdoll-figure-box {
+      position: relative;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-gold);
+      border-radius: 5px;
+      padding: 4px;
+      overflow: hidden;
+      min-width: 0;
       background:
         radial-gradient(circle at 50% 35%, var(--class-glow), transparent 62%),
-        radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.16), #090b08 78%) !important;
+        radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.16), #090b08 78%);
       box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.75);
     }
     .paperdoll-aura-ring {

@@ -1281,12 +1281,6 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
     }
 
     /* Winding .arvore-cobra ribbon (2 rows x 6 milestones — zero circle/label overlap) */
-    .arvore-cobra-wrap {
-      padding: 10px 12px;
-      border-bottom: 1px solid #2a3026;
-      background: rgba(11, 13, 10, 0.55);
-    }
-
     .arvore-cobra {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1756,17 +1750,6 @@ function buildSharedStyles(accentVar: string, accentGlow = 'rgba(201, 162, 39, 0
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    .paperdoll-figure-box {
-      position: relative;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(circle at 50% 45%, rgba(201, 162, 39, 0.12), #090b08 75%);
-      border: 1px solid var(--border-gold);
-      border-radius: 5px;
-      padding: 4px;
-      overflow: hidden;
-      min-width: 0;
     }
     .paperdoll-figure-box img {
       width: 100%;
