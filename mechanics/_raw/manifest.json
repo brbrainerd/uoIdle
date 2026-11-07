@@ -1,7 +1,92 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T03:27:00Z",
+  "updatedAt": "2026-11-07T03:37:41Z",
   "bundleVersion": "0.99.0",
   "modernuoCommit": "b0e6b17c5cba3a6944ca25a9676dcdec0022ac38",
-  "entries": {}
+  "entries": {
+    "bundle/abilities-catalog.json": {
+      "sha256": "17f9ce60a11b29d0a75ffc6738503a54b67f18f40a6522c42d2e14bbe14f8a36",
+      "lines": 1761,
+      "category": "skills",
+      "source": "https://cdn.uoidle.com/packs/idle/abilities.json?v=0.99.0"
+    },
+    "bundle/abilities-loader-and-hotbar.js": {
+      "sha256": "764da4d769732ebede3c83542ee4c691938a6b26f0ab93d4fb6e623cc569d5ff",
+      "lines": 1424,
+      "category": "skills",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L8192-L9611"
+    },
+    "bundle/ability-icons-atlas.json": {
+      "sha256": "a305a907412851dd4158f1100cf00cbcb8ddd5aba8c708e6600a0be00e477eab",
+      "lines": 1827,
+      "category": "engine-ui",
+      "source": "https://cdn.uoidle.com/packs/ability-icons/ability-icons.json?v=9"
+    },
+    "bundle/bestiary-and-wiki.js": {
+      "sha256": "9e0bd61b8381bf385f2438c23061f7f867d8eeccb5ab63ea0b3dbced95a3f5e7",
+      "lines": 1100,
+      "category": "dungeons-monsters",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L29306-L30106,L55132-L55425"
+    },
+    "bundle/character-bonus-and-status.js": {
+      "sha256": "e021b973248cf14ec3ce86d6505fd1db5fc76e4fd6c2c8af9deabd276d40316b",
+      "lines": 514,
+      "category": "status-effects",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L13294-L13803"
+    },
+    "bundle/classes-config.js": {
+      "sha256": "c8c43c0a4bc039d984c37ab6f5a72a499baa80e4f4127a2115cae8604fe47b17",
+      "lines": 246,
+      "category": "classes",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L2538-L2779"
+    },
+    "bundle/combat-estimators-and-hotbar.js": {
+      "sha256": "72335cf249d9d3d7948e469801608259aba5a4efb988aab6c78366f44de2f7fa",
+      "lines": 541,
+      "category": "combat",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L55437-L55973"
+    },
+    "bundle/game-theme.css": {
+      "sha256": "cac087da8a24d483076664edff5d6660756ea4cacbafc1843f047859494397e8",
+      "lines": 496,
+      "category": "engine-ui",
+      "source": "https://uoidle.com/assets/Jogo-CVXGOt-C.css"
+    },
+    "bundle/hunt-and-bot-config.js": {
+      "sha256": "e8589cba6e0ee5f509279a9f0be76dd833f48a84d0b20f938c85f8b2e71494ae",
+      "lines": 829,
+      "category": "combat",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L31584-L32408"
+    },
+    "bundle/i18n-en-abilities.js": {
+      "sha256": "a09ae695627130f5f74e1371a8cd73b9f6257f4f0e8b208e1306607e9b3d823a",
+      "lines": 3975,
+      "category": "skills",
+      "source": "https://uoidle.com/assets/index-CCYN0Dy6.js#L12729-L12775,L16161-L20082"
+    },
+    "bundle/i18n-pt-abilities.js": {
+      "sha256": "0c46e159d70531836409c0bc4b92511bb785bbd27244d46e85fc24ed3fb28089",
+      "lines": 3966,
+      "category": "skills",
+      "source": "https://uoidle.com/assets/index-CCYN0Dy6.js#L40671-L44631"
+    },
+    "bundle/paperdoll-and-items.js": {
+      "sha256": "c410ca20c4a06688d9c45c01633cb1e1d7d282e5a89b8a722394d31d0024c080",
+      "lines": 3458,
+      "category": "items-equipment",
+      "source": "https://uoidle.com/assets/bonecoVivo-DY66RLNm.js#L40957-L44410"
+    },
+    "bundle/progression-tree-ui.js": {
+      "sha256": "0a13873e0f8c90f0db913029bc52de9ecebedb313155308c15107e4004facc67",
+      "lines": 672,
+      "category": "progression",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L17227-L17894"
+    },
+    "bundle/skills-and-progression.js": {
+      "sha256": "ba36cc4111594c32d6cc3b8d4674941e7ef60065a3b8d32a706fd22e237163af",
+      "lines": 488,
+      "category": "progression",
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L7604-L8087"
+    }
+  }
 }

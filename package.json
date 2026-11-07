@@ -1,0 +1,19 @@
+{
+  "name": "uo-idle-kb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "extract:bundle": "node tools/bundle_extract.mjs",
+    "verify:bundle": "node tools/bundle_extract.mjs --verify"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "acorn": "^8.19.0",
+    "acorn-walk": "^8.3.5",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.0",
+    "zod": "^3.24.0"
+  }
+}

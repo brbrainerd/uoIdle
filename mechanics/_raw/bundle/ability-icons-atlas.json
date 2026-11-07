@@ -1,0 +1,1827 @@
+{
+  "version": 7,
+  "sourceGump": "C:\\Program Files (x86)\\UOForever\\UO\\gumpartLegacyMUL.uop",
+  "sourceForIdle": "E:\\UO-Idle\\client\\cliente-idle\\public\\packs\\ability-icons\\_for-idle",
+  "image": "ability-icons.png",
+  "imageWidth": 506,
+  "imageHeight": 506,
+  "cellW": 46,
+  "cellH": 46,
+  "preferredStyle": "color",
+  "frames": [
+    {
+      "key": "gump_2244",
+      "gumpId": 2244,
+      "width": 44,
+      "height": 44,
+      "x": 1,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2251",
+      "gumpId": 2251,
+      "width": 44,
+      "height": 44,
+      "x": 47,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2257",
+      "gumpId": 2257,
+      "width": 44,
+      "height": 44,
+      "x": 93,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2243",
+      "gumpId": 2243,
+      "width": 44,
+      "height": 44,
+      "x": 139,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2268",
+      "gumpId": 2268,
+      "width": 44,
+      "height": 44,
+      "x": 185,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2250",
+      "gumpId": 2250,
+      "width": 44,
+      "height": 44,
+      "x": 231,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2269",
+      "gumpId": 2269,
+      "width": 44,
+      "height": 44,
+      "x": 277,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2281",
+      "gumpId": 2281,
+      "width": 44,
+      "height": 44,
+      "x": 323,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2282",
+      "gumpId": 2282,
+      "width": 44,
+      "height": 44,
+      "x": 369,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2290",
+      "gumpId": 2290,
+      "width": 44,
+      "height": 44,
+      "x": 415,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_2264",
+      "gumpId": 2264,
+      "width": 44,
+      "height": 44,
+      "x": 461,
+      "y": 1,
+      "source": "forever",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_20481",
+      "gumpId": 20481,
+      "width": 42,
+      "height": 43,
+      "x": 1,
+      "y": 47,
+      "source": "for-idle:necromancy",
+      "sourceFile": "_for-idle\\books\\icons-necro-1\\icons-necro-1_01_r1c1.png"
+    },
+    {
+      "key": "gump_20488",
+      "gumpId": 20488,
+      "width": 44,
+      "height": 42,
+      "x": 47,
+      "y": 47,
+      "source": "for-idle:necromancy",
+      "sourceFile": "_for-idle\\books\\icons-necro-1\\icons-necro-1_02_r1c2.png"
+    },
+    {
+      "key": "gump_20489",
+      "gumpId": 20489,
+      "width": 41,
+      "height": 43,
+      "x": 93,
+      "y": 47,
+      "source": "for-idle:necromancy",
+      "sourceFile": "_for-idle\\books\\icons-necro-1\\icons-necro-1_03_r1c3.png"
+    },
+    {
+      "key": "gump_20494",
+      "gumpId": 20494,
+      "width": 42,
+      "height": 43,
+      "x": 139,
+      "y": 47,
+      "source": "for-idle:necromancy",
+      "sourceFile": "_for-idle\\books\\icons-necro-1\\icons-necro-1_04_r1c4.png"
+    },
+    {
+      "key": "gump_20737",
+      "gumpId": 20737,
+      "width": 43,
+      "height": 43,
+      "x": 185,
+      "y": 47,
+      "source": "for-idle:chivalry",
+      "sourceFile": "_for-idle\\books\\icons-chivalry\\icons-chivalry_01_r1c1.png"
+    },
+    {
+      "key": "gump_20738",
+      "gumpId": 20738,
+      "width": 42,
+      "height": 43,
+      "x": 231,
+      "y": 47,
+      "source": "for-idle:chivalry",
+      "sourceFile": "_for-idle\\books\\icons-chivalry\\icons-chivalry_02_r1c2.png"
+    },
+    {
+      "key": "gump_20740",
+      "gumpId": 20740,
+      "width": 41,
+      "height": 43,
+      "x": 277,
+      "y": 47,
+      "source": "for-idle:chivalry",
+      "sourceFile": "_for-idle\\books\\icons-chivalry\\icons-chivalry_03_r1c3.png"
+    },
+    {
+      "key": "gump_20742",
+      "gumpId": 20742,
+      "width": 42,
+      "height": 43,
+      "x": 323,
+      "y": 47,
+      "source": "for-idle:chivalry",
+      "sourceFile": "_for-idle\\books\\icons-chivalry\\icons-chivalry_04_r1c4.png"
+    },
+    {
+      "key": "gump_20743",
+      "gumpId": 20743,
+      "width": 42,
+      "height": 43,
+      "x": 369,
+      "y": 47,
+      "source": "for-idle:chivalry",
+      "sourceFile": "_for-idle\\books\\icons-chivalry\\icons-chivalry_05_r1c5.png"
+    },
+    {
+      "key": "gump_21280",
+      "gumpId": 21280,
+      "width": 39,
+      "height": 36,
+      "x": 415,
+      "y": 47,
+      "source": "for-idle:ninjitsu",
+      "sourceFile": "_for-idle\\books\\icons-ninjitsu-1\\icons-ninjitsu-1_01_r1c1.png"
+    },
+    {
+      "key": "gump_21281",
+      "gumpId": 21281,
+      "width": 39,
+      "height": 36,
+      "x": 461,
+      "y": 47,
+      "source": "for-idle:ninjitsu",
+      "sourceFile": "_for-idle\\books\\icons-ninjitsu-1\\icons-ninjitsu-1_02_r1c2.png"
+    },
+    {
+      "key": "gump_21286",
+      "gumpId": 21286,
+      "width": 39,
+      "height": 36,
+      "x": 1,
+      "y": 93,
+      "source": "for-idle:ninjitsu",
+      "sourceFile": "_for-idle\\books\\icons-ninjitsu-1\\icons-ninjitsu-1_03_r1c3.png"
+    },
+    {
+      "key": "gump_21287",
+      "gumpId": 21287,
+      "width": 39,
+      "height": 36,
+      "x": 47,
+      "y": 93,
+      "source": "for-idle:ninjitsu",
+      "sourceFile": "_for-idle\\books\\icons-ninjitsu-1\\icons-ninjitsu-1_04_r1c4.png"
+    },
+    {
+      "key": "gump_21536",
+      "gumpId": 21536,
+      "width": 43,
+      "height": 44,
+      "x": 93,
+      "y": 93,
+      "source": "for-idle:bushido",
+      "sourceFile": "_for-idle\\books\\icons-bushido\\icons-bushido_01_r1c1.png"
+    },
+    {
+      "key": "gump_21539",
+      "gumpId": 21539,
+      "width": 43,
+      "height": 44,
+      "x": 139,
+      "y": 93,
+      "source": "for-idle:bushido",
+      "sourceFile": "_for-idle\\books\\icons-bushido\\icons-bushido_02_r1c2.png"
+    },
+    {
+      "key": "gump_21540",
+      "gumpId": 21540,
+      "width": 41,
+      "height": 44,
+      "x": 185,
+      "y": 93,
+      "source": "for-idle:bushido",
+      "sourceFile": "_for-idle\\books\\icons-bushido\\icons-bushido_03_r1c3.png"
+    },
+    {
+      "key": "gump_23000",
+      "gumpId": 23000,
+      "width": 37,
+      "height": 38,
+      "x": 231,
+      "y": 93,
+      "source": "for-idle:spellweaving",
+      "sourceFile": "_for-idle\\books\\icons-spellweaving\\icons-spellweaving_01_r1c1.png"
+    },
+    {
+      "key": "gump_23001",
+      "gumpId": 23001,
+      "width": 37,
+      "height": 38,
+      "x": 277,
+      "y": 93,
+      "source": "for-idle:spellweaving",
+      "sourceFile": "_for-idle\\books\\icons-spellweaving\\icons-spellweaving_02_r1c2.png"
+    },
+    {
+      "key": "gump_23004",
+      "gumpId": 23004,
+      "width": 37,
+      "height": 38,
+      "x": 323,
+      "y": 93,
+      "source": "for-idle:spellweaving",
+      "sourceFile": "_for-idle\\books\\icons-spellweaving\\icons-spellweaving_03_r1c3.png"
+    },
+    {
+      "key": "gump_23013",
+      "gumpId": 23013,
+      "width": 40,
+      "height": 38,
+      "x": 369,
+      "y": 93,
+      "source": "for-idle:spellweaving",
+      "sourceFile": "_for-idle\\books\\icons-spellweaving\\icons-spellweaving_04_r1c4.png"
+    },
+    {
+      "key": "gump_24005",
+      "gumpId": 24005,
+      "width": 43,
+      "height": 40,
+      "x": 415,
+      "y": 93,
+      "source": "for-idle:mysticism",
+      "sourceFile": "_for-idle\\books\\icons-mysticism\\icons-mysticism_01_r1c1.png"
+    },
+    {
+      "key": "gump_24010",
+      "gumpId": 24010,
+      "width": 43,
+      "height": 43,
+      "x": 461,
+      "y": 93,
+      "source": "for-idle:mysticism",
+      "sourceFile": "_for-idle\\books\\icons-mysticism\\icons-mysticism_02_r1c2.png"
+    },
+    {
+      "key": "gump_24011",
+      "gumpId": 24011,
+      "width": 43,
+      "height": 43,
+      "x": 1,
+      "y": 139,
+      "source": "for-idle:mysticism",
+      "sourceFile": "_for-idle\\books\\icons-mysticism\\icons-mysticism_03_r1c3.png"
+    },
+    {
+      "key": "gump_24012",
+      "gumpId": 24012,
+      "width": 42,
+      "height": 43,
+      "x": 47,
+      "y": 139,
+      "source": "for-idle:mysticism",
+      "sourceFile": "_for-idle\\books\\icons-mysticism\\icons-mysticism_04_r1c4.png"
+    },
+    {
+      "key": "gump_24013",
+      "gumpId": 24013,
+      "width": 44,
+      "height": 43,
+      "x": 93,
+      "y": 139,
+      "source": "for-idle:mysticism",
+      "sourceFile": "_for-idle\\books\\icons-mysticism\\icons-mysticism_05_r1c5.png"
+    },
+    {
+      "key": "gump_20992",
+      "gumpId": 20992,
+      "width": 37,
+      "height": 39,
+      "x": 139,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_01_r1c1.png"
+    },
+    {
+      "key": "gump_20993",
+      "gumpId": 20993,
+      "width": 44,
+      "height": 30,
+      "x": 185,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_02_r1c2.png"
+    },
+    {
+      "key": "gump_20994",
+      "gumpId": 20994,
+      "width": 36,
+      "height": 39,
+      "x": 231,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_03_r1c3.png"
+    },
+    {
+      "key": "gump_20995",
+      "gumpId": 20995,
+      "width": 37,
+      "height": 39,
+      "x": 277,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_04_r1c4.png"
+    },
+    {
+      "key": "gump_20996",
+      "gumpId": 20996,
+      "width": 36,
+      "height": 38,
+      "x": 323,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_05_r1c5.png"
+    },
+    {
+      "key": "gump_20997",
+      "gumpId": 20997,
+      "width": 43,
+      "height": 39,
+      "x": 369,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_06_r1c6.png"
+    },
+    {
+      "key": "gump_20998",
+      "gumpId": 20998,
+      "width": 37,
+      "height": 39,
+      "x": 415,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_07_r1c7.png"
+    },
+    {
+      "key": "gump_20999",
+      "gumpId": 20999,
+      "width": 40,
+      "height": 39,
+      "x": 461,
+      "y": 139,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_08_r1c8.png"
+    },
+    {
+      "key": "gump_21000",
+      "gumpId": 21000,
+      "width": 36,
+      "height": 39,
+      "x": 1,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_09_r2c1.png"
+    },
+    {
+      "key": "gump_21001",
+      "gumpId": 21001,
+      "width": 44,
+      "height": 30,
+      "x": 47,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_10_r2c2.png"
+    },
+    {
+      "key": "gump_21002",
+      "gumpId": 21002,
+      "width": 37,
+      "height": 39,
+      "x": 93,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_11_r2c3.png"
+    },
+    {
+      "key": "gump_21003",
+      "gumpId": 21003,
+      "width": 39,
+      "height": 39,
+      "x": 139,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_12_r2c4.png"
+    },
+    {
+      "key": "gump_21004",
+      "gumpId": 21004,
+      "width": 38,
+      "height": 39,
+      "x": 185,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_13_r2c5.png"
+    },
+    {
+      "key": "gump_21005",
+      "gumpId": 21005,
+      "width": 40,
+      "height": 39,
+      "x": 231,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_14_r2c6.png"
+    },
+    {
+      "key": "gump_21006",
+      "gumpId": 21006,
+      "width": 38,
+      "height": 39,
+      "x": 277,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_15_r2c7.png"
+    },
+    {
+      "key": "gump_21007",
+      "gumpId": 21007,
+      "width": 40,
+      "height": 39,
+      "x": 323,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_16_r2c8.png"
+    },
+    {
+      "key": "gump_21008",
+      "gumpId": 21008,
+      "width": 36,
+      "height": 39,
+      "x": 369,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_17_r3c1.png"
+    },
+    {
+      "key": "gump_21009",
+      "gumpId": 21009,
+      "width": 44,
+      "height": 30,
+      "x": 415,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_18_r3c2.png"
+    },
+    {
+      "key": "gump_21010",
+      "gumpId": 21010,
+      "width": 37,
+      "height": 39,
+      "x": 461,
+      "y": 185,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_19_r3c3.png"
+    },
+    {
+      "key": "gump_21011",
+      "gumpId": 21011,
+      "width": 39,
+      "height": 39,
+      "x": 1,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_20_r3c4.png"
+    },
+    {
+      "key": "gump_21012",
+      "gumpId": 21012,
+      "width": 38,
+      "height": 39,
+      "x": 47,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_21_r3c5.png"
+    },
+    {
+      "key": "gump_21013",
+      "gumpId": 21013,
+      "width": 39,
+      "height": 39,
+      "x": 93,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_22_r3c6.png"
+    },
+    {
+      "key": "gump_21014",
+      "gumpId": 21014,
+      "width": 38,
+      "height": 39,
+      "x": 139,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_23_r3c7.png"
+    },
+    {
+      "key": "gump_21015",
+      "gumpId": 21015,
+      "width": 40,
+      "height": 39,
+      "x": 185,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_24_r3c8.png"
+    },
+    {
+      "key": "gump_21016",
+      "gumpId": 21016,
+      "width": 36,
+      "height": 40,
+      "x": 231,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_25_r4c1.png"
+    },
+    {
+      "key": "gump_21017",
+      "gumpId": 21017,
+      "width": 44,
+      "height": 31,
+      "x": 277,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_26_r4c2.png"
+    },
+    {
+      "key": "gump_21018",
+      "gumpId": 21018,
+      "width": 37,
+      "height": 40,
+      "x": 323,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_27_r4c3.png"
+    },
+    {
+      "key": "gump_21019",
+      "gumpId": 21019,
+      "width": 39,
+      "height": 40,
+      "x": 369,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_28_r4c4.png"
+    },
+    {
+      "key": "gump_21020",
+      "gumpId": 21020,
+      "width": 38,
+      "height": 40,
+      "x": 415,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_29_r4c5.png"
+    },
+    {
+      "key": "gump_21021",
+      "gumpId": 21021,
+      "width": 40,
+      "height": 40,
+      "x": 461,
+      "y": 231,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_30_r4c6.png"
+    },
+    {
+      "key": "gump_21022",
+      "gumpId": 21022,
+      "width": 38,
+      "height": 40,
+      "x": 1,
+      "y": 277,
+      "source": "for-idle:weapon_ability",
+      "sourceFile": "_for-idle\\books\\icons-weapon-abilities\\icons-weapon-abilities_31_r4c7.png"
+    },
+    {
+      "key": "idle_warrior_shield_bash",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 47,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_01_r1c1.png"
+    },
+    {
+      "key": "idle_warrior_armor_break",
+      "gumpId": null,
+      "width": 44,
+      "height": 43,
+      "x": 93,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_02_r1c2.png"
+    },
+    {
+      "key": "idle_warrior_brace",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 139,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_03_r1c3.png"
+    },
+    {
+      "key": "idle_warrior_riposte",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 185,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_04_r1c4.png"
+    },
+    {
+      "key": "idle_warrior_execution",
+      "gumpId": null,
+      "width": 43,
+      "height": 44,
+      "x": 231,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_05_r1c5.png"
+    },
+    {
+      "key": "idle_warrior_cleave",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 277,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_06_r1c6.png"
+    },
+    {
+      "key": "idle_warrior_bulwark",
+      "gumpId": null,
+      "width": 43,
+      "height": 44,
+      "x": 323,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_07_r1c7.png"
+    },
+    {
+      "key": "idle_warrior_shatter",
+      "gumpId": null,
+      "width": 43,
+      "height": 44,
+      "x": 369,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_08_r1c8.png"
+    },
+    {
+      "key": "idle_warrior_sidestep",
+      "gumpId": null,
+      "width": 36,
+      "height": 44,
+      "x": 415,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_09_r2c1.png"
+    },
+    {
+      "key": "idle_warrior_guard_captain",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 461,
+      "y": 277,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_10_r2c2.png"
+    },
+    {
+      "key": "idle_warrior_shield_wall",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 1,
+      "y": 323,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_01_r1c1.png"
+    },
+    {
+      "key": "idle_warrior_earthshaker",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 47,
+      "y": 323,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_11_r2c3.png"
+    },
+    {
+      "key": "idle_warrior_capstone",
+      "gumpId": null,
+      "width": 44,
+      "height": 39,
+      "x": 93,
+      "y": 323,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_12_r2c4.png"
+    },
+    {
+      "key": "idle_berserker_cleave",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 139,
+      "y": 323,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_13_r2c5.png"
+    },
+    {
+      "key": "idle_berserker_bloodrage",
+      "gumpId": null,
+      "width": 42,
+      "height": 44,
+      "x": 185,
+      "y": 323,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_15_r3c3.png"
+    },
+    {
+      "key": "idle_berserker_frenzy",
+      "gumpId": null,
+      "width": 44,
+      "height": 43,
+      "x": 231,
+      "y": 323,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_21_r4c3.png"
+    },
+    {
+      "key": "idle_berserker_berserk",
+      "gumpId": null,
+      "width": 43,
+      "height": 44,
+      "x": 277,
+      "y": 323,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_16_r3c4.png"
+    },
+    {
+      "key": "idle_duelist_net",
+      "gumpId": null,
+      "width": 44,
+      "height": 42,
+      "x": 323,
+      "y": 323,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_14_r2c6.png"
+    },
+    {
+      "key": "idle_duelist_crowd",
+      "gumpId": null,
+      "width": 44,
+      "height": 42,
+      "x": 369,
+      "y": 323,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_19_r4c1.png"
+    },
+    {
+      "key": "idle_duelist_roar",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 415,
+      "y": 323,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_14_r3c2.png"
+    },
+    {
+      "key": "idle_ranger_bolt_volley",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 461,
+      "y": 323,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_17_r3c1.png"
+    },
+    {
+      "key": "idle_ranger_multishot",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 1,
+      "y": 369,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_34_r5c2.png"
+    },
+    {
+      "key": "idle_ranger_deadeye",
+      "gumpId": null,
+      "width": 44,
+      "height": 43,
+      "x": 47,
+      "y": 369,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_18_r3c2.png"
+    },
+    {
+      "key": "idle_assassin_eviscerate",
+      "gumpId": null,
+      "width": 42,
+      "height": 44,
+      "x": 93,
+      "y": 369,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_21_r3c5.png"
+    },
+    {
+      "key": "idle_assassin_shadow",
+      "gumpId": null,
+      "width": 43,
+      "height": 44,
+      "x": 139,
+      "y": 369,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_22_r3c6.png"
+    },
+    {
+      "key": "idle_monk_flurry",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 185,
+      "y": 369,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_23_r3c7.png"
+    },
+    {
+      "key": "idle_monk_ki_recovery",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 231,
+      "y": 369,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_24_r3c8.png"
+    },
+    {
+      "key": "idle_monk_stun",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 277,
+      "y": 369,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_25_r4c1.png"
+    },
+    {
+      "key": "idle_samurai_way",
+      "gumpId": null,
+      "width": 44,
+      "height": 42,
+      "x": 323,
+      "y": 369,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_29_r5c5.png"
+    },
+    {
+      "key": "idle_bard_discord",
+      "gumpId": null,
+      "width": 30,
+      "height": 44,
+      "x": 369,
+      "y": 369,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_32_r6c2.png"
+    },
+    {
+      "key": "idle_bard_peace",
+      "gumpId": null,
+      "width": 30,
+      "height": 44,
+      "x": 415,
+      "y": 369,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_31_r6c1.png"
+    },
+    {
+      "key": "idle_bard_provoke",
+      "gumpId": null,
+      "width": 44,
+      "height": 42,
+      "x": 461,
+      "y": 369,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_30_r5c6.png"
+    },
+    {
+      "key": "idle_bard_fire_horn",
+      "gumpId": null,
+      "width": 30,
+      "height": 44,
+      "x": 1,
+      "y": 415,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-2\\icons-custom-2_33_r6c3.png"
+    },
+    {
+      "key": "idle_tamer_call",
+      "gumpId": null,
+      "width": 43,
+      "height": 44,
+      "x": 47,
+      "y": 415,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_26_r4c2.png"
+    },
+    {
+      "key": "idle_tamer_vet",
+      "gumpId": null,
+      "width": 44,
+      "height": 43,
+      "x": 93,
+      "y": 415,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_27_r4c3.png"
+    },
+    {
+      "key": "idle_tamer_recall",
+      "gumpId": null,
+      "width": 44,
+      "height": 43,
+      "x": 139,
+      "y": 415,
+      "source": "for-idle:customs",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_28_r4c4.png"
+    },
+    {
+      "key": "idle_warrior_provoke",
+      "gumpId": null,
+      "width": 44,
+      "height": 44,
+      "x": 185,
+      "y": 415,
+      "source": "override",
+      "sourceFile": "_for-idle\\customs\\icons-custom-1\\icons-custom-1_31_r4c7.png"
+    },
+    {
+      "key": "gump_20480",
+      "gumpId": 20480,
+      "width": 44,
+      "height": 44,
+      "x": 1,
+      "y": 460,
+      "source": "forever-append",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_20486",
+      "gumpId": 20486,
+      "width": 44,
+      "height": 44,
+      "x": 46,
+      "y": 460,
+      "source": "forever-append",
+      "sourceFile": null
+    },
+    {
+      "key": "gump_20490",
+      "gumpId": 20490,
+      "width": 44,
+      "height": 44,
+      "x": 91,
+      "y": 460,
+      "source": "forever-append",
+      "sourceFile": null
+    }
+  ],
+  "byAbility": {
+    "warrior_shield_bash": "idle_warrior_shield_bash",
+    "warrior_armor_break": "idle_warrior_armor_break",
+    "warrior_brace": "idle_warrior_brace",
+    "warrior_riposte": "idle_warrior_riposte",
+    "warrior_execution": "idle_warrior_execution",
+    "warrior_cleave": "idle_warrior_cleave",
+    "warrior_bulwark": "idle_warrior_bulwark",
+    "warrior_shatter": "idle_warrior_shatter",
+    "warrior_sidestep": "idle_warrior_sidestep",
+    "warrior_guard_captain": "idle_warrior_guard_captain",
+    "warrior_shield_wall": "idle_warrior_shield_wall",
+    "warrior_earthshaker": "idle_warrior_earthshaker",
+    "warrior_capstone": "idle_warrior_capstone",
+    "berserker_cleave": "idle_berserker_cleave",
+    "berserker_bloodrage": "idle_berserker_bloodrage",
+    "berserker_frenzy": "idle_berserker_frenzy",
+    "berserker_berserk": "idle_berserker_berserk",
+    "warrior_cleave_r2": "idle_warrior_cleave",
+    "berserker_berserk_r2": "idle_berserker_berserk",
+    "duelist_net": "idle_duelist_net",
+    "duelist_crowd": "idle_duelist_crowd",
+    "duelist_roar": "idle_duelist_roar",
+    "duelist_roar_r2": "idle_duelist_roar",
+    "ranger_bolt_volley": "idle_ranger_bolt_volley",
+    "ranger_multishot": "idle_ranger_multishot",
+    "ranger_deadeye": "idle_ranger_deadeye",
+    "ranger_multishot_r2": "idle_ranger_multishot",
+    "ranger_deadeye_r2": "idle_ranger_deadeye",
+    "assassin_eviscerate": "idle_assassin_eviscerate",
+    "assassin_shadow": "idle_assassin_shadow",
+    "assassin_eviscerate_r2": "idle_assassin_eviscerate",
+    "assassin_shadow_r2": "idle_assassin_shadow",
+    "monk_flurry": "idle_monk_flurry",
+    "monk_ki_recovery": "idle_monk_ki_recovery",
+    "monk_stun": "idle_monk_stun",
+    "monk_flurry_r2": "idle_monk_flurry",
+    "monk_ki_recovery_r2": "idle_monk_ki_recovery",
+    "samurai_way": "idle_samurai_way",
+    "bard_discord": "idle_bard_discord",
+    "bard_peace": "idle_bard_peace",
+    "bard_provoke": "idle_bard_provoke",
+    "bard_fire_horn": "idle_bard_fire_horn",
+    "bard_fire_horn_r2": "idle_bard_fire_horn",
+    "tamer_call": "idle_tamer_call",
+    "tamer_vet": "idle_tamer_vet",
+    "tamer_recall": "idle_tamer_recall",
+    "tamer_call_r2": "idle_tamer_call",
+    "warrior_provoke": "idle_warrior_provoke",
+    "warrior_slash": "gump_20992",
+    "warrior_heavy_strike": "gump_20995",
+    "warrior_disarm": "gump_20996",
+    "warrior_whirlwind": "gump_21004",
+    "warrior_crushing_blow": "gump_20995",
+    "warrior_blade_storm_r2": "gump_21004",
+    "duelist_piercing": "gump_20992",
+    "duelist_piercing_r2": "gump_20992",
+    "ranger_arrow": "gump_21013",
+    "ranger_rapid_shot": "gump_21013",
+    "ranger_aimed_shot": "gump_21002",
+    "ranger_piercing": "gump_20992",
+    "ranger_moving_shot": "gump_21001",
+    "ranger_double_shot_r2": "gump_21013",
+    "mage_magic_arrow": "gump_2244",
+    "mage_harm": "gump_2251",
+    "mage_fireball": "gump_2257",
+    "mage_heal": "gump_2243",
+    "mage_greater_heal": "gump_2268",
+    "mage_cure": "gump_2250",
+    "mage_lightning": "gump_2269",
+    "mage_energy_bolt": "gump_2281",
+    "mage_explosion": "gump_2282",
+    "mage_flamestrike": "gump_2290",
+    "mage_arch_cure": "gump_2264",
+    "mage_flamestrike_r2": "gump_2290",
+    "mage_energy_bolt_r2": "gump_2281",
+    "necro_magery_heal": "gump_2243",
+    "necro_magery_gh": "gump_2268",
+    "necro_magery_cure": "gump_2250",
+    "necro_pain_spike": "gump_20488",
+    "necro_blood_oath": "gump_20481",
+    "necro_poison_strike": "gump_20489",
+    "necro_wither": "gump_20494",
+    "necro_poison_strike_r2": "gump_20489",
+    "necro_wither_r2": "gump_20494",
+    "mystic_magery_heal": "gump_2243",
+    "mystic_magery_gh": "gump_2268",
+    "mystic_eagle": "gump_24005",
+    "mystic_cleansing": "gump_24010",
+    "mystic_bombard": "gump_24011",
+    "mystic_plague": "gump_24012",
+    "mystic_hail": "gump_24013",
+    "mystic_hail_r2": "gump_24013",
+    "sw_magery_heal": "gump_2243",
+    "sw_magery_gh": "gump_2268",
+    "sw_thunderstorm": "gump_23004",
+    "sw_renewal": "gump_23001",
+    "sw_circle": "gump_23000",
+    "sw_wildfire": "gump_23013",
+    "sw_renewal_r2": "gump_23001",
+    "sw_thunderstorm_r2": "gump_23004",
+    "paladin_close_wounds": "gump_20737",
+    "paladin_consecrate": "gump_20738",
+    "paladin_divine_fury": "gump_20740",
+    "paladin_holy_light": "gump_20742",
+    "paladin_noble": "gump_20743",
+    "paladin_close_wounds_r2": "gump_20737",
+    "paladin_noble_r2": "gump_20743",
+    "assassin_poison": "gump_20999",
+    "assassin_backstab": "gump_21003",
+    "ninja_focus": "gump_21280",
+    "ninja_death": "gump_21281",
+    "ninja_mirror": "gump_21287",
+    "ninja_shadowjump": "gump_21286",
+    "ninja_death_r2": "gump_21281",
+    "ninja_mirror_r2": "gump_21287",
+    "monk_palm": "gump_20998",
+    "samurai_lightning": "gump_21540",
+    "samurai_counter": "gump_21539",
+    "samurai_honorable": "gump_21536",
+    "samurai_honorable_r2": "gump_21536",
+    "samurai_lightning_r2": "gump_21540",
+    "mage_chain_lightning": "gump_2281",
+    "mage_fire_elemental": "gump_2290",
+    "mage_air_elemental": "gump_2269",
+    "cleric_bless": "gump_2268",
+    "cleric_gift": "gump_23001",
+    "cleric_arch_protection": "gump_2264",
+    "cleric_thunderstorm": "gump_23004",
+    "cleric_cleanse": "gump_2250",
+    "necro_strangle": "gump_20490",
+    "necro_animate_dead": "gump_20480",
+    "necro_lich_form": "gump_20486"
+  },
+  "byGump": {
+    "2243": "gump_2243",
+    "2244": "gump_2244",
+    "2250": "gump_2250",
+    "2251": "gump_2251",
+    "2257": "gump_2257",
+    "2264": "gump_2264",
+    "2268": "gump_2268",
+    "2269": "gump_2269",
+    "2281": "gump_2281",
+    "2282": "gump_2282",
+    "2290": "gump_2290",
+    "20480": "gump_20480",
+    "20481": "gump_20481",
+    "20486": "gump_20486",
+    "20488": "gump_20488",
+    "20489": "gump_20489",
+    "20490": "gump_20490",
+    "20494": "gump_20494",
+    "20737": "gump_20737",
+    "20738": "gump_20738",
+    "20740": "gump_20740",
+    "20742": "gump_20742",
+    "20743": "gump_20743",
+    "20992": "gump_20992",
+    "20993": "gump_20993",
+    "20994": "gump_20994",
+    "20995": "gump_20995",
+    "20996": "gump_20996",
+    "20997": "gump_20997",
+    "20998": "gump_20998",
+    "20999": "gump_20999",
+    "21000": "gump_21000",
+    "21001": "gump_21001",
+    "21002": "gump_21002",
+    "21003": "gump_21003",
+    "21004": "gump_21004",
+    "21005": "gump_21005",
+    "21006": "gump_21006",
+    "21007": "gump_21007",
+    "21008": "gump_21008",
+    "21009": "gump_21009",
+    "21010": "gump_21010",
+    "21011": "gump_21011",
+    "21012": "gump_21012",
+    "21013": "gump_21013",
+    "21014": "gump_21014",
+    "21015": "gump_21015",
+    "21016": "gump_21016",
+    "21017": "gump_21017",
+    "21018": "gump_21018",
+    "21019": "gump_21019",
+    "21020": "gump_21020",
+    "21021": "gump_21021",
+    "21022": "gump_21022",
+    "21280": "gump_21280",
+    "21281": "gump_21281",
+    "21286": "gump_21286",
+    "21287": "gump_21287",
+    "21536": "gump_21536",
+    "21539": "gump_21539",
+    "21540": "gump_21540",
+    "23000": "gump_23000",
+    "23001": "gump_23001",
+    "23004": "gump_23004",
+    "23013": "gump_23013",
+    "24005": "gump_24005",
+    "24010": "gump_24010",
+    "24011": "gump_24011",
+    "24012": "gump_24012",
+    "24013": "gump_24013"
+  },
+  "bookAssignments": [
+    {
+      "gumpId": 20481,
+      "book": "necromancy",
+      "file": "icons-necro-1_01_r1c1.png",
+      "key": "gump_20481"
+    },
+    {
+      "gumpId": 20488,
+      "book": "necromancy",
+      "file": "icons-necro-1_02_r1c2.png",
+      "key": "gump_20488"
+    },
+    {
+      "gumpId": 20489,
+      "book": "necromancy",
+      "file": "icons-necro-1_03_r1c3.png",
+      "key": "gump_20489"
+    },
+    {
+      "gumpId": 20494,
+      "book": "necromancy",
+      "file": "icons-necro-1_04_r1c4.png",
+      "key": "gump_20494"
+    },
+    {
+      "gumpId": 20737,
+      "book": "chivalry",
+      "file": "icons-chivalry_01_r1c1.png",
+      "key": "gump_20737"
+    },
+    {
+      "gumpId": 20738,
+      "book": "chivalry",
+      "file": "icons-chivalry_02_r1c2.png",
+      "key": "gump_20738"
+    },
+    {
+      "gumpId": 20740,
+      "book": "chivalry",
+      "file": "icons-chivalry_03_r1c3.png",
+      "key": "gump_20740"
+    },
+    {
+      "gumpId": 20742,
+      "book": "chivalry",
+      "file": "icons-chivalry_04_r1c4.png",
+      "key": "gump_20742"
+    },
+    {
+      "gumpId": 20743,
+      "book": "chivalry",
+      "file": "icons-chivalry_05_r1c5.png",
+      "key": "gump_20743"
+    },
+    {
+      "gumpId": 21280,
+      "book": "ninjitsu",
+      "file": "icons-ninjitsu-1_01_r1c1.png",
+      "key": "gump_21280"
+    },
+    {
+      "gumpId": 21281,
+      "book": "ninjitsu",
+      "file": "icons-ninjitsu-1_02_r1c2.png",
+      "key": "gump_21281"
+    },
+    {
+      "gumpId": 21286,
+      "book": "ninjitsu",
+      "file": "icons-ninjitsu-1_03_r1c3.png",
+      "key": "gump_21286"
+    },
+    {
+      "gumpId": 21287,
+      "book": "ninjitsu",
+      "file": "icons-ninjitsu-1_04_r1c4.png",
+      "key": "gump_21287"
+    },
+    {
+      "gumpId": 21536,
+      "book": "bushido",
+      "file": "icons-bushido_01_r1c1.png",
+      "key": "gump_21536"
+    },
+    {
+      "gumpId": 21539,
+      "book": "bushido",
+      "file": "icons-bushido_02_r1c2.png",
+      "key": "gump_21539"
+    },
+    {
+      "gumpId": 21540,
+      "book": "bushido",
+      "file": "icons-bushido_03_r1c3.png",
+      "key": "gump_21540"
+    },
+    {
+      "gumpId": 23000,
+      "book": "spellweaving",
+      "file": "icons-spellweaving_01_r1c1.png",
+      "key": "gump_23000"
+    },
+    {
+      "gumpId": 23001,
+      "book": "spellweaving",
+      "file": "icons-spellweaving_02_r1c2.png",
+      "key": "gump_23001"
+    },
+    {
+      "gumpId": 23004,
+      "book": "spellweaving",
+      "file": "icons-spellweaving_03_r1c3.png",
+      "key": "gump_23004"
+    },
+    {
+      "gumpId": 23013,
+      "book": "spellweaving",
+      "file": "icons-spellweaving_04_r1c4.png",
+      "key": "gump_23013"
+    },
+    {
+      "gumpId": 24005,
+      "book": "mysticism",
+      "file": "icons-mysticism_01_r1c1.png",
+      "key": "gump_24005"
+    },
+    {
+      "gumpId": 24010,
+      "book": "mysticism",
+      "file": "icons-mysticism_02_r1c2.png",
+      "key": "gump_24010"
+    },
+    {
+      "gumpId": 24011,
+      "book": "mysticism",
+      "file": "icons-mysticism_03_r1c3.png",
+      "key": "gump_24011"
+    },
+    {
+      "gumpId": 24012,
+      "book": "mysticism",
+      "file": "icons-mysticism_04_r1c4.png",
+      "key": "gump_24012"
+    },
+    {
+      "gumpId": 24013,
+      "book": "mysticism",
+      "file": "icons-mysticism_05_r1c5.png",
+      "key": "gump_24013"
+    },
+    {
+      "gumpId": 20992,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_01_r1c1.png",
+      "key": "gump_20992"
+    },
+    {
+      "gumpId": 20993,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_02_r1c2.png",
+      "key": "gump_20993"
+    },
+    {
+      "gumpId": 20994,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_03_r1c3.png",
+      "key": "gump_20994"
+    },
+    {
+      "gumpId": 20995,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_04_r1c4.png",
+      "key": "gump_20995"
+    },
+    {
+      "gumpId": 20996,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_05_r1c5.png",
+      "key": "gump_20996"
+    },
+    {
+      "gumpId": 20997,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_06_r1c6.png",
+      "key": "gump_20997"
+    },
+    {
+      "gumpId": 20998,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_07_r1c7.png",
+      "key": "gump_20998"
+    },
+    {
+      "gumpId": 20999,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_08_r1c8.png",
+      "key": "gump_20999"
+    },
+    {
+      "gumpId": 21000,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_09_r2c1.png",
+      "key": "gump_21000"
+    },
+    {
+      "gumpId": 21001,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_10_r2c2.png",
+      "key": "gump_21001"
+    },
+    {
+      "gumpId": 21002,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_11_r2c3.png",
+      "key": "gump_21002"
+    },
+    {
+      "gumpId": 21003,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_12_r2c4.png",
+      "key": "gump_21003"
+    },
+    {
+      "gumpId": 21004,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_13_r2c5.png",
+      "key": "gump_21004"
+    },
+    {
+      "gumpId": 21005,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_14_r2c6.png",
+      "key": "gump_21005"
+    },
+    {
+      "gumpId": 21006,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_15_r2c7.png",
+      "key": "gump_21006"
+    },
+    {
+      "gumpId": 21007,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_16_r2c8.png",
+      "key": "gump_21007"
+    },
+    {
+      "gumpId": 21008,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_17_r3c1.png",
+      "key": "gump_21008"
+    },
+    {
+      "gumpId": 21009,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_18_r3c2.png",
+      "key": "gump_21009"
+    },
+    {
+      "gumpId": 21010,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_19_r3c3.png",
+      "key": "gump_21010"
+    },
+    {
+      "gumpId": 21011,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_20_r3c4.png",
+      "key": "gump_21011"
+    },
+    {
+      "gumpId": 21012,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_21_r3c5.png",
+      "key": "gump_21012"
+    },
+    {
+      "gumpId": 21013,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_22_r3c6.png",
+      "key": "gump_21013"
+    },
+    {
+      "gumpId": 21014,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_23_r3c7.png",
+      "key": "gump_21014"
+    },
+    {
+      "gumpId": 21015,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_24_r3c8.png",
+      "key": "gump_21015"
+    },
+    {
+      "gumpId": 21016,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_25_r4c1.png",
+      "key": "gump_21016"
+    },
+    {
+      "gumpId": 21017,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_26_r4c2.png",
+      "key": "gump_21017"
+    },
+    {
+      "gumpId": 21018,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_27_r4c3.png",
+      "key": "gump_21018"
+    },
+    {
+      "gumpId": 21019,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_28_r4c4.png",
+      "key": "gump_21019"
+    },
+    {
+      "gumpId": 21020,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_29_r4c5.png",
+      "key": "gump_21020"
+    },
+    {
+      "gumpId": 21021,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_30_r4c6.png",
+      "key": "gump_21021"
+    },
+    {
+      "gumpId": 21022,
+      "book": "weapon_ability",
+      "file": "icons-weapon-abilities_31_r4c7.png",
+      "key": "gump_21022"
+    }
+  ],
+  "customAssignments": [
+    {
+      "id": "warrior_shield_bash",
+      "file": "icons-custom-1_01_r1c1.png",
+      "key": "idle_warrior_shield_bash"
+    },
+    {
+      "id": "warrior_armor_break",
+      "file": "icons-custom-1_02_r1c2.png",
+      "key": "idle_warrior_armor_break"
+    },
+    {
+      "id": "warrior_brace",
+      "file": "icons-custom-1_03_r1c3.png",
+      "key": "idle_warrior_brace"
+    },
+    {
+      "id": "warrior_riposte",
+      "file": "icons-custom-1_04_r1c4.png",
+      "key": "idle_warrior_riposte"
+    },
+    {
+      "id": "warrior_execution",
+      "file": "icons-custom-1_05_r1c5.png",
+      "key": "idle_warrior_execution"
+    },
+    {
+      "id": "warrior_cleave",
+      "file": "icons-custom-1_06_r1c6.png",
+      "key": "idle_warrior_cleave"
+    },
+    {
+      "id": "warrior_bulwark",
+      "file": "icons-custom-1_07_r1c7.png",
+      "key": "idle_warrior_bulwark"
+    },
+    {
+      "id": "warrior_shatter",
+      "file": "icons-custom-1_08_r1c8.png",
+      "key": "idle_warrior_shatter"
+    },
+    {
+      "id": "warrior_sidestep",
+      "file": "icons-custom-1_09_r2c1.png",
+      "key": "idle_warrior_sidestep"
+    },
+    {
+      "id": "warrior_guard_captain",
+      "file": "icons-custom-1_10_r2c2.png",
+      "key": "idle_warrior_guard_captain"
+    },
+    {
+      "id": "warrior_shield_wall",
+      "file": "icons-custom-2_01_r1c1.png",
+      "key": "idle_warrior_shield_wall",
+      "override": true
+    },
+    {
+      "id": "warrior_earthshaker",
+      "file": "icons-custom-1_11_r2c3.png",
+      "key": "idle_warrior_earthshaker"
+    },
+    {
+      "id": "warrior_capstone",
+      "file": "icons-custom-1_12_r2c4.png",
+      "key": "idle_warrior_capstone"
+    },
+    {
+      "id": "berserker_cleave",
+      "file": "icons-custom-1_13_r2c5.png",
+      "key": "idle_berserker_cleave"
+    },
+    {
+      "id": "berserker_bloodrage",
+      "file": "icons-custom-2_15_r3c3.png",
+      "key": "idle_berserker_bloodrage",
+      "override": true
+    },
+    {
+      "id": "berserker_frenzy",
+      "file": "icons-custom-2_21_r4c3.png",
+      "key": "idle_berserker_frenzy",
+      "override": true
+    },
+    {
+      "id": "berserker_berserk",
+      "file": "icons-custom-2_16_r3c4.png",
+      "key": "idle_berserker_berserk",
+      "override": true
+    },
+    {
+      "id": "duelist_net",
+      "file": "icons-custom-1_14_r2c6.png",
+      "key": "idle_duelist_net"
+    },
+    {
+      "id": "duelist_crowd",
+      "file": "icons-custom-2_19_r4c1.png",
+      "key": "idle_duelist_crowd",
+      "override": true
+    },
+    {
+      "id": "duelist_roar",
+      "file": "icons-custom-2_14_r3c2.png",
+      "key": "idle_duelist_roar",
+      "override": true
+    },
+    {
+      "id": "ranger_bolt_volley",
+      "file": "icons-custom-1_17_r3c1.png",
+      "key": "idle_ranger_bolt_volley"
+    },
+    {
+      "id": "ranger_multishot",
+      "file": "icons-custom-1_34_r5c2.png",
+      "key": "idle_ranger_multishot",
+      "override": true
+    },
+    {
+      "id": "ranger_deadeye",
+      "file": "icons-custom-1_18_r3c2.png",
+      "key": "idle_ranger_deadeye"
+    },
+    {
+      "id": "assassin_eviscerate",
+      "file": "icons-custom-1_21_r3c5.png",
+      "key": "idle_assassin_eviscerate"
+    },
+    {
+      "id": "assassin_shadow",
+      "file": "icons-custom-1_22_r3c6.png",
+      "key": "idle_assassin_shadow"
+    },
+    {
+      "id": "monk_flurry",
+      "file": "icons-custom-1_23_r3c7.png",
+      "key": "idle_monk_flurry"
+    },
+    {
+      "id": "monk_ki_recovery",
+      "file": "icons-custom-1_24_r3c8.png",
+      "key": "idle_monk_ki_recovery"
+    },
+    {
+      "id": "monk_stun",
+      "file": "icons-custom-1_25_r4c1.png",
+      "key": "idle_monk_stun"
+    },
+    {
+      "id": "samurai_way",
+      "file": "icons-custom-2_29_r5c5.png",
+      "key": "idle_samurai_way",
+      "override": true
+    },
+    {
+      "id": "bard_discord",
+      "file": "icons-custom-2_32_r6c2.png",
+      "key": "idle_bard_discord",
+      "override": true
+    },
+    {
+      "id": "bard_peace",
+      "file": "icons-custom-2_31_r6c1.png",
+      "key": "idle_bard_peace",
+      "override": true
+    },
+    {
+      "id": "bard_provoke",
+      "file": "icons-custom-2_30_r5c6.png",
+      "key": "idle_bard_provoke",
+      "override": true
+    },
+    {
+      "id": "bard_fire_horn",
+      "file": "icons-custom-2_33_r6c3.png",
+      "key": "idle_bard_fire_horn",
+      "override": true
+    },
+    {
+      "id": "tamer_call",
+      "file": "icons-custom-1_26_r4c2.png",
+      "key": "idle_tamer_call"
+    },
+    {
+      "id": "tamer_vet",
+      "file": "icons-custom-1_27_r4c3.png",
+      "key": "idle_tamer_vet"
+    },
+    {
+      "id": "tamer_recall",
+      "file": "icons-custom-1_28_r4c4.png",
+      "key": "idle_tamer_recall"
+    },
+    {
+      "id": "warrior_provoke",
+      "file": "icons-custom-1_31_r4c7.png",
+      "key": "idle_warrior_provoke",
+      "override": true
+    }
+  ]
+}
