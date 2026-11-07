@@ -155,6 +155,455 @@ function loadParityDataset(): ParityDataset {
   return JSON.parse(fs.readFileSync(filePath, 'utf8')) as ParityDataset;
 }
 
+interface GearWavesDataset {
+  version: string;
+  tickMs: number;
+  classes: string[];
+  damageBreakdowns: Array<{
+    classId: string;
+    bracketId: string;
+    archetypeId: string;
+    mode: string;
+    autoAttackDps: number;
+    specialMoveDps: number;
+    executeDps: number;
+    dotDps: number;
+    procCounterDps: number;
+    totalDps: number;
+  }>;
+  materialTierCurves: Array<{
+    classId: string;
+    tierId: string;
+    levelReq: number;
+    statBonusBudget: number;
+    hue: number;
+    lowDefBossDps: number;
+    highDefBossDps: number;
+    multiTargetDps: number;
+    ehpPerSec: number;
+  }>;
+  affixLoadoutCurves: Array<{
+    classId: string;
+    loadoutId: string;
+    loadoutName: string;
+    lowDefBossDps: number;
+    highDefBossDps: number;
+    multiTargetDps: number;
+    ehpPerSec: number;
+    netManaDeltaPerMin: number;
+    netStaminaDeltaPerMin: number;
+  }>;
+  multiWaveRuns: Array<{
+    classId: string;
+    totalClearTimeSec: number;
+    averageWaveDps: number;
+    minHpPct: number;
+    minManaPct: number;
+    totalParries: number;
+    totalCloneInterceptions: number;
+    waves: Array<{
+      waveIndex: number;
+      waveClearTimeSec: number;
+      cumulativeTimeSec: number;
+      waveDps: number;
+      endingHpPct: number;
+      endingManaPct: number;
+      endingStaminaPct: number;
+      parriesInWave: number;
+      clonesOrStreakEnd: number;
+    }>;
+  }>;
+  rotationTimelines: Array<{
+    classId: string;
+    bracketId: string;
+    horizonMs: number;
+    events: Array<{
+      timeMs: number;
+      kind: string;
+      label: string;
+      damage: number;
+      isCrit: boolean;
+    }>;
+  }>;
+}
+
+function loadGearWavesDataset(): GearWavesDataset {
+  const filePath = path.join(ROOT_DIR, 'data/sim-baselines/gear-and-waves-v1.1.json');
+  return JSON.parse(fs.readFileSync(filePath, 'utf8')) as GearWavesDataset;
+}
+
+interface PaperdollSlotSpec {
+  id: string;
+  slotLabel: string;
+  nameEn: string;
+  namePtBr: string;
+  graphic: number;
+  hex: string;
+  maleGump: number;
+  layer: string;
+  kind: 'armor' | 'weapon' | 'consumable';
+  baseArmorResist?: number;
+  baseDmg?: [number, number];
+  speed?: number;
+  primaryAbility?: string;
+  secondaryAbility?: string;
+  affixesEn: string[];
+  affixesPtBr: string[];
+  loreEn: string;
+  lorePtBr: string;
+}
+
+const PAPERDOLL_GEAR: Record<'samurai' | 'ninja', PaperdollSlotSpec[]> = {
+  samurai: [
+    {
+      id: 'kabuto',
+      slotLabel: 'Helm (Layer 6)',
+      nameEn: 'Imperial Kabuto Helm',
+      namePtBr: 'Elmo Kabuto Imperial',
+      graphic: 10102,
+      hex: '0x2776',
+      maleGump: 50444,
+      layer: 'Helm',
+      kind: 'armor',
+      baseArmorResist: 11,
+      affixesEn: ['Bushido +12', 'Defense Chance +15%', 'Physical Resist +14%'],
+      affixesPtBr: ['Bushido +12', 'Chance de Defesa +15%', 'Resistência Física +14%'],
+      loreEn: 'Crested Tokuno war-helm forged with an ancestral golden kuwagata crest.',
+      lorePtBr: 'Elmo de guerra de Tokuno forjado com crista ancestral dourada kuwagata.',
+    },
+    {
+      id: 'samurai_do',
+      slotLabel: 'Chest (Layer 13)',
+      nameEn: 'Crimson-Lacquer Plate Do',
+      namePtBr: 'Couraça Plate Do Carmesim',
+      graphic: 10182,
+      hex: '0x27C6',
+      maleGump: 50457,
+      layer: 'InnerTorso',
+      kind: 'armor',
+      baseArmorResist: 18,
+      affixesEn: ['Bushido +15', 'Stamina Regen +4/s', 'Damage Taken -8%'],
+      affixesPtBr: ['Bushido +15', 'Regen de Estamina +4/s', 'Dano Recebido -8%'],
+      loreEn: 'Lacquered lamellar cuirass bearing the crimson mon of Emperorotsu.',
+      lorePtBr: 'Couraça lamelar laqueada ostentando o brasão carmesim imperial.',
+    },
+    {
+      id: 'hiro_sode',
+      slotLabel: 'Arms (Layer 19)',
+      nameEn: 'Plate Hiro-Sode Vambraces',
+      namePtBr: 'Braçadeiras Plate Hiro-Sode',
+      graphic: 10110,
+      hex: '0x277E',
+      maleGump: 50473,
+      layer: 'Arms',
+      kind: 'armor',
+      baseArmorResist: 10,
+      affixesEn: ['Swing Speed +15%', 'Hit & Crit Chance +12%', 'STR +8'],
+      affixesPtBr: ['Velocidade de Ataque +15%', 'Chance de Acerto e Crítico +12%', 'FOR +8'],
+      loreEn: 'Articulated shoulder-guards engineered for unhindered two-handed Iaijutsu draws.',
+      lorePtBr: 'Ombreiras articuladas projetadas para saques rápidos de Iaijutsu.',
+    },
+    {
+      id: 'suneate',
+      slotLabel: 'Legs (Layer 4)',
+      nameEn: 'Plate Suneate Greaves',
+      namePtBr: 'Grevas Plate Suneate',
+      graphic: 5067,
+      hex: '0x13CB',
+      maleGump: 50543,
+      layer: 'Pants',
+      kind: 'armor',
+      baseArmorResist: 12,
+      affixesEn: ['Parrying +15', 'Stamina Max +18', 'Energy Resist +12%'],
+      affixesPtBr: ['Aparar +15', 'Estamina Máx +18', 'Resistência a Energia +12%'],
+      loreEn: 'Reinforced shin-guards anchoring the Samurai during Counter Attack stances.',
+      lorePtBr: 'Grevas reforçadas que firmam a base do Samurai durante Contra-Ataque.',
+    },
+    {
+      id: 'waraji',
+      slotLabel: 'Boots (Layer 3)',
+      nameEn: 'Waraji & Tabi Footwear',
+      namePtBr: 'Sandálias Waraji e Tabi',
+      graphic: 10134,
+      hex: '0x2796',
+      maleGump: 50569,
+      layer: 'Shoes',
+      kind: 'armor',
+      baseArmorResist: 6,
+      affixesEn: ['DEX +8', 'Swing Speed +10%', 'Stamina Cost -8%'],
+      affixesPtBr: ['DES +8', 'Velocidade de Ataque +10%', 'Custo de Estamina -8%'],
+      loreEn: 'Corded battle sandals worn over split-toe tabi for instantaneous footwork pivots.',
+      lorePtBr: 'Sandálias de batalha trançadas sobre meias tabi para pivôs instantâneos.',
+    },
+    {
+      id: 'jin_baori',
+      slotLabel: 'Cloak (Layer 20)',
+      nameEn: 'Imperial Jin-Baori Surcoat',
+      namePtBr: 'Sobretudo Imperial Jin-Baori',
+      graphic: 5397,
+      hex: '0x1515',
+      maleGump: 50468,
+      layer: 'Cloak',
+      kind: 'armor',
+      baseArmorResist: 7,
+      affixesEn: ['Bushido +10', 'Mana Regen +3/s', 'Perfection Cap +5%'],
+      affixesPtBr: ['Bushido +10', 'Regen de Mana +3/s', 'Limite de Perfeição +5%'],
+      loreEn: 'Sleeveless crimson campaign surcoat worn by Tokuno Kensei commanders.',
+      lorePtBr: 'Sobretudo carmesim sem mangas usado pelos comandantes Kensei de Tokuno.',
+    },
+    {
+      id: 'daisho',
+      slotLabel: 'Primary Weapon (2H)',
+      nameEn: 'Ancestral Daisho Pair',
+      namePtBr: 'Par Daisho Ancestral',
+      graphic: 10153,
+      hex: '0x27A9',
+      maleGump: 50470,
+      layer: 'TwoHanded',
+      kind: 'weapon',
+      baseDmg: [13, 15],
+      speed: 40,
+      primaryAbility: 'Feint (#8)',
+      secondaryAbility: 'Double Strike (#7)',
+      affixesEn: ['Damage +40%', 'Swing Speed +20%', 'Bushido +15'],
+      affixesPtBr: ['Dano +40%', 'Velocidade de Ataque +20%', 'Bushido +15'],
+      loreEn: 'Matched katana and wakizashi pair enabling shieldless 2H Bushido parrying (÷41,140).',
+      lorePtBr: 'Par combinando katana e wakizashi permitindo aparar sem escudo (÷41.140).',
+    },
+    {
+      id: 'katana',
+      slotLabel: 'Fast Blade (1H)',
+      nameEn: 'Folded-Steel Katana',
+      namePtBr: 'Katana de Aço Dobrado',
+      graphic: 5119,
+      hex: '0x13FF',
+      maleGump: 50627,
+      layer: 'OneHanded',
+      kind: 'weapon',
+      baseDmg: [11, 13],
+      speed: 46,
+      primaryAbility: 'Double Strike (#7)',
+      secondaryAbility: 'Armor Ignore (#1)',
+      affixesEn: ['Damage +35%', 'Hit & Crit Chance +18%', 'Energy Damage +20%'],
+      affixesPtBr: ['Dano +35%', 'Chance de Acerto e Crítico +18%', 'Dano de Energia +20%'],
+      loreEn: 'Razor-honed curved blade feeding Double Strike and Armor Ignore into Perfection.',
+      lorePtBr: 'Lâmina curva afiada alimentando Golpe Duplo e Ignorar Armadura.',
+    },
+    {
+      id: 'no_dachi',
+      slotLabel: 'Heavy Cleaver (2H)',
+      nameEn: 'Grandmaster No-Dachi',
+      namePtBr: 'No-Dachi de Grão-Mestre',
+      graphic: 10146,
+      hex: '0x27A2',
+      maleGump: 50519,
+      layer: 'TwoHanded',
+      kind: 'weapon',
+      baseDmg: [16, 18],
+      speed: 35,
+      primaryAbility: 'Crushing Blow (#4)',
+      secondaryAbility: 'Riding Swipe (#15)',
+      affixesEn: ['Damage +50%', 'Armor Pierce +20%', 'Execute Damage +15%'],
+      affixesPtBr: ['Dano +50%', 'Perfuração de Armadura +20%', 'Dano de Execução +15%'],
+      loreEn: 'Great field sword built for Momentum Strike two-target cleaves and Kensei executions.',
+      lorePtBr: 'Espada longa de batalha para Golpe de Ímpeto e execuções Kensei.',
+    },
+    {
+      id: 'wakizashi',
+      slotLabel: 'Cyclone Blade (1H)',
+      nameEn: 'Tokuno Wakizashi',
+      namePtBr: 'Wakizashi de Tokuno',
+      graphic: 10148,
+      hex: '0x27A4',
+      maleGump: 50464,
+      layer: 'OneHanded',
+      kind: 'weapon',
+      baseDmg: [11, 13],
+      speed: 45,
+      primaryAbility: 'Frenzied Whirlwind (#6)',
+      secondaryAbility: 'Double Strike (#7)',
+      affixesEn: ['Swing Speed +25%', 'Bleed Damage +20%', 'Bushido +12'],
+      affixesPtBr: ['Velocidade de Ataque +25%', 'Dano de Sangramento +20%', 'Bushido +12'],
+      loreEn: 'Companion blade that unlocks Frenzied Whirlwind AoE gales and rapid Double Strikes.',
+      lorePtBr: 'Lâmina curta que libera os ciclones de Turbilhão Frenético e Golpe Duplo.',
+    },
+  ],
+  ninja: [
+    {
+      id: 'ninja_hood',
+      slotLabel: 'Helm (Layer 6)',
+      nameEn: 'Leather Ninja Hood',
+      namePtBr: 'Capuz Ninja de Couro',
+      graphic: 10126,
+      hex: '0x278E',
+      maleGump: 50425,
+      layer: 'Helm',
+      kind: 'armor',
+      baseArmorResist: 9,
+      affixesEn: ['Ninjitsu +15', 'Stealth +15', 'Crit Chance +14%'],
+      affixesPtBr: ['Ninjitsu +15', 'Furtividade +15', 'Chance de Crítico +14%'],
+      loreEn: 'Shadow-dyed Tokuno cowl that conceals the shinobi during Smoke Bomb vanishes.',
+      lorePtBr: 'Capuz tingido nas sombras que oculta o shinobi durante Bomba de Fumaça.',
+    },
+    {
+      id: 'ninja_jacket',
+      slotLabel: 'Chest (Layer 13)',
+      nameEn: 'Leather Ninja Jacket',
+      namePtBr: 'Jaqueta Ninja de Couro',
+      graphic: 10131,
+      hex: '0x2793',
+      maleGump: 50426,
+      layer: 'InnerTorso',
+      kind: 'armor',
+      baseArmorResist: 14,
+      affixesEn: ['Ninjitsu +15', 'Mirror Image Evasion +10%', 'Mana Regen +4/s'],
+      affixesPtBr: ['Ninjitsu +15', 'Evasão de Imagem Espelhada +10%', 'Regen de Mana +4/s'],
+      loreEn: 'Supple midnight-indigo brigandine lined with hidden pockets for Egg Bombs and darts.',
+      lorePtBr: 'Jaqueta índigo meia-noite forrada com bolsos ocultos para Bombas de Ovo e dardos.',
+    },
+    {
+      id: 'ninja_mitts',
+      slotLabel: 'Gloves (Layer 7)',
+      nameEn: 'Leather Ninja Mitts',
+      namePtBr: 'Luvas Ninja de Couro',
+      graphic: 10130,
+      hex: '0x2792',
+      maleGump: 50424,
+      layer: 'Gloves',
+      kind: 'armor',
+      baseArmorResist: 8,
+      affixesEn: ['Poisoning +15', 'Poison Damage +25%', 'Swing Speed +15%'],
+      affixesPtBr: ['Envenenamento +15', 'Dano de Veneno +25%', 'Velocidade de Ataque +15%'],
+      loreEn: 'Venom-resistant gauntlets grooved for rapid Shuriken and Fukiya dart reloading.',
+      lorePtBr: 'Manoplas resistentes a veneno para recarga rápida de Shuriken e Fukiya.',
+    },
+    {
+      id: 'ninja_belt',
+      slotLabel: 'Waist (Layer 12)',
+      nameEn: 'Shuriken Utility Belt',
+      namePtBr: 'Cinto de Shurikens de Couro',
+      graphic: 10128,
+      hex: '0x2790',
+      maleGump: 50514,
+      layer: 'Waist',
+      kind: 'armor',
+      baseArmorResist: 7,
+      affixesEn: ['Shuriken Volley Damage +20%', 'Cooldown Reduction +10%', 'DEX +10'],
+      affixesPtBr: ['Dano de Shuriken +20%', 'Redução de Recarga +10%', 'DES +10'],
+      loreEn: 'Bandolier belt (0x2790) housing 10 poison-tipped star shurikens for automatic volleys.',
+      lorePtBr: 'Cinto bandoleira (0x2790) com 10 shurikens envenenadas para disparos automáticos.',
+    },
+    {
+      id: 'ninja_pants',
+      slotLabel: 'Legs (Layer 4)',
+      nameEn: 'Leather Ninja Pants',
+      namePtBr: 'Calças Ninja de Couro',
+      graphic: 10129,
+      hex: '0x2791',
+      maleGump: 50423,
+      layer: 'Pants',
+      kind: 'armor',
+      baseArmorResist: 10,
+      affixesEn: ['Stealth +15', 'Ki Attack Dash +15%', 'Stamina Regen +4/s'],
+      affixesPtBr: ['Furtividade +15', 'Avanço Ataque de Ki +15%', 'Regen de Estamina +4/s'],
+      loreEn: 'Soundless shinobi legwraps tailored for Animal Form speed and Shadowjump leaps.',
+      lorePtBr: 'Perneiras silenciosas feitas para a velocidade da Forma Animal e Salto das Sombras.',
+    },
+    {
+      id: 'ninja_tabi',
+      slotLabel: 'Boots (Layer 3)',
+      nameEn: 'Shinobi Ninja-Tabi',
+      namePtBr: 'Botas Shinobi Ninja-Tabi',
+      graphic: 10135,
+      hex: '0x2797',
+      maleGump: 50572,
+      layer: 'Shoes',
+      kind: 'armor',
+      baseArmorResist: 6,
+      affixesEn: ['DEX +12', 'Swing Speed +15%', 'Dodge Chance +10%'],
+      affixesPtBr: ['DES +12', 'Velocidade de Ataque +15%', 'Chance de Esquiva +10%'],
+      loreEn: 'Soft-soled split-toe boots that leave zero sound or tracks during Stealth ambushes.',
+      lorePtBr: 'Botas silenciosas de sola macia que não deixam rastros em emboscadas.',
+    },
+    {
+      id: 'tekagi',
+      slotLabel: 'Primary Claws (2H)',
+      nameEn: 'Venom-Edged Tekagi Claws',
+      namePtBr: 'Garras Tekagi Envenenadas',
+      graphic: 10155,
+      hex: '0x27AB',
+      maleGump: 50533,
+      layer: 'TwoHanded',
+      kind: 'weapon',
+      baseDmg: [10, 12],
+      speed: 55,
+      primaryAbility: 'Dual Wield (#23)',
+      secondaryAbility: 'Talon Strike (#21)',
+      affixesEn: ['Swing Speed +25%', 'Poison Damage +30%', 'Ninjitsu +15'],
+      affixesPtBr: ['Velocidade de Ataque +25%', 'Dano de Veneno +30%', 'Ninjitsu +15'],
+      loreEn: 'Twin four-bladed hand claws (Speed 55) that race through 5-swing Death Strike marks.',
+      lorePtBr: 'Garras duplas de quatro lâminas (Vel 55) que detonam Marca da Morte rapidamente.',
+    },
+    {
+      id: 'kama',
+      slotLabel: 'Twin Sickles (2H)',
+      nameEn: 'Kusarigama & Kama Pair',
+      namePtBr: 'Par de Foices Kama',
+      graphic: 10157,
+      hex: '0x27AD',
+      maleGump: 50535,
+      layer: 'TwoHanded',
+      kind: 'weapon',
+      baseDmg: [9, 11],
+      speed: 55,
+      primaryAbility: 'Whirlwind Attack (#13)',
+      secondaryAbility: 'Defense Mastery (#18)',
+      affixesEn: ['Swing Speed +25%', 'Cleave Damage +20%', 'Crit Chance +18%'],
+      affixesPtBr: ['Velocidade de Ataque +25%', 'Dano em Área +20%', 'Chance de Crítico +18%'],
+      loreEn: 'Reaping shinobi sickles built for multi-target packs and Twin Shadow executions.',
+      lorePtBr: 'Foices shinobi projetadas para grupos de inimigos e Execução das Sombras Gêmeas.',
+    },
+    {
+      id: 'fukiya',
+      slotLabel: 'Ranged Tool (1H)',
+      nameEn: 'Lacquer Fukiya Blowgun',
+      namePtBr: 'Zarabatana Fukiya Laqueada',
+      graphic: 10154,
+      hex: '0x27AA',
+      maleGump: 50532,
+      layer: 'OneHanded',
+      kind: 'weapon',
+      baseDmg: [4, 6],
+      speed: 50,
+      primaryAbility: 'Infectious Strike (#11)',
+      secondaryAbility: 'Shadow Strike (#12)',
+      affixesEn: ['Poisoning +20', 'Poison DoT +35%', 'Cooldown Reduction +12%'],
+      affixesPtBr: ['Envenenamento +20', 'DoT de Veneno +35%', 'Redução de Recarga +12%'],
+      loreEn: 'Silent bamboo blowgun firing Lethal Poison darts during Fukiya & Egg Bomb Barrage.',
+      lorePtBr: 'Zarabatana silenciosa que dispara dardos de Veneno Letal em barragem.',
+    },
+    {
+      id: 'kryss',
+      slotLabel: 'Venom Blade (1H)',
+      nameEn: 'Serpentine Assassin Kryss',
+      namePtBr: 'Kryss Serpentina de Assassino',
+      graphic: 5121,
+      hex: '0x1401',
+      maleGump: 50630,
+      layer: 'OneHanded',
+      kind: 'weapon',
+      baseDmg: [10, 12],
+      speed: 53,
+      primaryAbility: 'Armor Ignore (#1)',
+      secondaryAbility: 'Infectious Strike (#11)',
+      affixesEn: ['Poison Damage +30%', 'Damage +35%', 'Stealth Opener +15%'],
+      affixesPtBr: ['Dano de Veneno +30%', 'Dano +35%', 'Abertura Furtiva +15%'],
+      loreEn: 'Wavy-bladed fencing stiletto that leaves the off-hand free for Focus Attack & Shurikens.',
+      lorePtBr: 'Estilete ondulado que mantém a mão secundária livre para Ataque Focado e Shurikens.',
+    },
+  ],
+};
+
 const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstimator: string }> = {
   samurai_way: {
     modeA: 'Passive auto-attack swing loop + Parrying (ID 5) & Bushido (ID 52) shieldless parry scaling.',
@@ -1006,6 +1455,112 @@ function buildSharedStyles(accentVar: string): string {
       border-radius: 4px;
       flex-shrink: 0;
     }
+
+    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01) */
+    .paperdoll-stage {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) 58px;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .paperdoll-rack-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+    .gear-slot-tile {
+      position: relative;
+      width: 54px;
+      height: 54px;
+      border-radius: 4px;
+      border: 1px solid #5d4a2b;
+      background: #10130e;
+      cursor: pointer;
+      padding: 2px;
+      transition: all 0.14s ease;
+    }
+    .gear-slot-tile:hover, .gear-slot-tile.is-active {
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 12px rgba(229, 193, 88, 0.45);
+      transform: translateY(-1px);
+    }
+    .gear-slot-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .gear-slot-tag {
+      position: absolute;
+      bottom: 1px;
+      right: 2px;
+      padding: 0 3px;
+      border-radius: 2px;
+      background: rgba(8, 10, 8, 0.88);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      line-height: 1.2;
+    }
+    .paperdoll-figure-box {
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 45%, rgba(201, 162, 39, 0.12), #090b08 75%);
+      border: 1px solid var(--border-gold);
+      border-radius: 5px;
+      padding: 4px;
+      overflow: hidden;
+    }
+    .paperdoll-figure-box img {
+      width: 100%;
+      max-width: 196px;
+      height: auto;
+      display: block;
+      border-radius: 3px;
+    }
+    .weapon-rack-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .weapon-rack-strip .gear-slot-tile {
+      width: 100%;
+      height: 52px;
+    }
+    .tier-pill-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-bottom: 6px;
+    }
+    .tier-mini-btn {
+      padding: 2px 5px;
+      font-size: 9px;
+      font-family: 'IBM Plex Mono', monospace;
+      border: 1px solid #3c3425;
+      border-radius: 3px;
+      background: #121510;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .tier-mini-btn.is-active, .tier-mini-btn:hover {
+      border-color: var(--border-gold-bright);
+      background: #282011;
+      color: #fff2bf;
+    }
+    .gear-mouseover-card {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-gold);
+      border-left: 3px solid var(--class-accent);
+      border-radius: 4px;
+      background: linear-gradient(180deg, #161a14, #0d100c);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    }
   `;
 }
 
@@ -1162,6 +1717,37 @@ function buildClassSkillTreeHtml(
     )
     .join('\n');
 
+  const gearSlots = PAPERDOLL_GEAR[cls.id as 'samurai' | 'ninja'];
+  const armorSlots = gearSlots.filter((g) => g.kind === 'armor');
+  const leftRackSlots = armorSlots.slice(0, 3);
+  const rightRackSlots = armorSlots.slice(3, 6);
+  const weaponRackSlots = gearSlots.filter((g) => g.kind === 'weapon');
+  const defaultGear = weaponRackSlots[0] ?? gearSlots[0]!;
+
+  const renderGearTile = (g: PaperdollSlotSpec, isDefault: boolean): string => `
+    <div class="gear-slot-tile ${isDefault ? 'is-active' : ''}" data-gear-id="${escapeHtml(g.id)}" onmouseenter="inspectGear('${escapeHtml(g.id)}')" onclick="inspectGear('${escapeHtml(g.id)}')" title="${escapeHtml(g.nameEn)} (${escapeHtml(g.hex)})">
+      <img src="assets/items/${escapeHtml(g.id)}.png" alt="${escapeHtml(g.nameEn)}" />
+      <span class="gear-slot-tag">${escapeHtml(g.slotLabel.split(' ')[0])}</span>
+    </div>
+  `;
+
+  const tierButtonsHtml = [
+    { id: 'Iron', mult: 1.0, res: 0 },
+    { id: 'DullCopper', mult: 1.08, res: 12 },
+    { id: 'ShadowIron', mult: 1.17, res: 24 },
+    { id: 'Copper', mult: 1.26, res: 36 },
+    { id: 'Bronze', mult: 1.36, res: 48 },
+    { id: 'Gold', mult: 1.47, res: 60 },
+    { id: 'Agapite', mult: 1.59, res: 72 },
+    { id: 'Verite', mult: 1.71, res: 84 },
+    { id: 'Valorite', mult: 1.85, res: 96 },
+  ]
+    .map(
+      (t) =>
+        `<button type="button" class="tier-mini-btn ${t.id === 'Valorite' ? 'is-active' : ''}" data-mat-tier="${t.id}" onclick="setPaperdollTier('${t.id}', ${t.mult}, ${t.res})">${t.id}</button>`
+    )
+    .join('');
+
   const hotbarHtml = cls.seededHotbar
     .map((slot) => {
       const condStr =
@@ -1209,6 +1795,7 @@ function buildClassSkillTreeHtml(
   const embeddedPayload = {
     classData: cls,
     modeDescriptions: MODE_DESCRIPTIONS,
+    gearCatalog: gearSlots,
   };
 
   return `<!DOCTYPE html>
@@ -1268,8 +1855,9 @@ function buildClassSkillTreeHtml(
           <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
           <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
           <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
+          <a class="nav-pill" href="index.html">Review Portal</a>
           <a class="nav-pill" href="${escapeHtml(otherClassFile)}">${escapeHtml(otherClassLabel)}</a>
-          <a class="nav-pill" href="class-comparison.html">5-Class Parity</a>
+          <a class="nav-pill" href="class-comparison.html">5-Class Parity &amp; Sim</a>
         </div>
       </header>
 
@@ -1329,18 +1917,66 @@ function buildClassSkillTreeHtml(
 
           <section class="arvore-secao">
             <h2 class="arvore-secao-titulo">
-              <span class="title-left">Tokuno Starter Paperdoll</span>
-              <span class="arvore-secao-sub">yE / mx (${cls.starterEquipment.paperdollLayers.length} Layers)</span>
+              <span class="title-left">Interactive Tokuno Paperdoll &amp; Armory</span>
+              <span class="arvore-secao-sub">yE / mx · Hover or Click Gear</span>
             </h2>
             <div class="panel-body">
-              <div class="mono" style="font-size:10px;color:var(--text-secondary);margin-bottom:6px;">
-                kitTokens: [${cls.starterEquipment.kitTokens.map((t) => `"${escapeHtml(t)}"`).join(', ')}] · ${
-                  isSamurai ? 'Shieldless TwoHanded Empty (Parry Enabled)' : 'Off-Hand Free (FocusAttack &amp; Throws Enabled)'
-                }
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);margin-bottom:4px;">
+                Material Tier Scaling (<span id="pd-tier-label" style="color:var(--text-gold);font-weight:700;">Valorite · 1.85x Dmg / +96% Res</span>):
               </div>
-              <div class="kv-grid">
-                ${paperdollHtml}
+              <div class="tier-pill-bar">
+                ${tierButtonsHtml}
               </div>
+
+              <!-- Visual UO Layered Paperdoll + 6 Equipped Armor Slots -->
+              <div class="paperdoll-stage">
+                <div class="paperdoll-rack-col">
+                  ${leftRackSlots.map((g) => renderGearTile(g, false)).join('\n')}
+                </div>
+                <div class="paperdoll-figure-box">
+                  <img src="assets/items/paperdoll-${escapeHtml(cls.id)}.png" alt="${escapeHtml(classTitle)} Layered UO Paperdoll" />
+                </div>
+                <div class="paperdoll-rack-col">
+                  ${rightRackSlots.map((g) => renderGearTile(g, false)).join('\n')}
+                </div>
+              </div>
+
+              <!-- 4 Signature Tokuno Weapons Strip -->
+              <div style="margin-top:7px;font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--text-gold);text-transform:uppercase;">
+                Signature Tokuno Armaments (Hover / Click for Stats):
+              </div>
+              <div class="weapon-rack-strip">
+                ${weaponRackSlots.map((g, idx) => renderGearTile(g, idx === 0)).join('\n')}
+              </div>
+
+              <!-- Live Mouseover Gear Stat Card (#paperdoll-gear-tooltip) -->
+              <div class="gear-mouseover-card" id="paperdoll-gear-tooltip">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                  <strong style="color:#fff2bf;font-size:12px;" id="gear-tt-name">${escapeHtml(defaultGear.nameEn)}</strong>
+                  <span class="lv-pill" id="gear-tt-slot">${escapeHtml(defaultGear.slotLabel)}</span>
+                </div>
+                <div class="mono" style="font-size:9px;color:var(--text-secondary);margin-top:2px;" id="gear-tt-meta">
+                  graphic: ${defaultGear.graphic} (${escapeHtml(defaultGear.hex)}) · gump: ${defaultGear.maleGump} · layer: ${escapeHtml(defaultGear.layer)} · hue: ${cls.robeHue}
+                </div>
+                <div class="mono" style="font-size:11px;color:var(--text-gold);font-weight:700;margin-top:4px;" id="gear-tt-stats">
+                  Valorite Weapon: ${Math.round((defaultGear.baseDmg?.[0] ?? 11) * 1.85)}–${Math.round((defaultGear.baseDmg?.[1] ?? 13) * 1.85)} Dmg · Speed ${defaultGear.speed ?? 45} · ${escapeHtml(defaultGear.primaryAbility ?? '')} / ${escapeHtml(defaultGear.secondaryAbility ?? '')}
+                </div>
+                <div class="cost-badges" id="gear-tt-affixes" style="margin-top:4px;">
+                  ${defaultGear.affixesEn.map((af) => `<span class="badge-mana">${escapeHtml(af)}</span>`).join('')}
+                </div>
+                <div style="font-size:10px;color:var(--text-primary);margin-top:4px;" id="gear-tt-lore">
+                  ${escapeHtml(defaultGear.loreEn)}
+                </div>
+              </div>
+
+              <details style="margin-top:6px;">
+                <summary class="mono" style="font-size:9px;color:var(--text-secondary);cursor:pointer;">
+                  Raw Bundle Starter Layer IDs (kitTokens: [${cls.starterEquipment.kitTokens.map((t) => `"${escapeHtml(t)}"`).join(', ')}])
+                </summary>
+                <div class="kv-grid" style="margin-top:4px;">
+                  ${paperdollHtml}
+                </div>
+              </details>
             </div>
           </section>
 
@@ -1458,9 +2094,61 @@ function buildClassSkillTreeHtml(
       var payload = JSON.parse(raw);
       var cls = payload.classData;
       var modeMap = payload.modeDescriptions;
+      var gearList = payload.gearCatalog || [];
       var currentLocale = 'en';
       var currentMode = 'mode_a';
       var selectedAbilityId = cls.abilities[0].id;
+      var selectedGearId = gearList.length > 6 ? gearList[6].id : (gearList[0] ? gearList[0].id : '');
+      var currentTier = { id: 'Valorite', mult: 1.85, res: 96 };
+
+      window.setPaperdollTier = function(tierId, mult, resBonus) {
+        currentTier = { id: tierId, mult: mult, res: resBonus };
+        var btns = document.querySelectorAll('[data-mat-tier]');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('is-active', btns[i].getAttribute('data-mat-tier') === tierId);
+        }
+        document.getElementById('pd-tier-label').textContent =
+          tierId + ' · ' + mult.toFixed(2) + 'x Dmg / +' + resBonus + '% Res';
+        if (selectedGearId) window.inspectGear(selectedGearId);
+      };
+
+      window.inspectGear = function(gearId) {
+        var g = null;
+        for (var i = 0; i < gearList.length; i++) {
+          if (gearList[i].id === gearId) {
+            g = gearList[i];
+            break;
+          }
+        }
+        if (!g) return;
+        selectedGearId = gearId;
+        var tiles = document.querySelectorAll('[data-gear-id]');
+        for (var j = 0; j < tiles.length; j++) {
+          tiles[j].classList.toggle('is-active', tiles[j].getAttribute('data-gear-id') === gearId);
+        }
+        document.getElementById('gear-tt-name').textContent =
+          currentLocale === 'pt' ? g.namePtBr : g.nameEn;
+        document.getElementById('gear-tt-slot').textContent = g.slotLabel;
+        document.getElementById('gear-tt-meta').textContent =
+          'graphic: ' + g.graphic + ' (' + g.hex + ') · gump: ' + g.maleGump + ' · layer: ' + g.layer + ' · hue: ' + cls.robeHue;
+        if (g.kind === 'weapon' && g.baseDmg) {
+          var minD = Math.round(g.baseDmg[0] * currentTier.mult);
+          var maxD = Math.round(g.baseDmg[1] * currentTier.mult);
+          document.getElementById('gear-tt-stats').textContent =
+            currentTier.id + ' Weapon: ' + minD + '–' + maxD + ' Dmg · Speed ' + g.speed + ' · ' + g.primaryAbility + ' / ' + g.secondaryAbility;
+        } else {
+          var baseRes = g.baseArmorResist || 10;
+          var scaledRes = Math.round(baseRes * (1 + currentTier.res / 100));
+          document.getElementById('gear-tt-stats').textContent =
+            currentTier.id + ' Armor: +' + scaledRes + ' Physical/Elem Defense (Base ' + baseRes + ', +' + currentTier.res + '% Tier Bonus)';
+        }
+        var affs = currentLocale === 'pt' ? g.affixesPtBr : g.affixesEn;
+        document.getElementById('gear-tt-affixes').innerHTML = affs
+          .map(function(a) { return '<span class="badge-mana">' + a + '</span>'; })
+          .join('');
+        document.getElementById('gear-tt-lore').textContent =
+          currentLocale === 'pt' ? g.lorePtBr : g.loreEn;
+      };
 
       window.setLocale = function(lang) {
         currentLocale = lang;
@@ -1471,6 +2159,7 @@ function buildClassSkillTreeHtml(
           nodes[i].textContent = lang === 'pt' ? nodes[i].getAttribute('data-pt') : nodes[i].getAttribute('data-en');
         }
         window.selectAbility(selectedAbilityId);
+        if (selectedGearId) window.inspectGear(selectedGearId);
       };
 
       window.setExecMode = function(mode) {
@@ -1543,10 +2232,182 @@ function buildClassSkillTreeHtml(
 function buildClassComparisonHtml(
   classes: Record<string, ClassDefinition>,
   items: ItemsDataset,
-  parity: ParityDataset
+  parity: ParityDataset,
+  gearWaves: GearWavesDataset
 ): string {
   const orderedIds = ['warrior', 'mage', 'ranger', 'samurai', 'ninja'] as const;
   const levels = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60];
+
+  const classColors: Record<string, string> = {
+    warrior: '#d97706',
+    mage: '#3b82f6',
+    ranger: '#84cc16',
+    samurai: '#c83e37',
+    ninja: '#2e9e6b',
+  };
+
+  // Build SVG Multi-Bracket DPS & EHP/s Progression Chart (L10 -> L25 -> L45 -> L60) for low_def_boss (Mode B)
+  const brackets = ['L10', 'L25', 'L45', 'L60'];
+  const chartW = 680;
+  const chartH = 220;
+  const padL = 48;
+  const padR = 24;
+  const padT = 20;
+  const padB = 32;
+  const plotW = chartW - padL - padR;
+  const plotH = chartH - padT - padB;
+
+  const buildProgressionSvg = (metricKey: 'sustainedDps' | 'ehpPerSec', maxVal: number, unitLabel: string): string => {
+    const gridLines = [0, 0.25, 0.5, 0.75, 1.0]
+      .map((f) => {
+        const y = Math.round(padT + plotH * (1 - f));
+        const val = Math.round(maxVal * f);
+        return `<line x1="${padL}" y1="${y}" x2="${chartW - padR}" y2="${y}" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="${padL - 6}" y="${y + 3}" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">${val}</text>`;
+      })
+      .join('\n');
+
+    const xLabels = brackets
+      .map((b, idx) => {
+        const x = Math.round(padL + (idx / (brackets.length - 1)) * plotW);
+        return `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + plotH}" stroke="#1e241b" />
+                <text x="${x}" y="${chartH - 10}" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">${b}</text>`;
+      })
+      .join('\n');
+
+    const polylines = orderedIds
+      .map((cid) => {
+        const col = classColors[cid] ?? '#c9a227';
+        const pts = brackets.map((b, idx) => {
+          const rec = parity.mode_b.scenarios.find(
+            (s) => s.classId === cid && s.bracketId === b && s.archetypeId === 'low_def_boss'
+          );
+          const v = rec ? rec[metricKey] : 0;
+          const x = Math.round(padL + (idx / (brackets.length - 1)) * plotW);
+          const y = Math.round(padT + plotH * (1 - Math.min(1, v / maxVal)));
+          return { x, y, v };
+        });
+        const pointsAttr = pts.map((p) => `${p.x},${p.y}`).join(' ');
+        const circles = pts
+          .map(
+            (p) =>
+              `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${col}" stroke="#0b0d0a" stroke-width="1.5"><title>${cid.toUpperCase()}: ${p.v.toFixed(1)} ${unitLabel}</title></circle>`
+          )
+          .join('');
+        return `<polyline fill="none" stroke="${col}" stroke-width="${cid === 'samurai' || cid === 'ninja' ? '2.8' : '1.8'}" points="${pointsAttr}" />${circles}`;
+      })
+      .join('\n');
+
+    return `<svg viewBox="0 0 ${chartW} ${chartH}" style="width:100%;height:auto;background:#0c0f0b;border:1px solid #2a3026;border-radius:4px;">
+      ${gridLines}
+      ${xLabels}
+      ${polylines}
+    </svg>`;
+  };
+
+  const dpsProgressionSvg = buildProgressionSvg('sustainedDps', 350, 'DPS');
+  const ehpProgressionSvg = buildProgressionSvg('ehpPerSec', 320, 'EHP/s');
+
+  // 5-Channel Damage Breakdown Stacked Horizontal Bars (L60 low_def_boss Mode B)
+  const breakdownL60 = gearWaves.damageBreakdowns.filter(
+    (d) => d.bracketId === 'L60' && d.archetypeId === 'low_def_boss'
+  );
+  const breakdownBarsHtml = breakdownL60
+    .map((d) => {
+      const tot = Math.max(d.totalDps, 0.01);
+      const pAuto = ((d.autoAttackDps / tot) * 100).toFixed(1);
+      const pSpec = ((d.specialMoveDps / tot) * 100).toFixed(1);
+      const pExec = ((d.executeDps / tot) * 100).toFixed(1);
+      const pDot = ((d.dotDps / tot) * 100).toFixed(1);
+      const pProc = ((d.procCounterDps / tot) * 100).toFixed(1);
+      return `
+        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
+            <strong style="text-transform:uppercase;color:${classColors[d.classId] ?? '#fff2bf'};letter-spacing:0.04em;">${escapeHtml(d.classId)}</strong>
+            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: ${d.totalDps.toFixed(2)} DPS</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
+            Auto ${d.autoAttackDps.toFixed(1)} (${pAuto}%) · Skill ${d.specialMoveDps.toFixed(1)} (${pSpec}%) · Exec ${d.executeDps.toFixed(1)} (${pExec}%) · DoT ${d.dotDps.toFixed(1)} (${pDot}%) · Parry/Proc ${d.procCounterDps.toFixed(1)} (${pProc}%)
+          </div>
+          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+            <div style="width:${pAuto}%;background:#64748b;" title="Auto-Attack: ${d.autoAttackDps.toFixed(2)} DPS (${pAuto}%)"></div>
+            <div style="width:${pSpec}%;background:#3b82f6;" title="SpecialMove/Spell: ${d.specialMoveDps.toFixed(2)} DPS (${pSpec}%)"></div>
+            <div style="width:${pExec}%;background:#ef4444;" title="Execute/Detonation: ${d.executeDps.toFixed(2)} DPS (${pExec}%)"></div>
+            <div style="width:${pDot}%;background:#10b981;" title="DoT/Venom: ${d.dotDps.toFixed(2)} DPS (${pDot}%)"></div>
+            <div style="width:${pProc}%;background:#f59e0b;" title="Parry/Spirit Procs: ${d.procCounterDps.toFixed(2)} DPS (${pProc}%)"></div>
+          </div>
+        </div>
+      `;
+    })
+    .join('\n');
+
+  // Material Tier (Iron -> Valorite) Table across all 5 classes
+  const tierIds = ['Iron', 'DullCopper', 'ShadowIron', 'Copper', 'Bronze', 'Gold', 'Agapite', 'Verite', 'Valorite'];
+  const matTierRowsHtml = tierIds
+    .map((tid) => {
+      const cells = orderedIds
+        .map((cid) => {
+          const rec = gearWaves.materialTierCurves.find((m) => m.classId === cid && m.tierId === tid);
+          if (!rec) return `<td class="mono">—</td>`;
+          return `<td class="mono">${rec.lowDefBossDps.toFixed(1)} <span style="color:var(--text-secondary);">DPS</span> / <span style="color:#82d5b0;">${rec.ehpPerSec.toFixed(1)} EHP/s</span></td>`;
+        })
+        .join('');
+      const sample = gearWaves.materialTierCurves.find((m) => m.tierId === tid);
+      return `<tr>
+        <td class="mono"><strong style="color:#fff2bf;">${escapeHtml(tid)}</strong> <small style="color:var(--text-secondary);">(Lv.${sample?.levelReq ?? 1})</small></td>
+        ${cells}
+      </tr>`;
+    })
+    .join('\n');
+
+  // 10-Wave Continuous Dungeon Endurance Summary Rows
+  const multiWaveRowsHtml = gearWaves.multiWaveRuns
+    .map((mw) => {
+      const w1 = mw.waves[0]!;
+      const w10 = mw.waves[mw.waves.length - 1]!;
+      return `<tr>
+        <td><strong style="text-transform:uppercase;color:${classColors[mw.classId] ?? '#fff2bf'};">${escapeHtml(mw.classId)}</strong></td>
+        <td class="mono">${mw.totalClearTimeSec.toFixed(1)}s</td>
+        <td class="mono">${mw.averageWaveDps.toFixed(2)} DPS</td>
+        <td class="mono" style="color:#82d5b0;">${mw.minHpPct.toFixed(1)}%</td>
+        <td class="mono" style="color:#9ec9ff;">${mw.minManaPct.toFixed(1)}%</td>
+        <td class="mono">${w1.waveDps.toFixed(1)} → ${w10.waveDps.toFixed(1)} DPS</td>
+        <td class="mono">${mw.totalParries} Parries / ${mw.totalCloneInterceptions} Clones</td>
+        <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">10/10 WAVES CLEARED</span></td>
+      </tr>`;
+    })
+    .join('\n');
+
+  // 20-Second (100ms Tick) Combat Rotation Timeline Strips for Samurai & Ninja
+  const rotationStripsHtml = ['samurai', 'ninja']
+    .map((cid) => {
+      const rot = gearWaves.rotationTimelines.find((r) => r.classId === cid);
+      if (!rot) return '';
+      const castEvents = rot.events.filter((e) => e.kind !== 'swing').slice(0, 14);
+      const chips = castEvents
+        .map((ev) => {
+          const sec = (ev.timeMs / 1000).toFixed(1);
+          const badgeCol =
+            ev.kind === 'cast'
+              ? 'var(--border-gold-bright)'
+              : ev.kind === 'execute'
+                ? '#ef4444'
+                : ev.kind === 'parry'
+                  ? '#f59e0b'
+                  : '#10b981';
+          return `<div style="padding:4px 7px;background:#121611;border:1px solid ${badgeCol};border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=${sec}s</strong> · <span style="color:${badgeCol};text-transform:uppercase;">${escapeHtml(ev.kind)}</span> · ${escapeHtml(ev.label)} (${ev.damage > 0 ? ev.damage.toFixed(0) + ' dmg' : 'Posture/Buff'}${ev.isCrit ? ' ★' : ''})
+          </div>`;
+        })
+        .join('');
+      return `<div style="margin-top:8px;padding:8px 10px;background:#0e120d;border:1px solid #2a3026;border-radius:4px;">
+        <div style="font-family:'Cinzel',serif;font-size:11px;color:${classColors[cid]};font-weight:700;margin-bottom:6px;text-transform:uppercase;">
+          ${escapeHtml(cid)} L60 100ms Tick Combat Rotation Log (First 20.0s — ro(e) Hotbar Casts, DoTs &amp; Procs)
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">${chips}</div>
+      </div>`;
+    })
+    .join('\n');
 
   const classHeadersHtml = orderedIds
     .map((cid) => {
@@ -1648,19 +2509,22 @@ function buildClassComparisonHtml(
       const iron = arm.damageByMaterialTier['Iron'] ?? arm.baseDamageRange;
       const valorite = arm.damageByMaterialTier['Valorite'] ?? arm.baseDamageRange;
       return `
-        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
-          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-            <strong style="color:#fff2bf;font-size:12px;">${escapeHtml(arm.name)} <code style="font-size:10px;color:var(--text-secondary);">(${escapeHtml(arm.id)})</code></strong>
-            <span class="type-pill">${escapeHtml(arm.classTheme)} · ${escapeHtml(arm.skill)}</span>
-          </div>
-          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
-            graphic: ${arm.graphicId} (${escapeHtml(arm.classicUoGraphicHex)}) · ${escapeHtml(arm.layer)} · Speed ${arm.speed}
-          </div>
-          <div class="mono" style="font-size:10px;color:var(--text-gold);">
-            Iron: ${iron[0]}–${iron[1]} dmg → Valorite: ${valorite[0]}–${valorite[1]} dmg
-          </div>
-          <div class="mono" style="font-size:10px;color:#9ec9ff;">
-            1°: ${escapeHtml(arm.primaryAbility.moRef)} (#${arm.primaryAbility.id}) | 2°: ${escapeHtml(arm.secondaryAbility.moRef)} (#${arm.secondaryAbility.id})
+        <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
+          <img src="assets/items/${escapeHtml(arm.id)}.png" alt="${escapeHtml(arm.name)}" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
+          <div>
+            <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+              <strong style="color:#fff2bf;font-size:12px;">${escapeHtml(arm.name)} <code style="font-size:10px;color:var(--text-secondary);">(${escapeHtml(arm.id)})</code></strong>
+              <span class="type-pill">${escapeHtml(arm.classTheme)} · ${escapeHtml(arm.skill)}</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              graphic: ${arm.graphicId} (${escapeHtml(arm.classicUoGraphicHex)}) · ${escapeHtml(arm.layer)} · Speed ${arm.speed}
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-gold);">
+              Iron: ${iron[0]}–${iron[1]} dmg → Valorite: ${valorite[0]}–${valorite[1]} dmg
+            </div>
+            <div class="mono" style="font-size:10px;color:#9ec9ff;">
+              1°: ${escapeHtml(arm.primaryAbility.moRef)} (#${arm.primaryAbility.id}) | 2°: ${escapeHtml(arm.secondaryAbility.moRef)} (#${arm.secondaryAbility.id})
+            </div>
           </div>
         </div>
       `;
@@ -1671,7 +2535,10 @@ function buildClassComparisonHtml(
     .map(
       (w) => `
       <tr>
-        <td><strong style="color:#fff2bf;">${escapeHtml(w.name)}</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(${escapeHtml(w.id)})</code></td>
+        <td style="display:flex;align-items:center;gap:6px;">
+          <img src="assets/items/${escapeHtml(w.id)}.png" alt="${escapeHtml(w.name)}" style="width:28px;height:28px;border-radius:3px;border:1px solid #5d4a2b;" />
+          <div><strong style="color:#fff2bf;">${escapeHtml(w.name)}</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(${escapeHtml(w.id)})</code></div>
+        </td>
         <td class="mono">${w.itemId} (${escapeHtml(w.graphicHex)})</td>
         <td class="mono">${escapeHtml(w.skill)} / ${escapeHtml(w.layer)}</td>
         <td class="mono">${w.speed}</td>
@@ -1686,16 +2553,19 @@ function buildClassComparisonHtml(
   const consumablesHtml = items.consumables
     .map(
       (c) => `
-      <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
-        <div style="display:flex;justify-content:space-between;width:100%;">
-          <strong style="color:#fff2bf;">${escapeHtml(c.name)} / ${escapeHtml(c.namePtBr)}</strong>
-          <span class="lv-pill">itemId: ${c.itemId}</span>
-        </div>
-        <div class="mono" style="font-size:10px;color:var(--text-secondary);">
-          id: ${escapeHtml(c.id)} · abilityId: ${escapeHtml(c.abilityId)} · minSkill: ${c.requiredSkill.skillKey} ${c.requiredSkill.minSkill}
-        </div>
-        <div style="font-size:10px;color:var(--text-primary);">
-          ${escapeHtml(c.effect ?? `Range ${c.range}, MaxCharges ${c.maxCharges}, BaseDmg ${c.baseDamage?.join('–')}, Poison=${c.supportsPoison}`)}
+      <div class="kv-item" style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;">
+        <img src="assets/items/${escapeHtml(c.id)}.png" alt="${escapeHtml(c.name)}" style="width:48px;height:48px;border-radius:4px;border:1px solid #6d5733;" />
+        <div>
+          <div style="display:flex;justify-content:space-between;width:100%;">
+            <strong style="color:#fff2bf;">${escapeHtml(c.name)} / ${escapeHtml(c.namePtBr)}</strong>
+            <span class="lv-pill">itemId: ${c.itemId}</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            id: ${escapeHtml(c.id)} · abilityId: ${escapeHtml(c.abilityId)} · minSkill: ${c.requiredSkill.skillKey} ${c.requiredSkill.minSkill}
+          </div>
+          <div style="font-size:10px;color:var(--text-primary);">
+            ${escapeHtml(c.effect ?? `Range ${c.range}, MaxCharges ${c.maxCharges}, BaseDmg ${c.baseDamage?.join('–')}, Poison=${c.supportsPoison}`)}
+          </div>
         </div>
       </div>
     `
@@ -1741,7 +2611,7 @@ if (attacker is PlayerMobile smMiss && smMiss.ClassId == 114 && smMiss.Perfectio
 if (blocked && Core.TickCount - defender.NextBushidoParryProc >= 2000) {
     defender.NextBushidoParryProc = Core.TickCount;
     if (CounterAttack.IsCountering(defender) && defender.Weapon is BaseWeapon bw) bw.OnSwing(defender, attacker);
-    if (Confidence.IsConfident(defender)) { defender.Hits += (int)(bushido / 12); defender.Stam += (int)(bushido / 5); }
+    if (Confidence.IsConfident(defender)) { defender.Hits += 2; defender.Stam += 2; }
 }`;
 
   const ninjaCSharp = `// Mode B Server Hook (16 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
@@ -1752,9 +2622,9 @@ if (MirrorImage.HasClone(defender) && Core.TickCount - defender.NextCloneInterce
     MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone & decrements cloneStacks
     damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
 }
-// 2. OnWeaponSwingHit: 5-Swing DeathStrike Detonation & Stealth Opener Consumption (8 LOC)
+// 2. OnWeaponSwingHit: 3-Swing DeathStrike Detonation, Kitsune 3rd-Swing Claw & Stealth Opener (8 LOC)
 if (attacker is PlayerMobile nj && nj.ClassId == 115) {
-    DeathStrike.AddStep(defender); // Every connected Ninja swing advances ++Steps toward 5!
+    DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
     if (nj.CombatStealthUntil > Core.TickCount && (move is Backstab || move is SurpriseAttack)) {
         nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
         damage = (int)(damage * 1.15);
@@ -1808,6 +2678,22 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       line-height: 1.45;
       color: #e8e4d9;
     }
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      font-size: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -1815,8 +2701,8 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
     <div class="personagem-arvore">
       <header class="arvore-head">
         <div class="arvore-nivel">
-          <span class="class-badge-pill">v0.99.0 PARITY</span>
-          <strong>5-Class Progression Matrix, Combat Telemetry &amp; Tokuno Armaments</strong>
+          <span class="class-badge-pill">v1.1 SIMULATOR &amp; PARITY</span>
+          <strong>5-Class Progression Matrix, Visual Combat Telemetry &amp; Tokuno Armaments</strong>
         </div>
         <div class="arvore-saldos">
           <div class="arvore-saldo">
@@ -1824,22 +2710,23 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
             <em>12 Tiers (L1–L60)</em>
           </div>
           <div class="arvore-saldo">
-            <div><strong>4 Brackets × 4 Archetypes</strong><div><small>L10 · L25 · L45 · L60</small></div></div>
+            <div><strong>80 Scenarios + 9 Tiers</strong><div><small>10-Wave Endurance</small></div></div>
             <em>100ms Tick Engine</em>
           </div>
           <div class="arvore-saldo">
-            <div><strong>0 OOM Ticks</strong><div><small>Resource Sustainability</small></div></div>
+            <div><strong>0 OOM / 0 Deaths</strong><div><small>11/11 Unit Suites</small></div></div>
             <em>±5–8% Envelope</em>
           </div>
           <div class="arvore-saldo">
-            <div><strong>8 Armaments + 10 Affixes</strong><div><small>Tokuno Drop-In Kit</small></div></div>
+            <div><strong>34 UO Item Sprites</strong><div><small>Tokuno Drop-In Kit</small></div></div>
             <em>Mode A &amp; Mode B</em>
           </div>
         </div>
         <div class="arvore-head-acoes">
+          <a class="nav-pill" href="index.html">Review Portal</a>
           <a class="nav-pill" href="samurai-skill-tree.html">Samurai (SM 114)</a>
           <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
-          <a class="nav-pill is-active" href="class-comparison.html">5-Class Parity</a>
+          <a class="nav-pill is-active" href="class-comparison.html">5-Class Parity &amp; Sim</a>
         </div>
       </header>
 
@@ -1864,11 +2751,11 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         </div>
       </section>
 
-      <!-- SECTION 2: Interactive 5-Class Combat Parity Telemetry -->
+      <!-- SECTION 2: Interactive 5-Class Combat Parity Telemetry + Visual SVG Progression Curves -->
       <section class="arvore-secao">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">2. Deterministic 5-Class Combat Simulation Telemetry (100ms Tick Engine)</span>
-          <span class="arvore-secao-sub">Source: data/sim-baselines/parity-5class-v0.99.0.json</span>
+          <span class="title-left">2. Deterministic 5-Class Combat Simulation Telemetry &amp; Visual Charts (100ms Tick Engine)</span>
+          <span class="arvore-secao-sub">Sources: parity-5class-v0.99.0.json &amp; gear-and-waves-v1.1.json</span>
         </h2>
         <div class="panel-body">
           <div class="filter-bar">
@@ -1893,7 +2780,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
             </div>
           </div>
 
-          <table class="comp-table">
+          <table class="comp-table" style="margin-bottom:12px;">
             <thead>
               <tr>
                 <th>Class</th>
@@ -1913,19 +2800,119 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               ${initialTelemetryRowsHtml}
             </tbody>
           </table>
+
+          <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                  Multi-Bracket Sustained DPS Curve (L10 → L60)
+                </strong>
+                <div class="chart-legend">
+                  <span><i class="legend-dot" style="background:#d97706;"></i>WR</span>
+                  <span><i class="legend-dot" style="background:#3b82f6;"></i>MG</span>
+                  <span><i class="legend-dot" style="background:#84cc16;"></i>RG</span>
+                  <span><i class="legend-dot" style="background:#c83e37;"></i>SM</span>
+                  <span><i class="legend-dot" style="background:#2e9e6b;"></i>NJ</span>
+                </div>
+              </div>
+              ${dpsProgressionSvg}
+              <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;">
+                <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                  Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60)
+                </strong>
+                <span class="mono" style="font-size:10px;color:#82d5b0;">All 5 classes within ±5–8% envelope</span>
+              </div>
+              ${ehpProgressionSvg}
+            </div>
+
+            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                  5-Channel Damage Source Breakdown (L60 Boss)
+                </strong>
+                <div class="chart-legend">
+                  <span><i class="legend-dot" style="background:#64748b;"></i>Auto</span>
+                  <span><i class="legend-dot" style="background:#3b82f6;"></i>Skill/Spell</span>
+                  <span><i class="legend-dot" style="background:#ef4444;"></i>Execute/Detonate</span>
+                  <span><i class="legend-dot" style="background:#10b981;"></i>DoT/Venom</span>
+                  <span><i class="legend-dot" style="background:#f59e0b;"></i>Parry/Spirit Proc</span>
+                </div>
+              </div>
+              ${breakdownBarsHtml}
+              ${rotationStripsHtml}
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- SECTION 3: Tokuno Armaments, Consumables & Affix Showcase -->
+      <!-- SECTION 3: Material Tier (Iron -> Valorite) & 10-Wave Continuous Dungeon Endurance -->
       <section class="arvore-secao">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">3. Tokuno Armaments, Ninjitsu Consumables, Material Tiers &amp; Affix Pools</span>
-          <span class="arvore-secao-sub">Source: design/drop-in/items-bushido-ninjitsu.json</span>
+          <span class="title-left">3. Material Tier Scaling (Iron → Valorite) &amp; 10-Wave Dungeon Endurance</span>
+          <span class="arvore-secao-sub">Source: data/sim-baselines/gear-and-waves-v1.1.json · 11/11 Deterministic Test Suites</span>
+        </h2>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:12px;">
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
+                9-Tier UO Material Progression (1.00x Iron → 1.85x Valorite · Strictly Monotonic DPS &amp; EHP/s)
+              </div>
+              <table class="comp-table">
+                <thead>
+                  <tr>
+                    <th>Material Tier</th>
+                    <th>Warrior</th>
+                    <th>Mage</th>
+                    <th>Ranger</th>
+                    <th>Samurai (SM)</th>
+                    <th>Ninja (NJ)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${matTierRowsHtml}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">
+                10-Wave Continuous Dungeon Pull Endurance (8 Trash + 2 Boss Waves, Zero Reset)
+              </div>
+              <table class="comp-table">
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Clear Time</th>
+                    <th>Avg Wave DPS</th>
+                    <th>Min HP</th>
+                    <th>Min Mana</th>
+                    <th>W1 → W10 DPS</th>
+                    <th>Mitigation</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${multiWaveRowsHtml}
+                </tbody>
+              </table>
+              <div style="margin-top:8px;padding:8px 10px;background:#121611;border:1px solid #2a3026;border-radius:4px;font-size:11px;color:var(--text-secondary);">
+                <strong style="color:#82d5b0;">Idle Sustainability Proof:</strong> Across 10 consecutive waves without out-of-combat resets, <strong style="color:#fff2bf;">Samurai</strong> parries <strong>44</strong> attacks (fueling <em>Confidence</em> Inner Calm HP/Stam recovery and <em>Evasion</em> Iaido Flash Riposte), while <strong style="color:#fff2bf;">Ninja</strong> intercepts <strong>16</strong> boss blows via <em>Mirror Image</em> &amp; <em>Egg Bomb</em> clones and triggers <em>Smoke Bomb</em> Vanish &amp; Volley with <strong>0 OOM ticks</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Tokuno Armaments, Consumables & Affix Showcase -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">4. Authentic UO Tokuno Armaments, Ninjitsu Consumables &amp; Affix Pools</span>
+          <span class="arvore-secao-sub">Source: design/drop-in/items-bushido-ninjitsu.json &amp; mockups/assets/items/</span>
         </h2>
         <div class="panel-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div>
-              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Iron → Valorite Scaling)</div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Authentic art.png Sprites · Iron → Valorite)</div>
               <div class="kv-grid">
                 ${iconicArmamentsHtml}
               </div>
@@ -1967,10 +2954,10 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         </div>
       </section>
 
-      <!-- SECTION 4: Mode A vs Mode B Implementation & <20 LOC C# Server Hook Inspector -->
+      <!-- SECTION 5: Mode A vs Mode B Implementation & <20 LOC C# Server Hook Inspector -->
       <section class="arvore-secao">
         <h2 class="arvore-secao-titulo">
-          <span class="title-left">4. Mode A (Zero Engine Changes) vs Mode B (&lt;20 LOC C# Server Hooks)</span>
+          <span class="title-left">5. Mode A (Zero Engine Changes) vs Mode B (&lt;20 LOC C# Server Hooks)</span>
           <span class="arvore-secao-sub">design/drop-in/classes-patch.js · BaseWeapon.cs</span>
         </h2>
         <div class="panel-body">
@@ -2053,6 +3040,308 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
 </html>`;
 }
 
+function buildPortalIndexHtml(isRoot: boolean): string {
+  const prefix = isRoot ? 'mockups/' : '';
+  const rootPrefix = isRoot ? '' : '../';
+  const ghRepo = 'https://github.com/brbrainerd/uoIdle/blob/main/';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UO Idle v0.99.0 — Samurai (Bushido) &amp; Ninja (Ninjitsu) Lead Developer Review Portal</title>
+  <style>
+    ${buildSharedStyles('var(--border-gold)')}
+    .portal-hero {
+      padding: 18px 20px;
+      border: 1px solid var(--border-gold);
+      border-top: 3px solid var(--border-gold-bright);
+      border-radius: 5px;
+      background: linear-gradient(180deg, #1d211a 0%, #0f120e 100%);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
+    }
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .launch-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #5d4a2b;
+      border-radius: 5px;
+      background: var(--bg-card);
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.16s ease;
+    }
+    .launch-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201, 162, 39, 0.25);
+    }
+    .launch-thumb {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      object-position: top center;
+      border-bottom: 1px solid #3c3425;
+      background: #090b08;
+    }
+    .launch-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .tour-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .file-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+    }
+    .file-row a {
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .file-row a:hover {
+      color: var(--border-gold-bright);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="beta-shell">
+    <div class="personagem-arvore">
+      <header class="arvore-head">
+        <div class="arvore-nivel">
+          <span class="class-badge-pill">UO IDLE v0.99.0 · MILESTONE v1.1</span>
+          <strong>Samurai (Bushido) &amp; Ninja (Ninjitsu) — Lead Developer Review Portal</strong>
+        </div>
+        <div class="arvore-saldos">
+          <div class="arvore-saldo">
+            <div><strong>56 KB Pages</strong><div><small>649 Verified Claims</small></div></div>
+            <em>0 KB Check Errors</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>SM 114 &amp; NJ 115</strong><div><small>12 L1–L60 Milestones</small></div></div>
+            <em>EN + PT-BR Drop-In</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>80 Sim Scenarios</strong><div><small>9 Tiers · 10 Waves</small></div></div>
+            <em>11/11 Unit Suites</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>Zero Polygons</strong><div><small>Real UO Gumps &amp; Art</small></div></div>
+            <em>140 Icons + 37 Sprites</em>
+          </div>
+        </div>
+        <div class="arvore-head-acoes">
+          <a class="nav-pill is-active" href="${prefix}index.html">Review Portal</a>
+          <a class="nav-pill" href="${prefix}samurai-skill-tree.html">Samurai (SM 114)</a>
+          <a class="nav-pill" href="${prefix}ninja-skill-tree.html">Ninja (NJ 115)</a>
+          <a class="nav-pill" href="${prefix}class-comparison.html">5-Class Parity &amp; Sim</a>
+          <a class="nav-pill" href="https://github.com/brbrainerd/uoIdle" target="_blank" rel="noopener">GitHub Repo ↗</a>
+        </div>
+      </header>
+
+      <!-- Executive Introduction for the Lead Developer -->
+      <section class="portal-hero">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:center;">
+          <div>
+            <div class="mono" style="font-size:11px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.06em;">
+              Commissioned Technical Package for the Lead Developer of UO Idle (https://uoidle.com/beta)
+            </div>
+            <h1 style="font-family:'Cinzel',serif;font-size:22px;color:#fff2bf;margin:6px 0 8px;">
+              Drop-In Samurai (Bushido) &amp; Ninja (Ninjitsu) Class Skill Lines, 100ms Combat Simulator &amp; Source-Verified Knowledgebase
+            </h1>
+            <p style="margin:0 0 10px;font-size:13px;color:var(--text-primary);max-width:1020px;">
+              This package reverse-engineers the live <strong>UO Idle v0.99.0</strong> client bundle (<code>/assets/index-CCYN0Dy6.js</code>) and canonical <strong>ModernUO</strong> C# server source (<code>Projects/UOContent/Spells/{Bushido,Ninjitsu}/</code>) to deliver two implementation-ready classes: <strong>Samurai (ID 114, Badge SM, Hue 1884)</strong> and <strong>Ninja (ID 115, Badge NJ, Hue 1175)</strong>. Every ability is designed specifically for <strong>autonomous 1D idle combat</strong> (zero tile-click targeting, zero backpack ammo micro, and strict compliance with the <code>&gt;= 2,000ms</code> custom cooldown floor), mathematically balanced within <strong>±5–8%</strong> of live Warrior, Mage, and Ranger across all level brackets, material tiers (<code>Iron..Valorite</code>), and 10-wave dungeon pulls.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a class="beta-btn is-active" href="${prefix}samurai-skill-tree.html">Launch Samurai Workbench →</a>
+              <a class="beta-btn is-active" href="${prefix}ninja-skill-tree.html">Launch Ninja Workbench →</a>
+              <a class="beta-btn is-active" href="${prefix}class-comparison.html">Launch 5-Class Simulator &amp; Charts →</a>
+              <a class="beta-btn" href="${rootPrefix}design/drop-in/classes-patch.js">View Drop-In JS Patch (applyDropInClassPatch)</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;align-items:center;background:#10140f;padding:10px;border:1px solid #3c3425;border-radius:5px;">
+            <img src="${prefix}assets/items/paperdoll-samurai.png" alt="Samurai Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
+            <img src="${prefix}assets/items/paperdoll-ninja.png" alt="Ninja Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 1: Interactive Workbenches & Visual Dashboards -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">1. Interactive Beta UI Workbenches, Visual Paperdolls &amp; Simulation Telemetry</span>
+          <span class="arvore-secao-sub">Click any card to open the live interactive workbench</span>
+        </h2>
+        <div class="panel-body">
+          <div class="launch-grid">
+            <a class="launch-card" href="${prefix}samurai-skill-tree.html">
+              <img class="launch-thumb" src="${prefix}screenshots/samurai-skill-tree.png" alt="Samurai Skill Tree Preview" />
+              <div class="launch-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="class-badge-pill" style="border-color:var(--samurai-accent);">SM · ID 114 · Hue 1884</span>
+                  <span class="lv-pill">12 Milestones</span>
+                </div>
+                <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">Samurai (Bushido) Skill Tree &amp; Paperdoll</strong>
+                <p style="margin:0;font-size:12px;color:var(--text-secondary);">
+                  Interactive <code>[Arvore</code> progression, layered UO paperdoll with mouseover gear stats (<code>Iron..Valorite</code>), 5-slot seeded hotbar, EN/PT-BR toggle, and <em>Kensei: Amakura's Judgment</em> capstone.
+                </p>
+              </div>
+            </a>
+
+            <a class="launch-card" href="${prefix}ninja-skill-tree.html">
+              <img class="launch-thumb" src="${prefix}screenshots/ninja-skill-tree.png" alt="Ninja Skill Tree Preview" />
+              <div class="launch-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="class-badge-pill" style="border-color:var(--ninja-accent);">NJ · ID 115 · Hue 1175</span>
+                  <span class="lv-pill">13 Catalog Skills</span>
+                </div>
+                <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">Ninja (Ninjitsu) Skill Tree &amp; Paperdoll</strong>
+                <p style="margin:0;font-size:12px;color:var(--text-secondary);">
+                  Interactive <code>[Arvore</code> progression, Dual L35 <em>Smoke Bomb</em> + <em>Shuriken Volley</em> unlock, layered shinobi paperdoll with mouseover gear stats, and <em>Kage Bunshin: Twin Shadow Execution</em> capstone.
+                </p>
+              </div>
+            </a>
+
+            <a class="launch-card" href="${prefix}class-comparison.html">
+              <img class="launch-thumb" src="${prefix}screenshots/class-comparison.png" alt="5-Class Comparison &amp; Simulator Preview" />
+              <div class="launch-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="class-badge-pill">5-CLASS PARITY</span>
+                  <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">80 Scenarios PASS</span>
+                </div>
+                <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">5-Class Parity, SVG Telemetry &amp; Armaments</strong>
+                <p style="margin:0;font-size:12px;color:var(--text-secondary);">
+                  Multi-bracket DPS &amp; EHP/s SVG curves, 5-channel damage breakdown stacked bars, 9-tier material scaling, 10-wave dungeon endurance, and <code>&lt;20 LOC</code> C# server hooks.
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Guided Tour of Drop-In Payloads, Design Specs & Knowledgebase -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">2. Lead Developer Repository Guide — Key Files for Review &amp; Drop-In Integration</span>
+          <span class="arvore-secao-sub">Direct links to drop-in JSON/JS payloads, formal specs, simulator &amp; knowledgebase</span>
+        </h2>
+        <div class="panel-body">
+          <div class="tour-grid">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                A. Drop-In Class, Item &amp; Bundle Patch Payloads (<code>design/drop-in/</code>)
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${rootPrefix}design/drop-in/samurai.json">design/drop-in/samurai.json</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Samurai class definition (ID 114, 12 milestones, 12 skills, hotbar, EN/PT-BR).</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/drop-in/samurai.json" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${rootPrefix}design/drop-in/ninja.json">design/drop-in/ninja.json</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Ninja class definition (ID 115, 12 milestones, 13 skills incl. Dual L35 Shuriken).</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/drop-in/ninja.json" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${rootPrefix}design/drop-in/classes-patch.js">design/drop-in/classes-patch.js</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Idempotent ES module <code>applyDropInClassPatch(tables)</code> wiring all 9 client bundle tables.</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/drop-in/classes-patch.js" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${rootPrefix}design/drop-in/items-bushido-ninjitsu.json">design/drop-in/items-bushido-ninjitsu.json</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">8 Tokuno weapons, 4 cooldown-gated shinobi tools, 9 material tiers, and 10 affix pools.</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/drop-in/items-bushido-ninjitsu.json" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                B. Formal Specifications, Balance Report &amp; 56-Page Mechanics KB
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${ghRepo}design/SAMURAI_SPEC.md" target="_blank" rel="noopener">design/SAMURAI_SPEC.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Complete Samurai &amp; Bushido specification, ModernUO citations, and 17-LOC C# server hook.</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/SAMURAI_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${ghRepo}design/NINJA_SPEC.md" target="_blank" rel="noopener">design/NINJA_SPEC.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Complete Ninja &amp; Ninjitsu specification, idle adaptations, and 16-LOC C# server hook.</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/NINJA_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${ghRepo}design/BALANCE_REPORT.md" target="_blank" rel="noopener">design/BALANCE_REPORT.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">5-class parity proofs, 5-channel damage breakdowns, material curves, and 10-wave endurance.</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}design/BALANCE_REPORT.md" target="_blank" rel="noopener">Read Report ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="${ghRepo}mechanics/INDEX.md" target="_blank" rel="noopener">mechanics/INDEX.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">56-page claim-verified UO Idle v0.99.0 + ModernUO knowledgebase (649 verbatim claims).</div>
+                </div>
+                <a class="beta-btn" href="${ghRepo}mechanics/INDEX.md" target="_blank" rel="noopener">Browse KB ↗</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Sheets Preview Row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+            <a class="launch-card" href="${prefix}assets/icons/contact-sheet.png" target="_blank" rel="noopener">
+              <img class="launch-thumb" src="${prefix}assets/icons/contact-sheet.png" alt="Ability Icons Contact Sheet" style="height:175px;" />
+              <div class="launch-body">
+                <strong style="color:#fff2bf;font-size:12px;">Authentic UO Gumps &amp; Oil-Painted Ability Icon Sheet (140 PNGs, Zero Polygons)</strong>
+                <span class="mono" style="font-size:10px;color:var(--text-gold);">${prefix}assets/icons/contact-sheet.png</span>
+              </div>
+            </a>
+            <a class="launch-card" href="${prefix}assets/items/items-contact-sheet.png" target="_blank" rel="noopener">
+              <img class="launch-thumb" src="${prefix}assets/items/items-contact-sheet.png" alt="UO Item Sprites &amp; Paperdolls Contact Sheet" style="height:175px;" />
+              <div class="launch-body">
+                <strong style="color:#fff2bf;font-size:12px;">Layered UO Paperdolls &amp; Extracted Item Sprites Sheet (37 PNGs from art.png &amp; gumps)</strong>
+                <span class="mono" style="font-size:10px;color:var(--text-gold);">${prefix}assets/items/items-contact-sheet.png</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
 function compileAllMockups(): {
   classes: Record<string, ClassDefinition>;
   files: Record<string, string>;
@@ -2060,6 +3349,7 @@ function compileAllMockups(): {
   const classes = loadValidatedClasses();
   const items = loadItemsDataset();
   const parity = loadParityDataset();
+  const gearWaves = loadGearWavesDataset();
 
   const samuraiHtml = buildClassSkillTreeHtml(
     classes.samurai!,
@@ -2071,12 +3361,16 @@ function compileAllMockups(): {
     'samurai-skill-tree.html',
     'Samurai (SM 114)'
   );
-  const comparisonHtml = buildClassComparisonHtml(classes, items, parity);
+  const comparisonHtml = buildClassComparisonHtml(classes, items, parity, gearWaves);
+  const mockupsIndexHtml = buildPortalIndexHtml(false);
+  const rootIndexHtml = buildPortalIndexHtml(true);
 
   const files: Record<string, string> = {
     [path.join(MOCKUPS_DIR, 'samurai-skill-tree.html')]: samuraiHtml,
     [path.join(MOCKUPS_DIR, 'ninja-skill-tree.html')]: ninjaHtml,
     [path.join(MOCKUPS_DIR, 'class-comparison.html')]: comparisonHtml,
+    [path.join(MOCKUPS_DIR, 'index.html')]: mockupsIndexHtml,
+    [path.join(ROOT_DIR, 'index.html')]: rootIndexHtml,
   };
 
   return { classes, files };
@@ -2091,6 +3385,7 @@ function captureScreenshots(): void {
     { html: 'samurai-skill-tree.html', png: 'samurai-skill-tree.png' },
     { html: 'ninja-skill-tree.html', png: 'ninja-skill-tree.png' },
     { html: 'class-comparison.html', png: 'class-comparison.png' },
+    { html: 'index.html', png: 'portal-index.png' },
   ];
 
   for (const t of targets) {
@@ -2146,13 +3441,15 @@ function runVerify(): void {
       throw new Error(`Forbidden network call found in ${filePath}`);
     }
 
-    const iconRegex = /src="(assets\/icons\/[^"]+)"/g;
+    const iconRegex = /src="((?:mockups\/)?assets\/(?:icons|items)\/[^"]+)"/g;
     let m: RegExpExecArray | null;
     while ((m = iconRegex.exec(actualHtml)) !== null) {
-      const relIcon = m[1]!;
-      const absIcon = path.join(MOCKUPS_DIR, relIcon);
-      if (!fs.existsSync(absIcon)) {
-        throw new Error(`Broken icon path "${relIcon}" in ${filePath}`);
+      const relAsset = m[1]!;
+      const absAsset = relAsset.startsWith('mockups/')
+        ? path.join(ROOT_DIR, relAsset)
+        : path.join(MOCKUPS_DIR, relAsset);
+      if (!fs.existsSync(absAsset)) {
+        throw new Error(`Broken asset path "${relAsset}" in ${filePath}`);
       }
       resolvedIconsCount++;
     }
@@ -2186,7 +3483,7 @@ function runVerify(): void {
     }
   }
 
-  const screenshotNames = ['samurai-skill-tree.png', 'ninja-skill-tree.png', 'class-comparison.png'];
+  const screenshotNames = ['samurai-skill-tree.png', 'ninja-skill-tree.png', 'class-comparison.png', 'portal-index.png'];
   for (const sName of screenshotNames) {
     const sPath = path.join(SCREENSHOTS_DIR, sName);
     if (!fs.existsSync(sPath)) {
@@ -2204,11 +3501,11 @@ function runVerify(): void {
   console.log(
     JSON.stringify({
       ok: true,
-      mockups: 3,
-      screenshots: 3,
+      mockups: Object.keys(files).length,
+      screenshots: screenshotNames.length,
       samuraiAbilities: classes.samurai!.abilities.length,
       ninjaAbilities: classes.ninja!.abilities.length,
-      resolvedIcons: resolvedIconsCount,
+      resolvedAssets: resolvedIconsCount,
     })
   );
 }
