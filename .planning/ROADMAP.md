@@ -34,9 +34,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Private GitHub repository audit, directory scaffolding, and `mechanics/tools/kb.py` adaptation with `--self-test` and credential sanitization (`KB-01`, `KB-02`)
-- [ ] 01-02: Live UO Idle bundle AST extraction (`tools/bundle_extract.mjs`), read-only Chrome DevTools runtime/network capture, and wiki/doc scraping with `manifest.json` provenance (`KB-03`)
-- [ ] 01-03: Canonical ModernUO C# Bushido, Ninjitsu, Perfection, and Parry source extraction (`tools/fetch_modernuo.py`) (`KB-04`)
+- [ ] 01-01-PLAN.md — Private GitHub repository audit, directory scaffolding, and `mechanics/tools/kb.py` adaptation with `--self-test` and credential sanitization (`KB-01`, `KB-02`)
+- [ ] 01-02-PLAN.md — Live UO Idle bundle AST extraction (`tools/bundle_extract.mjs`), read-only Chrome DevTools runtime/network capture, and wiki/doc scraping with `manifest.json` provenance (`KB-03`)
+- [ ] 01-03-PLAN.md — Canonical ModernUO C# Bushido, Ninjitsu, Perfection, and Parry source extraction (`tools/fetch_modernuo.py`) (`KB-04`)
 
 ### Phase 2: Core UO Idle Engine & Systems Knowledgebase
 **Goal**: Reverse-engineer and document UO Idle's core combat tick loop, cooldown/haste resolution, hit/crit/mitigation math, resource economy, status effect opcodes, progression/equipment systems, and client-vs-server execution authority in claim-verified KB pages.
