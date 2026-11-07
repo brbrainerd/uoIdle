@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
-| 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete | 2026-11-07 |
+| 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete    | 2026-11-07 |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 0/2 | Not started | - |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |

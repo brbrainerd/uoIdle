@@ -16,8 +16,8 @@ Requirements for the v1 deliverable package. Each maps to a roadmap phase.
 
 ### Core Engine & Live Classes Knowledgebase (`INDEX`)
 
-- [ ] **INDEX-01**: Developer can look up claim-verified KB pages under `mechanics/combat/` and `mechanics/systems/` documenting UO Idle's combat tick loop, cooldown/haste resolution, hit/crit/armor/resistance mitigation formulas, resource regeneration, status effect opcodes, and progression/equipment systems
-- [ ] **INDEX-02**: Developer can audit an explicit **Engine Capability Matrix** classifying every live UO Idle combat hook, trigger, and status effect as Client-Evaluated, Shared-Config, or Server-Authoritative
+- [x] **INDEX-01**: Developer can look up claim-verified KB pages under `mechanics/combat/` and `mechanics/systems/` documenting UO Idle's combat tick loop, cooldown/haste resolution, hit/crit/armor/resistance mitigation formulas, resource regeneration, status effect opcodes, and progression/equipment systems
+- [x] **INDEX-02**: Developer can audit an explicit **Engine Capability Matrix** classifying every live UO Idle combat hook, trigger, and status effect as Client-Evaluated, Shared-Config, or Server-Authoritative
 - [ ] **INDEX-03**: Developer can look up complete, claim-verified KB pages for **Warrior** (`mechanics/classes/warrior.md`), **Mage** (`mechanics/classes/mage.md`), and **Ranger** (`mechanics/classes/ranger.md`) covering every active/passive skill, unlock level, resource cost, cooldown, scaling formula, and status interaction
 - [ ] **INDEX-04**: Developer can validate any live or candidate class, skill, and status effect definition against reverse-engineered JSON Schemas and TypeScript `zod` contracts (`schemas/{class,skill,effect}.schema.json`) and a structural parity specification (`mechanics/topics/class-structural-parity.md`)
 
@@ -88,8 +88,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | KB-02 | Phase 1 | Complete |
 | KB-03 | Phase 1 | Complete |
 | KB-04 | Phase 1 | Complete |
-| INDEX-01 | Phase 2 | Pending |
-| INDEX-02 | Phase 2 | Pending |
+| INDEX-01 | Phase 2 | Complete |
+| INDEX-02 | Phase 2 | Complete |
 | INDEX-03 | Phase 3 | Pending |
 | INDEX-04 | Phase 3 | Pending |
 | SIM-01 | Phase 4 | Pending |

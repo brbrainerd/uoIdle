@@ -1,0 +1,43 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Core UO Idle Engine & Systems Knowledgebase",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "ModernUO Reference KB & Baseline Combat Simulator",
+      "status": "pending"
+    },
+    {
+      "number": "5",
+      "name": "Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code",
+      "status": "pending"
+    },
+    {
+      "number": "6",
+      "name": "Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step (plan phase 3)",
+    "reason": "Phase 3 of 6 — needs a plan"
+  },
+  "updated_at": "2026-11-07T04:34:39.179Z"
+}
