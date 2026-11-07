@@ -1,5 +1,7 @@
 {
   "version": "0.99.0",
+  "milestone": "v1.1",
+  "zeroPolygons": true,
   "totalFiles": 140,
   "samuraiStems": 23,
   "ninjaStems": 22,
@@ -7,1682 +9,1682 @@
     "contact-sheet.png": {
       "width": 1440,
       "height": 1280,
-      "sha256": "8d008d5fe34311e717218e9c90117e7540d0bf7356d0d5fc478d2c0e2d46f703",
+      "sha256": "b3491df509d323dc1d93f5d20c51c7b4cfe73a6a0bc69a26bb4581db6b9ed68c",
       "meanRgba": [
-        34.8,
-        35.49,
-        25.64,
-        254.6
+        38.11,
+        38.96,
+        28.7,
+        254.33
       ],
-      "stdDev": 37.6
+      "stdDev": 42.88
     },
     "ninja/ninja_animal_form.png": {
       "width": 64,
       "height": 64,
-      "sha256": "45388139cbbb04934447b1147a1f64f5c86e1a93c7910a3c0f106508bf558b69",
+      "sha256": "2aedd831d394df7c88422b8c7488697e9c3c96e1c934ef9ce0ef11b9890fc4aa",
       "meanRgba": [
-        49.87,
-        72.06,
-        51.99,
-        252.39
+        61.75,
+        87.55,
+        96.86,
+        252.61
       ],
-      "stdDev": 53.97
+      "stdDev": 64.58
     },
     "ninja/ninja_animal_form@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "314bad6e108d2fcd35ec2e2871f27e3a5afffe1ea8960432a593a8cb4364aaa1",
+      "sha256": "dac29641f16f1e0de85cffd90111c8b8e1182e9759461c6d3c5ed90c922258fb",
       "meanRgba": [
-        50.35,
-        72.45,
-        52.29,
-        252.42
+        62.09,
+        87.79,
+        97.13,
+        252.66
       ],
-      "stdDev": 50.67
+      "stdDev": 62.31
     },
     "ninja/ninja_animal_form@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "45388139cbbb04934447b1147a1f64f5c86e1a93c7910a3c0f106508bf558b69",
+      "sha256": "2aedd831d394df7c88422b8c7488697e9c3c96e1c934ef9ce0ef11b9890fc4aa",
       "meanRgba": [
-        49.87,
-        72.06,
-        51.99,
-        252.39
+        61.75,
+        87.55,
+        96.86,
+        252.61
       ],
-      "stdDev": 53.97
+      "stdDev": 64.58
     },
     "ninja/ninja_armor_ignore.png": {
       "width": 64,
       "height": 64,
-      "sha256": "f7ecc01aff350374291cbcddcdc64823f49555e50b16f513a7ad7d9841d8357a",
+      "sha256": "415816ebc1a01cbb24ea887747190059e6dd77ffaa3082950cc273de1212cdb2",
       "meanRgba": [
-        49.36,
-        58.38,
-        42.35,
-        252.39
+        153.17,
+        110.99,
+        25.79,
+        210.9
       ],
-      "stdDev": 50.63
+      "stdDev": 68.67
     },
     "ninja/ninja_armor_ignore@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "fccf2bae8ff21619da52fc475924d173dfebfe022956daa8b8218b8c018eb82e",
+      "sha256": "a880b676fccc227586a9303833253ed179a063c5379f5a8b23d4c132edc04a83",
       "meanRgba": [
-        49.86,
-        58.76,
-        42.64,
-        252.42
+        153.78,
+        111.7,
+        26.79,
+        210.9
       ],
-      "stdDev": 47.12
+      "stdDev": 66.47
     },
     "ninja/ninja_armor_ignore@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "f7ecc01aff350374291cbcddcdc64823f49555e50b16f513a7ad7d9841d8357a",
+      "sha256": "415816ebc1a01cbb24ea887747190059e6dd77ffaa3082950cc273de1212cdb2",
       "meanRgba": [
-        49.36,
-        58.38,
-        42.35,
-        252.39
+        153.17,
+        110.99,
+        25.79,
+        210.9
       ],
-      "stdDev": 50.63
+      "stdDev": 68.67
     },
     "ninja/ninja_backstab.png": {
       "width": 64,
       "height": 64,
-      "sha256": "3b49ef30942d29d815a62ef79891ab154ee6aae0727ce1131204a4f6cb84e4e5",
+      "sha256": "7caa8e27b310f9723e4de10ad94de0c7984655db9339604b94e7a17ce6b65b6c",
       "meanRgba": [
-        62.62,
-        67.57,
-        54.94,
-        252.39
+        77.61,
+        56.28,
+        74.67,
+        252.61
       ],
-      "stdDev": 61.53
+      "stdDev": 51.12
     },
     "ninja/ninja_backstab@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "65392cf4af844a949b3f60c418c8dfab5384a6f82e485a82d1378cfd51566c2c",
+      "sha256": "e5bebf6331036f029da592335940c690b5ff90c250a9b72a137e57d7b5ce7ccf",
       "meanRgba": [
-        63.12,
-        67.95,
-        55.16,
-        252.42
+        77.93,
+        56.53,
+        74.91,
+        252.66
       ],
-      "stdDev": 58.65
+      "stdDev": 47.94
     },
     "ninja/ninja_backstab@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "3b49ef30942d29d815a62ef79891ab154ee6aae0727ce1131204a4f6cb84e4e5",
+      "sha256": "7caa8e27b310f9723e4de10ad94de0c7984655db9339604b94e7a17ce6b65b6c",
       "meanRgba": [
-        62.62,
-        67.57,
-        54.94,
-        252.39
+        77.61,
+        56.28,
+        74.67,
+        252.61
       ],
-      "stdDev": 61.53
+      "stdDev": 51.12
     },
     "ninja/ninja_death.png": {
       "width": 64,
       "height": 64,
-      "sha256": "6799b38b1dfa3b449fa0062df075971b4c87b4b0fa5a638694d10a2b87bb9a38",
+      "sha256": "34136829c06bec6bc50702d564e236e5a73220ce887fddb8d96bbf4d06288925",
       "meanRgba": [
-        46.51,
-        60.62,
-        43.62,
-        252.39
+        67.96,
+        132.35,
+        171.42,
+        248.36
       ],
-      "stdDev": 58.72
+      "stdDev": 76.57
     },
     "ninja/ninja_death@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "17ec90f2177d4faed788fc1c1f6385690799d5f0c156f8cca9154013d9063aca",
+      "sha256": "dd84fb37783aee9cc61baadf1f8038e202faf7d7768f7cae816d80f27956e624",
       "meanRgba": [
-        47.0,
-        61.0,
-        43.91,
-        252.42
+        68.62,
+        132.95,
+        172.0,
+        248.34
       ],
-      "stdDev": 55.72
+      "stdDev": 74.85
     },
     "ninja/ninja_death@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "6799b38b1dfa3b449fa0062df075971b4c87b4b0fa5a638694d10a2b87bb9a38",
+      "sha256": "34136829c06bec6bc50702d564e236e5a73220ce887fddb8d96bbf4d06288925",
       "meanRgba": [
-        46.51,
-        60.62,
-        43.62,
-        252.39
+        67.96,
+        132.35,
+        171.42,
+        248.36
       ],
-      "stdDev": 58.72
+      "stdDev": 76.57
     },
     "ninja/ninja_double_strike.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d531f6e9cf9d1bb05f696d832573e44c7cc867ce111fa44c1a200f4186952034",
+      "sha256": "5f3703fde926ce840a4bd0e1d343d4cfd5d226c2139f6ffc8856ce3338103891",
       "meanRgba": [
-        54.72,
-        73.63,
-        51.03,
-        252.39
+        60.34,
+        119.69,
+        142.84,
+        241.5
       ],
-      "stdDev": 66.17
+      "stdDev": 65.17
     },
     "ninja/ninja_double_strike@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "541a9fc68c2cbc45acae2d5ac21d72307d2652363f32fb1a3d23c4e2363cbfaa",
+      "sha256": "30a444fd3f0177c162012029d87a584e9d0ece754d587bb011292edbc4c17aa4",
       "meanRgba": [
-        55.25,
-        74.0,
-        51.32,
-        252.42
+        60.8,
+        120.18,
+        143.43,
+        241.3
       ],
-      "stdDev": 63.21
+      "stdDev": 63.37
     },
     "ninja/ninja_double_strike@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d531f6e9cf9d1bb05f696d832573e44c7cc867ce111fa44c1a200f4186952034",
+      "sha256": "5f3703fde926ce840a4bd0e1d343d4cfd5d226c2139f6ffc8856ce3338103891",
       "meanRgba": [
-        54.72,
-        73.63,
-        51.03,
-        252.39
+        60.34,
+        119.69,
+        142.84,
+        241.5
       ],
-      "stdDev": 66.17
+      "stdDev": 65.17
     },
     "ninja/ninja_focus.png": {
       "width": 64,
       "height": 64,
-      "sha256": "4835bd851cae78ecbc8a39a3c2c6e036b338946ca0d1655964e19a0711bab790",
+      "sha256": "4a7a3c3e91489ecbe18ccecad34fcb39b673bba2b80dea8db25ecfc92584814a",
       "meanRgba": [
-        51.64,
-        69.96,
-        51.5,
-        252.39
+        86.16,
+        133.32,
+        131.8,
+        244.4
       ],
-      "stdDev": 66.39
+      "stdDev": 80.42
     },
     "ninja/ninja_focus@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "88c4dbd35cd9972a52112fb5a0cedbc3f7090fc7193ab6ade01f750fbd1d3981",
+      "sha256": "cade3aecae8a1a5ab3bc0a1e09ff89bd8c4fe7b1e33f6c181ea00a60f1be9c9d",
       "meanRgba": [
-        52.12,
-        70.32,
-        51.76,
-        252.42
+        86.47,
+        133.6,
+        132.54,
+        244.33
       ],
-      "stdDev": 63.09
+      "stdDev": 78.84
     },
     "ninja/ninja_focus@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "4835bd851cae78ecbc8a39a3c2c6e036b338946ca0d1655964e19a0711bab790",
+      "sha256": "4a7a3c3e91489ecbe18ccecad34fcb39b673bba2b80dea8db25ecfc92584814a",
       "meanRgba": [
-        51.64,
-        69.96,
-        51.5,
-        252.39
+        86.16,
+        133.32,
+        131.8,
+        244.4
       ],
-      "stdDev": 66.39
+      "stdDev": 80.42
     },
     "ninja/ninja_focus_attack.png": {
       "width": 64,
       "height": 64,
-      "sha256": "efe7876478c839e1fbde57f81eb78887ccb08904da5395c8aa8586dfad572f45",
+      "sha256": "874217d01a21018e9255b09322cc9fc7beffade278c0fa3b2a59d3a4c8942273",
       "meanRgba": [
-        51.64,
-        70.01,
-        51.53,
-        252.39
+        83.45,
+        140.0,
+        132.28,
+        244.4
       ],
-      "stdDev": 66.37
+      "stdDev": 80.98
     },
     "ninja/ninja_focus_attack@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "32527b0d71eb6a65f6f00956a7f8ca10766e64b71a6163f9af6513e38af33d00",
+      "sha256": "fe96b8f227fc872efba73c3ce527ac1d1aa09e210572e7684b73df48f534d3ac",
       "meanRgba": [
-        52.12,
-        70.36,
-        51.78,
-        252.42
+        83.77,
+        140.26,
+        133.03,
+        244.33
       ],
-      "stdDev": 63.07
+      "stdDev": 79.4
     },
     "ninja/ninja_focus_attack@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "efe7876478c839e1fbde57f81eb78887ccb08904da5395c8aa8586dfad572f45",
+      "sha256": "874217d01a21018e9255b09322cc9fc7beffade278c0fa3b2a59d3a4c8942273",
       "meanRgba": [
-        51.64,
-        70.01,
-        51.53,
-        252.39
+        83.45,
+        140.0,
+        132.28,
+        244.4
       ],
-      "stdDev": 66.37
+      "stdDev": 80.98
     },
     "ninja/ninja_fukiya_barrage.png": {
       "width": 64,
       "height": 64,
-      "sha256": "321df19573a6a6b0e6934f99fa35b066d785566dc02602359f6d4c4563f1a2ba",
+      "sha256": "021c1b44cf7c433c4459587de2419129038c60015ae03a90afffb069593cc897",
       "meanRgba": [
-        89.02,
-        89.32,
-        55.06,
-        252.31
+        55.4,
+        81.78,
+        59.44,
+        252.61
       ],
-      "stdDev": 71.86
+      "stdDev": 42.12
     },
     "ninja/ninja_fukiya_barrage@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "fbb80d1f5b4098096febe9edba2f3fd71a76218a1c162b47d82ea4efa9c5842f",
+      "sha256": "97438456161646b32aa1430a6b37d31ac5de670380c1badaef658f40401b40da",
       "meanRgba": [
-        89.48,
-        89.7,
-        55.36,
-        252.35
+        55.74,
+        82.03,
+        59.68,
+        252.66
       ],
-      "stdDev": 68.25
+      "stdDev": 38.74
     },
     "ninja/ninja_fukiya_barrage@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "321df19573a6a6b0e6934f99fa35b066d785566dc02602359f6d4c4563f1a2ba",
+      "sha256": "021c1b44cf7c433c4459587de2419129038c60015ae03a90afffb069593cc897",
       "meanRgba": [
-        89.02,
-        89.32,
-        55.06,
-        252.31
+        55.4,
+        81.78,
+        59.44,
+        252.61
       ],
-      "stdDev": 71.86
+      "stdDev": 42.12
     },
     "ninja/ninja_infectious_strike.png": {
       "width": 64,
       "height": 64,
-      "sha256": "796b4c1928fdec1fc92c4a26bd8b6f4449a5f26e7f86c2dab7f176cc9c2f5541",
+      "sha256": "286ff8b97b9c7e7dc99238e6173e79b839c1aca60c7ead7f4a52ba4e52c70e48",
       "meanRgba": [
-        41.63,
-        60.93,
-        41.04,
-        252.39
+        121.81,
+        102.37,
+        45.2,
+        232.16
       ],
-      "stdDev": 50.98
+      "stdDev": 54.07
     },
     "ninja/ninja_infectious_strike@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "1ea30377f7dbbe2036031267ea194ebb8937e25b1a3e5e05ea350fcebf1fe4a8",
+      "sha256": "010157399f64b0d9fa23196ce4f75a6f762d58a6b759fa95623b098ed69fc321",
       "meanRgba": [
-        42.16,
-        61.3,
-        41.33,
-        252.42
+        122.06,
+        102.29,
+        45.17,
+        231.94
       ],
-      "stdDev": 48.17
+      "stdDev": 51.21
     },
     "ninja/ninja_infectious_strike@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "796b4c1928fdec1fc92c4a26bd8b6f4449a5f26e7f86c2dab7f176cc9c2f5541",
+      "sha256": "286ff8b97b9c7e7dc99238e6173e79b839c1aca60c7ead7f4a52ba4e52c70e48",
       "meanRgba": [
-        41.63,
-        60.93,
-        41.04,
-        252.39
+        121.81,
+        102.37,
+        45.2,
+        232.16
       ],
-      "stdDev": 50.98
+      "stdDev": 54.07
     },
     "ninja/ninja_ki_attack.png": {
       "width": 64,
       "height": 64,
-      "sha256": "69f718818795d710162694af94af39ce106ed4f962c78211fc756096d4180e5a",
+      "sha256": "e04892ef4ff50e22479193558f652a3321629da24a6ed54b2f976a3874ba687f",
       "meanRgba": [
-        54.72,
-        73.62,
-        51.02,
-        252.39
+        65.66,
+        96.66,
+        116.93,
+        252.61
       ],
-      "stdDev": 66.17
+      "stdDev": 68.62
     },
     "ninja/ninja_ki_attack@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "8fccc916b96710f50dfb2bd468353bb9fd6da351e26dd0e5defc9ef49415f75e",
+      "sha256": "fb328283fd2fab551daa07d14dab47181f1b9118ae50291eb9f445608c1c68d8",
       "meanRgba": [
-        55.25,
-        73.98,
-        51.31,
-        252.42
+        66.0,
+        96.94,
+        117.22,
+        252.66
       ],
-      "stdDev": 63.22
+      "stdDev": 66.15
     },
     "ninja/ninja_ki_attack@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "69f718818795d710162694af94af39ce106ed4f962c78211fc756096d4180e5a",
+      "sha256": "e04892ef4ff50e22479193558f652a3321629da24a6ed54b2f976a3874ba687f",
       "meanRgba": [
-        54.72,
-        73.62,
-        51.02,
-        252.39
+        65.66,
+        96.66,
+        116.93,
+        252.61
       ],
-      "stdDev": 66.17
+      "stdDev": 68.62
     },
     "ninja/ninja_lethal_toxins.png": {
       "width": 64,
       "height": 64,
-      "sha256": "e5408ea0ee0994502a58006640626c013b1ca51c18dad82abb9c7b3ff8f21584",
+      "sha256": "b0eed6ce60ac0a3d19c1ae72fbd518c95204ea5a01f71f775e868a0dc30dd48b",
       "meanRgba": [
-        43.46,
-        63.51,
-        42.37,
-        252.39
+        58.95,
+        100.4,
+        61.67,
+        185.05
       ],
-      "stdDev": 52.62
+      "stdDev": 60.63
     },
     "ninja/ninja_lethal_toxins@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "a6c3afc9856efd39691846794b3302906a6b72f732372804c6f773d0238b9158",
+      "sha256": "a2d150ad9e04112a045980dc39c7967d241bde8932cb0400c9c0b858f79e382d",
       "meanRgba": [
-        44.06,
-        63.9,
-        42.67,
-        252.42
+        59.93,
+        102.41,
+        63.56,
+        184.9
       ],
-      "stdDev": 49.75
+      "stdDev": 58.82
     },
     "ninja/ninja_lethal_toxins@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "e5408ea0ee0994502a58006640626c013b1ca51c18dad82abb9c7b3ff8f21584",
+      "sha256": "b0eed6ce60ac0a3d19c1ae72fbd518c95204ea5a01f71f775e868a0dc30dd48b",
       "meanRgba": [
-        43.46,
-        63.51,
-        42.37,
-        252.39
+        58.95,
+        100.4,
+        61.67,
+        185.05
       ],
-      "stdDev": 52.62
+      "stdDev": 60.63
     },
     "ninja/ninja_master_assassin.png": {
       "width": 64,
       "height": 64,
-      "sha256": "268ad6792c2a4aee7c3bf66b952e9086f57d86d1b1fa55179e95d9fc754f4468",
+      "sha256": "4254f655a458a15530c8042ee6a60ea1b04b0e3a543ec655fa82ea05f51536c7",
       "meanRgba": [
-        55.26,
-        63.03,
-        46.02,
-        252.39
+        64.95,
+        83.86,
+        83.95,
+        252.61
       ],
-      "stdDev": 56.48
+      "stdDev": 60.66
     },
     "ninja/ninja_master_assassin@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "7eafeda7acf1ca083179f4242696b8256b449247be2eb8dddc4829a29e392571",
+      "sha256": "1ba104b3349382d2c281c2b9d53f3d6b26af7f837f4c1c639107415ef2a90541",
       "meanRgba": [
-        55.88,
-        63.45,
-        46.34,
-        252.42
+        65.23,
+        84.06,
+        84.17,
+        252.66
       ],
-      "stdDev": 52.75
+      "stdDev": 57.34
     },
     "ninja/ninja_master_assassin@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "268ad6792c2a4aee7c3bf66b952e9086f57d86d1b1fa55179e95d9fc754f4468",
+      "sha256": "4254f655a458a15530c8042ee6a60ea1b04b0e3a543ec655fa82ea05f51536c7",
       "meanRgba": [
-        55.26,
-        63.03,
-        46.02,
-        252.39
+        64.95,
+        83.86,
+        83.95,
+        252.61
       ],
-      "stdDev": 56.48
+      "stdDev": 60.66
     },
     "ninja/ninja_mirror.png": {
       "width": 64,
       "height": 64,
-      "sha256": "06f6ee70c9f9a6bdeb8e9c9678efb09ebff5e3ddc3e8fb0e1eee9527ed1f817f",
+      "sha256": "6e35aea33e8c19265cea45837719963197265dcd5c43401db0f215573b21d605",
       "meanRgba": [
-        38.01,
-        54.26,
-        39.09,
-        252.39
+        100.18,
+        141.19,
+        58.29,
+        248.66
       ],
-      "stdDev": 44.68
+      "stdDev": 66.67
     },
     "ninja/ninja_mirror@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "defcbcaf8ae367c756afdddff1e995bd4a1dd31a35ff1afbd24edacf37e24e5a",
+      "sha256": "8d25023b533e56e39a48aa4eb91db821d092307e9a6eae04dcdf353622b0b7ed",
       "meanRgba": [
-        38.48,
-        54.63,
-        39.39,
-        252.42
+        100.56,
+        141.52,
+        58.62,
+        248.62
       ],
-      "stdDev": 41.1
+      "stdDev": 64.71
     },
     "ninja/ninja_mirror@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "06f6ee70c9f9a6bdeb8e9c9678efb09ebff5e3ddc3e8fb0e1eee9527ed1f817f",
+      "sha256": "6e35aea33e8c19265cea45837719963197265dcd5c43401db0f215573b21d605",
       "meanRgba": [
-        38.01,
-        54.26,
-        39.09,
-        252.39
+        100.18,
+        141.19,
+        58.29,
+        248.66
       ],
-      "stdDev": 44.68
+      "stdDev": 66.67
     },
     "ninja/ninja_mirror_image.png": {
       "width": 64,
       "height": 64,
-      "sha256": "8f3d2724d6b509abd1fd4ddf05b4e6a5b4afebc61dbb42faa683ca40f0b78264",
+      "sha256": "b0216e249d363161369a86756dc125a238feb75fe084da75af95cb3a88118273",
       "meanRgba": [
-        38.01,
-        54.23,
-        39.08,
-        252.39
+        96.9,
+        148.89,
+        58.86,
+        248.66
       ],
-      "stdDev": 44.68
+      "stdDev": 67.49
     },
     "ninja/ninja_mirror_image@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "43a88822045f8ec47a3523bf481cddf66b5414e7bea3d0caece13f71f44934f5",
+      "sha256": "aaf499bfa1e84c7045e05480d98e02d85662707594deee9e8498f6f9cbb2305b",
       "meanRgba": [
-        38.48,
-        54.6,
-        39.37,
-        252.42
+        97.29,
+        149.19,
+        59.19,
+        248.62
       ],
-      "stdDev": 41.11
+      "stdDev": 65.58
     },
     "ninja/ninja_mirror_image@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "8f3d2724d6b509abd1fd4ddf05b4e6a5b4afebc61dbb42faa683ca40f0b78264",
+      "sha256": "b0216e249d363161369a86756dc125a238feb75fe084da75af95cb3a88118273",
       "meanRgba": [
-        38.01,
-        54.23,
-        39.08,
-        252.39
+        96.9,
+        148.89,
+        58.86,
+        248.66
       ],
-      "stdDev": 44.68
+      "stdDev": 67.49
     },
     "ninja/ninja_shadow_discipline.png": {
       "width": 64,
       "height": 64,
-      "sha256": "20e7e5de563d51fd1d30642d3b158ca8b8eef2dc8f1f49c2cbd4db943f54e634",
+      "sha256": "af0b69b1acc3f32b791d15ee0f8633dc169a51dd91ddb25c55e3bf5c84b752f8",
       "meanRgba": [
-        51.21,
-        73.59,
-        54.39,
-        252.39
+        82.52,
+        92.43,
+        92.08,
+        241.66
       ],
-      "stdDev": 56.24
+      "stdDev": 57.33
     },
     "ninja/ninja_shadow_discipline@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "82ee6f478362b7f2772fb6fd2035dbd99b76dedf2eb5d2d58116cf5179a5bbce",
+      "sha256": "9cd14db14cc491db4b1bb26621d4d729b1c0632fc84a0caacbb0c0cc47aa099e",
       "meanRgba": [
-        51.75,
-        73.98,
-        54.7,
-        252.42
+        83.69,
+        93.75,
+        92.83,
+        241.51
       ],
-      "stdDev": 53.08
+      "stdDev": 54.21
     },
     "ninja/ninja_shadow_discipline@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "20e7e5de563d51fd1d30642d3b158ca8b8eef2dc8f1f49c2cbd4db943f54e634",
+      "sha256": "af0b69b1acc3f32b791d15ee0f8633dc169a51dd91ddb25c55e3bf5c84b752f8",
       "meanRgba": [
-        51.21,
-        73.59,
-        54.39,
-        252.39
+        82.52,
+        92.43,
+        92.08,
+        241.66
       ],
-      "stdDev": 56.24
+      "stdDev": 57.33
     },
     "ninja/ninja_shadow_strike.png": {
       "width": 64,
       "height": 64,
-      "sha256": "cd5e78380fa1672500e79e1d6e68330b835e451474b9a6420bcc7f4d2baf099a",
+      "sha256": "35615337322891a0b3a2b341d2251f597df525598b6d492d0ba3cf8794fbb2a7",
       "meanRgba": [
-        62.64,
-        67.6,
-        54.96,
-        252.39
+        61.64,
+        135.15,
+        156.36,
+        245.01
       ],
-      "stdDev": 61.52
+      "stdDev": 72.13
     },
     "ninja/ninja_shadow_strike@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "e5dd132f811361779cf1b7e184c4a7ea9cf6358a2020758705b6255981988045",
+      "sha256": "e30a0905ef39cccdb24c1cafb00de36ad8f1319da623e27d8cf0b3a4f6d52ed8",
       "meanRgba": [
-        63.13,
-        67.97,
-        55.17,
-        252.42
+        62.06,
+        135.39,
+        156.73,
+        244.95
       ],
-      "stdDev": 58.64
+      "stdDev": 70.45
     },
     "ninja/ninja_shadow_strike@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "cd5e78380fa1672500e79e1d6e68330b835e451474b9a6420bcc7f4d2baf099a",
+      "sha256": "35615337322891a0b3a2b341d2251f597df525598b6d492d0ba3cf8794fbb2a7",
       "meanRgba": [
-        62.64,
-        67.6,
-        54.96,
-        252.39
+        61.64,
+        135.15,
+        156.36,
+        245.01
       ],
-      "stdDev": 61.52
+      "stdDev": 72.13
     },
     "ninja/ninja_shadowjump.png": {
       "width": 64,
       "height": 64,
-      "sha256": "41ee25b8ee547582e5daba8f5d2c861eee2225c1b99d035e4f3410946fdd2b7f",
+      "sha256": "926ab8469257ef8415f6f93fb6f0d5bbc7577bfb0d832657eff76a5968f0e12a",
       "meanRgba": [
-        54.06,
-        66.35,
-        49.43,
-        252.39
+        64.14,
+        117.53,
+        172.82,
+        215.2
       ],
-      "stdDev": 55.68
+      "stdDev": 80.63
     },
     "ninja/ninja_shadowjump@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "a0f20a31ed84e77d24b5f6949be9531164bd85b9e6f10742c85ba46151462ba0",
+      "sha256": "6b327a9b4dbd9ec902856c09cb53793c990069f2306cc4b55a1a4f60d296c542",
       "meanRgba": [
-        54.55,
-        66.72,
-        49.74,
-        252.42
+        64.92,
+        117.96,
+        172.89,
+        215.08
       ],
-      "stdDev": 52.58
+      "stdDev": 78.75
     },
     "ninja/ninja_shadowjump@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "41ee25b8ee547582e5daba8f5d2c861eee2225c1b99d035e4f3410946fdd2b7f",
+      "sha256": "926ab8469257ef8415f6f93fb6f0d5bbc7577bfb0d832657eff76a5968f0e12a",
       "meanRgba": [
-        54.06,
-        66.35,
-        49.43,
-        252.39
+        64.14,
+        117.53,
+        172.82,
+        215.2
       ],
-      "stdDev": 55.68
+      "stdDev": 80.63
     },
     "ninja/ninja_shuriken.png": {
       "width": 64,
       "height": 64,
-      "sha256": "15478ee30d1e06e8cc4965d12dc7d04387fe405082b3483805ab390f5cda4201",
+      "sha256": "2d442fb9a0a88b19f35891e540e0764a7a5d1f7eff72028e512b58b8a27a4f58",
       "meanRgba": [
-        49.19,
-        60.78,
-        43.63,
-        252.39
+        56.99,
+        90.15,
+        62.3,
+        252.61
       ],
-      "stdDev": 62.53
+      "stdDev": 49.82
     },
     "ninja/ninja_shuriken@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "73fab4910e4f584128157cbd002a764e96ac1dbaed97fe00fc21943a73520a6e",
+      "sha256": "7696d6dff6dae71e7cc28a5c5cb163e7edbd3383fd861f598fa5387427c60026",
       "meanRgba": [
-        49.74,
-        61.15,
-        43.88,
-        252.42
+        57.33,
+        90.41,
+        62.52,
+        252.66
       ],
-      "stdDev": 59.71
+      "stdDev": 46.53
     },
     "ninja/ninja_shuriken@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "15478ee30d1e06e8cc4965d12dc7d04387fe405082b3483805ab390f5cda4201",
+      "sha256": "2d442fb9a0a88b19f35891e540e0764a7a5d1f7eff72028e512b58b8a27a4f58",
       "meanRgba": [
-        49.19,
-        60.78,
-        43.63,
-        252.39
+        56.99,
+        90.15,
+        62.3,
+        252.61
       ],
-      "stdDev": 62.53
+      "stdDev": 49.82
     },
     "ninja/ninja_smoke_bomb.png": {
       "width": 64,
       "height": 64,
-      "sha256": "9cf12050184da652b077c61a0190d49c33edf1d583e906fda84e6b139c4f5b41",
+      "sha256": "071a96a2148790611c6ade7c8e72c9879d0b2c6087784e4cd63663131a097ca3",
       "meanRgba": [
-        69.44,
-        88.84,
-        73.19,
-        252.39
+        84.88,
+        80.01,
+        86.63,
+        252.61
       ],
-      "stdDev": 67.83
+      "stdDev": 53.92
     },
     "ninja/ninja_smoke_bomb@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "46c1414f6698048f98f01cab3f3d35f4bd051a80304b26e4a5c51fb465481371",
+      "sha256": "0f8039a078f93dad926d7a059e46070dc33b91b914f8885eff857d376347f44a",
       "meanRgba": [
-        69.94,
-        89.22,
-        73.47,
-        252.42
+        85.17,
+        80.23,
+        86.85,
+        252.66
       ],
-      "stdDev": 65.27
+      "stdDev": 50.96
     },
     "ninja/ninja_smoke_bomb@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "9cf12050184da652b077c61a0190d49c33edf1d583e906fda84e6b139c4f5b41",
+      "sha256": "071a96a2148790611c6ade7c8e72c9879d0b2c6087784e4cd63663131a097ca3",
       "meanRgba": [
-        69.44,
-        88.84,
-        73.19,
-        252.39
+        84.88,
+        80.01,
+        86.63,
+        252.61
       ],
-      "stdDev": 67.83
+      "stdDev": 53.92
     },
     "ninja/ninja_surprise_attack.png": {
       "width": 64,
       "height": 64,
-      "sha256": "5099f7c769c8915d44faca2f9f2f01b935d5795cd403912f58ded37e2be14f5d",
+      "sha256": "27f43bab9118fafab6b0bac86e6560aba788b1ed14d551c793ec22d9f9372033",
       "meanRgba": [
-        69.64,
-        72.53,
-        45.51,
-        252.39
+        45.85,
+        71.58,
+        76.98,
+        252.61
       ],
-      "stdDev": 69.76
+      "stdDev": 55.04
     },
     "ninja/ninja_surprise_attack@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "2998dc8f0a8b18a891f60889745c4ac359edcb6f110a14db3775a2497b995f09",
+      "sha256": "7531a7317f7b06d27a1c93ca601e427e78e4d12486588c229026670feac664f2",
       "meanRgba": [
-        70.19,
-        72.94,
-        45.81,
-        252.42
+        46.17,
+        71.86,
+        77.22,
+        252.66
       ],
-      "stdDev": 67.18
+      "stdDev": 52.22
     },
     "ninja/ninja_surprise_attack@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "5099f7c769c8915d44faca2f9f2f01b935d5795cd403912f58ded37e2be14f5d",
+      "sha256": "27f43bab9118fafab6b0bac86e6560aba788b1ed14d551c793ec22d9f9372033",
       "meanRgba": [
-        69.64,
-        72.53,
-        45.51,
-        252.39
+        45.85,
+        71.58,
+        76.98,
+        252.61
       ],
-      "stdDev": 69.76
+      "stdDev": 55.04
     },
     "ninja/ninja_twin_shadow.png": {
       "width": 64,
       "height": 64,
-      "sha256": "68e49cffe45700d9bae2b1d315543292f811cc3660e8d71d6b671cb46ed35d0f",
+      "sha256": "d4d31b1c42a26ae90958705323c1e885df42f2b0040911ed6e5b015cc04ba4a0",
       "meanRgba": [
-        86.58,
-        80.47,
-        51.77,
-        252.31
+        98.99,
+        71.02,
+        91.7,
+        252.61
       ],
-      "stdDev": 67.52
+      "stdDev": 59.47
     },
     "ninja/ninja_twin_shadow@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "fbeb8b046c342fc16678a2663abeae3a19c94c6a065acaa36ebec0c259977e61",
+      "sha256": "ab77b162253d4d87a1f7ef9e051e8862e0683d8286b55185c8b4e03776f55d01",
       "meanRgba": [
-        87.13,
-        80.89,
-        52.09,
-        252.35
+        99.23,
+        71.27,
+        91.97,
+        252.66
       ],
-      "stdDev": 63.46
+      "stdDev": 56.22
     },
     "ninja/ninja_twin_shadow@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "68e49cffe45700d9bae2b1d315543292f811cc3660e8d71d6b671cb46ed35d0f",
+      "sha256": "d4d31b1c42a26ae90958705323c1e885df42f2b0040911ed6e5b015cc04ba4a0",
       "meanRgba": [
-        86.58,
-        80.47,
-        51.77,
-        252.31
+        98.99,
+        71.02,
+        91.7,
+        252.61
       ],
-      "stdDev": 67.52
+      "stdDev": 59.47
     },
     "ninja/ninja_way_of_stealth.png": {
       "width": 64,
       "height": 64,
-      "sha256": "2f841c818c76082d614db1e404e60cdaca4c5cfd26c329332065c70b8913e8c0",
+      "sha256": "face018a55e704ffafa394cd3a55e4e6d8bec5bdccebcae7dbd868fcf0fcaca4",
       "meanRgba": [
-        55.4,
-        67.84,
-        51.82,
-        252.39
+        61.0,
+        77.78,
+        78.14,
+        252.61
       ],
-      "stdDev": 57.94
+      "stdDev": 58.94
     },
     "ninja/ninja_way_of_stealth@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "06767a02a4cf07cffb5433b5a8cf4ea947cca2bd60424f14ef163ee4450868f9",
+      "sha256": "be6e3d09bebe1661ebc5117a772cd839c04736ae8f6366362c7243328d191029",
       "meanRgba": [
-        55.96,
-        68.22,
-        52.12,
-        252.42
+        61.29,
+        78.02,
+        78.34,
+        252.66
       ],
-      "stdDev": 54.99
+      "stdDev": 55.68
     },
     "ninja/ninja_way_of_stealth@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "2f841c818c76082d614db1e404e60cdaca4c5cfd26c329332065c70b8913e8c0",
+      "sha256": "face018a55e704ffafa394cd3a55e4e6d8bec5bdccebcae7dbd868fcf0fcaca4",
       "meanRgba": [
-        55.4,
-        67.84,
-        51.82,
-        252.39
+        61.0,
+        77.78,
+        78.14,
+        252.61
       ],
-      "stdDev": 57.94
+      "stdDev": 58.94
     },
     "ninja/portrait-ninja-64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "51de709c0529e5a5b9cf4d8e8e297a7d560f25c050604641c66a466cf6337c5c",
+      "sha256": "6865e957b87122fc6e73937fd4f35626eb9bb19c720135c94409011f49843b3a",
       "meanRgba": [
-        56.74,
-        63.7,
-        59.1,
-        252.39
+        60.9,
+        67.42,
+        60.46,
+        252.61
       ],
-      "stdDev": 48.99
+      "stdDev": 51.31
     },
     "ninja/portrait-ninja.png": {
       "width": 256,
       "height": 256,
-      "sha256": "795f8014c6d4dc0f8e7f454846bdc690abc7e16367629983bdd2521e633a7a1b",
+      "sha256": "9a2cfb992f33f426d47fc09a169892ae237e3f1b8a005df996747f2e338f8c02",
       "meanRgba": [
-        56.71,
-        63.78,
-        59.2,
-        252.52
+        60.89,
+        67.37,
+        60.42,
+        252.75
       ],
-      "stdDev": 56.87
+      "stdDev": 59.96
     },
     "samurai/portrait-samurai-64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "8ea61c8d64f2a0fe30ba9f70b282cabb910137c2072372330d992a11853ae4fe",
+      "sha256": "171931e7452a297b45734c73560ea17ca65c12c90f69c2f574822cd0b6495320",
       "meanRgba": [
-        65.37,
-        52.54,
-        41.17,
-        252.39
+        75.34,
+        59.93,
+        46.0,
+        252.61
       ],
-      "stdDev": 50.8
+      "stdDev": 53.14
     },
     "samurai/portrait-samurai.png": {
       "width": 256,
       "height": 256,
-      "sha256": "ab5122e063c852cab638fa6f4224b3be0436041ca79b6cfac9822a3c9b70882d",
+      "sha256": "d52b0fbb43a8d710ed3bb72b1c891b3b97be78a9fb7d779a797690319bd37029",
       "meanRgba": [
-        65.4,
-        52.59,
-        41.23,
-        252.52
+        75.3,
+        59.92,
+        46.05,
+        252.75
       ],
-      "stdDev": 57.84
+      "stdDev": 61.19
     },
     "samurai/samurai_armor_ignore.png": {
       "width": 64,
       "height": 64,
-      "sha256": "7ae9ede9a5ed3a155d1c609d23700ee52b6c2b594fb0c15b041e1a8a1c29f50b",
+      "sha256": "0ec76cfdcae63f687eec1e7f120c4c5396102f1270139c204cfe76a34cc1b7aa",
       "meanRgba": [
-        77.8,
-        55.51,
-        45.19,
-        252.39
+        172.07,
+        100.87,
+        22.46,
+        210.9
       ],
-      "stdDev": 59.94
+      "stdDev": 66.47
     },
     "samurai/samurai_armor_ignore@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "2b63e25d9d9def0924d6962543524309dacb0e105c0109ede11bd3edb38f28e9",
+      "sha256": "6fbe28bc594eac744648ad8fae958287464a89d65873279ff71999b1d011f2b3",
       "meanRgba": [
-        78.23,
-        55.98,
-        45.51,
-        252.42
+        172.63,
+        101.58,
+        23.44,
+        210.9
       ],
-      "stdDev": 57.29
+      "stdDev": 64.87
     },
     "samurai/samurai_armor_ignore@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "7ae9ede9a5ed3a155d1c609d23700ee52b6c2b594fb0c15b041e1a8a1c29f50b",
+      "sha256": "0ec76cfdcae63f687eec1e7f120c4c5396102f1270139c204cfe76a34cc1b7aa",
       "meanRgba": [
-        77.8,
-        55.51,
-        45.19,
-        252.39
+        172.07,
+        100.87,
+        22.46,
+        210.9
       ],
-      "stdDev": 59.94
+      "stdDev": 66.47
     },
     "samurai/samurai_bladeweave.png": {
       "width": 64,
       "height": 64,
-      "sha256": "31e4c1cf5f19200ab33256ae8e4847244dfdd17308b9ee52963d50148689741d",
+      "sha256": "22c0b78433009717a051f3444396902ccf24794d25e476770babb4d3368c3448",
       "meanRgba": [
-        86.2,
-        63.89,
-        50.6,
-        252.39
+        144.34,
+        78.35,
+        34.56,
+        200.12
       ],
-      "stdDev": 70.53
+      "stdDev": 59.17
     },
     "samurai/samurai_bladeweave@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "9e789baa8949a9289029b6aafb8e3c08117d6baba5b2085ba0a084b6bf4c5340",
+      "sha256": "259d33bbc9071c9a7bdbc8ae6fb44161681b77eecb76bf02c851ea78d5bbeb43",
       "meanRgba": [
-        86.62,
-        64.5,
-        51.32,
-        252.42
+        145.85,
+        79.5,
+        35.5,
+        200.04
       ],
-      "stdDev": 67.65
+      "stdDev": 57.58
     },
     "samurai/samurai_bladeweave@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "31e4c1cf5f19200ab33256ae8e4847244dfdd17308b9ee52963d50148689741d",
+      "sha256": "22c0b78433009717a051f3444396902ccf24794d25e476770babb4d3368c3448",
       "meanRgba": [
-        86.2,
-        63.89,
-        50.6,
-        252.39
+        144.34,
+        78.35,
+        34.56,
+        200.12
       ],
-      "stdDev": 70.53
+      "stdDev": 59.17
     },
     "samurai/samurai_bushido_initiate.png": {
       "width": 64,
       "height": 64,
-      "sha256": "768afc27da0ad9cc47be4f7c1bd59e3bcd9b1be2006819fbd5b4a0ff906fef91",
+      "sha256": "9027e06b86bd2f9f9963ce0c895f1f925caf6edb1986b5105f5a4476502445d1",
       "meanRgba": [
-        89.51,
-        62.07,
-        37.14,
-        252.39
+        106.41,
+        120.25,
+        80.36,
+        248.09
       ],
-      "stdDev": 61.08
+      "stdDev": 63.45
     },
     "samurai/samurai_bushido_initiate@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "fbb48bbe4d642cd6ea0e0884139d247276f32155b9a28cc7863ffd4477960897",
+      "sha256": "a262189e4312c8b00dfe915ad1719a409d68af7514a5cb56979839d687f0aa26",
       "meanRgba": [
-        89.93,
-        62.57,
-        37.51,
-        252.42
+        106.75,
+        120.53,
+        80.63,
+        248.07
       ],
-      "stdDev": 58.19
+      "stdDev": 60.91
     },
     "samurai/samurai_bushido_initiate@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "768afc27da0ad9cc47be4f7c1bd59e3bcd9b1be2006819fbd5b4a0ff906fef91",
+      "sha256": "9027e06b86bd2f9f9963ce0c895f1f925caf6edb1986b5105f5a4476502445d1",
       "meanRgba": [
-        89.51,
-        62.07,
-        37.14,
-        252.39
+        106.41,
+        120.25,
+        80.36,
+        248.09
       ],
-      "stdDev": 61.08
+      "stdDev": 63.45
     },
     "samurai/samurai_bushido_master.png": {
       "width": 64,
       "height": 64,
-      "sha256": "f0c60be9dca5bdf8e57bd491077390d165fade35fe75fe4f2d5c2cfdc1f6b397",
+      "sha256": "e5304d3f97e2c04dfc22d13de0c3311fd9f8dcf64439da6a29074f0a4f255deb",
       "meanRgba": [
-        106.62,
-        76.09,
-        39.78,
-        252.39
+        152.39,
+        113.17,
+        52.71,
+        252.61
       ],
-      "stdDev": 65.7
+      "stdDev": 60.92
     },
     "samurai/samurai_bushido_master@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "5d9f235e68f7116485cad81a1659824d3402a7cc9a491873c65811299c665c4a",
+      "sha256": "19582fde03624ecba86444259ac03ffd0baf075697c17357d69745768948ff0a",
       "meanRgba": [
-        107.06,
-        76.59,
-        40.12,
-        252.42
+        152.62,
+        113.41,
+        52.92,
+        252.66
       ],
-      "stdDev": 62.9
+      "stdDev": 56.97
     },
     "samurai/samurai_bushido_master@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "f0c60be9dca5bdf8e57bd491077390d165fade35fe75fe4f2d5c2cfdc1f6b397",
+      "sha256": "e5304d3f97e2c04dfc22d13de0c3311fd9f8dcf64439da6a29074f0a4f255deb",
       "meanRgba": [
-        106.62,
-        76.09,
-        39.78,
-        252.39
+        152.39,
+        113.17,
+        52.71,
+        252.61
       ],
-      "stdDev": 65.7
+      "stdDev": 60.92
     },
     "samurai/samurai_confidence.png": {
       "width": 64,
       "height": 64,
-      "sha256": "fb1a3d3e55ffebeefaa3273dd389274de13871d51373454393526bb6e5ca43fd",
+      "sha256": "19dfc2c1c741bf23da50db0e7bd57880892023e37931930373fb5d04e833fb3f",
       "meanRgba": [
-        78.56,
-        53.21,
-        30.76,
-        252.39
+        123.81,
+        86.16,
+        47.39,
+        252.61
       ],
-      "stdDev": 54.98
+      "stdDev": 56.12
     },
     "samurai/samurai_confidence@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "d45bd1a6b1ee1542d90723c9e6a5767c475d81dc977d6ebe741204057dd6de3d",
+      "sha256": "65777279b3e65cbaf3df5fe3ba077e2daf57e587f7f3f25776fca44d4a062918",
       "meanRgba": [
-        79.1,
-        53.79,
-        31.08,
-        252.42
+        124.08,
+        86.52,
+        47.7,
+        252.66
       ],
-      "stdDev": 52.04
+      "stdDev": 53.21
     },
     "samurai/samurai_confidence@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "fb1a3d3e55ffebeefaa3273dd389274de13871d51373454393526bb6e5ca43fd",
+      "sha256": "19dfc2c1c741bf23da50db0e7bd57880892023e37931930373fb5d04e833fb3f",
       "meanRgba": [
-        78.56,
-        53.21,
-        30.76,
-        252.39
+        123.81,
+        86.16,
+        47.39,
+        252.61
       ],
-      "stdDev": 54.98
+      "stdDev": 56.12
     },
     "samurai/samurai_counter.png": {
       "width": 64,
       "height": 64,
-      "sha256": "3208c7283d729c2cae057ed0e85ec2cd90ef091a144a80c8ed21c68e361d6a18",
+      "sha256": "e7716d94dd51d546edfc308f2e0b5a1245fbd0302709a23c80ad10deea9a5f18",
       "meanRgba": [
-        83.42,
-        52.9,
-        36.84,
-        252.39
+        148.95,
+        84.07,
+        27.97,
+        213.8
       ],
-      "stdDev": 58.43
+      "stdDev": 56.03
     },
     "samurai/samurai_counter@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "41aed246fb3e4b5cd7a41e0598aa12aa658f8cb0f5c2fa16bf3b1d7afa897169",
+      "sha256": "ed96a869d2cd8b4a42915fea3563035cd561aff8b02fe386f7c0f390a51c6b9b",
       "meanRgba": [
-        83.84,
-        53.36,
-        37.17,
-        252.42
+        148.97,
+        84.24,
+        28.35,
+        213.72
       ],
-      "stdDev": 55.49
+      "stdDev": 53.96
     },
     "samurai/samurai_counter@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "3208c7283d729c2cae057ed0e85ec2cd90ef091a144a80c8ed21c68e361d6a18",
+      "sha256": "e7716d94dd51d546edfc308f2e0b5a1245fbd0302709a23c80ad10deea9a5f18",
       "meanRgba": [
-        83.42,
-        52.9,
-        36.84,
-        252.39
+        148.95,
+        84.07,
+        27.97,
+        213.8
       ],
-      "stdDev": 58.43
+      "stdDev": 56.03
     },
     "samurai/samurai_counter_attack.png": {
       "width": 64,
       "height": 64,
-      "sha256": "5f1610aaa6d583d6a0e87814d552ae60859e993ebcef0d35e401fb8cd026e865",
+      "sha256": "dc423d7c09808e907a25c42a11fdd55c9681427645c7461f8cb7a284af97a070",
       "meanRgba": [
-        83.48,
-        52.9,
-        36.85,
-        252.39
+        153.97,
+        84.07,
+        27.97,
+        213.8
       ],
-      "stdDev": 58.41
+      "stdDev": 56.63
     },
     "samurai/samurai_counter_attack@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "4543f4d9a2c3c95ff9872cc9452b25a2e8798825856c79899e01c2da18eec98c",
+      "sha256": "cdbcc58906b4ff968fbdce1dc0cb331bcbe710108065c92d9ef2a0e25dd71fea",
       "meanRgba": [
-        83.89,
-        53.37,
-        37.18,
-        252.42
+        154.02,
+        84.24,
+        28.35,
+        213.72
       ],
-      "stdDev": 55.47
+      "stdDev": 54.56
     },
     "samurai/samurai_counter_attack@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "5f1610aaa6d583d6a0e87814d552ae60859e993ebcef0d35e401fb8cd026e865",
+      "sha256": "dc423d7c09808e907a25c42a11fdd55c9681427645c7461f8cb7a284af97a070",
       "meanRgba": [
-        83.48,
-        52.9,
-        36.85,
-        252.39
+        153.97,
+        84.07,
+        27.97,
+        213.8
       ],
-      "stdDev": 58.41
+      "stdDev": 56.63
     },
     "samurai/samurai_crushing_blow.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d9750bc22088b975d56a4e1bb1c8c0f7bb76af84d04cfbcd54e2f3edad7dc9dc",
+      "sha256": "3bdd82bbc545e244498792eae0d9960f350598b919cd478a6752244039e02ac0",
       "meanRgba": [
-        90.15,
-        60.52,
-        36.79,
-        252.39
+        63.76,
+        102.42,
+        133.17,
+        184.7
       ],
-      "stdDev": 60.01
+      "stdDev": 90.35
     },
     "samurai/samurai_crushing_blow@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "b196b2d891c11aa36903fa402aa1515c9d24ffd693a96ffc7205ee6330913cf3",
+      "sha256": "8fd84c1e991b7c59660c2ff6318d230017a0ff3fb9dd7e9a3156e7b06feab221",
       "meanRgba": [
-        90.54,
-        60.98,
-        37.12,
-        252.42
+        64.82,
+        103.25,
+        133.65,
+        184.62
       ],
-      "stdDev": 57.1
+      "stdDev": 88.67
     },
     "samurai/samurai_crushing_blow@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d9750bc22088b975d56a4e1bb1c8c0f7bb76af84d04cfbcd54e2f3edad7dc9dc",
+      "sha256": "3bdd82bbc545e244498792eae0d9960f350598b919cd478a6752244039e02ac0",
       "meanRgba": [
-        90.15,
-        60.52,
-        36.79,
-        252.39
+        63.76,
+        102.42,
+        133.17,
+        184.7
       ],
-      "stdDev": 60.01
+      "stdDev": 90.35
     },
     "samurai/samurai_double_strike.png": {
       "width": 64,
       "height": 64,
-      "sha256": "e8955ff3281bb6d703839678db503e3840b6cabc6c2feaa1c283f0d81d9c977e",
+      "sha256": "a284dbe76f1e8a01e9af5e1455e1679149470da3c67437061726ada0375f65b8",
       "meanRgba": [
-        85.98,
-        57.34,
-        40.97,
-        252.39
+        72.04,
+        108.26,
+        134.8,
+        241.5
       ],
-      "stdDev": 64.58
+      "stdDev": 66.49
     },
     "samurai/samurai_double_strike@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "78966f0c79ea53b2d98522182e3a7cd09ed369da532b1df71aebbf695bca27b6",
+      "sha256": "368d56e9531968512060f074e5dfcef7603ee15ad9cff6570798cd5fb9081359",
       "meanRgba": [
-        86.5,
-        57.86,
-        41.29,
-        252.42
+        72.55,
+        108.81,
+        135.43,
+        241.3
       ],
-      "stdDev": 61.63
+      "stdDev": 64.22
     },
     "samurai/samurai_double_strike@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "e8955ff3281bb6d703839678db503e3840b6cabc6c2feaa1c283f0d81d9c977e",
+      "sha256": "a284dbe76f1e8a01e9af5e1455e1679149470da3c67437061726ada0375f65b8",
       "meanRgba": [
-        85.98,
-        57.34,
-        40.97,
-        252.39
+        72.04,
+        108.26,
+        134.8,
+        241.5
       ],
-      "stdDev": 64.58
+      "stdDev": 66.49
     },
     "samurai/samurai_evasion.png": {
       "width": 64,
       "height": 64,
-      "sha256": "6dcf9f6a8ae6550fdaba6eff56e918f0fea06ef866c27ac4334ae5e6e5b8c469",
+      "sha256": "1ffdc41241c9108e960e38611cdfd6b08df30376cc35f6cadc7ce892dd743314",
       "meanRgba": [
-        80.66,
-        59.67,
-        49.46,
-        252.39
+        79.53,
+        75.99,
+        64.07,
+        252.61
       ],
-      "stdDev": 63.66
+      "stdDev": 59.39
     },
     "samurai/samurai_evasion@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "7d20d16e67456241da71bfcebeb8a31ef3afc57c1a7ec4fcf73fed0146f237b1",
+      "sha256": "7d05acd12d5e7bf3bc4e770a482b968e8aab29e0a1aef3852c8033cd06ae6e11",
       "meanRgba": [
-        81.07,
-        60.18,
-        49.88,
-        252.42
+        79.83,
+        76.31,
+        64.37,
+        252.66
       ],
-      "stdDev": 59.81
+      "stdDev": 56.45
     },
     "samurai/samurai_evasion@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "6dcf9f6a8ae6550fdaba6eff56e918f0fea06ef866c27ac4334ae5e6e5b8c469",
+      "sha256": "1ffdc41241c9108e960e38611cdfd6b08df30376cc35f6cadc7ce892dd743314",
       "meanRgba": [
-        80.66,
-        59.67,
-        49.46,
-        252.39
+        79.53,
+        75.99,
+        64.07,
+        252.61
       ],
-      "stdDev": 63.66
+      "stdDev": 59.39
     },
     "samurai/samurai_frenzied_whirlwind.png": {
       "width": 64,
       "height": 64,
-      "sha256": "369a158a740eb6587f0b05b0d671b1d9c0c9657c069cff6595a0a062a63fc879",
+      "sha256": "eab33e7ba245a667e6abbad0a579650a428743b2cd09d4e6280bf8a59e6e0fde",
       "meanRgba": [
-        111.03,
-        86.28,
-        54.77,
-        252.31
+        173.02,
+        100.95,
+        28.67,
+        224.43
       ],
-      "stdDev": 68.16
+      "stdDev": 59.21
     },
     "samurai/samurai_frenzied_whirlwind@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "6294229c9884c1f4dcfa1e84c4b43d1bde14f96a237c3e6f7d68da09bf10cd93",
+      "sha256": "3e63e77315408d72289307be591cbb7fc781bfdeb98f92ced9f72c25d34f75d8",
       "meanRgba": [
-        111.57,
-        86.83,
-        55.19,
-        252.35
+        173.66,
+        101.81,
+        29.28,
+        224.4
       ],
-      "stdDev": 63.83
+      "stdDev": 57.46
     },
     "samurai/samurai_frenzied_whirlwind@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "369a158a740eb6587f0b05b0d671b1d9c0c9657c069cff6595a0a062a63fc879",
+      "sha256": "eab33e7ba245a667e6abbad0a579650a428743b2cd09d4e6280bf8a59e6e0fde",
       "meanRgba": [
-        111.03,
-        86.28,
-        54.77,
-        252.31
+        173.02,
+        100.95,
+        28.67,
+        224.43
       ],
-      "stdDev": 68.16
+      "stdDev": 59.21
     },
     "samurai/samurai_honorable.png": {
       "width": 64,
       "height": 64,
-      "sha256": "6146854cd8e591a1219085c51330f99134abc76779fa865f28fa1ec77f930052",
+      "sha256": "a2b0d21c3047b2fa2c0f776d8925f4907cfdb06f04f866973e18a265f2f8f3b7",
       "meanRgba": [
-        97.12,
-        68.78,
-        34.39,
-        252.39
+        163.04,
+        120.4,
+        43.35,
+        230.12
       ],
-      "stdDev": 61.82
+      "stdDev": 68.24
     },
     "samurai/samurai_honorable@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "3477cd101f9779e0c674619f8439f0bf5a8af569a3cedce96d4dc6cb3ff11ff7",
+      "sha256": "e667d92f2a29cd118f44f8a5560e825d2452bee1f459951cf97490a685a46de9",
       "meanRgba": [
-        97.5,
-        69.25,
-        34.73,
-        252.42
+        164.41,
+        121.48,
+        44.61,
+        230.04
       ],
-      "stdDev": 59.23
+      "stdDev": 66.79
     },
     "samurai/samurai_honorable@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "6146854cd8e591a1219085c51330f99134abc76779fa865f28fa1ec77f930052",
+      "sha256": "a2b0d21c3047b2fa2c0f776d8925f4907cfdb06f04f866973e18a265f2f8f3b7",
       "meanRgba": [
-        97.12,
-        68.78,
-        34.39,
-        252.39
+        163.04,
+        120.4,
+        43.35,
+        230.12
       ],
-      "stdDev": 61.82
+      "stdDev": 68.24
     },
     "samurai/samurai_honorable_exec.png": {
       "width": 64,
       "height": 64,
-      "sha256": "947444c589a51bbf26f2f5d943c33eb43a229b1515a99372cb0d73661d5874b1",
+      "sha256": "bae1c35e9cd27fa37727744756139292ac5a48655776499cd4816bc2ab69a29b",
       "meanRgba": [
-        97.14,
-        68.8,
-        34.4,
-        252.39
+        169.51,
+        120.4,
+        43.35,
+        230.12
       ],
-      "stdDev": 61.81
+      "stdDev": 69.07
     },
     "samurai/samurai_honorable_exec@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "d09a9cf92a66d732e9320e39586f962fc923b0ed3f3dc4dc8f117770cb44ea2c",
+      "sha256": "6decc7e0c6f454622339a45ab92d0e0d3930a9eb54cf0dd685eddcd32b2cc811",
       "meanRgba": [
-        97.53,
-        69.26,
-        34.73,
-        252.42
+        170.81,
+        121.48,
+        44.61,
+        230.04
       ],
-      "stdDev": 59.23
+      "stdDev": 67.65
     },
     "samurai/samurai_honorable_exec@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "947444c589a51bbf26f2f5d943c33eb43a229b1515a99372cb0d73661d5874b1",
+      "sha256": "bae1c35e9cd27fa37727744756139292ac5a48655776499cd4816bc2ab69a29b",
       "meanRgba": [
-        97.14,
-        68.8,
-        34.4,
-        252.39
+        169.51,
+        120.4,
+        43.35,
+        230.12
       ],
-      "stdDev": 61.81
+      "stdDev": 69.07
     },
     "samurai/samurai_honorable_exec_r2.png": {
       "width": 64,
       "height": 64,
-      "sha256": "1909cd11e4891c5b4c0a0282d551dc523bc2b2f94253384a8ccebd64190b5de9",
+      "sha256": "3815d9f1e93bab4861fb6285f1679866435bb6fe3d60046479c5b1422f93cef7",
       "meanRgba": [
-        111.23,
-        87.2,
-        44.3,
-        252.31
+        112.95,
+        66.4,
+        43.48,
+        252.61
       ],
-      "stdDev": 66.45
+      "stdDev": 62.69
     },
     "samurai/samurai_honorable_exec_r2@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "7edd4b4b2adebef47cafec73fdfb27a2bf08605ff2637617a6960d30ef6fee2a",
+      "sha256": "c8da0dc9ed5542eacaed573a12aaeb0babc7fb09472abd963129d51bd8541a91",
       "meanRgba": [
-        111.69,
-        87.67,
-        44.64,
-        252.35
+        113.15,
+        66.7,
+        43.77,
+        252.66
       ],
-      "stdDev": 62.35
+      "stdDev": 60.0
     },
     "samurai/samurai_honorable_exec_r2@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "1909cd11e4891c5b4c0a0282d551dc523bc2b2f94253384a8ccebd64190b5de9",
+      "sha256": "3815d9f1e93bab4861fb6285f1679866435bb6fe3d60046479c5b1422f93cef7",
       "meanRgba": [
-        111.23,
-        87.2,
-        44.3,
-        252.31
+        112.95,
+        66.4,
+        43.48,
+        252.61
       ],
-      "stdDev": 66.45
+      "stdDev": 62.69
     },
     "samurai/samurai_inner_calm.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d118d1959b40cfea9af06dc74e54e7d246029ce2c7e390c7b25b3c6cc7e8e7fb",
+      "sha256": "e7c236be7d40a9e89ee3e74413462b2ab33714e29835386fb7da533a6c20ad8f",
       "meanRgba": [
-        80.26,
-        56.36,
-        33.56,
-        252.39
+        136.85,
+        96.67,
+        54.6,
+        252.61
       ],
-      "stdDev": 57.35
+      "stdDev": 58.3
     },
     "samurai/samurai_inner_calm@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "ff385278657ab305989de54d90bd8e7cc15015c893a072b7b25cb16f29ceebde",
+      "sha256": "a529b1d4864afc478489375828d1935c093fff05e41619c6ab28f16fc5fc532b",
       "meanRgba": [
-        80.84,
-        56.94,
-        33.91,
-        252.42
+        137.06,
+        96.93,
+        54.8,
+        252.66
       ],
-      "stdDev": 54.59
+      "stdDev": 55.25
     },
     "samurai/samurai_inner_calm@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d118d1959b40cfea9af06dc74e54e7d246029ce2c7e390c7b25b3c6cc7e8e7fb",
+      "sha256": "e7c236be7d40a9e89ee3e74413462b2ab33714e29835386fb7da533a6c20ad8f",
       "meanRgba": [
-        80.26,
-        56.36,
-        33.56,
-        252.39
+        136.85,
+        96.67,
+        54.6,
+        252.61
       ],
-      "stdDev": 57.35
+      "stdDev": 58.3
     },
     "samurai/samurai_kensei_judgment.png": {
       "width": 64,
       "height": 64,
-      "sha256": "e0c5da137c2e8e66ad97a24dc960c72d33ab746444a2c92fb4eee6f4f5bd5e33",
+      "sha256": "50fbfc4109bda11805c9a31d4469bd540bb077144bf88d4e9fe7a8a1f64d08e4",
       "meanRgba": [
-        111.05,
-        88.88,
-        48.0,
-        252.31
+        108.47,
+        66.07,
+        45.11,
+        252.61
       ],
-      "stdDev": 66.69
+      "stdDev": 62.22
     },
     "samurai/samurai_kensei_judgment@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "d407794a3bd7e1ef82b3f770b76671643b5c567e95b046a94d1106b3f11953fe",
+      "sha256": "da47c3627d3fa1abed159451e930d36cb73feb33c9733a18a5c35fbf24c2e161",
       "meanRgba": [
-        111.52,
-        89.35,
-        48.33,
-        252.35
+        108.67,
+        66.39,
+        45.4,
+        252.66
       ],
-      "stdDev": 62.52
+      "stdDev": 59.54
     },
     "samurai/samurai_kensei_judgment@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "e0c5da137c2e8e66ad97a24dc960c72d33ab746444a2c92fb4eee6f4f5bd5e33",
+      "sha256": "50fbfc4109bda11805c9a31d4469bd540bb077144bf88d4e9fe7a8a1f64d08e4",
       "meanRgba": [
-        111.05,
-        88.88,
-        48.0,
-        252.31
+        108.47,
+        66.07,
+        45.11,
+        252.61
       ],
-      "stdDev": 66.69
+      "stdDev": 62.22
     },
     "samurai/samurai_lightning.png": {
       "width": 64,
       "height": 64,
-      "sha256": "00af9c1bb97e521f6b4a6d280ea2b800fdb50d14a420120797c64ff1acd135d7",
+      "sha256": "8b7240892ceede71117bb0814c1c322d6d44ee8bd4c59894175b8d398415153d",
       "meanRgba": [
-        74.77,
-        56.32,
-        43.31,
-        252.39
+        116.32,
+        111.87,
+        77.75,
+        231.65
       ],
-      "stdDev": 60.34
+      "stdDev": 64.28
     },
     "samurai/samurai_lightning@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "9ea61680e330c2a891731e4a3f6d47fef837d37adc7bc05d09604d712c5e4359",
+      "sha256": "ebcd29fa88e9f51876f964e7d8ae2f2d0f10e72403d99ccf5ef57af15f5dd596",
       "meanRgba": [
-        75.07,
-        56.79,
-        43.63,
-        252.42
+        116.94,
+        112.39,
+        78.33,
+        231.5
       ],
-      "stdDev": 57.71
+      "stdDev": 62.04
     },
     "samurai/samurai_lightning@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "00af9c1bb97e521f6b4a6d280ea2b800fdb50d14a420120797c64ff1acd135d7",
+      "sha256": "8b7240892ceede71117bb0814c1c322d6d44ee8bd4c59894175b8d398415153d",
       "meanRgba": [
-        74.77,
-        56.32,
-        43.31,
-        252.39
+        116.32,
+        111.87,
+        77.75,
+        231.65
       ],
-      "stdDev": 60.34
+      "stdDev": 64.28
     },
     "samurai/samurai_lightning_strike.png": {
       "width": 64,
       "height": 64,
-      "sha256": "1499fd5fbd3c830fd457301e00e2c8871d0abcc9b17dd547e143f3e66fef3800",
+      "sha256": "01ce523fd2251ec87103cc21f9e94c19809ba0e6f7e4a1f3e85b058f957904d7",
       "meanRgba": [
-        76.88,
-        58.78,
-        45.47,
-        252.39
+        122.32,
+        111.87,
+        77.75,
+        231.65
       ],
-      "stdDev": 62.72
+      "stdDev": 65.43
     },
     "samurai/samurai_lightning_strike@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "a4faea2ac70febc95679d9b791a5941d505896a56e08557d00d5b786f985e331",
+      "sha256": "e32616d59838a2de298eb829dc04275f83b44d51c3fbfdeb344a2935f75fcd47",
       "meanRgba": [
-        77.18,
-        59.25,
-        45.8,
-        252.42
+        122.98,
+        112.39,
+        78.33,
+        231.5
       ],
-      "stdDev": 59.7
+      "stdDev": 63.23
     },
     "samurai/samurai_lightning_strike@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "1499fd5fbd3c830fd457301e00e2c8871d0abcc9b17dd547e143f3e66fef3800",
+      "sha256": "01ce523fd2251ec87103cc21f9e94c19809ba0e6f7e4a1f3e85b058f957904d7",
       "meanRgba": [
-        76.88,
-        58.78,
-        45.47,
-        252.39
+        122.32,
+        111.87,
+        77.75,
+        231.65
       ],
-      "stdDev": 62.72
+      "stdDev": 65.43
     },
     "samurai/samurai_momentum_strike.png": {
       "width": 64,
       "height": 64,
-      "sha256": "3faae7f50f02f5ec009ad32d7bdc821ecdb5b40c9640f558d4200ae3be471311",
+      "sha256": "34ac1a74bdd243b7721a5d08a0a480f130405c18edbbbbcbde9a19f765584d4d",
       "meanRgba": [
-        99.27,
-        63.58,
-        43.79,
-        252.39
+        91.78,
+        49.55,
+        40.14,
+        252.61
       ],
-      "stdDev": 65.95
+      "stdDev": 55.13
     },
     "samurai/samurai_momentum_strike@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "3b86183526ce1193da3c2d29d385a3f27b8d700495ce8e39346bcbb3069e7123",
+      "sha256": "4360e372f925e038c5ea57affa703d4035140c16d9c910b69a8a67171b5265ba",
       "meanRgba": [
-        99.75,
-        64.08,
-        44.09,
-        252.42
+        92.12,
+        49.9,
+        40.46,
+        252.66
       ],
-      "stdDev": 62.5
+      "stdDev": 52.18
     },
     "samurai/samurai_momentum_strike@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "3faae7f50f02f5ec009ad32d7bdc821ecdb5b40c9640f558d4200ae3be471311",
+      "sha256": "34ac1a74bdd243b7721a5d08a0a480f130405c18edbbbbcbde9a19f765584d4d",
       "meanRgba": [
-        99.27,
-        63.58,
-        43.79,
-        252.39
+        91.78,
+        49.55,
+        40.14,
+        252.61
       ],
-      "stdDev": 65.95
+      "stdDev": 55.13
     },
     "samurai/samurai_perfection.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d70c396ca86db49e90bf93b15a5ebbbdb1912c44db639fa63eb7985b548caf15",
+      "sha256": "21905e828ba88a1517af7f1ae73e2470f5befd91c3db3d555c7df00b28be2fbe",
       "meanRgba": [
-        85.9,
-        57.36,
-        31.91,
-        252.39
+        138.2,
+        101.66,
+        47.44,
+        252.61
       ],
-      "stdDev": 58.42
+      "stdDev": 62.82
     },
     "samurai/samurai_perfection@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "67c8846d14f9d7378fc38979438e39192ebd73cbd5cc4ea009243bfec49da76c",
+      "sha256": "e91b8a1d405fc9228fec4a5e24a5cffe2ef8b9da723b822be8771c958a6d1bde",
       "meanRgba": [
-        86.28,
-        57.84,
-        32.26,
-        252.42
+        138.46,
+        101.92,
+        47.68,
+        252.66
       ],
-      "stdDev": 55.43
+      "stdDev": 59.17
     },
     "samurai/samurai_perfection@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "d70c396ca86db49e90bf93b15a5ebbbdb1912c44db639fa63eb7985b548caf15",
+      "sha256": "21905e828ba88a1517af7f1ae73e2470f5befd91c3db3d555c7df00b28be2fbe",
       "meanRgba": [
-        85.9,
-        57.36,
-        31.91,
-        252.39
+        138.2,
+        101.66,
+        47.44,
+        252.61
       ],
-      "stdDev": 58.42
+      "stdDev": 62.82
     },
     "samurai/samurai_way.png": {
       "width": 64,
       "height": 64,
-      "sha256": "0b165cbcb1b8108047cd7eed570e351cd00ea8c0040c0cf21df14a45b1ab1ae9",
+      "sha256": "d30f6521972d605f15cec2d0723a1bd830012c082a1e747cbf221c83492e83a8",
       "meanRgba": [
-        88.35,
-        59.79,
-        37.15,
-        252.39
+        118.25,
+        77.05,
+        42.01,
+        252.61
       ],
-      "stdDev": 62.32
+      "stdDev": 56.2
     },
     "samurai/samurai_way@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "fb7848c41c4ac44fa0e250520738ea83f652f24198d74d351e21d2cbc6564860",
+      "sha256": "66d872b047fa0c45b57c2609bba786342056b9a2456f079db66f42a8ed046267",
       "meanRgba": [
-        88.77,
-        60.31,
-        37.49,
-        252.42
+        118.47,
+        77.29,
+        42.23,
+        252.66
       ],
-      "stdDev": 59.14
+      "stdDev": 53.16
     },
     "samurai/samurai_way@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "0b165cbcb1b8108047cd7eed570e351cd00ea8c0040c0cf21df14a45b1ab1ae9",
+      "sha256": "d30f6521972d605f15cec2d0723a1bd830012c082a1e747cbf221c83492e83a8",
       "meanRgba": [
-        88.35,
-        59.79,
-        37.15,
-        252.39
+        118.25,
+        77.05,
+        42.01,
+        252.61
       ],
-      "stdDev": 62.32
+      "stdDev": 56.2
     },
     "samurai/samurai_way_of_the_blade.png": {
       "width": 64,
       "height": 64,
-      "sha256": "7432ad854cdc3575e63ceff9aaff64dae2f904c86e96f10c2737248d9d55b233",
+      "sha256": "6a8a1ac0a81aeaf1cc37c4efe777dba5dc18814c4b905521bdf642ebbc801b83",
       "meanRgba": [
-        96.47,
-        64.9,
-        41.31,
-        252.39
+        126.31,
+        83.06,
+        44.99,
+        252.61
       ],
-      "stdDev": 64.88
+      "stdDev": 56.58
     },
     "samurai/samurai_way_of_the_blade@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "147fcf6547f421428f6798f06c5e7f0cf47d799befefcd6c72d539af987a95cf",
+      "sha256": "d88540f2fba47b4dbf12eababda5302640bceecc45a83411c43a1fbfcf62f645",
       "meanRgba": [
-        96.95,
-        65.45,
-        41.66,
-        252.42
+        126.48,
+        83.3,
+        45.21,
+        252.66
       ],
-      "stdDev": 61.76
+      "stdDev": 53.43
     },
     "samurai/samurai_way_of_the_blade@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "7432ad854cdc3575e63ceff9aaff64dae2f904c86e96f10c2737248d9d55b233",
+      "sha256": "6a8a1ac0a81aeaf1cc37c4efe777dba5dc18814c4b905521bdf642ebbc801b83",
       "meanRgba": [
-        96.47,
-        64.9,
-        41.31,
-        252.39
+        126.31,
+        83.06,
+        44.99,
+        252.61
       ],
-      "stdDev": 64.88
+      "stdDev": 56.58
     },
     "samurai/samurai_whirlwind_attack.png": {
       "width": 64,
       "height": 64,
-      "sha256": "053e0d995f04b0056ceef2b2c6624251f7b60e92f50562de2896670500ab85fe",
+      "sha256": "93c145644ce5fff4688af6c3c462a05e3bde1f195daad95420d39ea41142a810",
       "meanRgba": [
-        97.73,
-        66.23,
-        43.85,
-        252.39
+        137.44,
+        65.1,
+        40.22,
+        222.92
       ],
-      "stdDev": 66.83
+      "stdDev": 57.42
     },
     "samurai/samurai_whirlwind_attack@48.png": {
       "width": 48,
       "height": 48,
-      "sha256": "287ba81e3cb5b7c30a1a48317021cd8ebda23ab328bbf468540d0db28902b33c",
+      "sha256": "7f94cea1880a308525b9b33df8f97564eccf9c29fc32b21278983b74e466b018",
       "meanRgba": [
-        98.2,
-        66.74,
-        44.14,
-        252.42
+        137.96,
+        65.66,
+        40.74,
+        222.71
       ],
-      "stdDev": 63.29
+      "stdDev": 54.85
     },
     "samurai/samurai_whirlwind_attack@64.png": {
       "width": 64,
       "height": 64,
-      "sha256": "053e0d995f04b0056ceef2b2c6624251f7b60e92f50562de2896670500ab85fe",
+      "sha256": "93c145644ce5fff4688af6c3c462a05e3bde1f195daad95420d39ea41142a810",
       "meanRgba": [
-        97.73,
-        66.23,
-        43.85,
-        252.39
+        137.44,
+        65.1,
+        40.22,
+        222.92
       ],
-      "stdDev": 66.83
+      "stdDev": 57.42
     }
   }
 }

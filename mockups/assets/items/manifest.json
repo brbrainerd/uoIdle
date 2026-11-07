@@ -1,0 +1,728 @@
+{
+  "version": "0.99.0",
+  "milestone": "v1.1",
+  "totalItemFiles": 37,
+  "catalog": [
+    {
+      "id": "kabuto",
+      "name": "Kabuto Helm",
+      "graphic": 10102,
+      "hex": "0x2776",
+      "slot": "helm",
+      "class": "samurai",
+      "maleGump": 50444
+    },
+    {
+      "id": "samurai_do",
+      "name": "Plate Do Cuirass",
+      "graphic": 10182,
+      "hex": "0x27C6",
+      "slot": "chest",
+      "class": "samurai",
+      "maleGump": 50457
+    },
+    {
+      "id": "hiro_sode",
+      "name": "Plate Hiro-Sode",
+      "graphic": 10110,
+      "hex": "0x277E",
+      "slot": "arms",
+      "class": "samurai",
+      "maleGump": 50473
+    },
+    {
+      "id": "suneate",
+      "name": "Plate Suneate Greaves",
+      "graphic": 5067,
+      "hex": "0x13CB",
+      "slot": "legs",
+      "class": "samurai",
+      "maleGump": 50543
+    },
+    {
+      "id": "waraji",
+      "name": "Waraji & Tabi",
+      "graphic": 10134,
+      "hex": "0x2796",
+      "slot": "boots",
+      "class": "samurai",
+      "maleGump": 50569
+    },
+    {
+      "id": "jin_baori",
+      "name": "Imperial Jin-Baori Cloak",
+      "graphic": 5397,
+      "hex": "0x1515",
+      "slot": "cloak",
+      "class": "samurai",
+      "maleGump": 50468
+    },
+    {
+      "id": "katana",
+      "name": "Katana",
+      "graphic": 5119,
+      "hex": "0x13FF",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50627
+    },
+    {
+      "id": "daisho",
+      "name": "Daisho",
+      "graphic": 10153,
+      "hex": "0x27A9",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50470
+    },
+    {
+      "id": "no_dachi",
+      "name": "No-Dachi",
+      "graphic": 10146,
+      "hex": "0x27A2",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50519
+    },
+    {
+      "id": "wakizashi",
+      "name": "Wakizashi",
+      "graphic": 10148,
+      "hex": "0x27A4",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50464
+    },
+    {
+      "id": "bokuto",
+      "name": "Bokuto",
+      "graphic": 10152,
+      "hex": "0x27A8",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50467
+    },
+    {
+      "id": "tetsubo",
+      "name": "Tetsubo",
+      "graphic": 10150,
+      "hex": "0x27A6",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50583
+    },
+    {
+      "id": "yumi",
+      "name": "Yumi Greatbow",
+      "graphic": 10149,
+      "hex": "0x27A5",
+      "slot": "weapon",
+      "class": "samurai",
+      "maleGump": 50575
+    },
+    {
+      "id": "ninja_hood",
+      "name": "Leather Ninja Hood",
+      "graphic": 10126,
+      "hex": "0x278E",
+      "slot": "helm",
+      "class": "ninja",
+      "maleGump": 50425
+    },
+    {
+      "id": "ninja_jacket",
+      "name": "Leather Ninja Jacket",
+      "graphic": 10131,
+      "hex": "0x2793",
+      "slot": "chest",
+      "class": "ninja",
+      "maleGump": 50426
+    },
+    {
+      "id": "ninja_mitts",
+      "name": "Leather Ninja Mitts",
+      "graphic": 10130,
+      "hex": "0x2792",
+      "slot": "gloves",
+      "class": "ninja",
+      "maleGump": 50424
+    },
+    {
+      "id": "ninja_pants",
+      "name": "Leather Ninja Pants",
+      "graphic": 10129,
+      "hex": "0x2791",
+      "slot": "legs",
+      "class": "ninja",
+      "maleGump": 50423
+    },
+    {
+      "id": "ninja_tabi",
+      "name": "Shinobi Ninja-Tabi",
+      "graphic": 10135,
+      "hex": "0x2797",
+      "slot": "boots",
+      "class": "ninja",
+      "maleGump": 50572
+    },
+    {
+      "id": "ninja_belt",
+      "name": "Leather Shuriken Belt",
+      "graphic": 10128,
+      "hex": "0x2790",
+      "slot": "belt",
+      "class": "ninja",
+      "maleGump": 50514
+    },
+    {
+      "id": "tekagi",
+      "name": "Tekagi War Claws",
+      "graphic": 10155,
+      "hex": "0x27AB",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50533
+    },
+    {
+      "id": "kama",
+      "name": "Kama Twin Sickles",
+      "graphic": 10157,
+      "hex": "0x27AD",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50535
+    },
+    {
+      "id": "sai",
+      "name": "Sai",
+      "graphic": 10159,
+      "hex": "0x27AF",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50537
+    },
+    {
+      "id": "lajatang",
+      "name": "Lajatang Crescent Staff",
+      "graphic": 10151,
+      "hex": "0x27A7",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50526
+    },
+    {
+      "id": "tessen",
+      "name": "Tessen Iron War Fan",
+      "graphic": 10147,
+      "hex": "0x27A3",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50520
+    },
+    {
+      "id": "nunchaku",
+      "name": "Nunchaku",
+      "graphic": 10158,
+      "hex": "0x27AE",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50536
+    },
+    {
+      "id": "fukiya",
+      "name": "Fukiya Blowgun",
+      "graphic": 10154,
+      "hex": "0x27AA",
+      "slot": "offhand",
+      "class": "ninja",
+      "maleGump": 50532
+    },
+    {
+      "id": "kryss",
+      "name": "Kryss",
+      "graphic": 5121,
+      "hex": "0x1401",
+      "slot": "weapon",
+      "class": "ninja",
+      "maleGump": 50630
+    },
+    {
+      "id": "heal_potion",
+      "name": "Greater Heal Potion",
+      "graphic": 3852,
+      "hex": "0x0F0C",
+      "slot": "consumable",
+      "class": "both"
+    },
+    {
+      "id": "cure_potion",
+      "name": "Greater Cure Potion",
+      "graphic": 3847,
+      "hex": "0x0F07",
+      "slot": "consumable",
+      "class": "both"
+    },
+    {
+      "id": "refresh_potion",
+      "name": "Total Refresh Potion",
+      "graphic": 3846,
+      "hex": "0x0F06",
+      "slot": "consumable",
+      "class": "both"
+    },
+    {
+      "id": "bandage",
+      "name": "Clean Bandages",
+      "graphic": 3617,
+      "hex": "0x0E21",
+      "slot": "consumable",
+      "class": "both"
+    }
+  ],
+  "files": {
+    "bandage.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "1b8f8d06d24d1701af7f611efc350cbca41f1d711abcdbb0690b351c198f5886",
+      "meanRgba": [
+        57.39,
+        54.88,
+        41.17,
+        244.09
+      ],
+      "stdDev": 64.24
+    },
+    "bokuto.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "d72b982867d6339bbc82d6ae7ac23ef400705644ccdbf4d4ddfb3996114c45de",
+      "meanRgba": [
+        39.29,
+        26.67,
+        20.12,
+        245.97
+      ],
+      "stdDev": 25.34
+    },
+    "cure_potion.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "5203e67efeaf7ab983c55d1d50d0dac9d2e6302fd0467bdee0831c42782b7ae7",
+      "meanRgba": [
+        50.91,
+        43.06,
+        25.64,
+        246.19
+      ],
+      "stdDev": 44.72
+    },
+    "daisho.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "ed378f001144bcc7d0f3156f79feadd661fadd7b4f1d7de5a3a477e6d4b15fd5",
+      "meanRgba": [
+        41.82,
+        32.67,
+        28.04,
+        244.9
+      ],
+      "stdDev": 43.14
+    },
+    "egg_bomb.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "1520db248ab316365d5e480fa2f6083f58b82108ea5dfcad03c24a15686a329d",
+      "meanRgba": [
+        81.52,
+        75.01,
+        80.08,
+        248.95
+      ],
+      "stdDev": 45.08
+    },
+    "fukiya.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "754c0b06adb534abaa16c3bb284bae0d445274a8863cd2be29c3692118ccb977",
+      "meanRgba": [
+        20.8,
+        33.66,
+        24.64,
+        246.14
+      ],
+      "stdDev": 22.45
+    },
+    "heal_potion.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "30564c4aa876a55f138d77afe02c6c8848bdf075af8df8b65351821b5d447224",
+      "meanRgba": [
+        51.75,
+        46.41,
+        25.45,
+        246.19
+      ],
+      "stdDev": 48.13
+    },
+    "hiro_sode.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "63a343fb0bcbd806da7691863b403b2bc21d29982204d0090a7897d161bc82d0",
+      "meanRgba": [
+        54.44,
+        39.35,
+        21.11,
+        243.59
+      ],
+      "stdDev": 36.79
+    },
+    "items-contact-sheet.png": {
+      "width": 1440,
+      "height": 760,
+      "sha256": "0f9f87bf33ebbfc7c4ec2b79412e31dd89ba6f8f2c711542266e8cd2608527e2",
+      "meanRgba": [
+        25.63,
+        26.06,
+        17.84,
+        254.13
+      ],
+      "stdDev": 29.1
+    },
+    "jin_baori.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "7bd6127ee789db5bba9ee55adc13ff93a5e8597052a662f81c5a8fcd0587bd90",
+      "meanRgba": [
+        53.06,
+        46.11,
+        42.31,
+        246.4
+      ],
+      "stdDev": 43.86
+    },
+    "kabuto.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "e4ed2b03f09d54394ea591f29062f2420f00ed60fa527542c3a2490434188503",
+      "meanRgba": [
+        41.35,
+        28.23,
+        17.04,
+        246.22
+      ],
+      "stdDev": 25.5
+    },
+    "kama.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "137fda1bde758f3ae5ff69698345361dca293a0ee153cfc7e0341f6b100c0e52",
+      "meanRgba": [
+        28.55,
+        39.5,
+        30.13,
+        244.36
+      ],
+      "stdDev": 34.24
+    },
+    "katana.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "923f805b92639f3ea9822f59485cf2cb84efa4694d6aa84db7522eec186f5772",
+      "meanRgba": [
+        38.83,
+        29.68,
+        25.02,
+        245.14
+      ],
+      "stdDev": 34.18
+    },
+    "kryss.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "dd2bbd475c2cbfb90266fe2b88690b8dbd69c880138eb58466471d0b6740f8b3",
+      "meanRgba": [
+        24.91,
+        36.57,
+        27.96,
+        245.04
+      ],
+      "stdDev": 30.57
+    },
+    "lajatang.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "7b920be691667b56d735bafd49c232a96ea397a563148ecb393905e7b3e37e38",
+      "meanRgba": [
+        22.38,
+        35.55,
+        26.91,
+        245.75
+      ],
+      "stdDev": 26.0
+    },
+    "ninja_belt.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "464b50b6fe1aa9015c8b56c59a0e81eea94a0c2fd74a93a00b1007c6355ae879",
+      "meanRgba": [
+        31.53,
+        36.56,
+        23.95,
+        244.85
+      ],
+      "stdDev": 29.74
+    },
+    "ninja_hood.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "9fb08997a9f535a99f251a038b176ca8d244b9f3ebd41a268b12bdefd8244587",
+      "meanRgba": [
+        32.97,
+        38.3,
+        27.47,
+        244.8
+      ],
+      "stdDev": 30.94
+    },
+    "ninja_jacket.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "4c45846e08294609332a83fbb8fb3649495a6941a9f63b1609b5c417676fdc4f",
+      "meanRgba": [
+        27.11,
+        32.56,
+        23.23,
+        243.48
+      ],
+      "stdDev": 25.37
+    },
+    "ninja_mitts.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "95422f58452f31d54d2905486d3403b6d1e9a02ed73e78667175f728c985a1be",
+      "meanRgba": [
+        29.45,
+        37.2,
+        27.46,
+        243.66
+      ],
+      "stdDev": 25.43
+    },
+    "ninja_pants.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "6c5c8755b8ab2fa5c15b252732fb6de54c99da51f939ec7ca92a8e9cf98995f5",
+      "meanRgba": [
+        26.96,
+        34.27,
+        24.88,
+        244.77
+      ],
+      "stdDev": 26.02
+    },
+    "ninja_tabi.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "87b6b12826a1229c779a9081108949463ad5ea6d5145d0294761aadf44110e1c",
+      "meanRgba": [
+        26.68,
+        38.25,
+        32.75,
+        241.98
+      ],
+      "stdDev": 27.75
+    },
+    "no_dachi.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "6a18a55b96dba05eb43a74d86afa1545f92c553ed57862d8e8c0d8e2f70f6951",
+      "meanRgba": [
+        38.36,
+        28.56,
+        23.86,
+        246.35
+      ],
+      "stdDev": 34.93
+    },
+    "nunchaku.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "08b54166748931bdd6efb878793fb1b6d0c58c0b5afb0c5530805ba8419890d3",
+      "meanRgba": [
+        24.85,
+        35.65,
+        24.33,
+        244.72
+      ],
+      "stdDev": 25.6
+    },
+    "paperdoll-ninja.png": {
+      "width": 260,
+      "height": 237,
+      "sha256": "f21453086041235b942f512d1924b05d6fddc0e314680ea17c1be708cd1141e8",
+      "meanRgba": [
+        22.64,
+        31.64,
+        25.65,
+        253.82
+      ],
+      "stdDev": 28.56
+    },
+    "paperdoll-samurai.png": {
+      "width": 260,
+      "height": 237,
+      "sha256": "363597e6e7ac25e30a98c5d8ad01f3fa6979ee94c4ee2e227471e34cc2419ac6",
+      "meanRgba": [
+        43.56,
+        28.13,
+        18.32,
+        253.82
+      ],
+      "stdDev": 33.82
+    },
+    "refresh_potion.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "a582f3383d27cb7cd068ce341198d4fb97cc45c806676b7397710a3b4df3b785",
+      "meanRgba": [
+        43.05,
+        41.54,
+        28.41,
+        246.19
+      ],
+      "stdDev": 40.43
+    },
+    "sai.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "79b85f56211c3eccc1e9c18a32e9832d4b41a9e5957cd445691960a93fc4f34b",
+      "meanRgba": [
+        28.71,
+        39.84,
+        32.04,
+        243.91
+      ],
+      "stdDev": 39.81
+    },
+    "samurai_do.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "ee496cdcf0f7393cbb73c109b60faa8e2e978e5167db91cc24db59c4409a4f16",
+      "meanRgba": [
+        63.21,
+        46.3,
+        21.11,
+        244.28
+      ],
+      "stdDev": 47.81
+    },
+    "shuriken.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "d834ae318e40e87b7a1815c35ac81da5f5adb40cdfb48b477daccd772dd03c1e",
+      "meanRgba": [
+        42.01,
+        83.07,
+        63.58,
+        248.95
+      ],
+      "stdDev": 41.95
+    },
+    "smoke_bomb.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "5b40900ee2d89469f93d093ebddd6be93d5526309ed25d5c9b3a9a0643ba3cc6",
+      "meanRgba": [
+        74.0,
+        72.52,
+        89.97,
+        248.95
+      ],
+      "stdDev": 44.81
+    },
+    "suneate.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "80a5490b33a8e8ef05df7b914ab4feb1439b8a47198b4bd52ce93729e8d2cbaa",
+      "meanRgba": [
+        43.81,
+        33.16,
+        23.67,
+        244.88
+      ],
+      "stdDev": 30.04
+    },
+    "tekagi.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "9a05660096959d9f1076662a5dfafbf7559fdcafc33df3c034c70c7747631c22",
+      "meanRgba": [
+        30.55,
+        40.83,
+        31.98,
+        243.72
+      ],
+      "stdDev": 36.38
+    },
+    "tessen.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "bfef334fa7605f9af9978aa0799fac2490de19b0021239030eda5869a7c0c171",
+      "meanRgba": [
+        58.91,
+        50.73,
+        25.85,
+        245.99
+      ],
+      "stdDev": 47.63
+    },
+    "tetsubo.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "14f0b82c2bf7a633fd2d12d76d08772f179846741c0d809fa7944543c1415c2e",
+      "meanRgba": [
+        35.11,
+        26.14,
+        22.5,
+        245.66
+      ],
+      "stdDev": 25.86
+    },
+    "wakizashi.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "af3f859945fe4d0f897d172fc83a0d351371e040b7993de2c57aac6dea679d9d",
+      "meanRgba": [
+        41.54,
+        32.04,
+        27.17,
+        245.16
+      ],
+      "stdDev": 42.2
+    },
+    "waraji.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "2255420c28605f5b5a7a74b82a43fb638d90f51c59fc878146af9d34c4d77d4d",
+      "meanRgba": [
+        39.41,
+        31.35,
+        27.33,
+        242.61
+      ],
+      "stdDev": 31.94
+    },
+    "yumi.png": {
+      "width": 64,
+      "height": 64,
+      "sha256": "1685c692964e1a9e00cdad4f2e073a1b4b0cfb65670455f3758ad934aefac06e",
+      "meanRgba": [
+        36.22,
+        26.19,
+        21.02,
+        245.29
+      ],
+      "stdDev": 25.3
+    }
+  }
+}

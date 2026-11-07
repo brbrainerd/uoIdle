@@ -16,3 +16,7 @@ mechanics/_crawl/
 .DS_Store
 __pycache__/
 *.pyc
+
+# Unignore mockups/assets/icons (overrides macOS global Icon? rule on case-insensitive APFS)
+!mockups/assets/icons/
+!mockups/assets/icons/**

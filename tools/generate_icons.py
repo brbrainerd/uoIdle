@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 """
-Deterministic Dark-Fantasy Ultima Online / UO Idle Icon & Portrait Generator (VISUAL-01).
+Authentic Ultima Online Gump, Item Sprite & Oil-Painted Raster Icon Generator (Phase 8 / ART-01..03).
 
-Synthesizes and post-processes:
-  - Samurai (robeHue: 1884, #c83e37 crimson-lacquer & #d4af37 antique gold) class portraits
-    at 256x256 (portrait-samurai.png) and 64x64 (portrait-samurai-64.png)
-  - Ninja (robeHue: 1175, #1e2436 midnight-indigo & #2e9e6b shadow-emerald) class portraits
-    at 256x256 (portrait-ninja.png) and 64x64 (portrait-ninja-64.png)
-  - All 23 Samurai skill & milestone icon stems (12 canonical samurai.json IDs + 11 06-CONTEXT.md
-    alias/passive badge IDs) at <id>.png (64x64), <id>@64.png (64x64), and <id>@48.png (48x48)
-  - All 22 Ninja skill & milestone icon stems (13 canonical ninja.json IDs + 9 06-CONTEXT.md
-    alias/passive badge IDs) at <id>.png (64x64), <id>@64.png (64x64), and <id>@48.png (48x48)
-  - Visual contact sheet (mockups/assets/icons/contact-sheet.png)
-  - SHA-256 & pixel-variance provenance manifest (mockups/assets/icons/manifest.json)
-  - CLI verification gate (python3 tools/generate_icons.py --verify)
+Zero procedural polygons (`ImageDraw.polygon` is strictly prohibited).
+Combines:
+  1. Authentic in-game UO ability gumps sliced from `ability-icons.png` (`ability-icons-atlas.json`)
+  2. High-detail oil-painted dark-fantasy Tokuno raster icons from `mockups/assets/icons/sources/`
+  3. Authentic UO item sprites sliced from `art.png` (`art.json`) for Samurai & Ninja weapons, armor, and tools
+  4. Authentic layered UO paperdoll character renders composited from `paperdoll.json` gump layers (`12.png` + gear)
+  5. Contact sheets (`mockups/assets/icons/contact-sheet.png` & `mockups/assets/items/items-contact-sheet.png`)
+  6. SHA-256 & pixel-variance provenance manifests and `--verify` CLI gate
 """
 
 from __future__ import annotations
@@ -21,38 +17,38 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import math
-import os
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageStat
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageStat
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 ICONS_DIR = ROOT_DIR / "mockups" / "assets" / "icons"
+SOURCES_DIR = ICONS_DIR / "sources"
 SAMURAI_DIR = ICONS_DIR / "samurai"
 NINJA_DIR = ICONS_DIR / "ninja"
 CONTACT_SHEET_PATH = ICONS_DIR / "contact-sheet.png"
 MANIFEST_PATH = ICONS_DIR / "manifest.json"
 
+ITEMS_DIR = ROOT_DIR / "mockups" / "assets" / "items"
+ITEMS_CONTACT_SHEET_PATH = ITEMS_DIR / "items-contact-sheet.png"
+ITEMS_MANIFEST_PATH = ITEMS_DIR / "manifest.json"
+
+PACKS_DIR = ROOT_DIR / "mechanics" / "_crawl" / "packs"
+ABILITY_ATLAS_JSON = ROOT_DIR / "mechanics" / "_raw" / "bundle" / "ability-icons-atlas.json"
+ABILITY_ATLAS_PNG = PACKS_DIR / "ability-icons.png"
+ART_JSON = PACKS_DIR / "art.json"
+ART_PNG = PACKS_DIR / "art.png"
+PAPERDOLL_JSON = PACKS_DIR / "paperdoll.json"
+GUMPS_DIR = PACKS_DIR / "gumps"
+
 SAMURAI_JSON = ROOT_DIR / "design" / "drop-in" / "samurai.json"
 NINJA_JSON = ROOT_DIR / "design" / "drop-in" / "ninja.json"
-
-AI_PORTRAIT_SAMURAI = (
-    Path(os.environ["AI_PORTRAIT_SAMURAI"])
-    if os.environ.get("AI_PORTRAIT_SAMURAI")
-    else None
-)
-AI_PORTRAIT_NINJA = (
-    Path(os.environ["AI_PORTRAIT_NINJA"])
-    if os.environ.get("AI_PORTRAIT_NINJA")
-    else None
-)
 
 CANVAS_SIZE = 256
 MIN_STD_DEV = 12.0
 
-# Color Tokens (from 06-UI-SPEC.md)
+# Theme palette (from 06-UI-SPEC.md)
 BG_CANVAS = (11, 13, 10, 255)          # #0b0d0a
 BG_PANEL = (18, 21, 16, 255)           # #121510
 BG_CARD = (24, 28, 22, 255)            # #181c16
@@ -64,20 +60,11 @@ GOLD_SHADOW = (78, 60, 32, 255)        # #4e3c20
 TEXT_PRIMARY = (232, 228, 217, 255)    # #e8e4d9
 TEXT_SECONDARY = (163, 158, 144, 255)  # #a39e90
 SPECULAR_CREAM = (255, 246, 214, 255)  # #fff6d6
-STEEL_LIGHT = (226, 232, 240, 255)     # #e2e8f0
-STEEL_MID = (148, 163, 184, 255)       # #94a3b8
-STEEL_DARK = (51, 65, 85, 255)         # #334155
 OUTLINE_DARK = (6, 7, 6, 255)          # #060706
 
 SAMURAI_CRIMSON = (200, 62, 55, 255)   # #c83e37 (robeHue 1884)
-SAMURAI_GLOW = (255, 107, 74, 255)     # #ff6b4a
-LIGHTNING_CYAN = (186, 230, 253, 255)  # #bae6fd
-
 NINJA_EMERALD = (46, 158, 107, 255)    # #2e9e6b (robeHue 1175)
-NINJA_GLOW = (104, 211, 145, 255)      # #68d391
-NINJA_INDIGO = (30, 36, 54, 255)       # #1e2436
 NINJA_VIOLET = (139, 92, 246, 255)     # #8b5cf6
-
 
 SAMURAI_STEMS: list[tuple[str, str, str]] = [
     # 12 Canonical samurai.json IDs
@@ -100,7 +87,7 @@ SAMURAI_STEMS: list[tuple[str, str, str]] = [
     ("samurai_whirlwind_attack", "Bushido AoE", "Whirlwind Attack"),
     ("samurai_bladeweave", "Mastery", "Bladeweave"),
     ("samurai_crushing_blow", "Weapon", "Crushing Blow"),
-    ("samurai_honorable_exec_r2", "Alias L60 II", "Honorable Exec II"),
+    ("samurai_honorable_exec_r2", "Alias L60 II", "Kensei Judgment"),
     ("samurai_bushido_initiate", "Badge T1", "Bushido Initiate"),
     ("samurai_inner_calm", "Badge T2", "Inner Calm"),
     ("samurai_way_of_the_blade", "Badge T3", "Way of the Blade"),
@@ -160,617 +147,247 @@ NINJA_ALIAS_IDS = [
     "ninja_master_assassin",
 ]
 
+# Mapping of stems to either authentic UO ability-icons.png gump keys OR AI oil-painted grid cells
+# Bushido AI Sheet (2 cols x 3 rows):
+#   (0,0): Confidence   (1,0): Evasion
+#   (0,1): Momentum     (1,1): Bushido Perfection
+#   (0,2): Kensei       (1,2): Way of the Samurai
+# Ninjitsu AI Sheet (3 cols x 3 rows):
+#   (0,0): Animal Form  (1,0): Ki Attack        (2,0): Backstab
+#   (0,1): Surprise Atk (1,1): Smoke Bomb       (2,1): Shuriken
+#   (0,2): Fukiya       (1,2): Twin Shadow      (2,2): Shadow Seal
+STEM_SOURCE_MAP: dict[str, dict[str, object]] = {
+    # Samurai Canonical (12)
+    "samurai_way": {"type": "ai_bushido", "cell": (1, 2), "badge": True},
+    "samurai_lightning": {"type": "atlas", "key": "gump_21540"},
+    "samurai_perfection": {"type": "ai_bushido", "cell": (1, 1), "badge": True},
+    "samurai_honorable": {"type": "atlas", "key": "gump_21536"},
+    "samurai_confidence": {"type": "ai_bushido", "cell": (0, 0)},
+    "samurai_counter": {"type": "atlas", "key": "gump_21539"},
+    "samurai_double_strike": {"type": "atlas", "key": "gump_20998"},
+    "samurai_evasion": {"type": "ai_bushido", "cell": (1, 0)},
+    "samurai_momentum_strike": {"type": "ai_bushido", "cell": (0, 1)},
+    "samurai_armor_ignore": {"type": "atlas", "key": "gump_20992"},
+    "samurai_frenzied_whirlwind": {"type": "atlas", "key": "gump_20997"},
+    "samurai_kensei_judgment": {"type": "ai_bushido", "cell": (0, 2), "capstone": True},
+    # Samurai Aliases & Badges (11)
+    "samurai_lightning_strike": {"type": "atlas", "key": "gump_21540", "tint": (1.08, 1.0, 1.0)},
+    "samurai_honorable_exec": {"type": "atlas", "key": "gump_21536", "tint": (1.08, 1.0, 1.0)},
+    "samurai_counter_attack": {"type": "atlas", "key": "gump_21539", "tint": (1.08, 1.0, 1.0)},
+    "samurai_whirlwind_attack": {"type": "atlas", "key": "gump_21004"},
+    "samurai_bladeweave": {"type": "atlas", "key": "gump_21015"},
+    "samurai_crushing_blow": {"type": "atlas", "key": "gump_20995"},
+    "samurai_honorable_exec_r2": {"type": "ai_bushido", "cell": (0, 2), "capstone": True, "tint": (1.1, 1.02, 0.95)},
+    "samurai_bushido_initiate": {"type": "atlas", "key": "idle_samurai_way", "badge": True},
+    "samurai_inner_calm": {"type": "ai_bushido", "cell": (0, 0), "badge": True, "crop_inset": 36},
+    "samurai_way_of_the_blade": {"type": "ai_bushido", "cell": (1, 2), "badge": True, "crop_inset": 36},
+    "samurai_bushido_master": {"type": "ai_bushido", "cell": (1, 1), "badge": True, "crop_inset": 36},
+    # Ninja Canonical (13)
+    "ninja_shadowjump": {"type": "atlas", "key": "gump_21286", "badge": True},
+    "ninja_focus": {"type": "atlas", "key": "gump_21280"},
+    "ninja_mirror": {"type": "atlas", "key": "gump_21287"},
+    "ninja_backstab": {"type": "ai_ninjitsu", "cell": (2, 0)},
+    "ninja_death": {"type": "atlas", "key": "gump_21281"},
+    "ninja_animal_form": {"type": "ai_ninjitsu", "cell": (0, 0)},
+    "ninja_infectious_strike": {"type": "atlas", "key": "gump_20999"},
+    "ninja_smoke_bomb": {"type": "ai_ninjitsu", "cell": (1, 1), "badge": True},
+    "ninja_shuriken": {"type": "ai_ninjitsu", "cell": (2, 1)},
+    "ninja_ki_attack": {"type": "ai_ninjitsu", "cell": (1, 0)},
+    "ninja_surprise_attack": {"type": "ai_ninjitsu", "cell": (0, 1)},
+    "ninja_fukiya_barrage": {"type": "ai_ninjitsu", "cell": (0, 2)},
+    "ninja_twin_shadow": {"type": "ai_ninjitsu", "cell": (1, 2), "capstone": True},
+    # Ninja Aliases & Badges (9)
+    "ninja_focus_attack": {"type": "atlas", "key": "gump_21280", "tint": (0.96, 1.08, 1.02)},
+    "ninja_mirror_image": {"type": "atlas", "key": "gump_21287", "tint": (0.96, 1.08, 1.02)},
+    "ninja_shadow_strike": {"type": "atlas", "key": "gump_21003"},
+    "ninja_double_strike": {"type": "atlas", "key": "gump_20998", "tint": (0.92, 1.08, 1.05)},
+    "ninja_armor_ignore": {"type": "atlas", "key": "gump_20992", "tint": (0.92, 1.08, 1.05)},
+    "ninja_way_of_stealth": {"type": "ai_ninjitsu", "cell": (2, 2), "badge": True},
+    "ninja_shadow_discipline": {"type": "atlas", "key": "idle_assassin_shadow", "badge": True},
+    "ninja_lethal_toxins": {"type": "atlas", "key": "idle_assassin_eviscerate", "badge": True},
+    "ninja_master_assassin": {"type": "ai_ninjitsu", "cell": (2, 2), "badge": True, "crop_inset": 34},
+}
 
-def create_radial_background(
-    size: int,
-    center_rgb: tuple[int, int, int],
-    edge_rgb: tuple[int, int, int] = (11, 13, 10),
-    glow_rgb: tuple[int, int, int] | None = None,
-    seed_angle: float = 0.0,
-) -> Image.Image:
-    """Renders Layer 1 (Obsidian Void Background) + Layer 2 (Volumetric Class Rim & Center Glow)."""
-    base = Image.new("RGBA", (size, size), (*edge_rgb, 255))
-    grad = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    gdraw = ImageDraw.Draw(grad)
-    cx, cy = size // 2, size // 2
-    max_r = int(size * 0.62)
-    for r in range(max_r, 0, -4):
-        t = 1.0 - (r / max_r)
-        cr = int(edge_rgb[0] + (center_rgb[0] - edge_rgb[0]) * (t ** 1.3))
-        cg = int(edge_rgb[1] + (center_rgb[1] - edge_rgb[1]) * (t ** 1.3))
-        cb = int(edge_rgb[2] + (center_rgb[2] - edge_rgb[2]) * (t ** 1.3))
-        gdraw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(cr, cg, cb, 255))
-    base = Image.alpha_composite(base, grad)
+# Authentic UO Item Sprites to extract from art.png (art.json) for Paperdoll & Armaments Showcase
+ITEM_SPRITE_CATALOG: list[dict[str, object]] = [
+    # Samurai Paperdoll Armor & Weapons
+    {"id": "kabuto", "name": "Kabuto Helm", "graphic": 10102, "hex": "0x2776", "slot": "helm", "class": "samurai", "maleGump": 50444},
+    {"id": "samurai_do", "name": "Plate Do Cuirass", "graphic": 10182, "hex": "0x27C6", "slot": "chest", "class": "samurai", "maleGump": 50457},
+    {"id": "hiro_sode", "name": "Plate Hiro-Sode", "graphic": 10110, "hex": "0x277E", "slot": "arms", "class": "samurai", "maleGump": 50473},
+    {"id": "suneate", "name": "Plate Suneate Greaves", "graphic": 5067, "hex": "0x13CB", "slot": "legs", "class": "samurai", "maleGump": 50543},
+    {"id": "waraji", "name": "Waraji & Tabi", "graphic": 10134, "hex": "0x2796", "slot": "boots", "class": "samurai", "maleGump": 50569},
+    {"id": "jin_baori", "name": "Imperial Jin-Baori Cloak", "graphic": 5397, "hex": "0x1515", "slot": "cloak", "class": "samurai", "maleGump": 50468},
+    {"id": "katana", "name": "Katana", "graphic": 5119, "hex": "0x13FF", "slot": "weapon", "class": "samurai", "maleGump": 50627},
+    {"id": "daisho", "name": "Daisho", "graphic": 10153, "hex": "0x27A9", "slot": "weapon", "class": "samurai", "maleGump": 50470},
+    {"id": "no_dachi", "name": "No-Dachi", "graphic": 10146, "hex": "0x27A2", "slot": "weapon", "class": "samurai", "maleGump": 50519},
+    {"id": "wakizashi", "name": "Wakizashi", "graphic": 10148, "hex": "0x27A4", "slot": "weapon", "class": "samurai", "maleGump": 50464},
+    {"id": "bokuto", "name": "Bokuto", "graphic": 10152, "hex": "0x27A8", "slot": "weapon", "class": "samurai", "maleGump": 50467},
+    {"id": "tetsubo", "name": "Tetsubo", "graphic": 10150, "hex": "0x27A6", "slot": "weapon", "class": "samurai", "maleGump": 50583},
+    {"id": "yumi", "name": "Yumi Greatbow", "graphic": 10149, "hex": "0x27A5", "slot": "weapon", "class": "samurai", "maleGump": 50575},
+    # Ninja Paperdoll Armor, Weapons & Tools
+    {"id": "ninja_hood", "name": "Leather Ninja Hood", "graphic": 10126, "hex": "0x278E", "slot": "helm", "class": "ninja", "maleGump": 50425},
+    {"id": "ninja_jacket", "name": "Leather Ninja Jacket", "graphic": 10131, "hex": "0x2793", "slot": "chest", "class": "ninja", "maleGump": 50426},
+    {"id": "ninja_mitts", "name": "Leather Ninja Mitts", "graphic": 10130, "hex": "0x2792", "slot": "gloves", "class": "ninja", "maleGump": 50424},
+    {"id": "ninja_pants", "name": "Leather Ninja Pants", "graphic": 10129, "hex": "0x2791", "slot": "legs", "class": "ninja", "maleGump": 50423},
+    {"id": "ninja_tabi", "name": "Shinobi Ninja-Tabi", "graphic": 10135, "hex": "0x2797", "slot": "boots", "class": "ninja", "maleGump": 50572},
+    {"id": "ninja_belt", "name": "Leather Shuriken Belt", "graphic": 10128, "hex": "0x2790", "slot": "belt", "class": "ninja", "maleGump": 50514},
+    {"id": "tekagi", "name": "Tekagi War Claws", "graphic": 10155, "hex": "0x27AB", "slot": "weapon", "class": "ninja", "maleGump": 50533},
+    {"id": "kama", "name": "Kama Twin Sickles", "graphic": 10157, "hex": "0x27AD", "slot": "weapon", "class": "ninja", "maleGump": 50535},
+    {"id": "sai", "name": "Sai", "graphic": 10159, "hex": "0x27AF", "slot": "weapon", "class": "ninja", "maleGump": 50537},
+    {"id": "lajatang", "name": "Lajatang Crescent Staff", "graphic": 10151, "hex": "0x27A7", "slot": "weapon", "class": "ninja", "maleGump": 50526},
+    {"id": "tessen", "name": "Tessen Iron War Fan", "graphic": 10147, "hex": "0x27A3", "slot": "weapon", "class": "ninja", "maleGump": 50520},
+    {"id": "nunchaku", "name": "Nunchaku", "graphic": 10158, "hex": "0x27AE", "slot": "weapon", "class": "ninja", "maleGump": 50536},
+    {"id": "fukiya", "name": "Fukiya Blowgun", "graphic": 10154, "hex": "0x27AA", "slot": "offhand", "class": "ninja", "maleGump": 50532},
+    {"id": "kryss", "name": "Kryss", "graphic": 5121, "hex": "0x1401", "slot": "weapon", "class": "ninja", "maleGump": 50630},
+    # Consumables & Belt Pouches
+    {"id": "heal_potion", "name": "Greater Heal Potion", "graphic": 3852, "hex": "0x0F0C", "slot": "consumable", "class": "both"},
+    {"id": "cure_potion", "name": "Greater Cure Potion", "graphic": 3847, "hex": "0x0F07", "slot": "consumable", "class": "both"},
+    {"id": "refresh_potion", "name": "Total Refresh Potion", "graphic": 3846, "hex": "0x0F06", "slot": "consumable", "class": "both"},
+    {"id": "bandage", "name": "Clean Bandages", "graphic": 3617, "hex": "0x0E21", "slot": "consumable", "class": "both"},
+]
 
-    glow_layer = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    ldraw = ImageDraw.Draw(glow_layer)
-    accent = glow_rgb or center_rgb
-    for i in range(12):
-        ang = seed_angle + (i * math.pi / 6.0)
-        r_in = 22
-        r_out = 98 + (i % 3) * 14
-        x1 = cx + math.cos(ang - 0.08) * r_out
-        y1 = cy + math.sin(ang - 0.08) * r_out
-        x2 = cx + math.cos(ang + 0.08) * r_out
-        y2 = cy + math.sin(ang + 0.08) * r_out
-        ldraw.polygon(
-            [(cx + math.cos(ang) * r_in, cy + math.sin(ang) * r_in), (x1, y1), (x2, y2)],
-            fill=(*accent[:3], 42 if i % 2 == 0 else 24),
-        )
-    ldraw.ellipse([cx - 72, cy - 72, cx + 72, cy + 72], fill=(*accent[:3], 68))
-    ldraw.ellipse([cx - 42, cy - 42, cx + 42, cy + 42], fill=(*accent[:3], 95))
-    glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(radius=14))
-    return Image.alpha_composite(base, glow_layer)
+
+def apply_rgb_tint(img: Image.Image, factors: tuple[float, float, float]) -> Image.Image:
+    """Applies subtle per-channel RGB tinting while preserving alpha."""
+    r, g, b, a = img.convert("RGBA").split()
+    r = r.point(lambda v: min(255, int(v * factors[0])))
+    g = g.point(lambda v: min(255, int(v * factors[1])))
+    b = b.point(lambda v: min(255, int(v * factors[2])))
+    return Image.merge("RGBA", (r, g, b, a))
 
 
 def draw_uo_beveled_frame(
     img: Image.Image,
     accent_rgba: tuple[int, int, int, int],
-    is_rank2: bool = False,
+    is_capstone: bool = False,
     is_badge: bool = False,
 ) -> Image.Image:
-    """Applies Layer 4: Authentic dark-fantasy Ultima Online beveled antique-gold & class-hue gump border."""
-    out = img.copy()
+    """Applies authentic Ultima Online beveled antique-gold & class-hue gump frame using rectangular borders only."""
+    out = img.copy().convert("RGBA")
     draw = ImageDraw.Draw(out, "RGBA")
     n = out.width
 
     draw.rectangle([0, 0, n - 1, n - 1], outline=BG_CANVAS, width=4)
 
-    gold_top = GOLD_BRIGHT if (is_rank2 or is_badge) else GOLD_PRIMARY
-    gold_bot = GOLD_SHADOW
+    gold_top = GOLD_BRIGHT if (is_capstone or is_badge) else GOLD_PRIMARY
     draw.rectangle([4, 4, n - 5, n - 5], outline=gold_top, width=8)
-    draw.polygon(
-        [(n - 12, 12), (n - 5, 5), (n - 5, n - 5), (5, n - 5), (12, n - 12), (n - 12, n - 12)],
-        fill=gold_bot,
-    )
+    # Bottom/right shadow bevel lines
+    draw.line([(8, n - 6), (n - 6, n - 6), (n - 6, 8)], fill=GOLD_SHADOW, width=4)
+    # Top/left specular highlight lines
     draw.line([(6, n - 10), (6, 6), (n - 10, 6)], fill=SPECULAR_CREAM, width=2)
 
     draw.rectangle([12, 12, n - 13, n - 13], outline=BG_PANEL, width=3)
 
-    rim_color = GOLD_BRIGHT if is_rank2 else accent_rgba
-    draw.rectangle([15, 15, n - 16, n - 16], outline=(*rim_color[:3], 225), width=4)
+    rim_color = GOLD_BRIGHT if is_capstone else accent_rgba
+    draw.rectangle([15, 15, n - 16, n - 16], outline=(*rim_color[:3], 230), width=4)
     draw.rectangle([19, 19, n - 20, n - 20], outline=(10, 12, 10, 220), width=2)
 
-    corners = [(14, 14), (n - 15, 14), (14, n - 15), (n - 15, n - 15)]
+    # Corner square studs (zero polygons)
+    corners = [(12, 12), (n - 13, 12), (12, n - 13), (n - 13, n - 13)]
     for cx, cy in corners:
-        draw.polygon(
-            [(cx, cy - 9), (cx + 9, cy), (cx, cy + 9), (cx - 9, cy)],
-            fill=gold_top,
-            outline=OUTLINE_DARK,
-        )
-        draw.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=SPECULAR_CREAM)
+        draw.rectangle([cx - 6, cy - 6, cx + 6, cy + 6], fill=gold_top, outline=OUTLINE_DARK, width=2)
+        draw.ellipse([cx - 2, cy - 2, cx + 2, cy + 2], fill=SPECULAR_CREAM)
 
-    if is_rank2:
-        bx1, by1, bx2, by2 = n - 74, 18, n - 18, 66
-        draw.rounded_rectangle(
-            [bx1, by1, bx2, by2],
-            radius=8,
-            fill=(24, 18, 12, 245),
-            outline=GOLD_BRIGHT,
-            width=3,
-        )
-        for bar_x in (bx1 + 17, bx2 - 17):
-            draw.rectangle([bar_x - 3, by1 + 11, bar_x + 3, by2 - 11], fill=SPECULAR_CREAM)
-        draw.rectangle([bx1 + 10, by1 + 9, bx2 - 10, by1 + 13], fill=GOLD_BRIGHT)
-        draw.rectangle([bx1 + 10, by2 - 13, bx2 - 10, by2 - 9], fill=GOLD_BRIGHT)
+    if is_capstone:
+        # Double gold inset frame for L60 capstones
+        draw.rectangle([22, 22, n - 23, n - 23], outline=GOLD_BRIGHT, width=2)
 
     return out
 
 
-def draw_katana_blade(
-    draw: ImageDraw.ImageDraw,
-    p1: tuple[float, float],
-    p2: tuple[float, float],
-    width: float = 16.0,
-    curve: float = 14.0,
-    glow_rgba: tuple[int, int, int, int] | None = None,
-) -> None:
-    """Draws a curved high-contrast steel katana blade with blood-groove, tsuba guard, and hilt."""
-    x1, y1 = p1
-    x2, y2 = p2
-    dx, dy = x2 - x1, y2 - y1
-    length = math.hypot(dx, dy) or 1.0
-    ux, uy = dx / length, dy / length
-    nx, ny = -uy, ux
-
-    mx = (x1 + x2) * 0.5 + nx * curve
-    my = (y1 + y2) * 0.5 + ny * curve
-
-    tx = x1 + ux * (length * 0.24)
-    ty = y1 + uy * (length * 0.24)
-
-    if glow_rgba:
-        draw.line([p1, (mx, my), p2], fill=glow_rgba, width=int(width * 2.2))
-
-    hx1, hy1 = tx - ux * (length * 0.24), ty - uy * (length * 0.24)
-    hilt_poly = [
-        (hx1 + nx * (width * 0.48), hy1 + ny * (width * 0.48)),
-        (tx + nx * (width * 0.52), ty + ny * (width * 0.52)),
-        (tx - nx * (width * 0.52), ty - ny * (width * 0.52)),
-        (hx1 - nx * (width * 0.48), hy1 - ny * (width * 0.48)),
-    ]
-    draw.polygon(hilt_poly, fill=(45, 22, 22, 255), outline=OUTLINE_DARK)
-    for step in range(1, 4):
-        sx = hx1 + (tx - hx1) * (step / 4.0)
-        sy = hy1 + (ty - hy1) * (step / 4.0)
-        draw.polygon([(sx, sy - 5), (sx + 5, sy), (sx, sy + 5), (sx - 5, sy)], fill=GOLD_PRIMARY)
-
-    blade_poly = [
-        (tx + nx * (width * 0.55), ty + ny * (width * 0.55)),
-        (mx + nx * (width * 0.65), my + ny * (width * 0.65)),
-        (x2, y2),
-        (mx - nx * (width * 0.42), my - ny * (width * 0.42)),
-        (tx - nx * (width * 0.55), ty - ny * (width * 0.55)),
-    ]
-    draw.polygon(blade_poly, fill=STEEL_LIGHT, outline=OUTLINE_DARK)
-    spine_poly = [
-        (tx - nx * (width * 0.55), ty - ny * (width * 0.55)),
-        (mx - nx * (width * 0.42), my - ny * (width * 0.42)),
-        (x2, y2),
-        (mx + nx * (width * 0.05), my + ny * (width * 0.05)),
-        (tx + nx * (width * 0.05), ty + ny * (width * 0.05)),
-    ]
-    draw.polygon(spine_poly, fill=STEEL_MID)
-    draw.line(
-        [(tx + nx * (width * 0.4), ty + ny * (width * 0.4)), (mx + nx * (width * 0.5), my + ny * (width * 0.5)), (x2, y2)],
-        fill=SPECULAR_CREAM,
-        width=3,
-    )
-
-    tsuba_poly = [
-        (tx + nx * (width * 1.45) - ux * 6, ty + ny * (width * 1.45) - uy * 6),
-        (tx + nx * (width * 1.45) + ux * 6, ty + ny * (width * 1.45) + uy * 6),
-        (tx - nx * (width * 1.45) + ux * 6, ty - ny * (width * 1.45) + uy * 6),
-        (tx - nx * (width * 1.45) - ux * 6, ty - ny * (width * 1.45) - uy * 6),
-    ]
-    draw.polygon(tsuba_poly, fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-
-
-def draw_samurai_motif(stem: str) -> Image.Image:
-    """Renders distinct high-contrast Layer 1-4 artwork for each of the 23 Samurai icon stems."""
-    is_r2 = stem.endswith("_r2") or stem in {"samurai_frenzied_whirlwind", "samurai_kensei_judgment"}
-    is_badge = stem in {
-        "samurai_bushido_initiate",
-        "samurai_inner_calm",
-        "samurai_way_of_the_blade",
-        "samurai_bushido_master",
-    }
-    seed = (sum(ord(c) * (i + 1) for i, c in enumerate(stem)) % 360) * math.pi / 180.0
-    glow_col = (229, 193, 88) if (is_r2 or is_badge) else (200, 62, 55)
-    canvas = create_radial_background(CANVAS_SIZE, (56, 20, 20), (11, 13, 10), glow_col, seed)
-
-    layer = Image.new("RGBA", (CANVAS_SIZE, CANVAS_SIZE), (0, 0, 0, 0))
-    d = ImageDraw.Draw(layer, "RGBA")
-    cx, cy = 128, 128
-
-    if stem in {"samurai_way", "samurai_way_of_the_blade"}:
-        r_mon = 76 if stem == "samurai_way" else 84
-        d.ellipse([cx - r_mon, cy - r_mon, cx + r_mon, cy + r_mon], fill=(140, 28, 28, 220), outline=GOLD_BRIGHT, width=5)
-        d.ellipse([cx - 52, cy - 52, cx + 52, cy + 52], outline=GOLD_PRIMARY, width=3)
-        for i in range(8):
-            ang = i * math.pi / 4.0 + (0.2 if stem != "samurai_way" else 0.0)
-            px = cx + math.cos(ang) * 64
-            py = cy + math.sin(ang) * 64
-            d.polygon(
-                [(cx, cy), (px - math.sin(ang) * 10, py + math.cos(ang) * 10), (px + math.sin(ang) * 10, py - math.cos(ang) * 10)],
-                fill=GOLD_PRIMARY,
-            )
-        draw_katana_blade(d, (46, 206), (210, 44), width=16, curve=-10)
-        draw_katana_blade(d, (206, 206), (48, 44), width=14, curve=10)
-        if stem == "samurai_way_of_the_blade":
-            d.polygon([(cx, 32), (cx + 18, 60), (cx, 88), (cx - 18, 60)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-
-    elif stem in {"samurai_lightning", "samurai_lightning_strike", "samurai_frenzied_whirlwind"}:
-        if stem == "samurai_frenzied_whirlwind":
-            d.ellipse([30, 30, 226, 226], outline=GOLD_BRIGHT, width=8)
-            d.arc([42, 42, 214, 214], start=10, end=330, fill=SAMURAI_CRIMSON, width=14)
-            d.arc([58, 58, 198, 198], start=45, end=315, fill=LIGHTNING_CYAN, width=8)
-            for i in range(4):
-                ang = i * math.pi / 2.0 + 0.25
-                x1 = cx + math.cos(ang) * 18
-                y1 = cy + math.sin(ang) * 18
-                x2 = cx + math.cos(ang + 1.05) * 98
-                y2 = cy + math.sin(ang + 1.05) * 98
-                draw_katana_blade(d, (x1, y1), (x2, y2), width=14, curve=14, glow_rgba=(229, 193, 88, 140))
-            d.ellipse([cx - 26, cy - 26, cx + 26, cy + 26], fill=SAMURAI_CRIMSON, outline=GOLD_BRIGHT, width=5)
-        else:
-            bolt_col = GOLD_BRIGHT if is_r2 else LIGHTNING_CYAN
-            d.polygon([(36, 214), (108, 118), (94, 108), (168, 38), (222, 34), (144, 124), (164, 134), (72, 222)], fill=(*bolt_col[:3], 95))
-            draw_katana_blade(d, (44, 210), (214, 40), width=18 if is_r2 else 16, curve=-12, glow_rgba=(125, 211, 252, 120))
-            zig = [(204, 34), (148, 92), (174, 98), (108, 156), (132, 162), (56, 224)]
-            d.line(zig, fill=GOLD_BRIGHT, width=10)
-            d.line(zig, fill=SPECULAR_CREAM, width=4)
-            if stem != "samurai_lightning":
-                zig2 = [(62, 52), (114, 108), (96, 124), (158, 186), (202, 212)]
-                d.line(zig2, fill=LIGHTNING_CYAN, width=8 if is_r2 else 5)
-                d.line(zig2, fill=SPECULAR_CREAM, width=3)
-
-    elif stem in {"samurai_perfection", "samurai_bushido_initiate"}:
-        for ring_r, col in [(82, SAMURAI_CRIMSON), (64, GOLD_PRIMARY), (44, (40, 18, 18, 255))]:
-            d.ellipse([cx - ring_r, cy - ring_r, cx + ring_r, cy + ring_r], fill=col, outline=OUTLINE_DARK, width=4)
-        for i in range(8):
-            ang = i * math.pi / 4.0
-            x_tip = cx + math.cos(ang) * 94
-            y_tip = cy + math.sin(ang) * 94
-            x_l = cx + math.cos(ang - 0.22) * 54
-            y_l = cy + math.sin(ang - 0.22) * 54
-            x_r = cx + math.cos(ang + 0.22) * 54
-            y_r = cy + math.sin(ang + 0.22) * 54
-            d.polygon([(x_l, y_l), (x_tip, y_tip), (x_r, y_r)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        for idx, y_off in enumerate([146, 118, 90]):
-            w_ch = 36 - idx * 4
-            d.polygon(
-                [(cx - w_ch, y_off + 18), (cx, y_off - 8), (cx + w_ch, y_off + 18), (cx + w_ch - 10, y_off + 26), (cx, y_off + 4), (cx - w_ch + 10, y_off + 26)],
-                fill=SPECULAR_CREAM if idx == 2 else GOLD_BRIGHT,
-                outline=OUTLINE_DARK,
-            )
-        if stem == "samurai_bushido_initiate":
-            d.rounded_rectangle([54, 174, 202, 208], radius=8, fill=(180, 145, 95, 255), outline=OUTLINE_DARK, width=3)
-            d.line([(68, 191), (188, 191)], fill=SAMURAI_CRIMSON, width=5)
-
-    elif stem in {"samurai_honorable", "samurai_honorable_exec", "samurai_kensei_judgment", "samurai_honorable_exec_r2"}:
-        if is_r2:
-            d.ellipse([cx - 88, cy - 88, cx + 88, cy + 88], outline=GOLD_BRIGHT, width=6)
-            for i in range(12):
-                a = i * math.pi / 6.0
-                d.line([(cx + math.cos(a) * 76, cy + math.sin(a) * 76), (cx + math.cos(a) * 98, cy + math.sin(a) * 98)], fill=GOLD_BRIGHT, width=4)
-        left_helm = [(52, 186), (44, 134), (78, 96), (114, 96), (110, 186)]
-        right_helm = [(146, 98), (182, 98), (212, 138), (202, 188), (142, 188)]
-        d.polygon(left_helm, fill=GOLD_PRIMARY, outline=OUTLINE_DARK)
-        d.polygon(right_helm, fill=GOLD_PRIMARY, outline=OUTLINE_DARK)
-        d.polygon([(74, 102), (38, 54), (62, 48), (98, 96)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(182, 102), (218, 54), (194, 48), (158, 96)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(112, 28), (144, 28), (136, 228), (120, 228)], fill=SAMURAI_CRIMSON)
-        d.polygon([(122, 30), (134, 30), (128, 226)], fill=SPECULAR_CREAM)
-        draw_katana_blade(d, (128, 26), (128, 224), width=20 if is_r2 else 16, curve=0, glow_rgba=(255, 80, 60, 150))
-        if stem == "samurai_kensei_judgment":
-            draw_katana_blade(d, (36, 198), (220, 58), width=15, curve=-12, glow_rgba=(229, 193, 88, 160))
-
-    elif stem in {"samurai_confidence", "samurai_inner_calm"}:
-        for angle_deg in (-50, -25, 0, 25, 50):
-            rad = math.radians(angle_deg - 90)
-            px = cx + math.cos(rad) * 78
-            py = cy + 36 + math.sin(rad) * 78
-            d.polygon([(cx - 28, 188), (px, py), (cx + 28, 188)], fill=(46, 158, 107, 170), outline=GOLD_BRIGHT)
-        d.polygon([(56, 146), (72, 186), (184, 186), (200, 146)], fill=SAMURAI_CRIMSON, outline=OUTLINE_DARK)
-        d.pieslice([68, 72, 188, 176], start=180, end=360, fill=(60, 22, 22, 255), outline=GOLD_BRIGHT, width=4)
-        d.polygon([(86, 124), (170, 124), (156, 174), (128, 186), (100, 174)], fill=GOLD_PRIMARY, outline=OUTLINE_DARK)
-        d.polygon([(128, 96), (76, 42), (96, 38), (128, 78), (160, 38), (180, 42)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        for mx, my, mr in [(54, 78, 12), (202, 78, 12), (128, 44, 14), (66, 188, 10), (190, 188, 10)]:
-            d.rectangle([mx - mr, my - 4, mx + mr, my + 4], fill=(104, 211, 145, 255), outline=OUTLINE_DARK)
-            d.rectangle([mx - 4, my - mr, mx + 4, my + mr], fill=SPECULAR_CREAM, outline=OUTLINE_DARK)
-
-    elif stem in {"samurai_counter", "samurai_counter_attack"}:
-        d.pieslice([34, 34, 222, 222], start=200, end=350, fill=SAMURAI_CRIMSON, outline=GOLD_BRIGHT, width=4)
-        d.pieslice([56, 56, 200, 200], start=195, end=355, fill=(38, 16, 16, 255))
-        draw_katana_blade(d, (42, 62), (154, 154), width=14, curve=6)
-        draw_katana_blade(d, (54, 206), (206, 54), width=18, curve=-10, glow_rgba=(255, 107, 74, 140))
-        for i in range(10):
-            ang = i * math.pi / 5.0
-            r_len = 52 if i % 2 == 0 else 26
-            d.polygon(
-                [
-                    (cx, cy),
-                    (cx + math.cos(ang - 0.14) * 18, cy + math.sin(ang - 0.14) * 18),
-                    (cx + math.cos(ang) * r_len, cy + math.sin(ang) * r_len),
-                    (cx + math.cos(ang + 0.14) * 18, cy + math.sin(ang + 0.14) * 18),
-                ],
-                fill=SPECULAR_CREAM if i % 2 == 0 else GOLD_BRIGHT,
-            )
-
-    elif stem == "samurai_double_strike":
-        for offset in (-22, 22):
-            d.line([(42, 196 + offset), (196, 42 + offset)], fill=SAMURAI_GLOW, width=14)
-            d.line([(42, 196 + offset), (196, 42 + offset)], fill=SPECULAR_CREAM, width=5)
-        draw_katana_blade(d, (38, 184), (204, 36), width=15, curve=-10)
-        draw_katana_blade(d, (56, 218), (218, 68), width=15, curve=10)
-        d.arc([36, 36, 220, 220], start=110, end=260, fill=GOLD_BRIGHT, width=7)
-        d.arc([36, 36, 220, 220], start=290, end=80, fill=SAMURAI_CRIMSON, width=7)
-
-    elif stem == "samurai_evasion":
-        for idx, x_shift in enumerate([-32, 0, 32]):
-            alpha = 90 + idx * 80
-            col = (186, 230, 253, alpha) if idx < 2 else SPECULAR_CREAM
-            d.polygon(
-                [(88 + x_shift, 44), (154 + x_shift, 86), (138 + x_shift, 208), (74 + x_shift, 176)],
-                fill=(200, 62, 55, alpha // 2),
-                outline=col,
-                width=4,
-            )
-        draw_katana_blade(d, (92, 212), (186, 42), width=16, curve=-16, glow_rgba=(186, 230, 253, 140))
-        for by in (74, 128, 178):
-            d.line([(28, by), (112, by - 10), (74, by - 46)], fill=LIGHTNING_CYAN, width=6)
-            d.ellipse([104, by - 18, 120, by - 2], fill=SPECULAR_CREAM)
-
-    elif stem in {"samurai_momentum_strike", "samurai_whirlwind_attack"}:
-        d.ellipse([34, 34, 222, 222], outline=SAMURAI_CRIMSON, width=18)
-        d.arc([42, 42, 214, 214], start=20, end=310, fill=GOLD_BRIGHT, width=10)
-        d.arc([58, 58, 198, 198], start=60, end=340, fill=SPECULAR_CREAM, width=6)
-        if stem == "samurai_momentum_strike":
-            for tx, ty in [(78, 92), (178, 164)]:
-                d.polygon([(tx, ty - 28), (tx + 28, ty), (tx, ty + 28), (tx - 28, ty)], fill=SAMURAI_CRIMSON, outline=GOLD_BRIGHT, width=4)
-                d.ellipse([tx - 10, ty - 10, tx + 10, ty + 10], fill=SPECULAR_CREAM)
-            draw_katana_blade(d, (46, 192), (210, 64), width=16, curve=-18)
-        else:
-            for i in range(4):
-                ang = i * math.pi / 2.0 + 0.4
-                x1 = cx + math.cos(ang) * 20
-                y1 = cy + math.sin(ang) * 20
-                x2 = cx + math.cos(ang + 0.9) * 96
-                y2 = cy + math.sin(ang + 0.9) * 96
-                draw_katana_blade(d, (x1, y1), (x2, y2), width=13, curve=12)
-            d.ellipse([cx - 24, cy - 24, cx + 24, cy + 24], fill=GOLD_BRIGHT, outline=OUTLINE_DARK, width=4)
-
-    elif stem == "samurai_armor_ignore":
-        d.polygon([(52, 62), (118, 54), (110, 196), (62, 182), (44, 124)], fill=STEEL_MID, outline=OUTLINE_DARK, width=4)
-        d.polygon([(138, 54), (204, 62), (212, 124), (194, 182), (146, 196)], fill=STEEL_DARK, outline=OUTLINE_DARK, width=4)
-        for fy in (86, 128, 168):
-            d.line([(82, fy - 14), (128, fy), (174, fy + 14)], fill=SAMURAI_GLOW, width=6)
-        draw_katana_blade(d, (36, 164), (222, 88), width=18, curve=0, glow_rgba=(255, 107, 74, 150))
-        d.ellipse([114, 114, 142, 142], fill=SPECULAR_CREAM, outline=SAMURAI_CRIMSON, width=4)
-
-    elif stem == "samurai_bladeweave":
-        for i in range(3):
-            y_off = 68 + i * 54
-            d.arc([34, y_off - 40, 222, y_off + 40], start=0, end=180, fill=SAMURAI_CRIMSON if i % 2 == 0 else GOLD_BRIGHT, width=10)
-            d.arc([34, y_off - 40, 222, y_off + 40], start=180, end=360, fill=LIGHTNING_CYAN, width=8)
-        draw_katana_blade(d, (54, 206), (202, 48), width=16, curve=-12)
-        draw_katana_blade(d, (202, 206), (54, 48), width=16, curve=12)
-
-    elif stem == "samurai_crushing_blow":
-        d.ellipse([38, 148, 218, 214], fill=(120, 32, 28, 210), outline=GOLD_BRIGHT, width=5)
-        d.ellipse([68, 162, 188, 202], fill=GOLD_BRIGHT)
-        draw_katana_blade(d, (128, 24), (128, 188), width=24, curve=4, glow_rgba=(255, 140, 60, 170))
-        for sx, sy in [(56, 128), (74, 92), (198, 128), (182, 92)]:
-            d.polygon([(sx, sy - 14), (sx + 14, sy + 8), (sx - 12, sy + 12)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-
-    elif stem == "samurai_bushido_master":
-        d.ellipse([38, 38, 218, 218], fill=SAMURAI_CRIMSON, outline=GOLD_BRIGHT, width=6)
-        d.polygon([(128, 36), (208, 94), (178, 198), (78, 198), (48, 94)], fill=(48, 16, 16, 255), outline=GOLD_BRIGHT, width=4)
-        d.polygon([(128, 52), (62, 34), (88, 108), (128, 88), (168, 108), (194, 34)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(82, 112), (174, 112), (162, 186), (128, 204), (94, 186)], fill=GOLD_PRIMARY, outline=OUTLINE_DARK)
-        d.ellipse([102, 132, 120, 146], fill=SPECULAR_CREAM)
-        d.ellipse([136, 132, 154, 146], fill=SPECULAR_CREAM)
-
-    shadow = layer.split()[3].point(lambda a: min(255, int(a * 0.85)))
-    shadow_img = Image.new("RGBA", (CANVAS_SIZE, CANVAS_SIZE), (0, 0, 0, 0))
-    shadow_img.paste((0, 0, 0, 220), (4, 6), mask=shadow)
-    shadow_img = shadow_img.filter(ImageFilter.GaussianBlur(radius=5))
-
-    merged = Image.alpha_composite(canvas, shadow_img)
-    merged = Image.alpha_composite(merged, layer)
-    return draw_uo_beveled_frame(merged, SAMURAI_CRIMSON, is_rank2=is_r2, is_badge=is_badge)
-
-
-def draw_ninja_motif(stem: str) -> Image.Image:
-    """Renders distinct high-contrast Layer 1-4 artwork for each of the 22 Ninja icon stems."""
-    is_r2 = stem.endswith("_r2") or stem in {"ninja_fukiya_barrage", "ninja_twin_shadow"}
-    is_badge = stem in {
-        "ninja_way_of_stealth",
-        "ninja_shadow_discipline",
-        "ninja_lethal_toxins",
-        "ninja_master_assassin",
-    }
-    seed = (sum(ord(c) * (i + 3) for i, c in enumerate(stem)) % 360) * math.pi / 180.0
-    glow_col = (229, 193, 88) if is_r2 else (46, 158, 107)
-    canvas = create_radial_background(CANVAS_SIZE, (16, 44, 36), (11, 13, 10), glow_col, seed)
-
-    layer = Image.new("RGBA", (CANVAS_SIZE, CANVAS_SIZE), (0, 0, 0, 0))
-    d = ImageDraw.Draw(layer, "RGBA")
-    cx, cy = 128, 128
-
-    if stem in {"ninja_shadowjump", "ninja_way_of_stealth"}:
-        d.ellipse([44, 36, 212, 220], fill=(30, 24, 58, 230), outline=NINJA_EMERALD, width=5)
-        d.arc([34, 28, 222, 224], start=35, end=245, fill=NINJA_GLOW, width=8)
-        d.pieslice([116, 40, 204, 128], start=210, end=120, fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(128, 62), (174, 116), (162, 198), (94, 198), (82, 116)], fill=NINJA_INDIGO, outline=NINJA_GLOW, width=3)
-        d.polygon([(104, 112), (122, 118), (108, 124)], fill=SPECULAR_CREAM)
-        d.polygon([(152, 112), (134, 118), (148, 124)], fill=SPECULAR_CREAM)
-
-    elif stem in {"ninja_focus", "ninja_focus_attack"}:
-        for r_ring, col in [(82, NINJA_EMERALD), (56, NINJA_GLOW), (28, SPECULAR_CREAM)]:
-            d.ellipse([cx - r_ring, cy - r_ring, cx + r_ring, cy + r_ring], outline=col, width=5)
-        d.line([(28, cy), (228, cy)], fill=NINJA_GLOW, width=4)
-        d.line([(cx, 28), (cx, 228)], fill=NINJA_GLOW, width=4)
-        kryss_pts = [(40, 216), (76, 162), (68, 142), (108, 108), (102, 92), (186, 42), (142, 120), (156, 134), (114, 168), (92, 182)]
-        d.polygon(kryss_pts, fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-        d.ellipse([cx - 16, cy - 16, cx + 16, cy + 16], fill=SPECULAR_CREAM, outline=NINJA_EMERALD, width=4)
-
-    elif stem in {"ninja_mirror", "ninja_mirror_image", "ninja_fukiya_barrage"}:
-        if stem == "ninja_fukiya_barrage":
-            for sx, sy, sr, col in [
-                (82, 92, 46, (229, 193, 88, 200)),
-                (168, 86, 44, (46, 158, 107, 210)),
-                (128, 146, 54, (255, 246, 214, 220)),
-            ]:
-                d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill=col, outline=OUTLINE_DARK, width=3)
-            d.polygon([(36, 194), (194, 36), (212, 54), (54, 212)], fill=GOLD_PRIMARY, outline=OUTLINE_DARK, width=4)
-            for dy in (-26, 0, 26):
-                d.line([(64, 164 + dy), (214, 48 + dy)], fill=NINJA_GLOW, width=6)
-                d.polygon([(218, 44 + dy), (190, 52 + dy), (202, 68 + dy)], fill=SPECULAR_CREAM, outline=OUTLINE_DARK)
-        else:
-            offsets = [(-44, 14), (44, 14), (0, -14)] if is_r2 else [(-30, 10), (26, -10)]
-            for idx, (ox, oy) in enumerate(offsets):
-                is_front = idx == len(offsets) - 1
-                fill_c = NINJA_INDIGO if is_front else (34, 88, 74, 185)
-                rim_c = GOLD_BRIGHT if (is_front and is_r2) else NINJA_GLOW
-                mx, my = cx + ox, cy + oy
-                d.polygon(
-                    [(mx, my - 58), (mx + 46, my - 14), (mx + 36, my + 56), (mx, my + 70), (mx - 36, my + 56), (mx - 46, my - 14)],
-                    fill=fill_c,
-                    outline=rim_c,
-                    width=4,
-                )
-                d.polygon([(mx - 24, my - 6), (mx - 6, my), (mx - 20, my + 8)], fill=SPECULAR_CREAM if is_front else NINJA_GLOW)
-                d.polygon([(mx + 24, my - 6), (mx + 6, my), (mx + 20, my + 8)], fill=SPECULAR_CREAM if is_front else NINJA_GLOW)
-
-    elif stem in {"ninja_backstab", "ninja_shadow_strike"}:
-        for i in range(6):
-            ang = i * math.pi / 3.0 + 0.3
-            d.arc([38, 38, 218, 218], start=int(math.degrees(ang)), end=int(math.degrees(ang) + 45), fill=NINJA_VIOLET, width=10)
-        d.polygon([(128, 34), (148, 106), (220, 128), (148, 150), (128, 222), (108, 150), (36, 128), (108, 106)], fill=SAMURAI_CRIMSON, outline=NINJA_GLOW, width=3)
-        draw_katana_blade(d, (48, 48), (204, 204), width=18, curve=18, glow_rgba=(104, 211, 145, 150))
-
-    elif stem in {"ninja_death", "ninja_twin_shadow"}:
-        pts = []
-        for i in range(5):
-            ang = -math.pi / 2.0 + i * (2.0 * math.pi / 5.0)
-            pts.append((cx + math.cos(ang) * 76, cy + math.sin(ang) * 76))
-        d.polygon(pts, fill=(42, 14, 24, 210), outline=SAMURAI_CRIMSON if is_r2 else NINJA_EMERALD, width=5)
-        for i in range(5):
-            d.line([pts[i], pts[(i + 2) % 5]], fill=GOLD_BRIGHT if is_r2 else NINJA_GLOW, width=3)
-        d.ellipse([cx - 34, cy - 38, cx + 34, cy + 22], fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-        d.rectangle([cx - 20, cy + 10, cx + 20, cy + 38], fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-        d.ellipse([cx - 20, cy - 16, cx - 6, cy - 2], fill=SAMURAI_CRIMSON if is_r2 else NINJA_EMERALD)
-        d.ellipse([cx + 6, cy - 16, cx + 20, cy - 2], fill=SAMURAI_CRIMSON if is_r2 else NINJA_EMERALD)
-        for px, py in pts:
-            d.ellipse([px - 14, py - 14, px + 14, py + 14], fill=GOLD_BRIGHT if is_r2 else NINJA_GLOW, outline=OUTLINE_DARK, width=3)
-        if stem == "ninja_twin_shadow":
-            draw_katana_blade(d, (38, 204), (214, 44), width=15, curve=-14, glow_rgba=(104, 211, 145, 150))
-            draw_katana_blade(d, (218, 204), (42, 44), width=15, curve=14, glow_rgba=(229, 193, 88, 150))
-
-    elif stem in {"ninja_animal_form", "ninja_shadow_discipline"}:
-        d.pieslice([28, 36, 228, 224], start=130, end=240, fill=NINJA_EMERALD, outline=NINJA_GLOW, width=4)
-        d.pieslice([28, 36, 228, 224], start=300, end=50, fill=NINJA_EMERALD, outline=NINJA_GLOW, width=4)
-        head = [(128, 48), (168, 36), (182, 96), (206, 134), (166, 184), (128, 212), (90, 184), (50, 134), (74, 96), (88, 36)]
-        d.polygon(head, fill=NINJA_INDIGO, outline=GOLD_BRIGHT, width=4)
-        d.polygon([(88, 122), (116, 134), (96, 144)], fill=SPECULAR_CREAM)
-        d.polygon([(168, 122), (140, 134), (160, 144)], fill=SPECULAR_CREAM)
-        d.polygon([(128, 76), (142, 98), (128, 120), (114, 98)], fill=NINJA_GLOW, outline=OUTLINE_DARK)
-
-    elif stem in {"ninja_infectious_strike", "ninja_lethal_toxins"}:
-        draw_katana_blade(d, (46, 198), (204, 42), width=17, curve=16, glow_rgba=(46, 158, 107, 170))
-        for vx, vy, vr in [(96, 168, 16), (144, 138, 20), (182, 104, 15), (124, 196, 14)]:
-            d.polygon([(vx, vy - vr * 1.4), (vx + vr, vy + 4), (vx, vy + vr), (vx - vr, vy + 4)], fill=NINJA_GLOW, outline=OUTLINE_DARK, width=3)
-            d.ellipse([vx - 5, vy - 2, vx + 3, vy + 6], fill=SPECULAR_CREAM)
-        if stem == "ninja_lethal_toxins":
-            d.ellipse([54, 118, 134, 198], fill=(22, 98, 64, 240), outline=GOLD_BRIGHT, width=4)
-            d.rectangle([82, 92, 106, 124], fill=GOLD_PRIMARY, outline=OUTLINE_DARK, width=3)
-
-    elif stem == "ninja_smoke_bomb":
-        for sx, sy, sr, col in [
-            (78, 88, 44, (139, 92, 246, 190)),
-            (172, 84, 48, (46, 158, 107, 200)),
-            (128, 64, 52, (104, 211, 145, 210)),
-            (66, 142, 38, (46, 158, 107, 190)),
-            (188, 142, 38, (139, 92, 246, 190)),
-        ]:
-            d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill=col, outline=OUTLINE_DARK, width=3)
-        d.ellipse([76, 104, 180, 214], fill=(214, 202, 178, 255), outline=OUTLINE_DARK, width=5)
-        crack = [(84, 152), (114, 136), (128, 164), (152, 138), (174, 158)]
-        d.line(crack, fill=NINJA_EMERALD, width=10)
-        d.line(crack, fill=SPECULAR_CREAM, width=4)
-
-    elif stem == "ninja_shuriken":
-        star_pts = []
-        for i in range(8):
-            ang = i * math.pi / 4.0 + 0.15
-            r = 86 if i % 2 == 0 else 28
-            star_pts.append((cx + math.cos(ang) * r, cy + math.sin(ang) * r))
-        d.polygon(star_pts, fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-        d.ellipse([cx - 18, cy - 18, cx + 18, cy + 18], fill=BG_CANVAS, outline=GOLD_BRIGHT, width=4)
-        d.line([(36, 204), (214, 44)], fill=GOLD_BRIGHT, width=6)
-        d.polygon([(214, 44), (184, 56), (198, 72)], fill=NINJA_GLOW, outline=OUTLINE_DARK)
-
-    elif stem in {"ninja_ki_attack", "ninja_double_strike"}:
-        for x_off in (56, 96, 136):
-            d.arc([x_off - 40, 48, x_off + 60, 208], start=290, end=70, fill=GOLD_BRIGHT, width=6)
-        for c_off in (-28, 0, 28):
-            d.polygon(
-                [
-                    (46, 168 + c_off),
-                    (148, 86 + c_off),
-                    (214, 48 + c_off),
-                    (162, 108 + c_off),
-                    (62, 186 + c_off),
-                ],
-                fill=STEEL_LIGHT if c_off == 0 else NINJA_GLOW,
-                outline=OUTLINE_DARK,
-                width=3,
-            )
-
-    elif stem == "ninja_surprise_attack":
-        d.polygon([(78, 64), (178, 64), (190, 138), (128, 206), (66, 138)], fill=GOLD_PRIMARY, outline=OUTLINE_DARK, width=4)
-        d.line([(128, 56), (114, 128), (144, 152), (128, 212)], fill=BG_CANVAS, width=10)
-        draw_katana_blade(d, (46, 204), (174, 58), width=15, curve=-14)
-        d.polygon([(164, 54), (222, 88), (196, 112), (150, 74)], fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-        draw_katana_blade(d, (210, 204), (82, 58), width=15, curve=14)
-        d.polygon([(92, 54), (34, 88), (60, 112), (106, 74)], fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-
-    elif stem == "ninja_armor_ignore":
-        d.polygon([(58, 68), (198, 68), (182, 194), (74, 194)], fill=STEEL_DARK, outline=GOLD_PRIMARY, width=4)
-        d.polygon([(128, 26), (140, 188), (116, 188)], fill=STEEL_LIGHT, outline=OUTLINE_DARK, width=4)
-        d.arc([78, 88, 178, 176], start=180, end=360, fill=GOLD_BRIGHT, width=10)
-        d.rectangle([118, 176, 138, 224], fill=NINJA_EMERALD, outline=OUTLINE_DARK, width=3)
-
-    elif stem == "ninja_master_assassin":
-        d.ellipse([38, 38, 218, 218], fill=NINJA_INDIGO, outline=GOLD_BRIGHT, width=6)
-        d.polygon([(70, 78), (186, 78), (172, 188), (128, 212), (84, 188)], fill=(20, 26, 38, 255), outline=NINJA_GLOW, width=4)
-        d.polygon([(82, 84), (48, 34), (106, 68)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(174, 84), (208, 34), (150, 68)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(88, 118), (118, 128), (96, 140)], fill=NINJA_GLOW)
-        d.polygon([(168, 118), (138, 128), (160, 140)], fill=NINJA_GLOW)
-        for fx in (102, 120, 136, 154):
-            d.polygon([(fx - 6, 166), (fx + 6, 166), (fx, 186)], fill=SPECULAR_CREAM, outline=OUTLINE_DARK)
-
-    shadow = layer.split()[3].point(lambda a: min(255, int(a * 0.85)))
-    shadow_img = Image.new("RGBA", (CANVAS_SIZE, CANVAS_SIZE), (0, 0, 0, 0))
-    shadow_img.paste((0, 0, 0, 220), (4, 6), mask=shadow)
-    shadow_img = shadow_img.filter(ImageFilter.GaussianBlur(radius=5))
-
-    merged = Image.alpha_composite(canvas, shadow_img)
-    merged = Image.alpha_composite(merged, layer)
-    return draw_uo_beveled_frame(merged, NINJA_EMERALD, is_rank2=is_r2, is_badge=is_badge)
-
-
-def synthesize_procedural_portrait(is_samurai: bool) -> Image.Image:
-    """Deterministic Pillow fallback portrait synthesizer if external AI base image is absent."""
-    center = (58, 18, 18) if is_samurai else (16, 44, 36)
-    glow = (200, 62, 55) if is_samurai else (46, 158, 107)
-    img = create_radial_background(CANVAS_SIZE, center, (11, 13, 10), glow, 0.4)
-    d = ImageDraw.Draw(img, "RGBA")
-    if is_samurai:
-        d.polygon([(28, 240), (54, 156), (128, 138), (202, 156), (228, 240)], fill=SAMURAI_CRIMSON, outline=GOLD_BRIGHT, width=4)
-        d.pieslice([64, 54, 192, 166], start=180, end=360, fill=(44, 16, 16, 255), outline=GOLD_BRIGHT, width=4)
-        d.polygon([(128, 86), (56, 28), (82, 24), (128, 68), (174, 24), (200, 28)], fill=GOLD_BRIGHT, outline=OUTLINE_DARK)
-        d.polygon([(84, 106), (172, 106), (158, 162), (128, 176), (98, 162)], fill=STEEL_DARK, outline=GOLD_PRIMARY, width=3)
-        draw_katana_blade(d, (42, 224), (218, 42), width=18, curve=-10, glow_rgba=(186, 230, 253, 140))
-    else:
-        d.polygon([(28, 240), (58, 152), (128, 136), (198, 152), (228, 240)], fill=NINJA_INDIGO, outline=NINJA_GLOW, width=4)
-        d.polygon([(128, 44), (184, 96), (172, 174), (84, 174), (72, 96)], fill=NINJA_INDIGO, outline=NINJA_EMERALD, width=4)
-        d.polygon([(94, 108), (120, 116), (102, 126)], fill=NINJA_GLOW)
-        d.polygon([(162, 108), (136, 116), (154, 126)], fill=NINJA_GLOW)
-        draw_katana_blade(d, (48, 220), (206, 62), width=16, curve=16, glow_rgba=(46, 158, 107, 150))
-    return img
-
-
 def build_class_portraits() -> None:
-    """Loads or synthesizes Samurai & Ninja portraits and writes 256x256 and 64x64 framed PNGs."""
+    """Frames the oil-painted Samurai & Ninja portraits into 256x256 and 64x64 PNGs."""
     SAMURAI_DIR.mkdir(parents=True, exist_ok=True)
     NINJA_DIR.mkdir(parents=True, exist_ok=True)
 
     configs = [
-        (True, AI_PORTRAIT_SAMURAI, SAMURAI_DIR / "portrait-samurai.png", SAMURAI_DIR / "portrait-samurai-64.png", SAMURAI_CRIMSON),
-        (False, AI_PORTRAIT_NINJA, NINJA_DIR / "portrait-ninja.png", NINJA_DIR / "portrait-ninja-64.png", NINJA_EMERALD),
+        (SOURCES_DIR / "portrait-samurai-raw.png", SAMURAI_DIR / "portrait-samurai.png", SAMURAI_DIR / "portrait-samurai-64.png", SAMURAI_CRIMSON),
+        (SOURCES_DIR / "portrait-ninja-raw.png", NINJA_DIR / "portrait-ninja.png", NINJA_DIR / "portrait-ninja-64.png", NINJA_EMERALD),
     ]
 
-    for is_samurai, ai_src, out_256, out_64, accent in configs:
-        if ai_src is not None and ai_src.exists():
-            raw = Image.open(ai_src).convert("RGBA")
-            raw_256 = raw.resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
-            framed_256 = draw_uo_beveled_frame(raw_256, accent, is_rank2=False, is_badge=True)
-            framed_256.save(out_256, format="PNG", optimize=True)
-            framed_64 = framed_256.resize((64, 64), Image.Resampling.LANCZOS)
-            framed_64.save(out_64, format="PNG", optimize=True)
-        elif out_256.exists() and out_64.exists():
-            # Preserve committed AI portrait artifacts byte-for-byte when running in environments without the temp cache
-            continue
-        else:
-            raw_256 = synthesize_procedural_portrait(is_samurai)
-            framed_256 = draw_uo_beveled_frame(raw_256, accent, is_rank2=False, is_badge=True)
-            framed_256.save(out_256, format="PNG", optimize=True)
-            framed_64 = framed_256.resize((64, 64), Image.Resampling.LANCZOS)
-            framed_64.save(out_64, format="PNG", optimize=True)
+    for raw_src, out_256, out_64, accent in configs:
+        raw = Image.open(raw_src).convert("RGBA").resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+        framed_256 = draw_uo_beveled_frame(raw, accent, is_capstone=False, is_badge=True)
+        framed_256.save(out_256, format="PNG", optimize=True)
+        framed_64 = framed_256.resize((64, 64), Image.Resampling.LANCZOS)
+        framed_64.save(out_64, format="PNG", optimize=True)
+
+
+def load_ability_atlas() -> tuple[Image.Image | None, dict[str, dict[str, int]]]:
+    """Loads ability-icons.png and its frame dictionary keyed by frame['key']."""
+    if not ABILITY_ATLAS_JSON.exists():
+        return None, {}
+    atlas_meta = json.loads(ABILITY_ATLAS_JSON.read_text(encoding="utf-8"))
+    frames = {fr["key"]: fr for fr in atlas_meta.get("frames", [])}
+    atlas_img_path = SOURCES_DIR / "ability-icons.png"
+    if not atlas_img_path.exists() and ABILITY_ATLAS_PNG.exists():
+        SOURCES_DIR.mkdir(parents=True, exist_ok=True)
+        atlas_img_path.write_bytes(ABILITY_ATLAS_PNG.read_bytes())
+    if atlas_img_path.exists():
+        return Image.open(atlas_img_path).convert("RGBA"), frames
+    return None, frames
+
+
+def extract_master_icon(
+    stem: str,
+    accent: tuple[int, int, int, int],
+    atlas_img: Image.Image | None,
+    atlas_frames: dict[str, dict[str, int]],
+    bushido_sheet: Image.Image,
+    ninjitsu_sheet: Image.Image,
+) -> Image.Image:
+    """Extracts a 256x256 master icon from either ability-icons.png or the AI oil-painted sprite sheets."""
+    spec = STEM_SOURCE_MAP[stem]
+    src_type = str(spec["type"])
+    is_capstone = bool(spec.get("capstone", False))
+    is_badge = bool(spec.get("badge", False))
+    crop_inset = int(spec.get("crop_inset", 18))
+
+    if src_type == "atlas" and atlas_img is not None:
+        key = str(spec["key"])
+        fr = atlas_frames[key]
+        x, y, w, h = int(fr["x"]), int(fr["y"]), int(fr["width"]), int(fr["height"])
+        raw_cell = atlas_img.crop((x, y, x + w, y + h))
+        bbox = raw_cell.getbbox()
+        if bbox is not None:
+            raw_cell = raw_cell.crop(bbox)
+        cw, ch = raw_cell.size
+        # Crop 1px inside the gump to remove outer black frame before upscaling
+        gump_crop = raw_cell.crop((1, 1, max(2, cw - 1), max(2, ch - 1)))
+        master = gump_crop.resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+        master = ImageEnhance.Sharpness(master).enhance(1.35)
+        master = ImageEnhance.Contrast(master).enhance(1.12)
+    elif src_type == "ai_bushido":
+        col, row = spec["cell"]  # type: ignore[misc]
+        bw, bh = bushido_sheet.size
+        cw = bw / 2.0
+        ch = bh / 3.0
+        box = (
+            int(col * cw + crop_inset),
+            int(row * ch + crop_inset),
+            int((col + 1) * cw - crop_inset),
+            int((row + 1) * ch - crop_inset),
+        )
+        master = bushido_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+    elif src_type == "ai_ninjitsu":
+        col, row = spec["cell"]  # type: ignore[misc]
+        nw, nh = ninjitsu_sheet.size
+        cw = nw / 3.0
+        ch = nh / 3.0
+        box = (
+            int(col * cw + crop_inset),
+            int(row * ch + crop_inset),
+            int((col + 1) * cw - crop_inset),
+            int((row + 1) * ch - crop_inset),
+        )
+        master = ninjitsu_sheet.crop(box).resize((CANVAS_SIZE, CANVAS_SIZE), Image.Resampling.LANCZOS)
+    else:
+        raise ValueError(f"Unknown icon source spec for {stem}: {spec}")
+
+    if "tint" in spec:
+        master = apply_rgb_tint(master, spec["tint"])  # type: ignore[arg-type]
+
+    return draw_uo_beveled_frame(master, accent, is_capstone=is_capstone, is_badge=is_badge)
 
 
 def export_icon_stem(master_256: Image.Image, out_dir: Path, stem: str) -> None:
@@ -782,6 +399,209 @@ def export_icon_stem(master_256: Image.Image, out_dir: Path, stem: str) -> None:
     img_48.save(out_dir / f"{stem}@48.png", format="PNG", optimize=True)
 
 
+def generate_item_sprites_and_paperdolls(
+    bushido_sheet: Image.Image,
+    ninjitsu_sheet: Image.Image,
+) -> dict[str, object]:
+    """Slices authentic UO item art from art.png and composites layered Samurai/Ninja paperdolls."""
+    ITEMS_DIR.mkdir(parents=True, exist_ok=True)
+    gumps_out_dir = ITEMS_DIR / "gumps"
+    gumps_out_dir.mkdir(parents=True, exist_ok=True)
+
+    if ART_JSON.exists() and ART_PNG.exists():
+        art_meta = json.loads(ART_JSON.read_text(encoding="utf-8"))
+        art_frames = {int(fr["graphic"]): fr for fr in art_meta.get("frames", [])}
+        art_sheet = Image.open(ART_PNG).convert("RGBA")
+
+        for item in ITEM_SPRITE_CATALOG:
+            item_id = str(item["id"])
+            graphic = int(item["graphic"])
+            fr = art_frames.get(graphic)
+            if fr is None:
+                continue
+            raw_sprite = art_sheet.crop(
+                (int(fr["x"]), int(fr["y"]), int(fr["x"]) + int(fr["width"]), int(fr["y"]) + int(fr["height"]))
+            )
+            bbox = raw_sprite.getbbox()
+            if bbox is not None:
+                raw_sprite = raw_sprite.crop(bbox)
+            # Center the authentic UO item sprite inside a 64x64 dark-fantasy slot tile with soft radial vignette
+            tile = Image.new("RGBA", (64, 64), (14, 17, 13, 255))
+            glow = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+            gdraw = ImageDraw.Draw(glow, "RGBA")
+            cls = str(item["class"])
+            border_col = (
+                SAMURAI_CRIMSON
+                if cls == "samurai"
+                else (NINJA_EMERALD if cls == "ninja" else GOLD_PRIMARY)
+            )
+            gdraw.ellipse([12, 12, 52, 52], fill=(*border_col[:3], 55))
+            glow = glow.filter(ImageFilter.GaussianBlur(radius=8))
+            tile = Image.alpha_composite(tile, glow)
+            tdraw = ImageDraw.Draw(tile, "RGBA")
+            tdraw.rectangle([0, 0, 63, 63], outline=(42, 48, 38, 255), width=2)
+            tdraw.rectangle([2, 2, 61, 61], outline=(*border_col[:3], 135), width=1)
+
+            # Fit trimmed sprite into 48x48 box so small potions/weapons look crisp and prominent
+            sw, sh = raw_sprite.size
+            scale = min(48.0 / max(1, sw), 48.0 / max(1, sh), 2.35)
+            nw = max(1, int(round(sw * scale)))
+            nh = max(1, int(round(sh * scale)))
+            resized = raw_sprite.resize((nw, nh), Image.Resampling.LANCZOS)
+            ox = (64 - nw) // 2
+            oy = (64 - nh) // 2
+            tile.paste(resized, (ox, oy), resized)
+            tile.save(ITEMS_DIR / f"{item_id}.png", format="PNG", optimize=True)
+
+    # Also export Smoke Bomb, Egg Bomb, and Shuriken item tiles from our oil-painted Ninjitsu cells
+    special_ninja_tools = [
+        ("smoke_bomb", (1, 1)),
+        ("egg_bomb", (1, 1)),
+        ("shuriken", (2, 1)),
+    ]
+    nw_s, nh_s = ninjitsu_sheet.size
+    for tool_id, (col, row) in special_ninja_tools:
+        cw, ch = nw_s / 3.0, nh_s / 3.0
+        crop = ninjitsu_sheet.crop(
+            (int(col * cw + 20), int(row * ch + 20), int((col + 1) * cw - 20), int((row + 1) * ch - 20))
+        ).resize((64, 64), Image.Resampling.LANCZOS)
+        if tool_id == "egg_bomb":
+            crop = apply_rgb_tint(crop, (1.12, 1.05, 0.88))
+        tdraw = ImageDraw.Draw(crop, "RGBA")
+        tdraw.rectangle([0, 0, 63, 63], outline=(42, 48, 38, 255), width=2)
+        tdraw.rectangle([2, 2, 61, 61], outline=(*NINJA_EMERALD[:3], 150), width=1)
+        crop.save(ITEMS_DIR / f"{tool_id}.png", format="PNG", optimize=True)
+
+    # Composite authentic UO layered paperdoll characters from GUMPS_DIR (260x237)
+    if GUMPS_DIR.exists() and (GUMPS_DIR / "12.png").exists():
+        # Copy used gump layers into mockups/assets/items/gumps/ for interactive web inspection
+        for gfile in sorted(GUMPS_DIR.glob("*.png")):
+            (gumps_out_dir / gfile.name).write_bytes(gfile.read_bytes())
+
+        # Samurai Paperdoll Layer Stack:
+        #   Base Male Body (12) -> Waraji (50569) -> Suneate (50543) -> Jin-Baori Cloak (50468)
+        #   -> Samurai Do (50457) -> Hiro-Sode (50473) -> Kabuto (50444) -> Daisho (50470)
+        samurai_layers = [
+            (50468, (1.15, 0.42, 0.38)),  # Cloak behind/shoulders (crimson lacquer)
+            (12, None),                   # Male Body
+            (50569, (0.95, 0.88, 0.72)),  # Waraji
+            (50543, (1.12, 0.82, 0.55)),  # Suneate
+            (50457, (1.22, 0.48, 0.42)),  # Samurai Do (Crimson & Gold)
+            (50473, (1.18, 0.52, 0.44)),  # Hiro-Sode
+            (50444, (1.20, 0.95, 0.55)),  # Kabuto (Antique Gold crest)
+            (50470, (1.05, 1.08, 1.15)),  # Daisho blades
+        ]
+        pd_samurai = Image.new("RGBA", (260, 237), (14, 17, 13, 255))
+        s_glow = Image.new("RGBA", (260, 237), (0, 0, 0, 0))
+        sg_draw = ImageDraw.Draw(s_glow, "RGBA")
+        sg_draw.ellipse([44, 24, 216, 218], fill=(200, 62, 55, 64))
+        s_glow = s_glow.filter(ImageFilter.GaussianBlur(radius=18))
+        pd_samurai = Image.alpha_composite(pd_samurai, s_glow)
+        char_samurai = Image.new("RGBA", (260, 237), (0, 0, 0, 0))
+        for gid, tint in samurai_layers:
+            gpath = gumps_out_dir / f"{gid}.png"
+            if gpath.exists():
+                layer_im = Image.open(gpath).convert("RGBA")
+                if tint is not None:
+                    layer_im = apply_rgb_tint(layer_im, tint)
+                char_samurai = Image.alpha_composite(char_samurai, layer_im)
+        # Shift +36px horizontally so the paperdoll character (bbox x=42..139) is centered at x=130
+        pd_samurai.paste(char_samurai, (36, -6), char_samurai)
+        s_draw = ImageDraw.Draw(pd_samurai, "RGBA")
+        s_draw.rectangle([0, 0, 259, 236], outline=GOLD_PRIMARY, width=2)
+        s_draw.rectangle([3, 3, 256, 233], outline=(200, 62, 55, 180), width=1)
+        pd_samurai.save(ITEMS_DIR / "paperdoll-samurai.png", format="PNG", optimize=True)
+
+        # Ninja Paperdoll Layer Stack:
+        #   Base Male Body (12) -> Ninja Tabi (50572) -> Ninja Pants (50423) -> Ninja Jacket (50426)
+        #   -> Shuriken Belt (50514) -> Ninja Mitts (50424) -> Ninja Hood (50425) -> Tekagi (50533)
+        ninja_layers = [
+            (12, None),                   # Male Body
+            (50572, (0.45, 0.55, 0.68)),  # Ninja Tabi
+            (50423, (0.42, 0.50, 0.65)),  # Leather Ninja Pants (Midnight Indigo)
+            (50426, (0.40, 0.52, 0.66)),  # Leather Ninja Jacket
+            (50514, (0.45, 0.95, 0.72)),  # Leather Shuriken Belt (Emerald trim)
+            (50424, (0.45, 0.58, 0.70)),  # Leather Ninja Mitts
+            (50425, (0.38, 0.48, 0.64)),  # Leather Ninja Hood
+            (50533, (0.85, 1.15, 1.02)),  # Tekagi War Claws (Venom steel)
+        ]
+        pd_ninja = Image.new("RGBA", (260, 237), (12, 15, 18, 255))
+        n_glow = Image.new("RGBA", (260, 237), (0, 0, 0, 0))
+        ng_draw = ImageDraw.Draw(n_glow, "RGBA")
+        ng_draw.ellipse([44, 24, 216, 218], fill=(46, 158, 107, 64))
+        n_glow = n_glow.filter(ImageFilter.GaussianBlur(radius=18))
+        pd_ninja = Image.alpha_composite(pd_ninja, n_glow)
+        char_ninja = Image.new("RGBA", (260, 237), (0, 0, 0, 0))
+        for gid, tint in ninja_layers:
+            gpath = gumps_out_dir / f"{gid}.png"
+            if gpath.exists():
+                layer_im = Image.open(gpath).convert("RGBA")
+                if tint is not None:
+                    layer_im = apply_rgb_tint(layer_im, tint)
+                char_ninja = Image.alpha_composite(char_ninja, layer_im)
+        pd_ninja.paste(char_ninja, (36, -6), char_ninja)
+        n_draw = ImageDraw.Draw(pd_ninja, "RGBA")
+        n_draw.rectangle([0, 0, 259, 236], outline=GOLD_PRIMARY, width=2)
+        n_draw.rectangle([3, 3, 256, 233], outline=(46, 158, 107, 180), width=1)
+        pd_ninja.save(ITEMS_DIR / "paperdoll-ninja.png", format="PNG", optimize=True)
+
+    build_items_contact_sheet()
+    return write_items_manifest()
+
+
+def build_items_contact_sheet() -> None:
+    """Composites mockups/assets/items/items-contact-sheet.png showing both paperdolls and all 34 item sprites."""
+    width = 1440
+    height = 760
+    sheet = Image.new("RGBA", (width, height), BG_CANVAS)
+    draw = ImageDraw.Draw(sheet, "RGBA")
+    font = ImageFont.load_default()
+
+    draw.rectangle([8, 8, width - 9, height - 9], outline=GOLD_PRIMARY, width=3)
+    draw.rectangle([20, 20, width - 21, 68], fill=BG_PANEL, outline=GOLD_PRIMARY, width=2)
+    draw.text(
+        (36, 36),
+        "UO IDLE v1.1 - AUTHENTIC UO PAPERDOLL GUMPS & TOKUNO ITEM SPRITES (ART-01 / ART-03)",
+        fill=GOLD_TEXT,
+        font=font,
+    )
+
+    # Paperdoll panels on left (x=24..620)
+    for idx, (title, fname, accent) in enumerate(
+        [
+            ("SAMURAI LAYERED PAPERDOLL (260x237)", "paperdoll-samurai.png", SAMURAI_CRIMSON),
+            ("NINJA LAYERED PAPERDOLL (260x237)", "paperdoll-ninja.png", NINJA_EMERALD),
+        ]
+    ):
+        px = 24 + idx * 300
+        py = 84
+        draw.rectangle([px, py, px + 288, py + 292], fill=BG_PANEL, outline=accent, width=2)
+        draw.text((px + 12, py + 10), title, fill=GOLD_TEXT, font=font)
+        p_im = Image.open(ITEMS_DIR / fname).convert("RGBA")
+        sheet.paste(p_im, (px + 14, py + 36), p_im)
+
+    # Item grid across bottom & right
+    all_item_ids = [str(it["id"]) for it in ITEM_SPRITE_CATALOG] + ["smoke_bomb", "egg_bomb", "shuriken"]
+    draw.rectangle([24, 392, width - 25, height - 24], fill=BG_PANEL, outline=GOLD_PRIMARY, width=2)
+    draw.text((40, 404), f"EXTRACTED UO ITEM SPRITES ({len(all_item_ids)} 64x64 TILES FROM ART.PNG)", fill=GOLD_TEXT, font=font)
+
+    cols = 12
+    cell_w = 114
+    cell_h = 98
+    for idx, item_id in enumerate(all_item_ids):
+        r = idx // cols
+        c = idx % cols
+        cx = 36 + c * cell_w
+        cy = 432 + r * cell_h
+        im_path = ITEMS_DIR / f"{item_id}.png"
+        if im_path.exists():
+            ic = Image.open(im_path).convert("RGBA")
+            sheet.paste(ic, (cx + 20, cy + 4), ic)
+            draw.text((cx + 8, cy + 72), item_id[:15], fill=TEXT_PRIMARY, font=font)
+
+    sheet.save(ITEMS_CONTACT_SHEET_PATH, format="PNG", optimize=True)
+
+
 def build_contact_sheet() -> None:
     """Composites mockups/assets/icons/contact-sheet.png showing both class portraits and all 23+22 64x64 icons."""
     width = 1440
@@ -790,15 +610,13 @@ def build_contact_sheet() -> None:
     draw = ImageDraw.Draw(sheet, "RGBA")
     font = ImageFont.load_default()
 
-    # Outer antique-gold window frame
     draw.rectangle([8, 8, width - 9, height - 9], outline=GOLD_PRIMARY, width=3)
     draw.rectangle([14, 14, width - 15, height - 15], outline=BORDER_SUBTLE, width=1)
 
-    # Header banner
     draw.rectangle([20, 20, width - 21, 76], fill=BG_PANEL, outline=GOLD_PRIMARY, width=2)
     draw.text(
         (38, 34),
-        "UO IDLE v0.99.0 - CUSTOM DARK-FANTASY ICONOGRAPHY CONTACT SHEET (VISUAL-01)",
+        "UO IDLE v1.1 - AUTHENTIC UO GUMPS & OIL-PAINTED RASTER ICONOGRAPHY (ZERO POLYGONS)",
         fill=GOLD_TEXT,
         font=font,
     )
@@ -809,7 +627,6 @@ def build_contact_sheet() -> None:
         font=font,
     )
 
-    # Portraits Panel (Top row y=90..396)
     portrait_panels = [
         (
             24,
@@ -845,10 +662,9 @@ def build_contact_sheet() -> None:
         draw.text((x1 + 310, y1 + 52), lbl256, fill=TEXT_PRIMARY, font=font)
         sheet.paste(p64, (x1 + 310, y1 + 84), p64)
         draw.text((x1 + 390, y1 + 108), lbl64, fill=TEXT_PRIMARY, font=font)
-        draw.text((x1 + 310, y1 + 172), "Frame: Beveled Antique Gold (#c9a227)", fill=TEXT_SECONDARY, font=font)
-        draw.text((x1 + 310, y1 + 194), "Downsampling: 256 -> 64/48 LANCZOS", fill=TEXT_SECONDARY, font=font)
+        draw.text((x1 + 310, y1 + 172), "Source: Authentic UO Gumps + Oil-Painted Sheets", fill=TEXT_SECONDARY, font=font)
+        draw.text((x1 + 310, y1 + 194), "Zero ImageDraw.polygon calls", fill=TEXT_SECONDARY, font=font)
 
-    # Helper to render an 8-column skill icon grid section
     def render_icon_section(
         y_top: int,
         sec_title: str,
@@ -883,14 +699,14 @@ def build_contact_sheet() -> None:
 
     render_icon_section(
         412,
-        "SAMURAI SKILL & MILESTONE ICONS (23 STEMS x 3 RESOLUTIONS: <id>.png 64x64, <id>@64.png 64x64, <id>@48.png 48x48)",
+        "SAMURAI SKILL & MILESTONE ICONS (23 STEMS: AUTHENTIC UO GUMPS + OIL-PAINTED BUSHIDO ART)",
         SAMURAI_CRIMSON,
         SAMURAI_DIR,
         SAMURAI_STEMS,
     )
     render_icon_section(
         838,
-        "NINJA SKILL & MILESTONE ICONS (22 STEMS x 3 RESOLUTIONS: <id>.png 64x64, <id>@64.png 64x64, <id>@48.png 48x48)",
+        "NINJA SKILL & MILESTONE ICONS (22 STEMS: AUTHENTIC UO GUMPS + OIL-PAINTED NINJITSU ART)",
         NINJA_EMERALD,
         NINJA_DIR,
         NINJA_STEMS,
@@ -933,6 +749,8 @@ def write_manifest() -> dict[str, object]:
 
     manifest = {
         "version": "0.99.0",
+        "milestone": "v1.1",
+        "zeroPolygons": True,
         "totalFiles": len(files_meta),
         "samuraiStems": len(SAMURAI_STEMS),
         "ninjaStems": len(NINJA_STEMS),
@@ -942,9 +760,36 @@ def write_manifest() -> dict[str, object]:
     return manifest
 
 
+def write_items_manifest() -> dict[str, object]:
+    """Emits mockups/assets/items/manifest.json with metadata for all extracted item sprites and paperdoll renders."""
+    png_paths = sorted(
+        list(ITEMS_DIR.glob("*.png")),
+        key=lambda p: p.relative_to(ITEMS_DIR).as_posix(),
+    )
+    files_meta: dict[str, object] = {}
+    for p in png_paths:
+        rel = p.relative_to(ITEMS_DIR).as_posix()
+        files_meta[rel] = compute_image_metadata(p)
+
+    manifest = {
+        "version": "0.99.0",
+        "milestone": "v1.1",
+        "totalItemFiles": len(files_meta),
+        "catalog": ITEM_SPRITE_CATALOG,
+        "files": files_meta,
+    }
+    ITEMS_MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return manifest
+
+
 def verify_all_icons() -> int:
-    """Runs the --verify CLI gate checking JSON ID coverage, dimensions, stdDev >= 12.0, and SHA-256 parity."""
+    """Runs the --verify CLI gate checking JSON ID coverage, dimensions, stdDev >= 12.0, SHA-256 parity, and zero polygons."""
     errors: list[str] = []
+
+    # Check that this script itself has zero ImageDraw polygon calls
+    self_text = Path(__file__).read_text(encoding="utf-8")
+    if ("." + "polygon(") in self_text:
+        errors.append("Prohibited polygon call found in tools/generate_icons.py")
 
     if not SAMURAI_JSON.exists():
         errors.append(f"Missing drop-in file: {SAMURAI_JSON}")
@@ -954,6 +799,8 @@ def verify_all_icons() -> int:
         errors.append(f"Missing icon manifest: {MANIFEST_PATH}")
     if not CONTACT_SHEET_PATH.exists():
         errors.append(f"Missing icon contact sheet: {CONTACT_SHEET_PATH}")
+    if not ITEMS_MANIFEST_PATH.exists():
+        errors.append(f"Missing items manifest: {ITEMS_MANIFEST_PATH}")
 
     if errors:
         print(json.dumps({"ok": False, "errors": errors}))
@@ -963,8 +810,9 @@ def verify_all_icons() -> int:
     ninja_data = json.loads(NINJA_JSON.read_text(encoding="utf-8"))
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     manifest_files: dict[str, dict[str, object]] = manifest.get("files", {})
+    items_manifest = json.loads(ITEMS_MANIFEST_PATH.read_text(encoding="utf-8"))
+    item_files: dict[str, dict[str, object]] = items_manifest.get("files", {})
 
-    # Extract canonical IDs from samurai.json and ninja.json and union with 06-CONTEXT.md alias/badge IDs
     samurai_required_stems = set()
     for p in samurai_data.get("progression", []):
         samurai_required_stems.add(p["id"])
@@ -1027,6 +875,8 @@ def verify_all_icons() -> int:
 
     if len(manifest_files) < 140:
         errors.append(f"Expected >= 140 tracked files in manifest.json, got {len(manifest_files)}")
+    if len(item_files) < 35:
+        errors.append(f"Expected >= 35 tracked item/paperdoll files in items/manifest.json, got {len(item_files)}")
 
     if errors:
         print(json.dumps({"ok": False, "errors": errors}))
@@ -1036,9 +886,11 @@ def verify_all_icons() -> int:
         json.dumps(
             {
                 "ok": True,
+                "zeroPolygons": True,
                 "samuraiStems": len(samurai_required_stems),
                 "ninjaStems": len(ninja_required_stems),
                 "totalFiles": len(manifest_files),
+                "totalItemFiles": len(item_files),
             }
         )
     )
@@ -1046,21 +898,28 @@ def verify_all_icons() -> int:
 
 
 def generate_all_icons() -> None:
-    """Generates all Samurai (71 files) and Ninja (68 files) portraits and icons, contact-sheet.png, and manifest.json."""
+    """Generates all Samurai and Ninja portraits, icons, item sprites, paperdolls, contact sheets, and manifests."""
     build_class_portraits()
+    atlas_img, atlas_frames = load_ability_atlas()
+    bushido_sheet = Image.open(SOURCES_DIR / "bushido-sheet.jpg").convert("RGBA")
+    ninjitsu_sheet = Image.open(SOURCES_DIR / "ninjitsu-sheet.jpg").convert("RGBA")
+
     for stem, _role, _label in SAMURAI_STEMS:
-        master = draw_samurai_motif(stem)
+        master = extract_master_icon(stem, SAMURAI_CRIMSON, atlas_img, atlas_frames, bushido_sheet, ninjitsu_sheet)
         export_icon_stem(master, SAMURAI_DIR, stem)
+
     for stem, _role, _label in NINJA_STEMS:
-        master = draw_ninja_motif(stem)
+        master = extract_master_icon(stem, NINJA_EMERALD, atlas_img, atlas_frames, bushido_sheet, ninjitsu_sheet)
         export_icon_stem(master, NINJA_DIR, stem)
+
     build_contact_sheet()
     write_manifest()
+    generate_item_sprites_and_paperdolls(bushido_sheet, ninjitsu_sheet)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate or verify UO Idle Samurai & Ninja dark-fantasy icons.")
-    parser.add_argument("--verify", action="store_true", help="Verify all 140 icon/portrait/contact-sheet artifacts.")
+    parser = argparse.ArgumentParser(description="Generate or verify UO Idle Samurai & Ninja authentic gumps, item sprites, and icons.")
+    parser.add_argument("--verify", action="store_true", help="Verify all icon, item, paperdoll, and contact-sheet artifacts.")
     args = parser.parse_args()
     if args.verify:
         return verify_all_icons()
