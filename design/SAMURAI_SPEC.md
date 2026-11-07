@@ -403,5 +403,17 @@ Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/samurai.json 
 |---|---:|---:|---:|---:|---:|---:|---:|---|
 | **`L10`** | **7.26** | **3.42** | **6.62** | **8.57s** | **-9.50** | **+188.40** | **15.67** | **PASS** (Within $\pm 8\%$ of Warrior `7.32` DPS / `15.48` EHP) |
 | **`L25`** | **47.99** | **21.10** | **54.74** | **3.48s** | **-74.00** | **+266.40** | **53.24** | **PASS** (Inside `[45.06, 52.39]` Ranger–Warrior DPS & `[46.88, 54.63]` EHP) |
-| **`L45`** | **178.87** | **83.97** | **196.29** | **3.24s** | **-94.50** | **+352.40** | **147.95** | **PASS** (Inside `[167.35, 179.72]` 3-class DPS & `[143.43, 151.90]` EHP) |
-| **`L60`** | **363.15** | **212.02** | **465.83** | **2.81s** | **0.00** | **+432.00** | **316.89** | **PASS** (Inside `[351.58, 387.85]` 3-class DPS & `-0.2%` vs Warrior `317.63` EHP) |
+| **`L45`** | **178.87** | **83.97** | **196.29** | **3.24s** | **-94.50** | **+352.40** | **146.91** | **PASS** (Inside `[167.35, 179.72]` 3-class DPS & `[143.43, 151.90]` EHP) |
+| **`L60`** | **363.15** | **212.02** | **465.83** | **2.81s** | **0.00** | **+432.00** | **318.30** | **PASS** (Inside `[351.58, 387.85]` 3-class DPS & `+0.2%` vs Warrior `317.63` EHP) |
+
+---
+
+## Section 7 — Milestone `v1.1` Idle-Game Mechanical Refinements & Gear/Wave Telemetry (`IDLE-01`, `SIM-04`)
+
+To ensure every Samurai ability feels impactful in **100ms automated AFK idle combat** without manual cursor or stance toggling:
+1. **`samurai_confidence` (*Confidence* — `L20`):** In addition to an immediate `15% MaxHP` heal (`<65%` HP trigger), applies `samurai_confidence_calm` (*Inner Calm*: `+3%` `evasion_pct` for `8.0s`). In Mode B, every successful parry while *Inner Calm* is active restores `+2` HP and `+2` Stamina.
+2. **`samurai_evasion` (*Evasion* — `L35`):** Grants `samurai_evasion_stance` (`+4%` `defense_pct` and `+6%` `evasion_pct` for `5.0s`, `exclusive_posture`) and in Mode B arms an **Iaido Flash Riposte** (`0.12x` bonus weapon counter-slash on parry when `CounterAttack` is not already active).
+3. **Material Tier (`Iron -> Valorite`) & 10-Wave Dungeon Pull Scaling (`data/sim-baselines/gear-and-waves-v1.1.json`):**
+   - Samurai scales monotonically across all 9 canonical UO metal tiers at `L60` (`Iron` `138.99` DPS / `169.36` EHP/s $\to$ `Valorite` `391.92` DPS / `318.91` EHP/s).
+   - Across a 10-wave consecutive dungeon pull (`1,500ms` inter-wave transition), Samurai clears all 10 waves in `48.20s` (`403.42` average wave DPS, `21` total parries, maintaining `100%` ending stamina and `70.32%` minimum mana).
+

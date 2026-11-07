@@ -428,3 +428,16 @@ Running `npx tsx tools/sim_balance.ts --extra-class design/drop-in/ninja.json` c
 | **L25** | **53.81** (Warrior `52.39`, `+2.7%`) | **21.77** (in `[21.49, 25.52]`) | **48.79** (in `[42.18, 65.20]`) | **4.03s** (Warrior `4.07s`, `-1.0%`) | `-2.00` | `+146.40` | **45.90** (Ranger `46.88`, `-2.1%`) | **PASS** |
 | **L45** | **190.26** (Mage `179.72`, `+5.8%`) | **92.90** (Warrior `91.52`, `+1.5%`) | **208.70** (in `[176.44, 258.60]`) | **3.16s** (Mage `3.23s`, `-2.2%`) | `-30.50` | `+302.40` | **149.46** (in `[143.43, 151.90]`) | **PASS** |
 | **L60** | **374.50** (in `[351.58, 387.85]`) | **183.56** (in `[173.45, 213.73]`) | **426.76** (in `[384.42, 710.32]`) | **2.93s** (in `[2.43s, 2.98s]`) | `+26.00` | `+426.00` | **325.83** (in `[317.63, 366.26]`) | **PASS** |
+
+---
+
+## Section 7 — Milestone `v1.1` Idle-Game Mechanical Refinements & Gear/Wave Telemetry (`IDLE-01`, `SIM-04`)
+
+To ensure every Ninja ability operates as an exciting, zero-micro idle combat loop:
+1. **`ninja_animal_form` (*Animal Form* — `L25`):** Channels the *Kitsune & Wolf Aspect* (`+10%` `attack_speed_pct` and `+3%` `evasion_pct` for `8.0s`) without locking out weapon `SpecialMove` skills, and in Mode B triggers a bonus **Kitsune & Wolf Spirit Claw** slash (`0.12x` weapon damage with `25%` armor ignore) on every 3rd landed auto-attack hit.
+2. **`ninja_smoke_bomb` (*Smoke Bomb* — `L35`):** Enters a `6.0s` mid-combat *Smoke Veil* (`-8%` `damage_taken_pct`, `+6%` `damage_dealt_pct`) without consuming backpack bomb stacks, and in Mode B immediately accelerates `ninja_shuriken` cooldown recovery by `2,500ms` (*Vanish & Volley* combo).
+3. **`ninja_death` & `ninja_twin_shadow` Delayed Detonation Guard (`L20` / `L60`):** In Mode B, the hotbar priority evaluator prevents overwriting an active Death Strike mark (`state.deathStrikeSwingsRemaining > 0`) and triggers the pressure-point detonation on the 3rd connected weapon swing.
+4. **Material Tier (`Iron -> Valorite`) & 10-Wave Dungeon Pull Scaling (`data/sim-baselines/gear-and-waves-v1.1.json`):**
+   - Ninja scales monotonically across all 9 UO metal/craft tiers at `L60` (`Iron` `135.72` DPS / `180.93` EHP/s $\to$ `Valorite` `367.38` DPS / `330.44` EHP/s).
+   - Across a 10-wave consecutive dungeon pull (`1,500ms` inter-wave transition), Ninja clears all 10 waves in `50.80s` (`372.24` average wave DPS, `8` shadow clone interceptions, maintaining `100%` ending stamina and `63.87%` minimum mana).
+

@@ -1,11 +1,13 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { ClassSchema, type ClassDefinition } from '../src/schemas/skill.schema.js';
-import { runClassBaselineSuite } from '../src/sim/engine.js';
+import { runClassBaselineSuite, runGearAndWaveSuite } from '../src/sim/engine.js';
 import {
   BRACKET_IDS,
+  MATERIAL_TIER_IDS,
   type BracketId,
   type ClassBracketSummary,
+  type GearAndWavesArtifact,
   type SimBaselineArtifact,
   type SimImplementationMode,
 } from '../src/sim/types.js';
@@ -13,6 +15,7 @@ import {
 const ROOT_DIR = process.cwd();
 const DEFAULT_BASELINE_PATH = 'data/sim-baselines/baseline-v0.99.0.json';
 const DEFAULT_PARITY_PATH = 'data/sim-baselines/parity-5class-v0.99.0.json';
+const DEFAULT_GEAR_WAVES_PATH = 'data/sim-baselines/gear-and-waves-v1.1.json';
 const LIVE_CLASS_PATHS = [
   'data/live-classes/warrior.json',
   'data/live-classes/mage.json',
@@ -383,6 +386,13 @@ function main(): void {
       fs.writeFileSync(absParityPath, `${JSON.stringify(parityArtifact, null, 2)}\n`, 'utf8');
     }
 
+    const gearAndWaves = runGearAndWaveSuite(fiveClasses);
+    const absGearWavesPath = path.resolve(ROOT_DIR, DEFAULT_GEAR_WAVES_PATH);
+    if (isWriteParity || !fs.existsSync(absGearWavesPath)) {
+      fs.mkdirSync(path.dirname(absGearWavesPath), { recursive: true });
+      fs.writeFileSync(absGearWavesPath, `${JSON.stringify(gearAndWaves, null, 2)}\n`, 'utf8');
+    }
+
     if (isJson) {
       process.stdout.write(`${JSON.stringify(parityArtifact, null, 2)}\n`);
       return;
@@ -472,6 +482,56 @@ function main(): void {
       }
     }
 
+    // 3. Verify Gear Material Tiers, Tokuno Affix Loadouts & Multi-Wave Pull Suite (SIM-04)
+    const gearWaves1 = runGearAndWaveSuite(fiveClasses);
+    const gearWaves2 = runGearAndWaveSuite(fiveClasses);
+    if (JSON.stringify(gearWaves1) !== JSON.stringify(gearWaves2)) {
+      errors.push('Gear & Waves suite failed bit-for-bit determinism check');
+    }
+
+    for (const cls of fiveClasses) {
+      const tiers = gearWaves1.materialTierCurves.filter((p) => p.classId === cls.id);
+      if (tiers.length !== MATERIAL_TIER_IDS.length) {
+        errors.push(`Missing material tier curve points for ${cls.id}`);
+      } else {
+        for (let i = 1; i < tiers.length; i++) {
+          if (!(tiers[i].lowDefBossDps > tiers[i - 1].lowDefBossDps)) {
+            errors.push(
+              `Material tier DPS monotonicity failed for ${cls.id}: ${tiers[i].tierId} (${tiers[i].lowDefBossDps}) <= ${tiers[i - 1].tierId} (${tiers[i - 1].lowDefBossDps})`
+            );
+          }
+          if (!(tiers[i].ehpPerSec > tiers[i - 1].ehpPerSec)) {
+            errors.push(
+              `Material tier EHP/sec monotonicity failed for ${cls.id}: ${tiers[i].tierId} (${tiers[i].ehpPerSec}) <= ${tiers[i - 1].tierId} (${tiers[i - 1].ehpPerSec})`
+            );
+          }
+        }
+      }
+
+      const waveRun = gearWaves1.multiWaveRuns.find((r) => r.classId === cls.id);
+      if (!waveRun || waveRun.waves.length !== 10) {
+        errors.push(`Multi-wave pull run for ${cls.id} did not complete all 10 waves`);
+      } else if (waveRun.minHpPct <= 0) {
+        errors.push(`Multi-wave pull run for ${cls.id} died (minHpPct=${waveRun.minHpPct})`);
+      }
+    }
+
+    const absGearWavesPath = path.resolve(ROOT_DIR, DEFAULT_GEAR_WAVES_PATH);
+    if (!fs.existsSync(absGearWavesPath)) {
+      errors.push(`Committed gear-and-waves artifact missing at ${DEFAULT_GEAR_WAVES_PATH}`);
+    } else {
+      try {
+        const committedGear = readJsonFile<GearAndWavesArtifact>(DEFAULT_GEAR_WAVES_PATH);
+        if (JSON.stringify(committedGear) !== JSON.stringify(gearWaves1)) {
+          errors.push(
+            `Gear-and-waves artifact drift detected: live output does not match ${DEFAULT_GEAR_WAVES_PATH}`
+          );
+        }
+      } catch (err) {
+        errors.push(`Failed to read gear-and-waves artifact ${DEFAULT_GEAR_WAVES_PATH}: ${String(err)}`);
+      }
+    }
+
     if (errors.length > 0) {
       process.stdout.write(`${JSON.stringify({ ok: false, errors })}\n`);
       process.exit(1);
@@ -487,8 +547,11 @@ function main(): void {
       scenarios: parityA1.scenarios.length,
       baselineScenarios: baseRun1.scenarios.length,
       parityModes: ['mode_a', 'mode_b'],
+      materialTiers: MATERIAL_TIER_IDS.length,
+      multiWavePulls: gearWaves1.multiWaveRuns.length,
       baselineArtifact: DEFAULT_BASELINE_PATH,
       parityArtifact: DEFAULT_PARITY_PATH,
+      gearWavesArtifact: DEFAULT_GEAR_WAVES_PATH,
     };
     process.stdout.write(`${JSON.stringify(verifyPayload)}\n`);
     return;

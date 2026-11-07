@@ -109,8 +109,8 @@
       "nameEn": "Shadowjump",
       "namePtBr": "Salto das Sombras",
       "type": "passive",
-      "descEn": "Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai.",
-      "descPtBr": "Movimentação inata de passo das sombras Ninjitsu e maestria de ataque automático rápido de Esgrima com Kryss, Tekagi, Kama e Sai.",
+      "descEn": "Melt into the seams of twilight and reappear behind your prey between heartbeats. Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai that primes stealth openers on each new target.",
+      "descPtBr": "Dissolva-se nas frestas do crepúsculo e ressurja atrás da presa entre um batimento e outro. Passo das sombras inato de Ninjitsu e maestria de ataque automático veloz de Esgrima com Kryss, Tekagi, Kama e Sai que prepara aberturas furtivas.",
       "inCatalog": true,
       "catalogId": "ninja_shadowjump"
     },
@@ -120,8 +120,8 @@
       "nameEn": "Focus Attack",
       "namePtBr": "Ataque Focado",
       "type": "skill",
-      "descEn": "Shieldless Ninjitsu precision strike that concentrates ki into a single blow (1.15x-1.25x) and staggers the target's nerves.",
-      "descPtBr": "Golpe de precisão Ninjitsu sem escudo que concentra ki em um único ataque (1.15x-1.25x) e paralisa os nervos do alvo.",
+      "descEn": "Condense all of your Ninjitsu ki into the needle-point of a shieldless blade. Strikes for 1.15x-1.25x Ninjitsu damage (1 + Ninjitsu^2/43,636), amplifies weapon proc properties, and staggers the target's radial nerves for 3s.",
+      "descPtBr": "Condense todo o seu ki Ninjitsu na ponta de agulha de uma lâmina sem escudo. Golpeia causando 1.15x-1.25x de dano Ninjitsu (1 + Ninjitsu^2/43.636), amplifica propriedades da arma e paralisa os nervos do alvo por 3s.",
       "inCatalog": true,
       "catalogId": "ninja_focus"
     },
@@ -131,8 +131,8 @@
       "nameEn": "Mirror Image",
       "namePtBr": "Imagem Espelhada",
       "type": "spell",
-      "descEn": "Complete single-rank Ninjitsu shadow clone spell that diverts incoming melee attacks and reduces damage taken by 8%.",
-      "descPtBr": "Feitiço único completo de clone ilusório Ninjitsu que desvia ataques corpo a corpo recebidos e reduz o dano sofrido em 8%.",
+      "descEn": "Weave a living illusion of smoke and moonlight that mimics your every stance. Summons an ablative shadow clone reducing damage taken by 8% for 6s in Mode A and intercepting incoming melee blows (Ninjitsu / 150 chance) in Mode B.",
+      "descPtBr": "Teça uma ilusão viva de fumaça e luar que espelha cada postura sua. Conjura um clone sombrio ablativo reduzindo o dano sofrido em 8% por 6s no Modo A e desviando golpes corpo a corpo (chance Ninjitsu / 150) no Modo B.",
       "inCatalog": true,
       "catalogId": "ninja_mirror"
     },
@@ -142,8 +142,8 @@
       "nameEn": "Backstab",
       "namePtBr": "Punhalada pelas Costas",
       "type": "skill",
-      "descEn": "Ambush strike from the shadows that deals 1.15x-1.25x Ninjitsu damage and grants a 5s stealth damage window (+6%).",
-      "descPtBr": "Ataque de emboscada das sombras que causa 1.15x-1.25x de dano Ninjitsu e concede 5s de janela furtiva (+6% de dano).",
+      "descEn": "Lunge from the blind spot where armor plates meet, driving steel deep into vital arteries. Delivers a 1.15x-1.25x Ninjitsu ambush strike (scaled by Hiding and Stealth) and opens a 5s Shadow Ambush window (+6% all damage dealt).",
+      "descPtBr": "Avance pelo ponto cego onde as placas de armadura se encontram, cravando o aço em artérias vitais. Desfere uma emboscada de 1.15x-1.25x de dano Ninjitsu e abre uma janela de Emboscada Sombria de 5s (+6% de dano causado).",
       "inCatalog": true,
       "catalogId": "ninja_backstab"
     },
@@ -153,8 +153,8 @@
       "nameEn": "Death Strike",
       "namePtBr": "Golpe Mortal",
       "type": "skill",
-      "descEn": "Complete single-rank pressure-point strike that plants a lethal Ninjitsu mark detonating after 5 combat swings or 4s of internal trauma.",
-      "descPtBr": "Golpe único completo nos pontos vitais que planta uma marca letal de Ninjitsu detonando após 5 golpes de combate ou 4s de trauma interno.",
+      "descEn": "Strike the forbidden dim-mak meridian—the victim feels only a chill until their heart falters five beats later. Plants a lethal Ninjitsu Death Mark that ticks over 4s of internal trauma in Mode A or detonates for massive unmitigated damage on your 5th swing in Mode B.",
+      "descPtBr": "Atinja o meridiano proibido dim-mak—a vítima sente apenas um calafrio até o coração falhar cinco golpes depois. Planta a Marca da Morte Ninjitsu que pulsa por 4s no Modo A ou detona em dano puro devastador no 5º ataque conectado no Modo B.",
       "inCatalog": true,
       "catalogId": "ninja_death"
     },
@@ -164,8 +164,8 @@
       "nameEn": "Animal Form",
       "namePtBr": "Forma Animal",
       "type": "spell",
-      "descEn": "Channels the Grey Wolf and Bake Kitsune Ninjitsu aspect, increasing weapon attack speed by 10% for 8s.",
-      "descPtBr": "Canaliza o aspecto Ninjitsu de Lobo Cinzento e Bake Kitsune, aumentando a velocidade de ataque em 10% por 8s.",
+      "descEn": "Invoke the primal totems of Tokuno's mist-shrouded forests without sheathing your blades. Channels the Kitsune & Grey Wolf Predator Aspect for 8s: grants +10% Attack Speed, +3% Evasion instinct, and unleashes a Fox-Fire Spirit Claw on every 3rd Fencing swing.",
+      "descPtBr": "Invoque os totens primordiais das florestas nebulosas de Tokuno sem embainhar suas armas. Canaliza o Aspecto Predador de Kitsune e Lobo Cinzento por 8s: concede +10% de Velocidade de Ataque, +3% de Evasão e dispara Garra Espiritual a cada 3º ataque.",
       "inCatalog": true,
       "catalogId": "ninja_animal_form"
     },
@@ -175,8 +175,8 @@
       "nameEn": "Infectious Strike",
       "namePtBr": "Golpe Infeccioso",
       "type": "skill",
-      "descEn": "Kryss primary mastery: coats the blade in virulent assassin venom, inflicting 3 poison ticks over 6s.",
-      "descPtBr": "Maestria primária de Kryss: reveste a lâmina com veneno virulento de assassino, aplicando 3 pulsos de veneno em 6s.",
+      "descEn": "Draw the wavy serpentine edge of your Kryss across a hidden reservoir of nightshade and sea-serpent bile. Inflicts 0.90x-1.00x Fencing damage and injects a virulent 3-tick assassin venom over 6s with zero potion consumption.",
+      "descPtBr": "Deslize a lâmina sinuosa do Kryss por um reservatório oculto de beladona e bile de serpente marinha. Causa 0.90x-1.00x de dano de Esgrima e injeta um veneno virulento de 3 pulsos ao longo de 6s sem consumir poções.",
       "inCatalog": true,
       "catalogId": "ninja_infectious_strike"
     },
@@ -186,8 +186,8 @@
       "nameEn": "Smoke Bomb",
       "namePtBr": "Bomba de Fumaça",
       "type": "mechanic",
-      "descEn": "Detonates a Tokuno smoke bomb to enter mid-combat stealth (-8% damage taken for 6s) and unlocks Shuriken & Fukiya volleys.",
-      "descPtBr": "Detona uma bomba de fumaça de Tokuno para entrar em furtividade de combate (-8% de dano recebido por 6s) e libera Shuriken e Fukiya.",
+      "descEn": "Shatter a lacquered Tokuno flash-sphere at your feet, vanishing in a choking cloud of sulfur and ash. Triggers a 6s Vanish & Volley stealth veil (-8% damage taken), refreshes Stealth opener empowerment, and unlocks Shuriken & Fukiya volleys.",
+      "descPtBr": "Estilhace uma esfera de fumaça de Tokuno aos seus pés, desaparecendo numa nuvem densa de enxofre e cinzas. Ativa um véu furtivo de 6s (-8% de dano recebido), renova aberturas furtivas e libera saraivadas de Shuriken e Fukiya.",
       "inCatalog": true,
       "catalogId": "ninja_smoke_bomb"
     },
@@ -197,8 +197,8 @@
       "nameEn": "Ki Attack",
       "namePtBr": "Ataque de Ki",
       "type": "skill",
-      "descEn": "High-velocity Ninjitsu dash strike that closes the gap and splashes 85% kinetic ki damage onto a second target.",
-      "descPtBr": "Investida veloz de Ninjitsu que fecha a distância e espalha 85% de dano cinético de ki em um segundo alvo.",
+      "descEn": "Compress wind and shadow beneath your Tabi boots, vaulting across the battlefield in a single blurred flash. Closes the gap for 0.95x-1.05x Ninjitsu damage and releases an 85% kinetic ki shockwave onto an adjacent enemy.",
+      "descPtBr": "Comprima vento e sombra sob suas botas Tabi, cruzando o campo de batalha num único clarão. Fecha a distância causando 0.95x-1.05x de dano Ninjitsu e libera uma onda de choque cinética de 85% em um inimigo adjacente.",
       "inCatalog": true,
       "catalogId": "ninja_ki_attack"
     },
@@ -208,8 +208,8 @@
       "nameEn": "Surprise Attack",
       "namePtBr": "Ataque Surpresa",
       "type": "skill",
-      "descEn": "Blindsides the enemy from stealth, shredding target physical defense by 8% for 6s to expose them to Death Strike.",
-      "descPtBr": "Surpreende o inimigo a partir da furtividade, reduzindo a defesa física do alvo em 8% por 6s para expô-lo ao Golpe Mortal.",
+      "descEn": "Strike from the smoke veil at the exact instant the enemy turns their head, shattering their defensive posture. Shreds target physical defense by -8% (and -16 to -25 Defense Chance) for 6s, leaving bosses wide open to Death Strike.",
+      "descPtBr": "Golpeie a partir do véu de fumaça no exato instante em que o inimigo desvia o olhar, quebrando sua postura defensiva. Reduz a defesa física do alvo em -8% por 6s, deixando chefes vulneráveis ao Golpe Mortal.",
       "inCatalog": true,
       "catalogId": "ninja_surprise_attack"
     },
@@ -219,8 +219,8 @@
       "nameEn": "Fukiya & Egg Bomb Barrage",
       "namePtBr": "Barragem de Fukiya e Bomba de Ovo",
       "type": "spell",
-      "descEn": "Canonical Tokuno Egg Bomb (itemId: 10249) and Fukiya blowgun (itemId: 10154) ambush: blinds foes in flash-powder (-10% dmg taken) and coats darts (+8% dmg dealt for 7s).",
-      "descPtBr": "Emboscada clássica de Tokuno com Bomba de Ovo (10249) e Zarabatana Fukiya (10154): cega inimigos na fumaça (-10% de dano sofrido) e potencializa dardos (+8% de dano por 7s).",
+      "descEn": "Unleash the full Tokuno shinobi arsenal: a blinding Egg Bomb (itemId: 10249) flash-cloud paired with a rapid Fukiya blowgun (itemId: 10154) poison-dart barrage. Grants -10% damage taken, +8% damage dealt, and an ablative decoy clone for 7s.",
+      "descPtBr": "Libere todo o arsenal shinobi de Tokuno: uma Bomba de Ovo (10249) cegante combinada com uma barragem de dardos envenenados de Zarabatana Fukiya (10154). Concede -10% de dano recebido, +8% de dano causado e um clone de fumaça por 7s.",
       "inCatalog": true,
       "catalogId": "ninja_fukiya_barrage"
     },
@@ -230,8 +230,8 @@
       "nameEn": "Kage Bunshin: Twin Shadow Execution",
       "namePtBr": "Kage Bunshin: Execução das Sombras Gêmeas",
       "type": "feature",
-      "descEn": "Grandmaster Ninjitsu shadow-clone capstone: synchronized 1.25x-1.35x assassination strike (1.95x execute below 35% HP) planting a 4-tick Twin Shadow Mark.",
-      "descPtBr": "Assassinato supremo de Grão-Mestre Ninjitsu: golpe sincronizado de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) aplicando a Marca das Sombras Gêmeas de 4 pulsos.",
+      "descEn": "Forbidden Grandmaster Kage Bunshin assassination art: two living shadow clones converge from opposite blind spots to sever the target's lifeline. Deals 1.25x-1.35x damage (1.95x execute below 35% HP) and plants a 4-tick / 5-swing Twin Shadow Mark.",
+      "descPtBr": "Arte proibida de Grão-Mestre Kage Bunshin: dois clones de sombra vivos convergem de ângulos opostos para ceifar a vida do alvo. Causa 1.25x-1.35x de dano (execução de 1.95x abaixo de 35% de Vida) e planta a Marca das Sombras Gêmeas.",
       "inCatalog": true,
       "catalogId": "ninja_twin_shadow"
     }
@@ -458,13 +458,14 @@
       "effectType": "self_buff",
       "statusEffect": {
         "id": "ninja_animal_aspect",
-        "name": "Animal Aspect",
+        "name": "Kitsune & Wolf Aspect",
         "effectType": "self_buff",
         "durationMs": 8000,
         "tickIntervalMs": 0,
         "tickCount": 0,
         "modifiers": [
-          { "stat": "attack_speed_pct", "value": 10 }
+          { "stat": "attack_speed_pct", "value": 10 },
+          { "stat": "evasion_pct", "value": 3 }
         ],
         "stackingRule": "refresh",
         "authorityTier": "design-proposal"
@@ -476,7 +477,7 @@
       "gumpIcon": 21282,
       "iconKey": "gump_21282",
       "scalingFormula": {
-        "summary": "UO AnimalForm (ref 502): Grey Wolf / Bake Kitsune combat aspect granting +10% attack speed without weapon-lock",
+        "summary": "UO AnimalForm (ref 502): Kitsune & Grey Wolf aspect granting +10% attack speed, +3% evasion, and a 3rd-swing Spirit Claw proc in Mode B",
         "stat": "ninjitsu"
       },
       "unlockLevel": 25,
@@ -560,7 +561,7 @@
       "gumpIcon": 10248,
       "iconKey": "idle_ninja_smoke_bomb",
       "scalingFormula": {
-        "summary": "UO SmokeBomb / EggBomb (itemId 10248): mid-combat Hiding.CombatOverride veil granting 6s stealth and -8% damage taken",
+        "summary": "UO SmokeBomb (itemId 10248): Vanish & Volley mid-combat stealth veil (-8% damage taken for 6s) that refreshes Stealth openers and Shuriken readiness in Mode B",
         "stat": "ninjitsu"
       },
       "unlockLevel": 35,

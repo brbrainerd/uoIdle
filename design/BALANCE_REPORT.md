@@ -159,5 +159,56 @@ A primary design risk for Bushido and Ninjitsu in a 24/7 idle RPG is **avoidance
    - `samurai_evasion` is a `5,000ms` `exclusive_posture` on a `20,000ms` cooldown (`25%` maximum duty cycle) granting `+4%` `defense_pct` in Mode A, and total avoidance is hard-capped at `65%` in `src/sim/engine.ts:1125-1131`.
    - `samurai_confidence` (`18,000ms` cooldown) has `statusEffect: null` in Mode A and triggers only when `hp <= 65%`, preventing passive HoT overhealing from inflating `ehpPerSec` (`316.89` at `L60` vs `317.63` for `warrior`).
 2. **Ninja `MirrorImage` Clone Caps:**
-   - `ninja_mirror` (`18,000ms` cooldown, `6,000ms` duration) and `ninja_mirror_r2` (`18,000ms` cooldown, `7,000ms` duration) use `stackingRule: "exclusive_posture"`, preventing Rank I and Rank II from stacking.
-   - In Mode B, `state.cloneStacks` is capped at `1` per cast (matching ModernUO's 1-follower-slot check in `MirrorImage.cs`) with a `10,000ms` internal interception cooldown (`cloneIcdMs = 10000`), yielding at most `3` clone interceptions over a `60s` boss encounter and keeping `L60` `ehpPerSec` at `338.15` (inside `[317.63, 366.26]`).
+   - `ninja_mirror` (`18,000ms` cooldown, `6,000ms` duration) and `ninja_fukiya_barrage` (`18,000ms` cooldown, `7,000ms` duration) use `stackingRule: "exclusive_posture"`, preventing shadow clone stances from stacking.
+   - In Mode B, `state.cloneStacks` is capped at `1..2` per cast with a `10,000ms` internal interception cooldown (`cloneIcdMs = 10000`), yielding at most `3` clone interceptions over a `60s` boss encounter and keeping `L60` `ehpPerSec` at `330.44` (inside `[317.63, 366.26]`).
+
+---
+
+## Section 5 — Milestone `v1.1` Extended Gear, Affix, Damage-Channel & Multi-Wave Telemetry (`SIM-04`, `SIM-05`)
+
+Committed in [`data/sim-baselines/gear-and-waves-v1.1.json`](file:///Users/brbrainerd/dev/uoIdle/data/sim-baselines/gear-and-waves-v1.1.json) and verified via [`tools/test_sim.ts`](file:///Users/brbrainerd/dev/uoIdle/tools/test_sim.ts) (`npm run test:sim`, 11/11 deterministic unit test suites passing):
+
+### 5.1 `L60` Damage Channel Breakdown (`low_def_boss`, `mode_b`)
+
+| Class | `autoAttackDps` | `specialMoveDps` | `executeDps` | `dotDps` | `procCounterDps` | `totalDps` | Primary Offensive Identity |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `warrior` | 212.56 | 93.75 | 38.68 | 6.59 | 0.00 | **351.58** | Heavy physical auto-swings + `Execution` + `Rend` bleed |
+| `mage` | 153.21 | 234.64 | 0.00 | 0.00 | 0.00 | **387.85** | High-multiplier elemental `Magery` spell cadence (`x80` caster curve) |
+| `ranger` | 235.91 | 109.76 | 30.89 | 7.28 | 0.00 | **383.85** | Rapid `Precision` bow shots + `Multishot` + `Deadeye` finisher |
+| **`samurai`** | **235.12** | **93.81** | **55.66** | **0.00** | **7.33** | **391.92** | `Perfection`-amplified katana swings + `Kensei's Judgment` execute + `Iaido`/`Counter` parry ripostes |
+| **`ninja`** | **234.46** | **87.13** | **32.37** | **13.42** | **0.00** | **367.38** | High-speed `Kryss`/`Tekagi` crits + 3rd-swing `Twin Shadow` / `Death Strike` detonation + `Infectious` venom |
+
+### 5.2 Material Tier Scaling Curve (`Iron -> Valorite` at `L60`, `low_def_boss` DPS / `high_def_boss` EHP/s)
+
+| Material Tier (`levelReq`, Budget) | `warrior` (DPS / EHP) | `mage` (DPS / EHP) | `ranger` (DPS / EHP) | **`samurai` (DPS / EHP)** | **`ninja` (DPS / EHP)** |
+|---|---:|---:|---:|---:|---:|
+| **Iron** (`L1`, `+0`) | 127.03 / 169.36 | 246.30 / 189.20 | 140.48 / 168.42 | **138.99 / 169.36** | **135.72 / 180.93** |
+| **DullCopper** (`L8`, `+6`) | 143.47 / 177.96 | 257.33 / 199.13 | 158.13 / 177.26 | **156.24 / 177.96** | **150.70 / 189.84** |
+| **ShadowIron** (`L15`, `+12`) | 160.62 / 187.47 | 268.23 / 210.15 | 178.92 / 187.05 | **175.66 / 187.47** | **166.96 / 199.72** |
+| **Copper** (`L22`, `+18`) | 177.79 / 198.05 | 279.13 / 222.46 | 198.60 / 197.96 | **195.88 / 198.05** | **188.45 / 210.74** |
+| **Bronze** (`L30`, `+24`) | 196.71 / 209.90 | 290.15 / 236.28 | 217.56 / 210.20 | **217.34 / 209.90** | **206.79 / 223.11** |
+| **Gold** (`L38`, `+32`) | 225.35 / 228.18 | 306.51 / 257.70 | 248.36 / 229.11 | **248.24 / 228.18** | **236.70 / 242.26** |
+| **Agapite** (`L45`, `+42`) | 258.59 / 252.87 | 328.99 / 287.87 | 285.14 / 254.76 | **286.67 / 253.47** | **269.67 / 269.18** |
+| **Verite** (`L52`, `+54`) | 298.81 / 280.12 | 357.15 / 323.51 | 328.88 / 283.14 | **335.42 / 281.34** | **311.53 / 301.00** |
+| **Valorite** (`L60`, `+68`) | 351.58 / 317.63 | 387.85 / 366.26 | 383.85 / 321.12 | **391.92 / 318.91** | **367.38 / 330.44** |
+
+### 5.3 Tokuno Affix Loadout Scaling (`L60`, `mode_b`)
+
+| Loadout Archetype | `warrior` (DPS / EHP) | `mage` (DPS / EHP) | `ranger` (DPS / EHP) | **`samurai` (DPS / EHP)** | **`ninja` (DPS / EHP)** |
+|---|---:|---:|---:|---:|---:|
+| `clean_base` *(Un-Affixed Base Gear)* | 198.48 / 229.13 | 284.77 / 261.26 | 219.99 / 230.58 | **219.99 / 229.13** | **207.29 / 243.47** |
+| `speed_crit` *(+38% SSI, +20% Crit)* | 316.01 / 293.07 | 360.87 / 338.80 | 355.28 / 296.46 | **355.70 / 294.31** | **338.30 / 305.51** |
+| `power_lethality` *(+80% DI/SDI, Heavy Weapon)* | 375.94 / 293.07 | 418.43 / 338.80 | 405.84 / 296.46 | **417.07 / 294.31** | **393.19 / 305.51** |
+| `bastion_parry` *(+45% DCI, 70% Resist, +Regen)* | 296.46 / 397.96 | 351.31 / 463.75 | 328.43 / 402.83 | **336.12 / 399.38** | **313.25 / 412.27** |
+| `valorite_bis` *(Grandmaster Valorite Cap)* | 428.84 / 369.55 | 446.51 / 428.79 | 471.01 / 374.12 | **476.09 / 371.12** | **453.47 / 382.34** |
+
+### 5.4 10-Wave Consecutive Dungeon Pull Endurance (`L60`, `1,500ms` Inter-Wave Spawn Delay)
+
+| Class | Total 10-Wave Clear Time | Average Effective Wave DPS | Minimum HP % | Minimum Mana % | Total Parries | Clone Interceptions |
+|---|---:|---:|---:|---:|---:|---:|
+| `warrior` | 62.60s | 272.24 | 58.13% | 100.00% | 23 | 0 |
+| `mage` | 29.50s | 620.99 | 78.64% | 5.29% | 1 | 0 |
+| `ranger` | 30.90s | 580.62 | 76.20% | 27.62% | 1 | 0 |
+| **`samurai`** | **48.20s** | **355.85** | **68.07%** | **70.32%** | **21** | **0** |
+| **`ninja`** | **50.80s** | **337.98** | **73.49%** | **63.87%** | **2** | **8** |
+

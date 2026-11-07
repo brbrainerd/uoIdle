@@ -108,8 +108,8 @@
       "nameEn": "Way of the Blade",
       "namePtBr": "Caminho da Lâmina",
       "type": "passive",
-      "descEn": "Automatic weapon swing and shieldless Bushido Weapon Parry mastery with Katana, Wakizashi, No-Dachi, and Daisho.",
-      "descPtBr": "Ataque automático da arma e maestria em Aparar de Arma Bushido sem escudo com Katana, Wakizashi, No-Dachi e Daisho.",
+      "descEn": "Walk the Bushido code of Tokuno: your weapon and mind become a single shieldless ward. Grants continuous auto-swing mastery and authentic Bushido Weapon Parry (Parry * Bushido / 48,000 1H or 41,140 2H) with Katana, Wakizashi, No-Dachi, and Daisho.",
+      "descPtBr": "Trilhe o código Bushido de Tokuno: sua lâmina e mente tornam-se uma guarda sem escudo. Concede maestria contínua de ataque automático e Aparar de Arma Bushido autêntico (Parry * Bushido / 48.000 1M ou 41.140 2M) com Katana, Wakizashi, No-Dachi e Daisho.",
       "inCatalog": true,
       "catalogId": "samurai_way"
     },
@@ -119,8 +119,8 @@
       "nameEn": "Lightning Strike",
       "namePtBr": "Golpe Relâmpago",
       "type": "skill",
-      "descEn": "Complete single-rank Bushido precision strike (+50 Accuracy) with full Bushido^2/72000 IgnoreArmor critical scaling and brief stagger.",
-      "descPtBr": "Golpe único completo de precisão Bushido (+50 de Precisão) com escalonamento crítico total de ignorar armadura e breve desequilíbrio.",
+      "descEn": "Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.10x-1.20x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.",
+      "descPtBr": "Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda. Desfere um corte de precisão (+50 de Acerto, 1.10x-1.20x) com chance crítica Bushido^2/72.000 de ignorar armadura e 3s de desequilíbrio.",
       "inCatalog": true,
       "catalogId": "samurai_lightning"
     },
@@ -130,8 +130,8 @@
       "nameEn": "Honor & Perfection",
       "namePtBr": "Honra e Perfeição",
       "type": "mechanic",
-      "descEn": "Focuses Bushido honor on the target, building Perfection consecutive-hit damage stacks and restoring vitals on kill.",
-      "descPtBr": "Foca a honra Bushido no alvo, acumulando bônus de dano de Perfeição em golpes consecutivos e restaurando vitais ao abater.",
+      "descEn": "Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+10% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.",
+      "descPtBr": "Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial crescente. Acumula bônus de dano em acertos consecutivos (+10% Modo A / até +15% Modo B) e restaura Vida, Mana e Estamina ao abater.",
       "inCatalog": true,
       "catalogId": "samurai_perfection"
     },
@@ -141,8 +141,8 @@
       "nameEn": "Honorable Execution",
       "namePtBr": "Execução Honrosa",
       "type": "skill",
-      "descEn": "Complete single-rank Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.",
-      "descPtBr": "Finalizador único completo de Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.",
+      "descEn": "Deliver the merciful final stroke of the Samurai code when your foe wavers near death. Unleashes a decisive Bushido cut (1.35x-1.45x base, surging to 1.85x execute below 35% HP) and ignites +15% attack speed for 9s with zero failure penalty.",
+      "descPtBr": "Desfira o golpe final misericordioso do código Samurai quando o inimigo vacilar. Executa um corte decisivo de Bushido (1.35x-1.45x base, subindo para 1.85x abaixo de 35% de Vida) e concede +15% de velocidade de ataque por 9s sem penalidade.",
       "inCatalog": true,
       "catalogId": "samurai_honorable"
     },
@@ -152,8 +152,8 @@
       "nameEn": "Confidence",
       "namePtBr": "Confiança",
       "type": "spell",
-      "descEn": "Defensive Bushido stance that restores health on cast and recovers HP and Stamina on every successful weapon parry.",
-      "descPtBr": "Postura defensiva Bushido que restaura vida ao conjurar e recupera Vida e Estamina a cada aparar de arma bem-sucedido.",
+      "descEn": "Exhale doubt and center your spirit in unshakable Bushido composure. Restores health on cast (15 + Bushido^2/576) and awakens Inner Calm for 6s: every parried blow restores bonus Stamina and Mana while empowering your next counter-cut.",
+      "descPtBr": "Afaste a dúvida e concentre seu espírito na serenidade inabalável do Bushido. Restaura vida ao conjurar (15 + Bushido^2/576) e desperta Calma Interior por 6s: cada golpe aparado recupera Estamina e Mana extras e fortalece seu próximo corte.",
       "inCatalog": true,
       "catalogId": "samurai_confidence"
     },
@@ -163,8 +163,8 @@
       "nameEn": "Counter Attack",
       "namePtBr": "Contra-Ataque",
       "type": "spell",
-      "descEn": "Reactive Bushido stance that empowers weapon damage (+18%) and unleashes an instant counter-swing upon parrying.",
-      "descPtBr": "Postura reativa Bushido que amplia o dano da arma (+18%) e desfere um contra-golpe imediato ao aparar.",
+      "descEn": "Read the rhythm of the enemy's steel and turn their aggression into their undoing. Strikes for 1.50x-1.60x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.",
+      "descPtBr": "Leia o ritmo do aço inimigo e transforme a agressão deles em ruína. Golpeia com 1.50x-1.60x de dano Bushido, concede +18% de dano na Postura de Contra-Ataque por 7s e desfere uma retaliação imediata gratuita ao aparar.",
       "inCatalog": true,
       "catalogId": "samurai_counter"
     },
@@ -174,8 +174,8 @@
       "nameEn": "Double Strike",
       "namePtBr": "Golpe Duplo",
       "type": "skill",
-      "descEn": "Signature Katana and Daisho technique: delivers two rapid consecutive weapon strikes at 90% damage each.",
-      "descPtBr": "Técnica clássica de Katana e Daisho: executa dois golpes rápidos consecutivos causando 90% de dano cada.",
+      "descEn": "Flow from an overhead Katana cut directly into a rising reverse slash before the enemy can recover. Signature Katana, Daisho, and Wakizashi technique that lands two rapid consecutive blows at 90% weapon damage each, accelerating Perfection.",
+      "descPtBr": "Flua de um corte descendente de Katana diretamente para um corte reverso ascendente num único fôlego. Técnica clássica de Katana, Daisho e Wakizashi que aplica dois golpes rápidos consecutivos com 90% de dano cada, acelerando a Perfeição.",
       "inCatalog": true,
       "catalogId": "samurai_double_strike"
     },
@@ -185,8 +185,8 @@
       "nameEn": "Evasion",
       "namePtBr": "Evasão",
       "type": "spell",
-      "descEn": "Short burst Bushido posture that amplifies weapon parry chance and intercepts incoming direct-damage spells.",
-      "descPtBr": "Postura curta de Bushido que multiplica a chance de aparar com a arma e intercepta magias de dano direto.",
+      "descEn": "Enter a transcendent state of sixth-sense awareness where even arcane bolts part before your blade. Amplifies Weapon Parry (1.16x-1.50x) and intercepts direct-damage spells for 5s; deflecting an attack triggers an instant 0.85x Iaido Flash Riposte.",
+      "descPtBr": "Entre em um estado transcendente de sexto sentido onde até projéteis arcanos são cortados no ar. Multiplica o Aparar de Arma (1.16x-1.50x) e intercepta magias por 5s; defletir um ataque dispara um Lampejo Iaido imediato de 0.85x.",
       "inCatalog": true,
       "catalogId": "samurai_evasion"
     },
@@ -196,8 +196,8 @@
       "nameEn": "Momentum Strike",
       "namePtBr": "Golpe de Ímpeto",
       "type": "spell",
-      "descEn": "Two-target Bushido cleave that channels weapon momentum through the primary enemy into a second adjacent foe.",
-      "descPtBr": "Corte Bushido para dois alvos que transfere o ímpeto da lâmina do alvo principal para um segundo inimigo adjacente.",
+      "descEn": "Channel the full kinetic weight of your blade through the first enemy's ribs directly into a second foe beside them. Cleaves two targets with 115% transferred momentum (150% if the primary target falls) and staggers their footing for 3s.",
+      "descPtBr": "Canalize todo o peso cinético da lâmina através do primeiro inimigo diretamente contra um segundo adversário ao lado. Corta dois alvos transferindo 115% de ímpeto (150% se o alvo principal cair) e desequilibra a guarda por 3s.",
       "inCatalog": true,
       "catalogId": "samurai_momentum_strike"
     },
@@ -207,8 +207,8 @@
       "nameEn": "Armor Ignore",
       "namePtBr": "Ignorar Armadura",
       "type": "skill",
-      "descEn": "Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses.",
-      "descPtBr": "Maestria secundária de Katana: perfura as defesas do alvo (-18% de defesa por 7s) e desequilibra chefes blindados.",
+      "descEn": "Slide the razor tip of your Katana through the narrow seams of plate and dragon-scale alike. Bypasses target physical resistance, shreds enemy defense by -18% for 7s, and staggers heavily armored bosses.",
+      "descPtBr": "Deslize a ponta afiada da Katana pelas frestas mais estreitas de placas e escamas dracônicas. Ignora a resistência física, reduz a defesa inimiga em -18% por 7s e desequilibra chefes pesadamente blindados.",
       "inCatalog": true,
       "catalogId": "samurai_armor_ignore"
     },
@@ -218,8 +218,8 @@
       "nameEn": "Frenzied Whirlwind",
       "namePtBr": "Turbilhão Frenético",
       "type": "skill",
-      "descEn": "Signature Tokuno Wakizashi & Lajatang WeaponAbility (ref: 6): unleashes a high-velocity blade tempest with 50% secondary cleave and kinetic stagger.",
-      "descPtBr": "Habilidade de arma clássica de Tokuno para Wakizashi e Lajatang (ref: 6): desfere uma tempestade de lâminas com 50% de corte secundário e desequilíbrio.",
+      "descEn": "Become the eye of a howling Tokuno steel tempest. Signature Wakizashi and Lajatang mastery (ref: 6) that lashes primary and adjacent enemies for 1.15x-1.25x Bushido damage with 50% cyclone cleave, 25% armor bypass, and kinetic stagger.",
+      "descPtBr": "Torne-se o olho de uma tempestade uivante de aço de Tokuno. Maestria clássica de Wakizashi e Lajatang (ref: 6) que açoita o alvo e inimigos adjacentes com 1.15x-1.25x de dano Bushido, 50% de corte ciclônico e 25% de penetração.",
       "inCatalog": true,
       "catalogId": "samurai_frenzied_whirlwind"
     },
@@ -229,8 +229,8 @@
       "nameEn": "Kensei: Amakura's Judgment",
       "namePtBr": "Kensei: Julgamento de Amakura",
       "type": "feature",
-      "descEn": "Grandmaster Bushido Sword-Saint Iaijutsu capstone: 1.95x execute finisher below 35% HP that locks Kensei Stance (+12% attack speed and +8% damage).",
-      "descPtBr": "Supremo Iaijutsu do Santo da Espada Bushido: finalizador de execução 1.95x abaixo de 35% de vida que ativa a Postura Kensei (+12% de velocidade e +8% de dano).",
+      "descEn": "The forbidden Grandmaster Iaijutsu stroke of Sword-Saint Amakura. Unsheathes a blinding horizon cut (1.15x-1.25x base, surging to 1.95x execute below 35% HP) and awakens Kensei Stance for 10s (+12% Attack Speed and +8% Damage).",
+      "descPtBr": "O golpe proibido de Iaijutsu do Grão-Mestre e Santo da Espada Amakura. Desembainha um corte cegante no horizonte (1.15x-1.25x base, 1.95x de execução abaixo de 35% de Vida) e desperta a Postura Kensei por 10s (+12% Velocidade e +8% Dano).",
       "inCatalog": true,
       "catalogId": "samurai_kensei_judgment"
     }
@@ -347,7 +347,7 @@
       "gumpIcon": 21536,
       "iconKey": "idle_samurai_perfection",
       "scalingFormula": {
-        "summary": "ModernUO HonorContext Perfection ramp: grants +10% Perfection streak bonus in Mode A or per-hit streak scaling in Mode B",
+        "summary": "ModernUO HonorContext Perfection ramp: grants +10% Perfection streak bonus in Mode A or per-hit streak scaling (+8 HP/Stam/Mana on kill) in Mode B",
         "stat": "bushido"
       },
       "unlockLevel": 10,
@@ -415,7 +415,19 @@
       "goldCost": 0,
       "reagentsRequired": false,
       "effectType": "heal",
-      "statusEffect": null,
+      "statusEffect": {
+        "id": "samurai_confidence_calm",
+        "name": "Inner Calm",
+        "effectType": "self_buff",
+        "durationMs": 6000,
+        "tickIntervalMs": 0,
+        "tickCount": 0,
+        "modifiers": [
+          { "stat": "evasion_pct", "value": 3 }
+        ],
+        "stackingRule": "refresh",
+        "authorityTier": "design-proposal"
+      },
       "weaponAbilityRef": null,
       "spellId": 401,
       "itemId": null,
@@ -423,7 +435,7 @@
       "gumpIcon": 21537,
       "iconKey": "gump_21537",
       "scalingFormula": {
-        "summary": "UO Confidence (ref 401): emergency Bushido self-recovery (15 + Bushido^2/576 HP) plus on-parry HP/Stamina restore in Mode B",
+        "summary": "UO Confidence (ref 401): Bushido self-recovery (15 + Bushido^2/576 HP) + 6s Inner Calm (+3% parry/evasion and on-parry HP/Stamina/Mana restore in Mode B)",
         "stat": "bushido",
         "minMultiplier": 0.02,
         "maxMultiplier": 0.02
@@ -467,7 +479,7 @@
       "gumpIcon": 21539,
       "iconKey": "gump_21539",
       "scalingFormula": {
-        "summary": "UO CounterAttack (ref 403): reactive Bushido counter-strike (1.50x-1.60x) and +18% counter stance damage",
+        "summary": "UO CounterAttack (ref 403): reactive Bushido counter-strike (1.50x-1.60x), +18% Counter Stance damage, and instant on-parry retaliation swing",
         "stat": "bushido",
         "minMultiplier": 1.5,
         "maxMultiplier": 1.6
@@ -499,7 +511,7 @@
       "gumpIcon": 20998,
       "iconKey": "gump_20998",
       "scalingFormula": {
-        "summary": "UO DoubleStrike (ref 7, Katana/Daisho/Wakizashi): rapid twin-blade strike at 0.90x weapon multiplier",
+        "summary": "UO DoubleStrike (ref 7, Katana/Daisho/Wakizashi): rapid twin-blade strike at 0.90x weapon multiplier per hit",
         "stat": "weapon",
         "minMultiplier": 0.9,
         "maxMultiplier": 0.9,
@@ -526,7 +538,7 @@
       "effectType": "self_buff",
       "statusEffect": {
         "id": "samurai_evasion_stance",
-        "name": "Evasion Stance",
+        "name": "Evasion & Iaido Riposte",
         "effectType": "posture",
         "durationMs": 5000,
         "tickIntervalMs": 0,
@@ -544,7 +556,7 @@
       "gumpIcon": 21538,
       "iconKey": "gump_21538",
       "scalingFormula": {
-        "summary": "UO Evasion (ref 402): 5s defensive Bushido posture (+4% defense in Mode A; 1.16x-1.50x Parry scalar + spell evasion in Mode B)",
+        "summary": "UO Evasion (ref 402): 5s Bushido posture (+4% defense in Mode A; 1.16x-1.50x Parry scalar + spell interception + 0.85x Iaido Flash Riposte on parry in Mode B)",
         "stat": "bushido"
       },
       "unlockLevel": 35,

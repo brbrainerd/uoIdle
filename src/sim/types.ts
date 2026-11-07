@@ -163,3 +163,128 @@ export interface SimBaselineArtifact {
   scenarios: SimTelemetry[];
   summaryByClassBracket: ClassBracketSummary[];
 }
+
+export type MaterialTierId =
+  | 'Iron'
+  | 'DullCopper'
+  | 'ShadowIron'
+  | 'Copper'
+  | 'Bronze'
+  | 'Gold'
+  | 'Agapite'
+  | 'Verite'
+  | 'Valorite';
+
+export const MATERIAL_TIER_IDS: readonly MaterialTierId[] = [
+  'Iron',
+  'DullCopper',
+  'ShadowIron',
+  'Copper',
+  'Bronze',
+  'Gold',
+  'Agapite',
+  'Verite',
+  'Valorite',
+] as const;
+
+export type AffixLoadoutId =
+  | 'clean_base'
+  | 'speed_crit'
+  | 'power_lethality'
+  | 'bastion_parry'
+  | 'valorite_bis';
+
+export const AFFIX_LOADOUT_IDS: readonly AffixLoadoutId[] = [
+  'clean_base',
+  'speed_crit',
+  'power_lethality',
+  'bastion_parry',
+  'valorite_bis',
+] as const;
+
+export interface DamageChannelBreakdown {
+  classId: string;
+  bracketId: BracketId;
+  archetypeId: EnemyArchetypeId;
+  mode: SimImplementationMode;
+  autoAttackDps: number;
+  specialMoveDps: number;
+  executeDps: number;
+  dotDps: number;
+  procCounterDps: number;
+  totalDps: number;
+}
+
+export interface MaterialTierPoint {
+  classId: string;
+  tierId: MaterialTierId;
+  levelReq: number;
+  statBonusBudget: number;
+  hue: number;
+  lowDefBossDps: number;
+  highDefBossDps: number;
+  multiTargetDps: number;
+  ehpPerSec: number;
+}
+
+export interface AffixLoadoutPoint {
+  classId: string;
+  loadoutId: AffixLoadoutId;
+  loadoutName: string;
+  lowDefBossDps: number;
+  highDefBossDps: number;
+  multiTargetDps: number;
+  ehpPerSec: number;
+  netManaDeltaPerMin: number;
+  netStaminaDeltaPerMin: number;
+}
+
+export interface WavePullTelemetryPoint {
+  waveIndex: number;
+  waveClearTimeSec: number;
+  cumulativeTimeSec: number;
+  waveDps: number;
+  endingHpPct: number;
+  endingManaPct: number;
+  endingStaminaPct: number;
+  parriesInWave: number;
+  clonesOrStreakEnd: number;
+}
+
+export interface ClassMultiWaveRun {
+  classId: string;
+  totalClearTimeSec: number;
+  averageWaveDps: number;
+  minHpPct: number;
+  minManaPct: number;
+  totalParries: number;
+  totalCloneInterceptions: number;
+  waves: WavePullTelemetryPoint[];
+}
+
+export interface RotationTimelineEvent {
+  timeMs: number;
+  kind: 'cast' | 'swing' | 'dot' | 'proc' | 'detonate';
+  label: string;
+  damage: number;
+  isCrit: boolean;
+}
+
+export interface ClassRotationTimeline {
+  classId: string;
+  bracketId: BracketId;
+  horizonMs: number;
+  events: RotationTimelineEvent[];
+}
+
+export interface GearAndWavesArtifact {
+  version: '1.1.0';
+  tickMs: 100;
+  classes: string[];
+  damageBreakdowns: DamageChannelBreakdown[];
+  materialTierCurves: MaterialTierPoint[];
+  affixLoadoutCurves: AffixLoadoutPoint[];
+  multiWaveRuns: ClassMultiWaveRun[];
+  rotationTimelines: ClassRotationTimeline[];
+}
+

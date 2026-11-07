@@ -3,25 +3,37 @@ import {
   BRACKET_BUDGETS,
   BRACKET_ENEMY_SCALE,
   ENEMY_ARCHETYPES,
+  MATERIAL_TIER_SPECS,
+  buildAffixLoadoutBudget,
+  buildMaterialTierBudget,
   resolveClassStatsForBracket,
 } from './archetypes.js';
 import {
+  AFFIX_LOADOUT_IDS,
   ARCHETYPE_IDS,
   BRACKET_IDS,
   type ActiveStatusInstance,
+  type AffixLoadoutPoint,
   type BracketBudget,
   type BracketId,
   type ClassBracketSummary,
   type ClassDefinition,
+  type ClassMultiWaveRun,
+  type ClassRotationTimeline,
   type CombatState,
+  type DamageChannelBreakdown,
   type EffectDefinition,
   type EnemyArchetype,
   type EnemyArchetypeId,
+  type GearAndWavesArtifact,
+  type MaterialTierPoint,
   type ResolvedClassStats,
+  type RotationTimelineEvent,
   type SimBaselineArtifact,
   type SimImplementationMode,
   type SimTelemetry,
   type SkillDefinition,
+  type WavePullTelemetryPoint,
 } from './types.js';
 
 export const TICK_MS = 100;
@@ -495,16 +507,25 @@ function upsertStatusInstance(
   }
 }
 
+export interface DetailedScenarioOutput {
+  telemetry: SimTelemetry;
+  breakdown: DamageChannelBreakdown;
+  timelineEvents: RotationTimelineEvent[];
+}
+
 /**
- * Runs a deterministic 100ms-tick combat simulation for a single (classDef, bracketId, archetypeId, mode) scenario.
+ * Runs a deterministic 100ms-tick combat simulation for a single (classDef, bracketId, archetypeId, mode) scenario,
+ * optionally overriding the gear/stat BracketBudget and collecting per-channel damage breakdown + rotation timeline.
  */
-export function simulateScenario(
+export function simulateScenarioDetailed(
   classDef: ClassDefinition,
   bracketId: BracketId,
   archetypeId: EnemyArchetypeId,
-  mode: SimImplementationMode = 'mode_a'
-): SimTelemetry {
-  const bracket = BRACKET_BUDGETS[bracketId];
+  mode: SimImplementationMode = 'mode_a',
+  budgetOverride?: BracketBudget,
+  timelineHorizonMs = 0
+): DetailedScenarioOutput {
+  const bracket = budgetOverride ?? BRACKET_BUDGETS[bracketId];
   const archetype = ENEMY_ARCHETYPES[archetypeId];
   const stats = resolveClassStatsForBracket(classDef, bracket);
   const { passives, hotbar } = buildHotbarLoadout(classDef, bracket);
@@ -559,6 +580,12 @@ export function simulateScenario(
 
   let totalEffectiveDamage = 0;
   let totalRawDamage = 0;
+  let autoAttackEffectiveDmg = 0;
+  let specialMoveEffectiveDmg = 0;
+  let executeEffectiveDmg = 0;
+  let dotEffectiveDmg = 0;
+  let procCounterEffectiveDmg = 0;
+
   let totalCasts = 0;
   let totalSwings = 0;
   let totalHits = 0;
@@ -573,6 +600,7 @@ export function simulateScenario(
   let totalStaminaRegenerated = 0;
   let totalHpHealedOrRegenerated = 0;
   let totalIncomingDamageMitigated = 0;
+  const timelineEvents: RotationTimelineEvent[] = [];
 
   // Passive regeneration rates per second ([[resources]] Eq)
   const hasMeditation =
@@ -595,15 +623,33 @@ export function simulateScenario(
 
   let enemyAttackTimerMs = archetype.enemyAttackIntervalMs;
 
-  const dealDamageToTarget = (targetIdx: number, mitigatedDmg: number): void => {
+  type DamageChannel = 'auto' | 'special' | 'execute' | 'dot' | 'proc';
+
+  const dealDamageToTarget = (
+    targetIdx: number,
+    mitigatedDmg: number,
+    channel: DamageChannel = 'special'
+  ): number => {
     const currentHp = state.targetHpPools[targetIdx] ?? 0;
     if (currentHp <= 0) {
-      return;
+      return 0;
     }
     const clampedDmg = Math.max(1, mitigatedDmg);
     totalRawDamage += clampedDmg;
     const effective = Math.min(currentHp, clampedDmg);
     totalEffectiveDamage += effective;
+    if (channel === 'auto') {
+      autoAttackEffectiveDmg += effective;
+    } else if (channel === 'execute') {
+      executeEffectiveDmg += effective;
+    } else if (channel === 'dot') {
+      dotEffectiveDmg += effective;
+    } else if (channel === 'proc') {
+      procCounterEffectiveDmg += effective;
+    } else {
+      specialMoveEffectiveDmg += effective;
+    }
+
     const nextHp = currentHp - effective;
     if (mode === 'mode_b' && nextHp <= 0) {
       state.perfectionStreakBonusPct = 0;
@@ -614,6 +660,7 @@ export function simulateScenario(
     } else {
       state.targetHpPools[targetIdx] = nextHp;
     }
+    return effective;
   };
 
   for (let tick = 1; tick <= maxTicks; tick++) {
@@ -673,7 +720,16 @@ export function simulateScenario(
           );
           const primaryIdx = state.targetHpPools.findIndex((hp) => hp > 0);
           if (primaryIdx >= 0) {
-            dealDamageToTarget(primaryIdx, dotMitigated);
+            const eff = dealDamageToTarget(primaryIdx, dotMitigated, 'dot');
+            if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && eff > 0) {
+              timelineEvents.push({
+                timeMs: state.elapsedMs,
+                kind: 'dot',
+                label: debuff.effect.name,
+                damage: round2(eff),
+                isCrit: false,
+              });
+            }
           }
         }
       }
@@ -805,6 +861,13 @@ export function simulateScenario(
       ) {
         continue;
       }
+      if (
+        mode === 'mode_b' &&
+        (skill.id.includes('death') || skill.id.includes('twin_shadow')) &&
+        state.deathStrikeSwingsRemaining > 0
+      ) {
+        continue;
+      }
 
       const { manaCost, staminaCost } = resolveSkillResourceCost(classDef, skill);
       if (state.mana < manaCost || state.stamina < staminaCost) {
@@ -831,6 +894,15 @@ export function simulateScenario(
         if (skill.statusEffect) {
           upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, true);
         }
+        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+          timelineEvents.push({
+            timeMs: state.elapsedMs,
+            kind: 'cast',
+            label: skill.name,
+            damage: 0,
+            isCrit: false,
+          });
+        }
       } else if (skill.effectType === 'self_buff') {
         if (skill.statusEffect) {
           upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
@@ -847,10 +919,31 @@ export function simulateScenario(
           state.cloneStacks =
             skill.id.endsWith('_r2') || skill.id.includes('fukiya_barrage') ? 2 : 1;
         }
+        // Mode B idle synergy: Smoke Bomb (Vanish & Volley) accelerates Shuriken readiness
+        if (mode === 'mode_b' && skill.id === 'ninja_smoke_bomb') {
+          const shurikenRem = state.skillCooldownsMs.get('ninja_shuriken') ?? 0;
+          if (shurikenRem > 0) {
+            if (shurikenRem <= 2500) {
+              state.skillCooldownsMs.delete('ninja_shuriken');
+            } else {
+              state.skillCooldownsMs.set('ninja_shuriken', shurikenRem - 2500);
+            }
+          }
+        }
+        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+          timelineEvents.push({
+            timeMs: state.elapsedMs,
+            kind: 'cast',
+            label: skill.name,
+            damage: 0,
+            isCrit: false,
+          });
+        }
       } else if (skill.effectType === 'debuff') {
         if (skill.statusEffect) {
           upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, 0, false);
         }
+        let castDmg = 0;
         // WeaponAbility debuffs (e.g. warrior_disarm) also land a weapon strike
         if (skill.kind === 'WeaponAbility' || skill.kind === 'SpecialMove') {
           const out = computeSkillBaseOutput(
@@ -870,7 +963,16 @@ export function simulateScenario(
             out.armorIgnorePct,
             targetDefenseDeltaPct
           );
-          dealDamageToTarget(primaryTargetIdx, mitigated);
+          castDmg = dealDamageToTarget(primaryTargetIdx, mitigated, 'special');
+        }
+        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+          timelineEvents.push({
+            timeMs: state.elapsedMs,
+            kind: 'cast',
+            label: skill.name,
+            damage: round2(castDmg),
+            isCrit: false,
+          });
         }
       } else if (skill.effectType === 'dot') {
         const out = computeSkillBaseOutput(
@@ -894,6 +996,15 @@ export function simulateScenario(
             out.isElemental
           );
         }
+        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+          timelineEvents.push({
+            timeMs: state.elapsedMs,
+            kind: 'cast',
+            label: skill.name,
+            damage: 0,
+            isCrit: false,
+          });
+        }
       } else {
         // direct_damage
         const out = computeSkillBaseOutput(
@@ -916,6 +1027,9 @@ export function simulateScenario(
           accuracyBonus
         );
         const critProb = computeCritChance(bracket, stats, buffCritPct);
+        const isExecSkill = (skill.scalingFormula.executeThresholdHpPct ?? 0) > 0;
+        let castTotalDmg = 0;
+        let castAnyCrit = false;
 
         const targetIndicesToHit = aliveIndices.slice(0, out.targetsHit);
         for (const tIdx of targetIndicesToHit) {
@@ -940,6 +1054,7 @@ export function simulateScenario(
             const critMult = didCrit ? 1.5 : 1.0;
             if (didCrit) {
               totalCrits++;
+              castAnyCrit = true;
             }
 
             if (mode === 'mode_b' && classDef.id === 'samurai' && bracket.skillLevel >= 50) {
@@ -956,8 +1071,22 @@ export function simulateScenario(
               out.armorIgnorePct,
               targetDefenseDeltaPct
             );
-            dealDamageToTarget(tIdx, mitigated);
+            castTotalDmg += dealDamageToTarget(
+              tIdx,
+              mitigated,
+              isExecSkill ? 'execute' : 'special'
+            );
           }
+        }
+
+        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+          timelineEvents.push({
+            timeMs: state.elapsedMs,
+            kind: 'cast',
+            label: skill.name,
+            damage: round2(castTotalDmg),
+            isCrit: castAnyCrit,
+          });
         }
 
         if (
@@ -990,8 +1119,8 @@ export function simulateScenario(
           mode === 'mode_b' &&
           (skill.id.includes('death') || skill.id.includes('twin_shadow'))
         ) {
-          state.deathStrikeSwingsRemaining = 5;
-          state.deathStrikePendingDamage = out.rawDamagePerHit * 0.95;
+          state.deathStrikeSwingsRemaining = 3;
+          state.deathStrikePendingDamage = out.rawDamagePerHit * 0.45;
         }
       }
 
@@ -1054,7 +1183,44 @@ export function simulateScenario(
             0,
             targetDefenseDeltaPct
           );
-          dealDamageToTarget(swingTargetIdx, mitigatedSwing);
+          const effSwing = dealDamageToTarget(swingTargetIdx, mitigatedSwing, 'auto');
+          if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effSwing > 0) {
+            timelineEvents.push({
+              timeMs: state.elapsedMs,
+              kind: 'swing',
+              label: 'Auto-Attack',
+              damage: round2(effSwing),
+              isCrit: didCrit,
+            });
+          }
+
+          // Mode B: Animal Form (Kitsune & Wolf Aspect) 3rd-swing Spirit Claw slash
+          if (
+            mode === 'mode_b' &&
+            classDef.id === 'ninja' &&
+            totalHits % 3 === 0 &&
+            state.selfBuffs.some((b) => b.id === 'ninja_animal_aspect')
+          ) {
+            const spiritRaw =
+              computeAutoAttackRawDamage(bracket, stats, buffDamagePct, 0) * 0.12;
+            const spiritMitigated = applyTargetMitigation(
+              spiritRaw,
+              archetype,
+              false,
+              25,
+              targetDefenseDeltaPct
+            );
+            const effSpirit = dealDamageToTarget(swingTargetIdx, spiritMitigated, 'proc');
+            if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effSpirit > 0) {
+              timelineEvents.push({
+                timeMs: state.elapsedMs,
+                kind: 'proc',
+                label: 'Kitsune & Wolf Spirit Claw',
+                damage: round2(effSpirit),
+                isCrit: false,
+              });
+            }
+          }
 
           // Mode B: 5-swing DeathStrike delayed detonation counter
           if (mode === 'mode_b' && state.deathStrikeSwingsRemaining > 0) {
@@ -1067,7 +1233,16 @@ export function simulateScenario(
                 50,
                 targetDefenseDeltaPct
               );
-              dealDamageToTarget(swingTargetIdx, detDmg);
+              const effDet = dealDamageToTarget(swingTargetIdx, detDmg, 'execute');
+              if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effDet > 0) {
+                timelineEvents.push({
+                  timeMs: state.elapsedMs,
+                  kind: 'detonate',
+                  label: 'Death Strike 5th-Step Detonation',
+                  damage: round2(effDet),
+                  isCrit: false,
+                });
+              }
               state.deathStrikePendingDamage = 0;
             }
           }
@@ -1173,10 +1348,24 @@ export function simulateScenario(
           parryCount++;
           totalIncomingDamageMitigated += effectiveEnemyHit;
 
-          // Mode B: CounterAttack reactive free weapon swing on parry
+          // Mode B: Confidence (Inner Calm) on-parry vitality & stamina restoration
           if (
             mode === 'mode_b' &&
-            state.counterStanceRemainingMs > 0 &&
+            state.selfBuffs.some((b) => b.id === 'samurai_confidence_calm')
+          ) {
+            state.hp = Math.min(state.maxHP, state.hp + 2);
+            totalHpHealedOrRegenerated += 2;
+            state.stamina = Math.min(state.maxStamina, state.stamina + 2);
+            totalStaminaRegenerated += 2;
+          }
+
+          // Mode B: CounterAttack or Evasion Iaido Riposte reactive swing on parry
+          const hasEvasionStance = state.selfBuffs.some(
+            (b) => b.id === 'samurai_evasion_stance'
+          );
+          if (
+            mode === 'mode_b' &&
+            (state.counterStanceRemainingMs > 0 || hasEvasionStance) &&
             state.counterIcdMs <= 0
           ) {
             state.counterIcdMs = 6000;
@@ -1185,13 +1374,19 @@ export function simulateScenario(
               const hasCounterStanceBuff = state.selfBuffs.some(
                 (b) => b.id === 'samurai_counter_stance'
               );
+              const counterMult =
+                state.counterStanceRemainingMs > 0
+                  ? hasCounterStanceBuff
+                    ? 0.35
+                    : 0.75
+                  : 0.12;
               const rawCounter =
                 computeAutoAttackRawDamage(
                   bracket,
                   stats,
                   buffDamagePct,
                   totalPerfectionBonus
-                ) * (hasCounterStanceBuff ? 0.55 : 1.0);
+                ) * counterMult;
               const mitigatedCounter = applyTargetMitigation(
                 rawCounter,
                 archetype,
@@ -1201,7 +1396,23 @@ export function simulateScenario(
               );
               totalSwings++;
               totalHits++;
-              dealDamageToTarget(counterTargetIdx, mitigatedCounter);
+              const effCounter = dealDamageToTarget(
+                counterTargetIdx,
+                mitigatedCounter,
+                'proc'
+              );
+              if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effCounter > 0) {
+                timelineEvents.push({
+                  timeMs: state.elapsedMs,
+                  kind: 'proc',
+                  label:
+                    state.counterStanceRemainingMs > 0
+                      ? 'Counter Attack Riposte'
+                      : 'Iaido Flash Riposte',
+                  damage: round2(effCounter),
+                  isCrit: false,
+                });
+              }
             }
           }
         } else {
@@ -1289,7 +1500,7 @@ export function simulateScenario(
         elapsedSec
   );
 
-  return {
+  const telemetry: SimTelemetry = {
     classId: classDef.id,
     bracketId,
     archetypeId,
@@ -1310,6 +1521,33 @@ export function simulateScenario(
     oomTicks:
       classDef.resourceProfile.primaryResource === 'zero-mana-physical' ? 0 : oomTicks,
   };
+
+  const breakdown: DamageChannelBreakdown = {
+    classId: classDef.id,
+    bracketId,
+    archetypeId,
+    mode,
+    autoAttackDps: round2(autoAttackEffectiveDmg / elapsedSec),
+    specialMoveDps: round2(specialMoveEffectiveDmg / elapsedSec),
+    executeDps: round2(executeEffectiveDmg / elapsedSec),
+    dotDps: round2(dotEffectiveDmg / elapsedSec),
+    procCounterDps: round2(procCounterEffectiveDmg / elapsedSec),
+    totalDps: sustainedDps,
+  };
+
+  return { telemetry, breakdown, timelineEvents };
+}
+
+/**
+ * Runs a deterministic 100ms-tick combat simulation for a single (classDef, bracketId, archetypeId, mode) scenario.
+ */
+export function simulateScenario(
+  classDef: ClassDefinition,
+  bracketId: BracketId,
+  archetypeId: EnemyArchetypeId,
+  mode: SimImplementationMode = 'mode_a'
+): SimTelemetry {
+  return simulateScenarioDetailed(classDef, bracketId, archetypeId, mode).telemetry;
 }
 
 /**
@@ -1361,3 +1599,480 @@ export function runClassBaselineSuite(
     summaryByClassBracket,
   };
 }
+
+/**
+ * Simulates a 10-wave consecutive dungeon pull at L60 with a 1,500ms inter-wave travel/spawn gap,
+ * tracking cooldown recovery, resource pools, Perfection streak retention, and Mirror Image clone persistence across waves.
+ */
+export function simulateMultiWavePull(
+  classDef: ClassDefinition,
+  bracketId: BracketId = 'L60',
+  waveCount = 10,
+  interWaveDelayMs = 1500
+): ClassMultiWaveRun {
+  const bracket = BRACKET_BUDGETS[bracketId];
+  const archetype: EnemyArchetype = {
+    archetypeId: 'multi_target_pack',
+    name: 'Elite Dungeon Pull (2 targets)',
+    targetCount: 3,
+    waveCount,
+    fightHorizonMs: 180000,
+    hpMultiplier: 0.85,
+    physResistPct: 30,
+    elemResistPct: 25,
+    defenseSkill: 45,
+    enemyPreMitigationDpsPerTarget: 2.2,
+    enemyAttackIntervalMs: 2000,
+  };
+  const stats = resolveClassStatsForBracket(classDef, bracket);
+  const { passives, hotbar } = buildHotbarLoadout(classDef, bracket);
+  const passiveEffects: EffectDefinition[] = [];
+  for (const p of passives) {
+    if (p.statusEffect) {
+      passiveEffects.push(p.statusEffect);
+    }
+  }
+
+  const enemyScale = BRACKET_ENEMY_SCALE[bracketId];
+  const singleTargetMaxHp = Math.max(
+    40,
+    Math.round(BASE_ENEMY_HP * enemyScale * archetype.hpMultiplier)
+  );
+  const spawnWave = (): number[] => [singleTargetMaxHp, singleTargetMaxHp];
+
+  const state: CombatState = {
+    tick: 0,
+    elapsedMs: 0,
+    hp: stats.maxHP,
+    maxHP: stats.maxHP,
+    stamina: stats.maxStamina,
+    maxStamina: stats.maxStamina,
+    mana: stats.maxMana,
+    maxMana: stats.maxMana,
+    swingCooldownMs: 0,
+    potionCooldownMs: 0,
+    bandageCooldownMs: 0,
+    skillCooldownsMs: new Map<string, number>(),
+    selfBuffs: [],
+    targetDebuffs: [],
+    targetHpPools: spawnWave(),
+    targetMaxHp: singleTargetMaxHp,
+    perfectionStreakBonusPct: 0,
+    cloneStacks: 0,
+    cloneIcdMs: 0,
+    counterStanceRemainingMs: 0,
+    counterIcdMs: 0,
+    deathStrikeSwingsRemaining: 0,
+    deathStrikePendingDamage: 0,
+    hitAcc: 0.5,
+    critAcc: 0.25,
+    parryAcc: 0.35,
+    procAcc: 0.4,
+  };
+
+  const hasMeditation =
+    classDef.resourceProfile.meditationCap > 0 &&
+    classDef.starterSkills.some((s) => s.skillKey === 'meditation');
+  const meditationSkill = hasMeditation ? bracket.skillLevel : 0;
+  const focusSkill = bracket.skillLevel;
+  const manaRegenPerSec =
+    classDef.resourceProfile.primaryResource === 'zero-mana-physical'
+      ? 0
+      : 1.0 + (meditationSkill / 100) * 2.5 + focusSkill / 200 + bracket.manaRegenAffix;
+  const staminaRegenPerSec = 1.8 + (focusSkill / 100) * 2.4 + bracket.staminaRegenAffix;
+  const hpRegenPerSec = 0.8 + bracket.hpRegenAffix;
+  const hasBandageInHotbar = classDef.seededHotbar.some((s) => s.abilityId === 'bandage');
+  const hasManaPotionInHotbar =
+    classDef.resourceProfile.primaryResource !== 'zero-mana-physical' &&
+    classDef.seededHotbar.some((s) => s.abilityId.includes('mana_potion'));
+
+  let currentWaveIdx = 1;
+  let waveStartElapsedMs = 0;
+  let waveEffectiveDamage = 0;
+  let waveParries = 0;
+  let interWaveRemainingMs = 0;
+  let enemyAttackTimerMs = archetype.enemyAttackIntervalMs;
+  let totalParries = 0;
+  let totalCloneInterceptions = 0;
+  let minHpPct = 100;
+  let minManaPct = 100;
+  const waves: WavePullTelemetryPoint[] = [];
+
+  const dealWaveDmg = (tIdx: number, dmg: number): void => {
+    const cur = state.targetHpPools[tIdx] ?? 0;
+    if (cur <= 0) {
+      return;
+    }
+    const eff = Math.min(cur, Math.max(1, dmg));
+    waveEffectiveDamage += eff;
+    state.targetHpPools[tIdx] = cur - eff;
+  };
+
+  const maxTicks = 1800; // up to 180s
+  for (let tick = 1; tick <= maxTicks; tick++) {
+    state.tick = tick;
+    state.elapsedMs = tick * TICK_MS;
+
+    state.swingCooldownMs = Math.max(0, state.swingCooldownMs - TICK_MS);
+    state.potionCooldownMs = Math.max(0, state.potionCooldownMs - TICK_MS);
+    state.bandageCooldownMs = Math.max(0, state.bandageCooldownMs - TICK_MS);
+    state.cloneIcdMs = Math.max(0, state.cloneIcdMs - TICK_MS);
+    state.counterStanceRemainingMs = Math.max(0, state.counterStanceRemainingMs - TICK_MS);
+    state.counterIcdMs = Math.max(0, state.counterIcdMs - TICK_MS);
+    state.skillCooldownsMs.forEach((rem, key) => {
+      if (rem <= TICK_MS) {
+        state.skillCooldownsMs.delete(key);
+      } else {
+        state.skillCooldownsMs.set(key, rem - TICK_MS);
+      }
+    });
+
+    for (let i = state.selfBuffs.length - 1; i >= 0; i--) {
+      const buff = state.selfBuffs[i];
+      buff.remainingMs -= TICK_MS;
+      if (buff.remainingMs <= 0) {
+        state.selfBuffs.splice(i, 1);
+      }
+    }
+
+    if (state.elapsedMs % 1000 === 0) {
+      state.hp = Math.min(state.maxHP, state.hp + hpRegenPerSec);
+      state.stamina = Math.min(state.maxStamina, state.stamina + staminaRegenPerSec);
+      if (state.maxMana > 0) {
+        state.mana = Math.min(state.maxMana, state.mana + manaRegenPerSec);
+      }
+    }
+
+    const hpPct = (state.hp / state.maxHP) * 100;
+    const manaPct = state.maxMana > 0 ? (state.mana / state.maxMana) * 100 : 100;
+    minHpPct = Math.min(minHpPct, hpPct);
+    minManaPct = Math.min(minManaPct, manaPct);
+
+    if (hpPct <= 65 && state.potionCooldownMs <= 0) {
+      state.hp = Math.min(state.maxHP, state.hp + state.maxHP * 0.25);
+      state.potionCooldownMs = 10000;
+    } else if (hasManaPotionInHotbar && state.maxMana > 0 && manaPct <= 35 && state.potionCooldownMs <= 0) {
+      state.mana = Math.min(state.maxMana, state.mana + state.maxMana * 0.25);
+      state.potionCooldownMs = 10000;
+    }
+    if (hasBandageInHotbar && hpPct <= 80 && state.bandageCooldownMs <= 0) {
+      const avgBandage =
+        (bracket.skillLevel / 8 + bracket.skillLevel / 5 + 4 + bracket.skillLevel / 6 + bracket.skillLevel / 2.5 + 4) / 2;
+      state.hp = Math.min(state.maxHP, state.hp + avgBandage);
+      state.bandageCooldownMs = 8000;
+    }
+
+    // Handle inter-wave travel/spawn transition
+    if (interWaveRemainingMs > 0) {
+      interWaveRemainingMs -= TICK_MS;
+      if (interWaveRemainingMs <= 0) {
+        state.targetHpPools = spawnWave();
+        state.targetDebuffs = [];
+        waveStartElapsedMs = state.elapsedMs;
+        waveEffectiveDamage = 0;
+        waveParries = 0;
+      }
+      continue;
+    }
+
+    const targetDefenseDeltaPct = sumModifierStat(state.targetDebuffs, [], 'defense_pct');
+    for (let i = state.targetDebuffs.length - 1; i >= 0; i--) {
+      const debuff = state.targetDebuffs[i];
+      debuff.remainingMs -= TICK_MS;
+      if (debuff.dotDamagePerTick > 0) {
+        debuff.nextTickCountdownMs -= TICK_MS;
+        if (debuff.nextTickCountdownMs <= 0) {
+          debuff.nextTickCountdownMs += debuff.effect.tickIntervalMs > 0 ? debuff.effect.tickIntervalMs : 1000;
+          const dotMitigated = applyTargetMitigation(
+            debuff.dotDamagePerTick,
+            archetype,
+            debuff.isElemental,
+            0,
+            targetDefenseDeltaPct
+          );
+          const pIdx = state.targetHpPools.findIndex((hp) => hp > 0);
+          if (pIdx >= 0) {
+            dealWaveDmg(pIdx, dotMitigated);
+          }
+        }
+      }
+      if (debuff.remainingMs <= 0) {
+        state.targetDebuffs.splice(i, 1);
+      }
+    }
+
+    const aliveIndices = state.targetHpPools
+      .map((hp, idx) => (hp > 0 ? idx : -1))
+      .filter((idx) => idx >= 0);
+
+    if (aliveIndices.length > 0) {
+      const primaryIdx = aliveIndices[0];
+      const primaryHpPct = (state.targetHpPools[primaryIdx] / state.targetMaxHp) * 100;
+      const buffDamagePct = sumModifierStat(state.selfBuffs, passiveEffects, 'damage_dealt_pct');
+      const buffAttackSpeedPct = sumModifierStat(state.selfBuffs, passiveEffects, 'attack_speed_pct');
+      const buffCritPct = sumModifierStat(state.selfBuffs, passiveEffects, 'crit_chance_pct');
+      const buffPerfectionPct = sumModifierStat(state.selfBuffs, passiveEffects, 'perfection_streak_pct');
+      const totalPerfectionBonus = Math.max(state.perfectionStreakBonusPct, buffPerfectionPct);
+
+      // Cast 1 hotbar skill
+      for (const skill of hotbar) {
+        if ((state.skillCooldownsMs.get(skill.id) ?? 0) > 0) continue;
+        if (skill.effectType === 'heal' && hpPct > 65) continue;
+        const execThresh = skill.scalingFormula.executeThresholdHpPct ?? 0;
+        if (execThresh > 0 && primaryHpPct > execThresh) continue;
+        if (isStrictMultiTargetOnlySkill(skill) && aliveIndices.length < 2) continue;
+        if (skill.effectType === 'self_buff' && skill.statusEffect && state.selfBuffs.some((b) => b.id === skill.statusEffect?.id)) continue;
+        if (skill.effectType === 'debuff' && skill.statusEffect && state.targetDebuffs.some((d) => d.id === skill.statusEffect?.id)) continue;
+        if (skill.effectType === 'dot' && skill.statusEffect && state.targetDebuffs.some((d) => d.id === skill.statusEffect?.id)) continue;
+
+        const { manaCost, staminaCost } = resolveSkillResourceCost(classDef, skill);
+        if (state.mana < manaCost || state.stamina < staminaCost) continue;
+
+        state.mana -= manaCost;
+        state.stamina -= staminaCost;
+        state.skillCooldownsMs.set(skill.id, resolveEffectiveCooldownMs(skill));
+
+        if (skill.effectType === 'heal') {
+          state.hp = Math.min(state.maxHP, state.hp + state.maxHP * (skill.id.includes('greater') ? 0.35 : 0.15));
+          if (skill.statusEffect) upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, true);
+        } else if (skill.effectType === 'self_buff') {
+          if (skill.statusEffect) upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
+          if (skill.id.includes('mirror') || skill.id.includes('fukiya_barrage')) {
+            state.cloneStacks = skill.id.endsWith('_r2') || skill.id.includes('fukiya_barrage') ? 2 : 1;
+          }
+          if (skill.id === 'ninja_smoke_bomb') {
+            const rem = state.skillCooldownsMs.get('ninja_shuriken') ?? 0;
+            if (rem > 0) {
+              if (rem <= 2500) state.skillCooldownsMs.delete('ninja_shuriken');
+              else state.skillCooldownsMs.set('ninja_shuriken', rem - 2500);
+            }
+          }
+        } else if (skill.effectType === 'debuff') {
+          if (skill.statusEffect) upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, 0, false);
+          if (skill.kind === 'WeaponAbility' || skill.kind === 'SpecialMove') {
+            const out = computeSkillBaseOutput(classDef, skill, bracket, stats, primaryHpPct, aliveIndices.length, buffDamagePct, totalPerfectionBonus);
+            dealWaveDmg(primaryIdx, applyTargetMitigation(out.rawDamagePerHit, archetype, out.isElemental, out.armorIgnorePct, targetDefenseDeltaPct));
+          }
+        } else if (skill.effectType === 'dot') {
+          const out = computeSkillBaseOutput(classDef, skill, bracket, stats, primaryHpPct, aliveIndices.length, buffDamagePct, totalPerfectionBonus);
+          const tickCount = Math.max(1, skill.statusEffect?.tickCount ?? 5);
+          if (skill.statusEffect) {
+            upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, (out.rawDamagePerHit * 0.45) / Math.min(6, tickCount), out.isElemental);
+          }
+        } else {
+          const out = computeSkillBaseOutput(classDef, skill, bracket, stats, primaryHpPct, aliveIndices.length, buffDamagePct, totalPerfectionBonus);
+          const hitProb = computeHitChance(bracket, stats, archetype, out.isElemental, 15);
+          const critProb = computeCritChance(bracket, stats, buffCritPct);
+          for (const tIdx of aliveIndices.slice(0, out.targetsHit)) {
+            for (let h = 0; h < out.hits; h++) {
+              const [didHit, nextHit] = resolveDeterministicRoll(state.hitAcc, hitProb);
+              state.hitAcc = nextHit;
+              if (!didHit) continue;
+              const [didCrit, nextCrit] = resolveDeterministicRoll(state.critAcc, critProb);
+              state.critAcc = nextCrit;
+              if (classDef.id === 'samurai') {
+                state.perfectionStreakBonusPct = Math.min(12, state.perfectionStreakBonusPct + 4);
+              }
+              dealWaveDmg(
+                tIdx,
+                applyTargetMitigation(out.rawDamagePerHit * (didCrit ? 1.5 : 1.0), archetype, out.isElemental, out.armorIgnorePct, targetDefenseDeltaPct)
+              );
+            }
+          }
+          if (skill.id.includes('counter')) state.counterStanceRemainingMs = 7000;
+          if (skill.id.includes('death') || skill.id.includes('twin_shadow')) {
+            state.deathStrikeSwingsRemaining = 5;
+            state.deathStrikePendingDamage = out.rawDamagePerHit * 0.95;
+          }
+        }
+        break;
+      }
+
+      // Auto-attack
+      if (state.swingCooldownMs <= 0) {
+        const curAlive = state.targetHpPools.map((hp, idx) => (hp > 0 ? idx : -1)).filter((idx) => idx >= 0);
+        if (curAlive.length > 0) {
+          state.swingCooldownMs = computeSwingIntervalMs(bracket, state.stamina, buffAttackSpeedPct);
+          const [didHit, nextHit] = resolveDeterministicRoll(state.hitAcc, computeHitChance(bracket, stats, archetype, false, 0));
+          state.hitAcc = nextHit;
+          if (didHit) {
+            const [didCrit, nextCrit] = resolveDeterministicRoll(state.critAcc, computeCritChance(bracket, stats, buffCritPct));
+            state.critAcc = nextCrit;
+            if (classDef.id === 'samurai') {
+              state.perfectionStreakBonusPct = Math.min(12, state.perfectionStreakBonusPct + 4);
+            }
+            const rawSwing = computeAutoAttackRawDamage(bracket, stats, buffDamagePct, totalPerfectionBonus) * (didCrit ? 1.5 : 1.0);
+            dealWaveDmg(curAlive[0], applyTargetMitigation(rawSwing, archetype, false, 0, targetDefenseDeltaPct));
+            if (state.deathStrikeSwingsRemaining > 0) {
+              state.deathStrikeSwingsRemaining--;
+              if (state.deathStrikeSwingsRemaining === 0 && state.deathStrikePendingDamage > 0) {
+                dealWaveDmg(curAlive[0], applyTargetMitigation(state.deathStrikePendingDamage, archetype, false, 50, targetDefenseDeltaPct));
+                state.deathStrikePendingDamage = 0;
+              }
+            }
+          }
+        }
+      }
+
+      // Incoming enemy hit
+      enemyAttackTimerMs -= TICK_MS;
+      if (enemyAttackTimerMs <= 0) {
+        enemyAttackTimerMs += archetype.enemyAttackIntervalMs;
+        const livingCount = Math.max(1, state.targetHpPools.filter((hp) => hp > 0).length);
+        let incoming = archetype.enemyPreMitigationDpsPerTarget * enemyScale * (archetype.enemyAttackIntervalMs / 1000) * livingCount;
+        if (state.cloneStacks > 0 && state.cloneIcdMs <= 0) {
+          const [didInt, nextP] = resolveDeterministicRoll(state.procAcc, 0.25);
+          state.procAcc = nextP;
+          if (didInt) {
+            state.cloneStacks--;
+            state.cloneIcdMs = 10000;
+            totalCloneInterceptions++;
+            incoming *= 0.65;
+          }
+        }
+        const hasParry = classDef.starterSkills.some((s) => s.skillKey === 'parry' || s.skillKey === 'bushido');
+        const buffEv = sumModifierStat(state.selfBuffs, passiveEffects, 'evasion_pct');
+        const avoidChance = clamp((hasParry ? 0.25 : 0) + buffEv / 100 + bracket.defenseChanceIncreasePct / 200, 0, 0.65);
+        const [didParry, nextPa] = resolveDeterministicRoll(state.parryAcc, avoidChance);
+        state.parryAcc = nextPa;
+        if (didParry) {
+          waveParries++;
+          totalParries++;
+        } else {
+          const resist = clamp(bracket.armorPhysResistPct * 0.7 + bracket.armorElemResistPct * 0.3, 0, 75);
+          state.hp = Math.max(1, state.hp - incoming * (1 - resist / 100));
+        }
+      }
+    }
+
+    // Check if wave cleared
+    if (state.targetHpPools.every((hp) => hp <= 0)) {
+      const waveSec = Math.max(0.5, (state.elapsedMs - waveStartElapsedMs) / 1000);
+      const effectiveWaveWindowSec = waveSec + (currentWaveIdx > 1 ? interWaveDelayMs / 1000 : 0);
+      waves.push({
+        waveIndex: currentWaveIdx,
+        waveClearTimeSec: round2(waveSec),
+        cumulativeTimeSec: round2(state.elapsedMs / 1000),
+        waveDps: round2(waveEffectiveDamage / effectiveWaveWindowSec),
+        endingHpPct: round2((state.hp / state.maxHP) * 100),
+        endingManaPct: state.maxMana > 0 ? round2((state.mana / state.maxMana) * 100) : 100,
+        endingStaminaPct: round2((state.stamina / state.maxStamina) * 100),
+        parriesInWave: waveParries,
+        clonesOrStreakEnd: classDef.id === 'samurai' ? state.perfectionStreakBonusPct : state.cloneStacks,
+      });
+
+      if (currentWaveIdx >= waveCount) {
+        break;
+      }
+      currentWaveIdx++;
+      interWaveRemainingMs = interWaveDelayMs;
+    }
+  }
+
+  const totalSec = waves.length > 0 ? waves[waves.length - 1].cumulativeTimeSec : round2(state.elapsedMs / 1000);
+  const avgDps =
+    waves.length > 0
+      ? round2(waves.reduce((acc, w) => acc + w.waveDps, 0) / waves.length)
+      : 0;
+
+  return {
+    classId: classDef.id,
+    totalClearTimeSec: totalSec,
+    averageWaveDps: avgDps,
+    minHpPct: round2(minHpPct),
+    minManaPct: round2(minManaPct),
+    totalParries,
+    totalCloneInterceptions,
+    waves,
+  };
+}
+
+/**
+ * Generates the comprehensive v1.1 Gear, Affix, Damage-Breakdown, Rotation Timeline & Multi-Wave artifact (`SIM-04`).
+ */
+export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArtifact {
+  const damageBreakdowns: DamageChannelBreakdown[] = [];
+  const materialTierCurves: MaterialTierPoint[] = [];
+  const affixLoadoutCurves: AffixLoadoutPoint[] = [];
+  const multiWaveRuns: ClassMultiWaveRun[] = [];
+  const rotationTimelines: ClassRotationTimeline[] = [];
+
+  for (const classDef of classes) {
+    // 1. Damage channel breakdowns across all brackets & archetypes (mode_b) + 20s L60 rotation timeline
+    for (const bracketId of BRACKET_IDS) {
+      for (const archetypeId of ARCHETYPE_IDS) {
+        const captureTimeline = bracketId === 'L60' && archetypeId === 'low_def_boss' ? 20000 : 0;
+        const detailed = simulateScenarioDetailed(
+          classDef,
+          bracketId,
+          archetypeId,
+          'mode_b',
+          undefined,
+          captureTimeline
+        );
+        damageBreakdowns.push(detailed.breakdown);
+        if (captureTimeline > 0) {
+          rotationTimelines.push({
+            classId: classDef.id,
+            bracketId: 'L60',
+            horizonMs: captureTimeline,
+            events: detailed.timelineEvents,
+          });
+        }
+      }
+    }
+
+    // 2. Material Tier curves (Iron -> Valorite at L60)
+    for (const tierSpec of MATERIAL_TIER_SPECS) {
+      const budget = buildMaterialTierBudget(tierSpec);
+      const lowDef = simulateScenarioDetailed(classDef, 'L60', 'low_def_boss', 'mode_b', budget).telemetry;
+      const highDef = simulateScenarioDetailed(classDef, 'L60', 'high_def_boss', 'mode_b', budget).telemetry;
+      const multi = simulateScenarioDetailed(classDef, 'L60', 'multi_target_pack', 'mode_b', budget).telemetry;
+      materialTierCurves.push({
+        classId: classDef.id,
+        tierId: tierSpec.tierId,
+        levelReq: tierSpec.levelReq,
+        statBonusBudget: tierSpec.statBonusBudget,
+        hue: tierSpec.hue,
+        lowDefBossDps: lowDef.sustainedDps,
+        highDefBossDps: highDef.sustainedDps,
+        multiTargetDps: multi.sustainedDps,
+        ehpPerSec: highDef.ehpPerSec,
+      });
+    }
+
+    // 3. Tokuno Affix Loadout curves at L60
+    for (const loadoutId of AFFIX_LOADOUT_IDS) {
+      const { name, budget } = buildAffixLoadoutBudget(loadoutId);
+      const lowDef = simulateScenarioDetailed(classDef, 'L60', 'low_def_boss', 'mode_b', budget).telemetry;
+      const highDef = simulateScenarioDetailed(classDef, 'L60', 'high_def_boss', 'mode_b', budget).telemetry;
+      const multi = simulateScenarioDetailed(classDef, 'L60', 'multi_target_pack', 'mode_b', budget).telemetry;
+      affixLoadoutCurves.push({
+        classId: classDef.id,
+        loadoutId,
+        loadoutName: name,
+        lowDefBossDps: lowDef.sustainedDps,
+        highDefBossDps: highDef.sustainedDps,
+        multiTargetDps: multi.sustainedDps,
+        ehpPerSec: highDef.ehpPerSec,
+        netManaDeltaPerMin: lowDef.netManaDeltaPerMin,
+        netStaminaDeltaPerMin: lowDef.netStaminaDeltaPerMin,
+      });
+    }
+
+    // 4. 10-Wave Consecutive Dungeon Pull at L60
+    multiWaveRuns.push(simulateMultiWavePull(classDef, 'L60', 10, 1500));
+  }
+
+  return {
+    version: '1.1.0',
+    tickMs: 100,
+    classes: classes.map((c) => c.id),
+    damageBreakdowns,
+    materialTierCurves,
+    affixLoadoutCurves,
+    multiWaveRuns,
+    rotationTimelines,
+  };
+}
+

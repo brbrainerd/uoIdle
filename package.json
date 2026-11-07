@@ -8,7 +8,8 @@
     "verify:bundle": "node tools/bundle_extract.mjs --verify",
     "verify:icons": "python3 tools/generate_icons.py --verify",
     "verify:mockups": "npx tsx tools/build_mockups.ts --verify",
-    "verify:all": "python3 mechanics/tools/kb.py --self-test && python3 mechanics/tools/kb.py check --root mechanics && npx tsx tools/validate_skills.ts --verify && npx tsx tools/sim_balance.ts --verify && python3 tools/generate_icons.py --verify && npx tsx tools/build_mockups.ts --verify"
+    "test:sim": "npx tsx tools/test_sim.ts",
+    "verify:all": "python3 mechanics/tools/kb.py --self-test && python3 mechanics/tools/kb.py check --root mechanics && npx tsx tools/validate_skills.ts --verify && npx tsx tools/sim_balance.ts --verify && npx tsx tools/test_sim.ts && python3 tools/generate_icons.py --verify && npx tsx tools/build_mockups.ts --verify"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
