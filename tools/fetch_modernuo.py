@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
-"""Deterministic ModernUO C# source file fetcher and manifest updater.
+"""Deterministic ModernUO C# source file fetcher, manifest updater, and verifier.
 
-Fetches canonical Bushido, Ninjitsu, Perfection (HonorContext.cs), and Parry
-(BaseWeapon.cs, SpecialMove.cs) C# source files from modernuo/ModernUO pinned
-to commit b0e6b17c5cba3a6944ca25a9676dcdec0022ac38 into mechanics/_raw/modernuo/
-and merges their SHA-256 and line-count provenance entries into
+Fetches all 48 canonical Bushido, Ninjitsu, Perfection (HonorContext.cs), Parry
+(BaseWeapon.cs, SpecialMove.cs), Ninjitsu skill items/armor, and Tokuno (Samurai
+Empire) weapon C# source files from modernuo/ModernUO pinned to commit
+b0e6b17c5cba3a6944ca25a9676dcdec0022ac38 into mechanics/_raw/modernuo/ and
+merges their SHA-256 and line-count provenance entries into
 mechanics/_raw/manifest.json.
+
+Usage:
+  python3 tools/fetch_modernuo.py           # Fetch/extract all 48 .cs files + update manifest.json
+  python3 tools/fetch_modernuo.py --force   # Re-fetch from GitHub ignoring local _crawl/ cache
+  python3 tools/fetch_modernuo.py --verify  # Verify all 48 .cs files against manifest.json
 
 Stdlib only (urllib.request, urllib.parse, hashlib, json, os, pathlib, subprocess).
 """
@@ -34,7 +40,7 @@ MODERNUO_OUT_DIR = RAW_DIR / "modernuo"
 MANIFEST_PATH = RAW_DIR / "manifest.json"
 CRAWL_MODERNUO_DIR = ROOT_DIR / "mechanics" / "_crawl" / "modernuo"
 
-# (dest_filename, upstream_repo_path, category)
+# (dest_filename, upstream_repo_path, category) — 48 canonical ModernUO C# files
 MODERNUO_FILES: Tuple[Tuple[str, str, str], ...] = (
     # Group 1 — Bushido Spells & Special Moves (9 files, category "modernuo-bushido")
     ("Confidence.cs", "Projects/UOContent/Spells/Bushido/Confidence.cs", "modernuo-bushido"),
@@ -59,10 +65,36 @@ MODERNUO_FILES: Tuple[Tuple[str, str, str], ...] = (
     ("SurpriseAttack.cs", "Projects/UOContent/Spells/Ninjitsu/SurpriseAttack.cs", "modernuo-ninjitsu"),
     ("BookOfNinjitsu.cs", "Projects/UOContent/Items/Skill Items/Magical/BookOfNinjitsu.cs", "modernuo-ninjitsu"),
     ("AnimalFormTests.cs", "Projects/UOContent.Tests/Tests/Spells/Ninjitsu/AnimalFormTests.cs", "modernuo-ninjitsu"),
+    # Group 3 — Ninjitsu Skill Items & Armor (11 files, category "modernuo-ninjitsu")
+    ("EggBomb.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/EggBomb.cs", "modernuo-ninjitsu"),
+    ("Fukiya.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/Fukiya.cs", "modernuo-ninjitsu"),
+    ("FukiyaDarts.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/FukiyaDarts.cs", "modernuo-ninjitsu"),
+    ("LeatherNinjaBelt.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/LeatherNinjaBelt.cs", "modernuo-ninjitsu"),
+    ("NinjaWeapons.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/NinjaWeapons.cs", "modernuo-ninjitsu"),
+    ("Shuriken.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/Shuriken.cs", "modernuo-ninjitsu"),
+    ("SmokeBomb.cs", "Projects/UOContent/Items/Skill Items/Ninjitsu/SmokeBomb.cs", "modernuo-ninjitsu"),
+    ("LeatherNinjaHood.cs", "Projects/UOContent/Items/Armor/Leather/LeatherNinjaHood.cs", "modernuo-ninjitsu"),
+    ("LeatherNinjaJacket.cs", "Projects/UOContent/Items/Armor/Leather/LeatherNinjaJacket.cs", "modernuo-ninjitsu"),
+    ("LeatherNinjaMitts.cs", "Projects/UOContent/Items/Armor/Leather/LeatherNinjaMitts.cs", "modernuo-ninjitsu"),
+    ("LeatherNinjaPants.cs", "Projects/UOContent/Items/Armor/Leather/LeatherNinjaPants.cs", "modernuo-ninjitsu"),
     # Group 4 — Core Combat, Honor/Perfection, Parry & SpecialMove Hooks (3 files, category "modernuo-bushido")
     ("HonorContext.cs", "Projects/UOContent/Engines/Virtues/HonorContext.cs", "modernuo-bushido"),
     ("BaseWeapon.cs", "Projects/UOContent/Items/Weapons/BaseWeapon.cs", "modernuo-bushido"),
     ("SpecialMove.cs", "Projects/UOContent/Spells/Base/SpecialMove.cs", "modernuo-bushido"),
+    # Group 5 — Tokuno (Samurai Empire) Weapons for Phase 5 CLASS-04 (13 files, category "items-equipment")
+    ("Katana.cs", "Projects/UOContent/Items/Weapons/Swords/Katana.cs", "items-equipment"),
+    ("Bokuto.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Bokuto.cs", "items-equipment"),
+    ("Daisho.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Daisho.cs", "items-equipment"),
+    ("Kama.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Kama.cs", "items-equipment"),
+    ("Lajatang.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Lajatang.cs", "items-equipment"),
+    ("NoDachi.cs", "Projects/UOContent/Items/Weapons/SE Weapons/NoDachi.cs", "items-equipment"),
+    ("Nunchaku.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Nunchaku.cs", "items-equipment"),
+    ("Sai.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Sai.cs", "items-equipment"),
+    ("Tekagi.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Tekagi.cs", "items-equipment"),
+    ("Tessen.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Tessen.cs", "items-equipment"),
+    ("Tetsubo.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Tetsubo.cs", "items-equipment"),
+    ("Wakizashi.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Wakizashi.cs", "items-equipment"),
+    ("Yumi.cs", "Projects/UOContent/Items/Weapons/SE Weapons/Yumi.cs", "items-equipment"),
 )
 
 
@@ -180,13 +212,81 @@ def extract_all(force: bool = False) -> Dict[str, Any]:
     }
 
 
+def verify_all() -> Dict[str, Any]:
+    errors: List[str] = []
+    if not MANIFEST_PATH.is_file():
+        return {"ok": False, "verified": 0, "errors": ["manifest.json is missing"]}
+
+    try:
+        manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return {"ok": False, "verified": 0, "errors": [f"manifest.json unreadable: {exc}"]}
+
+    if manifest.get("modernuoCommit") != MODERNUO_COMMIT:
+        errors.append(
+            f"modernuoCommit mismatch: expected {MODERNUO_COMMIT!r}, got {manifest.get('modernuoCommit')!r}"
+        )
+
+    entries = manifest.get("entries", {})
+    verified = 0
+    expected_names = set()
+
+    for dest_name, repo_path, category in MODERNUO_FILES:
+        safe_name = safe_cs_filename(dest_name)
+        expected_names.add(safe_name)
+        rel_key = f"modernuo/{safe_name}"
+        entry = entries.get(rel_key)
+        file_path = MODERNUO_OUT_DIR / safe_name
+
+        if entry is None:
+            errors.append(f"Missing manifest entry for {rel_key}")
+            continue
+        if not file_path.is_file():
+            errors.append(f"Missing file on disk: mechanics/_raw/{rel_key}")
+            continue
+
+        content = norm_eol(file_path.read_text(encoding="utf-8"))
+        actual_sha = sha256_hex(content)
+        actual_lines = count_lines(content)
+        expected_src = f"https://github.com/{MODERNUO_REPO}/blob/{MODERNUO_COMMIT}/{repo_path}"
+
+        if entry.get("sha256") != actual_sha:
+            errors.append(f"{rel_key}: sha256 mismatch ({entry.get('sha256')} != {actual_sha})")
+            continue
+        if entry.get("lines") != actual_lines:
+            errors.append(f"{rel_key}: lines mismatch ({entry.get('lines')} != {actual_lines})")
+            continue
+        if entry.get("category") != category:
+            errors.append(f"{rel_key}: category mismatch ({entry.get('category')} != {category})")
+            continue
+        if entry.get("source") != expected_src:
+            errors.append(f"{rel_key}: source mismatch ({entry.get('source')} != {expected_src})")
+            continue
+
+        verified += 1
+
+    if MODERNUO_OUT_DIR.is_dir():
+        for p in sorted(MODERNUO_OUT_DIR.iterdir()):
+            if p.is_file() and not p.name.startswith(".") and p.name not in expected_names:
+                errors.append(f"Orphan file in mechanics/_raw/modernuo/: {p.name}")
+
+    out: Dict[str, Any] = {"ok": len(errors) == 0 and verified == len(MODERNUO_FILES), "verified": verified}
+    if errors:
+        out["errors"] = errors
+    return out
+
+
 def main(argv: List[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Fetch canonical ModernUO C# files into mechanics/_raw/modernuo/")
+    parser = argparse.ArgumentParser(description="Fetch or verify canonical ModernUO C# files in mechanics/_raw/modernuo/")
     parser.add_argument("--force", action="store_true", help="Re-fetch files from GitHub ignoring local _crawl/ cache")
+    parser.add_argument("--verify", action="store_true", help="Verify all 48 .cs files against mechanics/_raw/manifest.json")
     args = parser.parse_args(argv)
 
     try:
-        res = extract_all(force=args.force)
+        if args.verify:
+            res = verify_all()
+        else:
+            res = extract_all(force=args.force)
         print(json.dumps(res))
         return 0 if res.get("ok") else 1
     except Exception as exc:

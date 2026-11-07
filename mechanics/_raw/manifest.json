@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T03:42:48Z",
+  "updatedAt": "2026-11-07T03:44:21Z",
   "bundleVersion": "0.99.0",
   "modernuoCommit": "b0e6b17c5cba3a6944ca25a9676dcdec0022ac38",
   "entries": {
@@ -124,6 +124,12 @@
       "category": "modernuo-bushido",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/BaseWeapon.cs"
     },
+    "modernuo/Bokuto.cs": {
+      "sha256": "1373d890947722a444fb40002baa2718b8d024eec2ea93d17935d4be6c1dcd52",
+      "lines": 36,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Bokuto.cs"
+    },
     "modernuo/BookOfBushido.cs": {
       "sha256": "7e212a1a1efcfd9909650fa07765bc49da5ef8f29a2fe06946d3e092dd605cbc",
       "lines": 15,
@@ -148,11 +154,23 @@
       "category": "modernuo-bushido",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/CounterAttack.cs"
     },
+    "modernuo/Daisho.cs": {
+      "sha256": "536ad35023158700bb15c29de06513372f36ca65552b231c3a8a9acf468f8c15",
+      "lines": 33,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Daisho.cs"
+    },
     "modernuo/DeathStrike.cs": {
       "sha256": "df945584f10f23c2c3b35184897152365dc2a646464d8d0e1a43b2496843b6c2",
       "lines": 177,
       "category": "modernuo-ninjitsu",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/DeathStrike.cs"
+    },
+    "modernuo/EggBomb.cs": {
+      "sha256": "2e478af038310abb1b4ce342c7d56d0f4a5751fce0c10398bd2036a81d1a7e3c",
+      "lines": 59,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/EggBomb.cs"
     },
     "modernuo/Evasion.cs": {
       "sha256": "5e572da03a30895cfc2bc80a6469704652c5c54cbdcde1c2be25585d3f81ce18",
@@ -166,6 +184,18 @@
       "category": "modernuo-ninjitsu",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/FocusAttack.cs"
     },
+    "modernuo/Fukiya.cs": {
+      "sha256": "c1b1adc6312b1919024dfc81d3accde1c0232f66b3b4c4d8830c2f70941011b5",
+      "lines": 90,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/Fukiya.cs"
+    },
+    "modernuo/FukiyaDarts.cs": {
+      "sha256": "bcaf1de80f2cbde4f26a2dac12421a32f9fff21315c019dacf937ea078caaa99",
+      "lines": 60,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/FukiyaDarts.cs"
+    },
     "modernuo/HonorContext.cs": {
       "sha256": "64fed5ad63d240104d32d079aa3fd212e1c196d16bc73d4f5a8b96f336d45873",
       "lines": 261,
@@ -178,11 +208,59 @@
       "category": "modernuo-bushido",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/HonorableExecution.cs"
     },
+    "modernuo/Kama.cs": {
+      "sha256": "eccb2bacdb586bbf5c2c41da402b0233b8ffc6db85d24d1e560c0edfc276363d",
+      "lines": 37,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Kama.cs"
+    },
+    "modernuo/Katana.cs": {
+      "sha256": "2a7f07491e4ec5b8e2b39ffbcfee5cdb9ad75f79c4defec896e1c6b12feb7f9a",
+      "lines": 36,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/Swords/Katana.cs"
+    },
     "modernuo/KiAttack.cs": {
       "sha256": "9ad08a1219a800f6cde18c5cd4457dc2ddb4576a8ea46c8d7b00ebd8e8a18ba6",
       "lines": 125,
       "category": "modernuo-ninjitsu",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/KiAttack.cs"
+    },
+    "modernuo/Lajatang.cs": {
+      "sha256": "046dc7c76fddb335f6dd9d10e7ff662f580f018ec57b01901ea7d6e588d01637",
+      "lines": 37,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Lajatang.cs"
+    },
+    "modernuo/LeatherNinjaBelt.cs": {
+      "sha256": "3ed84dc70e30ba6d90e90bf32248001df3721df089d26dea0f6f2806f5f8f3d9",
+      "lines": 103,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/LeatherNinjaBelt.cs"
+    },
+    "modernuo/LeatherNinjaHood.cs": {
+      "sha256": "2788c4ff88c61735f78a3a7987814d16dd04d6f323b47ef15e12d083409055e1",
+      "lines": 34,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Armor/Leather/LeatherNinjaHood.cs"
+    },
+    "modernuo/LeatherNinjaJacket.cs": {
+      "sha256": "0a804741d67b76a6f9fb8e43304de705890011815cd6970d71f783573acd491b",
+      "lines": 34,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Armor/Leather/LeatherNinjaJacket.cs"
+    },
+    "modernuo/LeatherNinjaMitts.cs": {
+      "sha256": "90e525a7c0d252c74f6451c83f7d68f067127ecd65a604594d0225ada0155b64",
+      "lines": 34,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Armor/Leather/LeatherNinjaMitts.cs"
+    },
+    "modernuo/LeatherNinjaPants.cs": {
+      "sha256": "b982bb707256ec7b8ed7d11d494e56112502c2ca6929b00966ed841a2d65c13d",
+      "lines": 34,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Armor/Leather/LeatherNinjaPants.cs"
     },
     "modernuo/LightningStrike.cs": {
       "sha256": "3bdb7bada07c279f4f88d63e95b4cb4320894e1ba14cf5eaffc1a47cca0c68bc",
@@ -214,6 +292,30 @@
       "category": "modernuo-ninjitsu",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/NinjaSpell.cs"
     },
+    "modernuo/NinjaWeapons.cs": {
+      "sha256": "068bea03724e45f46d189e40ba814da75f2376694dca9446b153f1befd6717ae",
+      "lines": 357,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/NinjaWeapons.cs"
+    },
+    "modernuo/NoDachi.cs": {
+      "sha256": "c2ec7e04c4d1950ebc6f25dcacf49af1e0909b38609d01809e03c35c6d95eee1",
+      "lines": 33,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/NoDachi.cs"
+    },
+    "modernuo/Nunchaku.cs": {
+      "sha256": "3e870f5ac1907f8a276592e2a0092827c266868a99f1b513a4899b2808946519",
+      "lines": 36,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Nunchaku.cs"
+    },
+    "modernuo/Sai.cs": {
+      "sha256": "dee8ba35ea05d28fcbc71a40c10773213ca9c70f067120b04b1f3f92f351185a",
+      "lines": 38,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Sai.cs"
+    },
     "modernuo/SamuraiMove.cs": {
       "sha256": "dc293ee7a5013594cbb562660aa8d60e82b9b9440324123f555eb15f8f0cc187",
       "lines": 12,
@@ -232,6 +334,18 @@
       "category": "modernuo-ninjitsu",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/ShadowJump.cs"
     },
+    "modernuo/Shuriken.cs": {
+      "sha256": "53e1225bc2b245ab10b5eb2ec537d89db1974324afc6e7b43774391275232b39",
+      "lines": 61,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/Shuriken.cs"
+    },
+    "modernuo/SmokeBomb.cs": {
+      "sha256": "9271c33fbd96a7584f60c9ff940dacf4f5398c929a291c33e478f79827b20433",
+      "lines": 53,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Ninjitsu/SmokeBomb.cs"
+    },
     "modernuo/SpecialMove.cs": {
       "sha256": "3040b43d925332830d700088bbec0daeea6857844d901086403ad8f0ca06da0f",
       "lines": 320,
@@ -243,6 +357,36 @@
       "lines": 120,
       "category": "modernuo-ninjitsu",
       "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/SurpriseAttack.cs"
+    },
+    "modernuo/Tekagi.cs": {
+      "sha256": "5f35e32f07aea97ca6dacd72c4f668aadf399725d62bc16284d8121925a44b9f",
+      "lines": 37,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Tekagi.cs"
+    },
+    "modernuo/Tessen.cs": {
+      "sha256": "15d0c362f060eb3edc534f74c17b28b438500abc93e980048ae244ac90ec8aa2",
+      "lines": 36,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Tessen.cs"
+    },
+    "modernuo/Tetsubo.cs": {
+      "sha256": "dfdb6bbfb9f3f43836737645316e39865879cc71c98b6c6cab003f00509bd29c",
+      "lines": 35,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Tetsubo.cs"
+    },
+    "modernuo/Wakizashi.cs": {
+      "sha256": "3b97942fe23e386a25e5cadef7ce2bae63e7ffea3a51356928d5de99bd88a1d4",
+      "lines": 33,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Wakizashi.cs"
+    },
+    "modernuo/Yumi.cs": {
+      "sha256": "6710a257ce71d1daf6991809f838ec5e8b5aab41df6bbffe64159763ec537363",
+      "lines": 43,
+      "category": "items-equipment",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/SE Weapons/Yumi.cs"
     },
     "wiki/changelog-client-dev.md": {
       "sha256": "71858b04c50786d5e7d890fcf1ade46b554e17c89ab4adaa322226691503e30f",
