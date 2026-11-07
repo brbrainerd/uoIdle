@@ -2473,6 +2473,14 @@ function buildClassSkillTreeHtml(
   <script id="mockup-data" type="application/json">${safeJsonEmbed(embeddedPayload)}</script>
   <script>
     (function() {
+      function escHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
       var raw = document.getElementById('mockup-data').textContent;
       var payload = JSON.parse(raw);
       var cls = payload.classData;
@@ -2546,7 +2554,7 @@ function buildClassSkillTreeHtml(
         }
         var affs = currentLocale === 'pt' ? g.affixesPtBr : g.affixesEn;
         document.getElementById('gear-tt-affixes').innerHTML = affs
-          .map(function(a) { return '<span class="badge-mana">' + a + '</span>'; })
+          .map(function(a) { return '<span class="badge-mana">' + escHtml(a) + '</span>'; })
           .join('');
         document.getElementById('gear-tt-lore').textContent =
           currentLocale === 'pt' ? g.lorePtBr : g.loreEn;
@@ -2755,7 +2763,7 @@ function buildClassSkillTreeHtml(
             slice.push(pool[(tickerStepIdx + i) % pool.length]);
           }
           feedEl.innerHTML = slice.map(function(f) {
-            return '<div class="ticker-log-item" style="border-left-color:' + f.col + ';"><div><strong style="color:#fff2bf;">' + f.t + '</strong> <span style="color:' + f.col + ';font-weight:700;">[' + f.tag + ']</span> ' + f.txt + '</div></div>';
+            return '<div class="ticker-log-item" style="border-left-color:' + escHtml(f.col) + ';"><div><strong style="color:#fff2bf;">' + escHtml(f.t) + '</strong> <span style="color:' + escHtml(f.col) + ';font-weight:700;">[' + escHtml(f.tag) + ']</span> ' + escHtml(f.txt) + '</div></div>';
           }).join('');
         }
         var pips = document.querySelectorAll('[data-ticker-pip]');
@@ -3634,6 +3642,14 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
   <script id="mockup-data" type="application/json">${safeJsonEmbed({ parity, breakdowns: gearWaves.damageBreakdowns })}</script>
   <script>
     (function() {
+      function escHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
       var payload = JSON.parse(document.getElementById('mockup-data').textContent);
       var parityData = payload.parity;
       var breakdownsData = payload.breakdowns || [];
@@ -3747,7 +3763,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           var pct = Math.min(100, Math.round((s.sustainedDps / maxDps) * 100));
           var barColor = s.classId === 'samurai' ? 'var(--samurai-accent)' : (s.classId === 'ninja' ? 'var(--ninja-accent)' : 'var(--border-gold)');
           html += '<tr>' +
-            '<td><strong style="text-transform:uppercase;color:#fff2bf;">' + s.classId + '</strong></td>' +
+            '<td><strong style="text-transform:uppercase;color:#fff2bf;">' + escHtml(s.classId) + '</strong></td>' +
             '<td class="mono">' + s.sustainedDps.toFixed(2) + '</td>' +
             '<td style="width:220px;"><div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;"><div style="width:' + pct + '%;height:100%;background:' + barColor + ';"></div></div></td>' +
             '<td class="mono">' + s.trashTtkSec.toFixed(2) + 's</td>' +
@@ -3782,17 +3798,17 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               : (ks.classId === 'ninja'
                 ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
                 : (ks.parryCount + ' Shield Parries'));
-            kpiHtml += '<div class="exec-kpi-card" style="border-top-color:' + kCol + ';">' +
+            kpiHtml += '<div class="exec-kpi-card" style="border-top-color:' + escHtml(kCol) + ';">' +
               '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-                '<strong style="font-family:\'Cinzel\',serif;font-size:12px;color:' + kCol + ';text-transform:uppercase;">' + ks.classId + '</strong>' +
-                '<span class="mono" style="font-size:9.5px;color:#82d5b0;">' + dStr + ' vs Mean</span>' +
+                '<strong style="font-family:\'Cinzel\',serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + '</strong>' +
+                '<span class="mono" style="font-size:9.5px;color:#82d5b0;">' + escHtml(dStr) + ' vs Mean</span>' +
               '</div>' +
               '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
                 '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
                 '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
               '</div>' +
               '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
-                '<span>' + mLbl + '</span>' +
+                '<span>' + escHtml(mLbl) + '</span>' +
                 '<span style="color:#82d5b0;">0 OOM</span>' +
               '</div>' +
             '</div>';
@@ -3836,7 +3852,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               var cCol = classCols[db.classId] || '#fff2bf';
               bHtml += '<div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">' +
                 '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">' +
-                  '<strong style="text-transform:uppercase;color:' + cCol + ';letter-spacing:0.04em;">' + db.classId + '</strong>' +
+                  '<strong style="text-transform:uppercase;color:' + escHtml(cCol) + ';letter-spacing:0.04em;">' + escHtml(db.classId) + '</strong>' +
                   '<span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: ' + db.totalDps.toFixed(2) + ' DPS</span>' +
                 '</div>' +
                 '<div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">' +
