@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 UO Idle Samurai & Ninja Class Skill Lines & Mechanics Knowledgebase** — Phases 1–6 (shipped 2026-11-07) — [Archive](file:///Users/brbrainerd/dev/uoIdle/.planning/milestones/v1.0-ROADMAP.md)
-- 🚧 **v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal** — Phases 7–10 (in progress)
+- ✅ **v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal** — Phases 7–10 (shipped 2026-11-07)
 
 ---
 
@@ -21,12 +21,12 @@
 
 </details>
 
-### 🚧 v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal (Phases 7–10)
+### ✅ v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal (Phases 7–10) — SHIPPED 2026-11-07
 
-- [ ] **Phase 7: Idle-Game Ability Overhaul, Evocative Lore Blurbs & Expanded Simulation/Test Suite** (`2` plans)
-- [ ] **Phase 8: Authentic UO Gump/Item Sprite Extraction & High-Detail AI Raster Iconography** (`2` plans)
-- [ ] **Phase 9: Interactive Visual Paperdoll, Simulator Telemetry Charts & CV UI Polish (`/gsd-ui-phase`)** (`2` plans)
-- [ ] **Phase 10: Lead Developer Review Portal (`index.html`), Live GitHub Pages Deployment & Final Audit** (`2` plans)
+- [x] **Phase 7: Idle-Game Ability Overhaul, Evocative Lore Blurbs & Expanded Simulation/Test Suite** (`1/1` plan) — completed 2026-11-07
+- [x] **Phase 8: Authentic UO Gump/Item Sprite Extraction & High-Detail AI Raster Iconography** (`1/1` plan) — completed 2026-11-07
+- [x] **Phase 9: Interactive Visual Paperdoll, Simulator Telemetry Charts & CV UI Polish (`/gsd-ui-phase`)** (`1/1` plan) — completed 2026-11-07
+- [x] **Phase 10: Lead Developer Review Portal (`index.html`), Live GitHub Pages Deployment & Final Audit** (`1/1` plan) — completed 2026-11-07
 
 ---
 
@@ -104,7 +104,7 @@
 | 4. ModernUO Reference & Combat Simulator | v1.0 | 2/2 | Complete | 2026-11-07 |
 | 5. Samurai & Ninja Design, Balance & Code | v1.0 | 3/3 | Complete | 2026-11-07 |
 | 6. Iconography, Beta UI Mockups & Handoff | v1.0 | 2/2 | Complete | 2026-11-07 |
-| 7. Idle Ability Overhaul, Lore Blurbs & Sim Tests | v1.1 | 0/2 | Not started | - |
-| 8. Authentic UO Gump/Item Art & AI Icons | v1.1 | 0/2 | Not started | - |
-| 9. Interactive Paperdoll & Sim Telemetry UI | v1.1 | 0/2 | Not started | - |
-| 10. Developer Portal & Live GitHub Pages | v1.1 | 0/2 | Not started | - |
+| 7. Idle Ability Overhaul, Lore Blurbs & Sim Tests | v1.1 | 1/1 | Complete | 2026-11-07 |
+| 8. Authentic UO Gump/Item Art & AI Icons | v1.1 | 1/1 | Complete | 2026-11-07 |
+| 9. Interactive Paperdoll & Sim Telemetry UI | v1.1 | 1/1 | Complete | 2026-11-07 |
+| 10. Developer Portal & Live GitHub Pages | v1.1 | 1/1 | Complete | 2026-11-07 |

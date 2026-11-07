@@ -56,16 +56,16 @@ Requirements for Milestone `v1.1` (`Phases 7–10`), upgrading the `v1.0` baseli
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| IDLE-01 | Phase 7 | Pending |
-| IDLE-02 | Phase 7 | Pending |
-| SIM-04 | Phase 7 | Pending |
-| SIM-05 | Phase 7 | Pending |
-| ART-01 | Phase 8 | Pending |
-| ART-02 | Phase 8 | Pending |
-| UI-01 | Phase 9 | Pending |
-| UI-02 | Phase 9 | Pending |
-| UI-03 | Phase 9 | Pending |
-| HOST-01 | Phase 10 | Pending |
+| IDLE-01 | Phase 7 | Complete |
+| IDLE-02 | Phase 7 | Complete |
+| SIM-04 | Phase 7 | Complete |
+| SIM-05 | Phase 7 | Complete |
+| ART-01 | Phase 8 | Complete |
+| ART-02 | Phase 8 | Complete |
+| UI-01 | Phase 9 | Complete |
+| UI-02 | Phase 9 | Complete |
+| UI-03 | Phase 9 | Complete |
+| HOST-01 | Phase 10 | Complete |
 
 **Coverage:**
 - Milestone `v1.1` requirements: 10 total

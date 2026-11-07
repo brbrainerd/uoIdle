@@ -1,8 +1,14 @@
 # UO Idle (`v0.99.0`) — Ninja & Samurai Class Skill Lines & Mechanics Knowledgebase
 
-**Milestone v1.0 Executive Handoff & Engineering Package**
+**Milestone v1.1 Executive Handoff, Interactive Workbench & Live GitHub Pages Portal**
 
-This repository delivers a **100% source-verified mechanics knowledgebase** of **UO Idle** (`https://uoidle.com/beta`, build `v0.99.0`) and **ModernUO** (*Bushido* & *Ninjitsu*), a **deterministic `100ms`-tick 5-class combat simulator**, complete **drop-in Samurai (`SM`, `classNumericId: 114`, `robeHue: 1884`) and Ninja (`NJ`, `classNumericId: 115`, `robeHue: 1175`) class, skill, and Tokuno armament definitions** supporting both **Mode A** (zero engine code changes) and **Mode B** (`<20 LOC` native C# server hooks), **140 custom dark-fantasy Ultima Online icon & portrait PNG assets**, and **pixel-accurate offline `uoidle.com/beta` HTML/CSS UI mockups**.
+> **Live Interactive Review Portal (GitHub Pages):**  
+> - **Lead Developer Executive Portal:** <https://brbrainerd.github.io/uoIdle/>  
+> - **Samurai (`SM`, ID `114`, `robeHue: 1884`) Interactive Workbench & Paperdoll:** <https://brbrainerd.github.io/uoIdle/mockups/samurai-skill-tree.html>  
+> - **Ninja (`NJ`, ID `115`, `robeHue: 1175`) Interactive Workbench & Paperdoll:** <https://brbrainerd.github.io/uoIdle/mockups/ninja-skill-tree.html>  
+> - **5-Class Progression Matrix, Simulator Visual Telemetry & Tokuno Armaments:** <https://brbrainerd.github.io/uoIdle/mockups/class-comparison.html>
+
+This repository delivers a **100% source-verified mechanics knowledgebase** (56 claim-verified pages) of **UO Idle** (`https://uoidle.com/beta`, build `v0.99.0`) and **ModernUO** (*Bushido* & *Ninjitsu*), a **deterministic `100ms`-tick 5-class combat simulator** (verified across 9 material tiers `Iron -> Valorite`, 10-wave dungeon endurance runs, and 11 unit test suites), complete **drop-in Samurai (`SM`, `classNumericId: 114`, `robeHue: 1884`) and Ninja (`NJ`, `classNumericId: 115`, `robeHue: 1175`) class, skill, and Tokuno armament definitions** supporting both **Mode A** (zero engine code changes) and **Mode B** (`<20 LOC` native C# server hooks), **140 oil-painted & authentic UO gump icon PNGs + 34 authentic UO item/paperdoll sprites** (zero procedural polygons), and **interactive `uoidle.com/beta` HTML/CSS UI mockups** with mouseover gear paperdolls and visual simulator charts.
 
 ---
 
@@ -81,7 +87,7 @@ Every v1 requirement (`KB-01..04`, `INDEX-01..04`, `SIM-01..03`, `CLASS-01..04`,
 
 ---
 
-## 4. Reproducible 6-Command Milestone v1.0 Verification Suite
+## 4. Reproducible 7-Command Milestone v1.1 Verification Suite
 
 Run the complete verification suite via `npm run verify:all` or execute each gate individually (completes in `< 5 seconds`):
 
@@ -89,18 +95,21 @@ Run the complete verification suite via `npm run verify:all` or execute each gat
 # 1. Verify kb.py claim linter self-tests (28 mutation & 4 unit self-tests)
 python3 mechanics/tools/kb.py --self-test
 
-# 2. Verify all 31 KB pages in mechanics/INDEX.md and scan repository for leaked secrets
+# 2. Verify all 56 KB pages in mechanics/INDEX.md and scan repository for leaked secrets
 python3 mechanics/tools/kb.py check --root mechanics
 
 # 3. Validate all 5 class JSON payloads (Warrior, Mage, Ranger, Samurai, Ninja) & 134 catalog skills against Zod/JSON Schemas
 npx tsx tools/validate_skills.ts --verify
 
-# 4. Run deterministic 5-class Mode A & Mode B combat simulations across L10/L25/L45/L60 × 4 archetypes and verify ±5-8% parity gates
+# 4. Run deterministic 5-class Mode A & Mode B combat simulations across L10/L25/L45/L60 × 4 archetypes + 9 material tiers + 10-wave endurance
 npx tsx tools/sim_balance.ts --verify
 
-# 5. Verify all 140 custom icon & portrait PNG dimensions, pixel variance (stdDev >= 12.0), and SHA-256 hashes
+# 5. Run 11 deterministic unit test suites for idle state-machine mechanics (Perfection, Parry ICD, Mirror Image, 3-Swing Death Strike, etc.)
+npx tsx tools/test_sim.ts
+
+# 6. Verify all 140 oil-painted/gump icons + 37 item/paperdoll PNGs, zero ImageDraw.polygon usage, and SHA-256 hashes
 python3 tools/generate_icons.py --verify
 
-# 6. Verify all 3 standalone beta HTML mockups, zero-CORS icon links, and >=1600x1400 PNG screenshots
+# 7. Verify all 5 standalone beta HTML mockups/portals, 164 resolved asset links, and 4 high-DPI PNG screenshots
 npx tsx tools/build_mockups.ts --verify
 ```

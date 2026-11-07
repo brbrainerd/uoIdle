@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UO Idle v0.99.0 — Samurai (Bushido) &amp; Ninja (Ninjitsu) Lead Developer Review Portal</title>
+  <style>
+    
+    :root {
+      --bg-canvas: #0b0d0a;
+      --bg-panel: #121510;
+      --bg-card: #181c16;
+      --bg-card-hover: #20261d;
+      --border-subtle: #2a3026;
+      --border-gold: #c9a227;
+      --border-gold-bright: #e5c158;
+      --text-primary: #e8e4d9;
+      --text-secondary: #a39e90;
+      --text-gold: #d4af37;
+      --samurai-accent: #c83e37;
+      --ninja-accent: #2e9e6b;
+      --mana-blue: #4a90e2;
+      --stamina-amber: #e2a04a;
+      --cd-purple: #9b6be2;
+      --class-accent: var(--border-gold);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      color: var(--text-primary);
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .mono, code, pre, .num {
+      font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .beta-shell {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+    }
+
+    /* Live uoidle.com/beta .personagem-arvore & .arvore-* structural rules from game-theme.css */
+    .personagem-arvore {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      color: #f6ecd4;
+      gap: 10px;
+    }
+
+    .arvore-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      min-height: 54px;
+      padding: 8px 14px;
+      border: 1px solid #6d5733;
+      border-top: 2px solid var(--border-gold);
+      border-radius: 4px;
+      background: linear-gradient(180deg, #20221ff0, #0d1112fa);
+      color: #f3e2b3;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    }
+
+    .arvore-nivel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+      padding-right: 12px;
+      border-right: 1px solid #725b31;
+      white-space: nowrap;
+    }
+
+    .arvore-nivel strong {
+      color: #fff2bf;
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+    }
+
+    .arvore-saldos {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+      flex: 1 1 auto;
+      justify-content: center;
+    }
+
+    .arvore-saldo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 2px 10px;
+      border-left: 1px solid #725b31;
+      white-space: nowrap;
+    }
+
+    .arvore-saldo strong {
+      color: #82d5b0;
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .arvore-saldo small {
+      color: #75bd93;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .arvore-saldo em {
+      color: #a39e90;
+      font-size: 9px;
+      font-style: normal;
+    }
+
+    .arvore-head-acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .beta-btn, .nav-pill {
+      padding: 5px 10px;
+      border: 1px solid #6d5733;
+      border-radius: 4px;
+      background: #141816;
+      color: #e8e4d9;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .beta-btn:hover, .nav-pill:hover {
+      border-color: var(--border-gold-bright);
+      background: var(--bg-card-hover);
+      color: #fff2bf;
+    }
+
+    .beta-btn.is-active, .nav-pill.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 10px rgba(201, 162, 39, 0.35);
+    }
+
+    .class-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      border: 1px solid var(--class-accent);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hue-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--class-accent);
+      border: 1px solid #fff2bf;
+      display: inline-block;
+    }
+
+    .arvore-secao {
+      min-width: 0;
+      border: 1px solid #5d4a2b;
+      border-radius: 4px;
+      background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.06);
+    }
+
+    .arvore-secao-titulo {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 8px 12px 6px;
+      border-bottom: 1px solid #3c3425;
+      color: var(--text-gold);
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .arvore-secao-titulo .title-left::before {
+      content: '✦ ';
+      color: #c99d3f;
+    }
+
+    .arvore-secao-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .col-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-body {
+      padding: 10px 12px;
+    }
+
+    /* Portrait & Identity */
+    .identity-hero {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .portrait-frame {
+      position: relative;
+      width: 116px;
+      height: 116px;
+      border: 2px solid var(--border-gold);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #080907;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+    }
+
+    .portrait-frame img.main-portrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .portrait-mini-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 4px;
+      background: #0b0d0a;
+    }
+
+    .stat-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .stat-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .stat-chip span {
+      display: block;
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .stat-chip strong {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: #fff2bf;
+    }
+
+    /* Skills & Paperdoll */
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .kv-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .kv-item .k {
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .kv-item .v {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-gold);
+      font-weight: 600;
+    }
+
+    .hotbar-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hotbar-slot {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 5px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--class-accent);
+      border-radius: 4px;
+    }
+
+    .slot-num {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      background: #0d100c;
+      border: 1px solid #5d4a2b;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-gold);
+    }
+
+    /* Winding .arvore-cobra ribbon */
+    .arvore-cobra-wrap {
+      padding: 10px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: rgba(11, 13, 10, 0.55);
+    }
+
+    .arvore-cobra {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 4px;
+      align-items: center;
+    }
+
+    .arvore-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .arvore-lv {
+      color: #e6c36a;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .arvore-circulo {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 2px solid #6d5733;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .arvore-circulo.is-on {
+      border-color: #e6c36a;
+      box-shadow: 0 0 12px #e6c36a73;
+    }
+
+    .arvore-circulo:hover {
+      transform: scale(1.06);
+      border-color: var(--border-gold-bright);
+    }
+
+    .arvore-circulo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .arvore-nome {
+      color: #f6ecd4;
+      font-size: 9px;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 64px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 12 Milestone Cards Grid */
+    .milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .milestone-card {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    }
+
+    .milestone-card.is-capstone {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #241f14, #171a14);
+    }
+
+    .milestone-icon-box {
+      position: relative;
+      width: 52px;
+      height: 52px;
+    }
+
+    .milestone-icon-box img {
+      width: 52px;
+      height: 52px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      display: block;
+    }
+
+    .lv-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #262013;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .type-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      border: 1px solid #3c4436;
+      background: #121611;
+      color: var(--text-secondary);
+    }
+
+    .dual-unlock-banner {
+      margin-top: 6px;
+      padding: 5px 7px;
+      border-radius: 4px;
+      border: 1px dashed var(--ninja-accent);
+      background: rgba(46, 158, 107, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: #b8f5d8;
+    }
+
+    .dual-unlock-banner img {
+      width: 28px;
+      height: 28px;
+      border-radius: 3px;
+      border: 1px solid var(--border-gold);
+    }
+
+    /* Pinned Live Tooltip Inspector (.arvore-dica) */
+    .arvore-dica-pinned {
+      padding: 10px 12px;
+      border: 1px solid var(--border-gold);
+      border-radius: 4px;
+      background: #0c0e0cf7;
+      color: #f6ecd4;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+    }
+
+    .dica-header {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #3c3425;
+      margin-bottom: 8px;
+    }
+
+    .dica-header img {
+      width: 56px;
+      height: 56px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+    }
+
+    /* Ability Catalog Cards */
+    .catalog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 10px 12px;
+    }
+
+    .catalog-card {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      padding: 7px 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .catalog-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+    }
+
+    .catalog-card img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .cost-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .badge-mana {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(74, 144, 226, 0.16);
+      border: 1px solid var(--mana-blue);
+      color: #9ec9ff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-stamina {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(226, 160, 74, 0.16);
+      border: 1px solid var(--stamina-amber);
+      color: #ffd18b;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-cd {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(155, 107, 226, 0.16);
+      border: 1px solid var(--cd-purple);
+      color: #d7bfff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-meta {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #111510;
+      border: 1px solid #333a2e;
+      color: var(--text-secondary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .passive-badges-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px 12px 12px;
+    }
+
+    .passive-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 7px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .passive-badge-item img {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Interactive Visual Paperdoll & Equipment Rack (PAPERDOLL-01) */
+    .paperdoll-stage {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) 58px;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .paperdoll-rack-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+    .gear-slot-tile {
+      position: relative;
+      width: 54px;
+      height: 54px;
+      border-radius: 4px;
+      border: 1px solid #5d4a2b;
+      background: #10130e;
+      cursor: pointer;
+      padding: 2px;
+      transition: all 0.14s ease;
+    }
+    .gear-slot-tile:hover, .gear-slot-tile.is-active {
+      border-color: var(--border-gold-bright);
+      box-shadow: 0 0 12px rgba(229, 193, 88, 0.45);
+      transform: translateY(-1px);
+    }
+    .gear-slot-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .gear-slot-tag {
+      position: absolute;
+      bottom: 1px;
+      right: 2px;
+      padding: 0 3px;
+      border-radius: 2px;
+      background: rgba(8, 10, 8, 0.88);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      line-height: 1.2;
+    }
+    .paperdoll-figure-box {
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 45%, rgba(201, 162, 39, 0.12), #090b08 75%);
+      border: 1px solid var(--border-gold);
+      border-radius: 5px;
+      padding: 4px;
+      overflow: hidden;
+    }
+    .paperdoll-figure-box img {
+      width: 100%;
+      max-width: 196px;
+      height: auto;
+      display: block;
+      border-radius: 3px;
+    }
+    .weapon-rack-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .weapon-rack-strip .gear-slot-tile {
+      width: 100%;
+      height: 52px;
+    }
+    .tier-pill-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-bottom: 6px;
+    }
+    .tier-mini-btn {
+      padding: 2px 5px;
+      font-size: 9px;
+      font-family: 'IBM Plex Mono', monospace;
+      border: 1px solid #3c3425;
+      border-radius: 3px;
+      background: #121510;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .tier-mini-btn.is-active, .tier-mini-btn:hover {
+      border-color: var(--border-gold-bright);
+      background: #282011;
+      color: #fff2bf;
+    }
+    .gear-mouseover-card {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-gold);
+      border-left: 3px solid var(--class-accent);
+      border-radius: 4px;
+      background: linear-gradient(180deg, #161a14, #0d100c);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    }
+  
+    .portal-hero {
+      padding: 18px 20px;
+      border: 1px solid var(--border-gold);
+      border-top: 3px solid var(--border-gold-bright);
+      border-radius: 5px;
+      background: linear-gradient(180deg, #1d211a 0%, #0f120e 100%);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
+    }
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .launch-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #5d4a2b;
+      border-radius: 5px;
+      background: var(--bg-card);
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.16s ease;
+    }
+    .launch-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201, 162, 39, 0.25);
+    }
+    .launch-thumb {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      object-position: top center;
+      border-bottom: 1px solid #3c3425;
+      background: #090b08;
+    }
+    .launch-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .tour-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .file-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+    }
+    .file-row a {
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .file-row a:hover {
+      color: var(--border-gold-bright);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="beta-shell">
+    <div class="personagem-arvore">
+      <header class="arvore-head">
+        <div class="arvore-nivel">
+          <span class="class-badge-pill">UO IDLE v0.99.0 · MILESTONE v1.1</span>
+          <strong>Samurai (Bushido) &amp; Ninja (Ninjitsu) — Lead Developer Review Portal</strong>
+        </div>
+        <div class="arvore-saldos">
+          <div class="arvore-saldo">
+            <div><strong>56 KB Pages</strong><div><small>649 Verified Claims</small></div></div>
+            <em>0 KB Check Errors</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>SM 114 &amp; NJ 115</strong><div><small>12 L1–L60 Milestones</small></div></div>
+            <em>EN + PT-BR Drop-In</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>80 Sim Scenarios</strong><div><small>9 Tiers · 10 Waves</small></div></div>
+            <em>11/11 Unit Suites</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>Zero Polygons</strong><div><small>Real UO Gumps &amp; Art</small></div></div>
+            <em>140 Icons + 37 Sprites</em>
+          </div>
+        </div>
+        <div class="arvore-head-acoes">
+          <a class="nav-pill is-active" href="index.html">Review Portal</a>
+          <a class="nav-pill" href="samurai-skill-tree.html">Samurai (SM 114)</a>
+          <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
+          <a class="nav-pill" href="class-comparison.html">5-Class Parity &amp; Sim</a>
+          <a class="nav-pill" href="https://github.com/brbrainerd/uoIdle" target="_blank" rel="noopener">GitHub Repo ↗</a>
+        </div>
+      </header>
+
+      <!-- Executive Introduction for the Lead Developer -->
+      <section class="portal-hero">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:center;">
+          <div>
+            <div class="mono" style="font-size:11px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.06em;">
+              Commissioned Technical Package for the Lead Developer of UO Idle (https://uoidle.com/beta)
+            </div>
+            <h1 style="font-family:'Cinzel',serif;font-size:22px;color:#fff2bf;margin:6px 0 8px;">
+              Drop-In Samurai (Bushido) &amp; Ninja (Ninjitsu) Class Skill Lines, 100ms Combat Simulator &amp; Source-Verified Knowledgebase
+            </h1>
+            <p style="margin:0 0 10px;font-size:13px;color:var(--text-primary);max-width:1020px;">
+              This package reverse-engineers the live <strong>UO Idle v0.99.0</strong> client bundle (<code>/assets/index-CCYN0Dy6.js</code>) and canonical <strong>ModernUO</strong> C# server source (<code>Projects/UOContent/Spells/{Bushido,Ninjitsu}/</code>) to deliver two implementation-ready classes: <strong>Samurai (ID 114, Badge SM, Hue 1884)</strong> and <strong>Ninja (ID 115, Badge NJ, Hue 1175)</strong>. Every ability is designed specifically for <strong>autonomous 1D idle combat</strong> (zero tile-click targeting, zero backpack ammo micro, and strict compliance with the <code>&gt;= 2,000ms</code> custom cooldown floor), mathematically balanced within <strong>±5–8%</strong> of live Warrior, Mage, and Ranger across all level brackets, material tiers (<code>Iron..Valorite</code>), and 10-wave dungeon pulls.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a class="beta-btn is-active" href="samurai-skill-tree.html">Launch Samurai Workbench →</a>
+              <a class="beta-btn is-active" href="ninja-skill-tree.html">Launch Ninja Workbench →</a>
+              <a class="beta-btn is-active" href="class-comparison.html">Launch 5-Class Simulator &amp; Charts →</a>
+              <a class="beta-btn" href="../design/drop-in/classes-patch.js">View Drop-In JS Patch (applyDropInClassPatch)</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;align-items:center;background:#10140f;padding:10px;border:1px solid #3c3425;border-radius:5px;">
+            <img src="assets/items/paperdoll-samurai.png" alt="Samurai Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
+            <img src="assets/items/paperdoll-ninja.png" alt="Ninja Paperdoll" style="width:126px;height:auto;border-radius:4px;" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 1: Interactive Workbenches & Visual Dashboards -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">1. Interactive Beta UI Workbenches, Visual Paperdolls &amp; Simulation Telemetry</span>
+          <span class="arvore-secao-sub">Click any card to open the live interactive workbench</span>
+        </h2>
+        <div class="panel-body">
+          <div class="launch-grid">
+            <a class="launch-card" href="samurai-skill-tree.html">
+              <img class="launch-thumb" src="screenshots/samurai-skill-tree.png" alt="Samurai Skill Tree Preview" />
+              <div class="launch-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="class-badge-pill" style="border-color:var(--samurai-accent);">SM · ID 114 · Hue 1884</span>
+                  <span class="lv-pill">12 Milestones</span>
+                </div>
+                <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">Samurai (Bushido) Skill Tree &amp; Paperdoll</strong>
+                <p style="margin:0;font-size:12px;color:var(--text-secondary);">
+                  Interactive <code>[Arvore</code> progression, layered UO paperdoll with mouseover gear stats (<code>Iron..Valorite</code>), 5-slot seeded hotbar, EN/PT-BR toggle, and <em>Kensei: Amakura's Judgment</em> capstone.
+                </p>
+              </div>
+            </a>
+
+            <a class="launch-card" href="ninja-skill-tree.html">
+              <img class="launch-thumb" src="screenshots/ninja-skill-tree.png" alt="Ninja Skill Tree Preview" />
+              <div class="launch-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="class-badge-pill" style="border-color:var(--ninja-accent);">NJ · ID 115 · Hue 1175</span>
+                  <span class="lv-pill">13 Catalog Skills</span>
+                </div>
+                <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">Ninja (Ninjitsu) Skill Tree &amp; Paperdoll</strong>
+                <p style="margin:0;font-size:12px;color:var(--text-secondary);">
+                  Interactive <code>[Arvore</code> progression, Dual L35 <em>Smoke Bomb</em> + <em>Shuriken Volley</em> unlock, layered shinobi paperdoll with mouseover gear stats, and <em>Kage Bunshin: Twin Shadow Execution</em> capstone.
+                </p>
+              </div>
+            </a>
+
+            <a class="launch-card" href="class-comparison.html">
+              <img class="launch-thumb" src="screenshots/class-comparison.png" alt="5-Class Comparison &amp; Simulator Preview" />
+              <div class="launch-body">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="class-badge-pill">5-CLASS PARITY</span>
+                  <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">80 Scenarios PASS</span>
+                </div>
+                <strong style="font-family:'Cinzel',serif;font-size:15px;color:#fff2bf;">5-Class Parity, SVG Telemetry &amp; Armaments</strong>
+                <p style="margin:0;font-size:12px;color:var(--text-secondary);">
+                  Multi-bracket DPS &amp; EHP/s SVG curves, 5-channel damage breakdown stacked bars, 9-tier material scaling, 10-wave dungeon endurance, and <code>&lt;20 LOC</code> C# server hooks.
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Guided Tour of Drop-In Payloads, Design Specs & Knowledgebase -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">2. Lead Developer Repository Guide — Key Files for Review &amp; Drop-In Integration</span>
+          <span class="arvore-secao-sub">Direct links to drop-in JSON/JS payloads, formal specs, simulator &amp; knowledgebase</span>
+        </h2>
+        <div class="panel-body">
+          <div class="tour-grid">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                A. Drop-In Class, Item &amp; Bundle Patch Payloads (<code>design/drop-in/</code>)
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="../design/drop-in/samurai.json">design/drop-in/samurai.json</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Samurai class definition (ID 114, 12 milestones, 12 skills, hotbar, EN/PT-BR).</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/samurai.json" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="../design/drop-in/ninja.json">design/drop-in/ninja.json</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Validated Ninja class definition (ID 115, 12 milestones, 13 skills incl. Dual L35 Shuriken).</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/ninja.json" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="../design/drop-in/classes-patch.js">design/drop-in/classes-patch.js</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Idempotent ES module <code>applyDropInClassPatch(tables)</code> wiring all 9 client bundle tables.</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/classes-patch.js" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="../design/drop-in/items-bushido-ninjitsu.json">design/drop-in/items-bushido-ninjitsu.json</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">8 Tokuno weapons, 4 cooldown-gated shinobi tools, 9 material tiers, and 10 affix pools.</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/drop-in/items-bushido-ninjitsu.json" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                B. Formal Specifications, Balance Report &amp; 56-Page Mechanics KB
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/SAMURAI_SPEC.md" target="_blank" rel="noopener">design/SAMURAI_SPEC.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Complete Samurai &amp; Bushido specification, ModernUO citations, and 17-LOC C# server hook.</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/SAMURAI_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/NINJA_SPEC.md" target="_blank" rel="noopener">design/NINJA_SPEC.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">Complete Ninja &amp; Ninjitsu specification, idle adaptations, and 16-LOC C# server hook.</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/NINJA_SPEC.md" target="_blank" rel="noopener">Read Spec ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/design/BALANCE_REPORT.md" target="_blank" rel="noopener">design/BALANCE_REPORT.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">5-class parity proofs, 5-channel damage breakdowns, material curves, and 10-wave endurance.</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/design/BALANCE_REPORT.md" target="_blank" rel="noopener">Read Report ↗</a>
+              </div>
+              <div class="file-row">
+                <div>
+                  <a href="https://github.com/brbrainerd/uoIdle/blob/main/mechanics/INDEX.md" target="_blank" rel="noopener">mechanics/INDEX.md</a>
+                  <div style="font-size:11px;color:var(--text-secondary);">56-page claim-verified UO Idle v0.99.0 + ModernUO knowledgebase (649 verbatim claims).</div>
+                </div>
+                <a class="beta-btn" href="https://github.com/brbrainerd/uoIdle/blob/main/mechanics/INDEX.md" target="_blank" rel="noopener">Browse KB ↗</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Sheets Preview Row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+            <a class="launch-card" href="assets/icons/contact-sheet.png" target="_blank" rel="noopener">
+              <img class="launch-thumb" src="assets/icons/contact-sheet.png" alt="Ability Icons Contact Sheet" style="height:175px;" />
+              <div class="launch-body">
+                <strong style="color:#fff2bf;font-size:12px;">Authentic UO Gumps &amp; Oil-Painted Ability Icon Sheet (140 PNGs, Zero Polygons)</strong>
+                <span class="mono" style="font-size:10px;color:var(--text-gold);">assets/icons/contact-sheet.png</span>
+              </div>
+            </a>
+            <a class="launch-card" href="assets/items/items-contact-sheet.png" target="_blank" rel="noopener">
+              <img class="launch-thumb" src="assets/items/items-contact-sheet.png" alt="UO Item Sprites &amp; Paperdolls Contact Sheet" style="height:175px;" />
+              <div class="launch-body">
+                <strong style="color:#fff2bf;font-size:12px;">Layered UO Paperdolls &amp; Extracted Item Sprites Sheet (37 PNGs from art.png &amp; gumps)</strong>
+                <span class="mono" style="font-size:10px;color:var(--text-gold);">assets/items/items-contact-sheet.png</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
