@@ -14,7 +14,7 @@ This roadmap delivers a 100% source-verified mechanics knowledgebase of **UO Idl
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline** - Private repo verification, adapted `kb.py` claim linter with credential sanitization, formatted/AST-sliced UO Idle bundle extracts, and canonical ModernUO C# source snapshots. (completed 2026-11-06)
-- [ ] **Phase 2: Core UO Idle Engine & Systems Knowledgebase** - Claim-verified KB pages for combat tick loops, hit/crit/mitigation math, resource regen, status opcodes, progression/equipment systems, and the Engine Capability Matrix.
+- [x] **Phase 2: Core UO Idle Engine & Systems Knowledgebase** - Claim-verified KB pages for combat tick loops, hit/crit/mitigation math, resource regen, status opcodes, progression/equipment systems, and the Engine Capability Matrix. (completed 2026-11-07)
 - [ ] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules.
 - [ ] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines.
 - [ ] **Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code** - Numerically balanced Samurai and Ninja skill lines, Tokuno equipment affixes, Mode A/Mode B drop-in JSON/JS payloads, formal specs, and automated parity proof.
@@ -62,7 +62,7 @@ Plans:
   2. Developer can audit an explicit **Engine Capability Matrix** classifying every live UO Idle combat hook, trigger, and status effect opcode as Client-Evaluated, Shared-Config, or Server-Authoritative based on bundle and live WebSocket/network verification.
   3. `python3 mechanics/tools/kb.py check --root mechanics` passes with zero errors across all core engine and system KB pages and regenerates `mechanics/INDEX.md`.
 
-**Plans**: 1/2 plans executed
+**Plans**: 2/2 plans executed
 
 Plans:
 **Wave 1**
@@ -71,7 +71,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-02-PLAN.md — Progression/unlock trees (`progression-unlocks.md`), equipment/affixes/bestiary scaling (`equipment-affixes.md`), and the verified 3-tier Client/Shared/Server Engine Capability Matrix (`engine-capability-matrix.md`) (`INDEX-01`, `INDEX-02`)
+- [x] 02-02-PLAN.md — Progression/unlock trees (`progression-unlocks.md`), equipment/affixes/bestiary scaling (`equipment-affixes.md`), and the verified 3-tier Client/Shared/Server Engine Capability Matrix (`engine-capability-matrix.md`) (`INDEX-01`, `INDEX-02`)
 
 ### Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas
 
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
-| 2. Core UO Idle Engine & Systems Knowledgebase | 1/2 | In Progress|  |
+| 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete | 2026-11-07 |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 0/2 | Not started | - |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |
