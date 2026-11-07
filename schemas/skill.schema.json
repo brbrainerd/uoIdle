@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uoidle.com/schemas/skill.schema.json",
+  "title": "SkillDefinition",
+  "description": "Canonical UO Idle class ability, spell, weapon ability, special move, passive, or item use definition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "aliasOf",
+    "name",
+    "namePtBr",
+    "category",
+    "kind",
+    "tab",
+    "cooldownMs",
+    "customCooldownMs",
+    "manaCost",
+    "staminaCost",
+    "goldCost",
+    "reagentsRequired",
+    "effectType",
+    "statusEffect",
+    "weaponAbilityRef",
+    "spellId",
+    "itemId",
+    "mapScope",
+    "gumpIcon",
+    "iconKey",
+    "scalingFormula",
+    "unlockLevel",
+    "progressionTreeLevel",
+    "inCatalog"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "aliasOf": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "namePtBr": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "warrior",
+        "ranger",
+        "mage",
+        "worker",
+        "berserker",
+        "duelist",
+        "necromancer",
+        "mystic",
+        "spellweaver",
+        "paladin",
+        "assassin",
+        "ninja",
+        "monk",
+        "samurai",
+        "bard",
+        "tamer",
+        "*"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "Passive",
+        "Custom",
+        "WeaponAbility",
+        "Spell",
+        "SpecialMove",
+        "ItemUse"
+      ]
+    },
+    "tab": {
+      "type": "string",
+      "enum": ["ability", "spell", "item"]
+    },
+    "cooldownMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "customCooldownMs": {
+      "type": "integer",
+      "oneOf": [
+        { "const": 0 },
+        { "minimum": 2000 }
+      ]
+    },
+    "manaCost": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "staminaCost": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "goldCost": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reagentsRequired": {
+      "type": "boolean"
+    },
+    "effectType": {
+      "type": "string",
+      "enum": [
+        "self_buff",
+        "direct_damage",
+        "dot",
+        "debuff",
+        "heal"
+      ]
+    },
+    "statusEffect": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "https://uoidle.com/schemas/effect.schema.json" }
+      ]
+    },
+    "weaponAbilityRef": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "spellId": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "itemId": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "mapScope": {
+      "type": ["string", "null"],
+      "enum": ["UO", "New", "Idle", "New/Eth", "Eth/New", null]
+    },
+    "gumpIcon": {
+      "type": ["integer", "null"]
+    },
+    "iconKey": {
+      "type": ["string", "null"]
+    },
+    "scalingFormula": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "stat"],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stat": {
+          "type": "string",
+          "enum": [
+            "str",
+            "dex",
+            "int",
+            "weapon",
+            "tactics",
+            "magery",
+            "chivalry",
+            "necromancy",
+            "spellweaving",
+            "bushido",
+            "ninjitsu",
+            "focus",
+            "alchemy",
+            "healing",
+            "none"
+          ]
+        },
+        "minMultiplier": { "type": "number" },
+        "maxMultiplier": { "type": "number" },
+        "schoolMultiplier": { "type": "number" },
+        "hits": { "type": "integer", "minimum": 1 },
+        "splashRatio": { "type": "number" },
+        "executeThresholdHpPct": { "type": "number" },
+        "executeMultiplier": { "type": "number" }
+      }
+    },
+    "unlockLevel": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 300
+    },
+    "progressionTreeLevel": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 60
+    },
+    "inCatalog": {
+      "type": "boolean"
+    }
+  }
+}

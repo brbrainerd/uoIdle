@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uoidle.com/schemas/class.schema.json",
+  "title": "ClassDefinition",
+  "description": "Canonical UO Idle class definition covering identity, starter kit, paperdoll, seeded hotbar, L1-60 progression curve, and abilities.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "classNumericId",
+    "badge",
+    "role",
+    "baseStats",
+    "resourceProfile",
+    "starterSkills",
+    "legacyTemplateSkills",
+    "starterEquipment",
+    "robeHue",
+    "seededHotbar",
+    "progression",
+    "abilities"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "enum": [
+        "warrior",
+        "ranger",
+        "mage",
+        "worker",
+        "berserker",
+        "duelist",
+        "necromancer",
+        "mystic",
+        "spellweaver",
+        "paladin",
+        "assassin",
+        "ninja",
+        "monk",
+        "samurai",
+        "bard",
+        "tamer"
+      ]
+    },
+    "classNumericId": {
+      "type": "integer",
+      "minimum": 101,
+      "maximum": 116
+    },
+    "badge": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["melee", "ranged", "magic", "support"]
+    },
+    "baseStats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["str", "dex", "int"],
+      "properties": {
+        "str": { "type": "integer", "minimum": 10, "maximum": 100 },
+        "dex": { "type": "integer", "minimum": 10, "maximum": 100 },
+        "int": { "type": "integer", "minimum": 10, "maximum": 100 }
+      }
+    },
+    "resourceProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primaryResource",
+        "startingManaMax",
+        "meditationCap",
+        "consumesReagents",
+        "consumesAmmo",
+        "chivalryGoldTithe"
+      ],
+      "properties": {
+        "primaryResource": {
+          "type": "string",
+          "enum": ["stamina", "mana", "zero-mana-physical"]
+        },
+        "startingManaMax": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "meditationCap": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120
+        },
+        "consumesReagents": { "type": "boolean" },
+        "consumesAmmo": { "type": "boolean" },
+        "chivalryGoldTithe": { "type": "boolean" }
+      }
+    },
+    "starterSkills": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["skillId", "skillKey", "initialValue"],
+        "properties": {
+          "skillId": { "type": "integer", "minimum": 0, "maximum": 57 },
+          "skillKey": { "type": "string", "minLength": 1 },
+          "initialValue": { "type": "integer", "enum": [30, 50] }
+        }
+      }
+    },
+    "legacyTemplateSkills": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["skillId", "skillKey", "weight"],
+        "properties": {
+          "skillId": { "type": "integer", "minimum": 0, "maximum": 57 },
+          "skillKey": { "type": "string", "minLength": 1 },
+          "weight": { "type": "integer", "enum": [10, 20, 30, 40] }
+        }
+      }
+    },
+    "starterEquipment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kitTokens", "paperdollLayers"],
+      "properties": {
+        "kitTokens": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "paperdollLayers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["layer", "graphic"],
+            "properties": {
+              "layer": { "type": "string", "minLength": 1 },
+              "graphic": { "type": "integer", "minimum": 1 },
+              "softFlag": {
+                "type": "string",
+                "enum": ["softShirt", "softRobe", "softCloak", "softHat", "softLower", "softTop"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "robeHue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "seededHotbar": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slotIndex", "kind", "abilityId", "label", "enabled", "conditions"],
+        "properties": {
+          "slotIndex": { "type": "integer", "minimum": 0, "maximum": 11 },
+          "kind": { "type": "string", "enum": ["ability", "spell", "item", "meditate"] },
+          "abilityId": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "enabled": { "type": "boolean" },
+          "graphic": { "type": "integer", "minimum": 0 },
+          "hue": { "type": "integer", "minimum": 0 },
+          "context": { "type": "string", "enum": ["always", "hunt", "gather"] },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["target", "attr", "op", "value"],
+              "properties": {
+                "target": { "type": "string", "enum": ["self", "ally", "party:leader", "enemy"] },
+                "attr": { "type": "string", "minLength": 1 },
+                "op": { "type": "string", "enum": ["<=", ">=", "==", "<", ">", "!="] },
+                "value": { "type": "number" },
+                "percent": { "type": "boolean" },
+                "join": { "type": "string", "enum": ["and", "or"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "progression": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "level",
+          "id",
+          "nameEn",
+          "namePtBr",
+          "type",
+          "descEn",
+          "descPtBr",
+          "inCatalog",
+          "catalogId"
+        ],
+        "properties": {
+          "level": {
+            "type": "integer",
+            "enum": [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+          },
+          "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "nameEn": { "type": "string", "minLength": 1 },
+          "namePtBr": { "type": "string", "minLength": 1 },
+          "type": {
+            "type": "string",
+            "enum": ["passive", "skill", "spell", "mechanic", "feature"]
+          },
+          "descEn": { "type": "string", "minLength": 1 },
+          "descPtBr": { "type": "string", "minLength": 1 },
+          "inCatalog": { "type": "boolean" },
+          "catalogId": {
+            "type": ["string", "null"],
+            "pattern": "^[a-z0-9_]+$"
+          }
+        }
+      }
+    },
+    "abilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "https://uoidle.com/schemas/skill.schema.json"
+      }
+    }
+  }
+}

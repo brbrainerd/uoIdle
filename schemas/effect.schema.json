@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uoidle.com/schemas/effect.schema.json",
+  "title": "EffectDefinition",
+  "description": "Canonical UO Idle status effect, buff, debuff, DoT, HoT, summon, posture, or stealth state definition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "effectType",
+    "durationMs",
+    "tickIntervalMs",
+    "tickCount",
+    "modifiers",
+    "stackingRule",
+    "authorityTier"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "effectType": {
+      "type": "string",
+      "enum": [
+        "self_buff",
+        "direct_damage",
+        "dot",
+        "debuff",
+        "heal",
+        "posture",
+        "summon",
+        "stealth"
+      ]
+    },
+    "durationMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tickIntervalMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tickCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "modifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stat", "value"],
+        "properties": {
+          "stat": {
+            "type": "string",
+            "enum": [
+              "damage_dealt_pct",
+              "damage_taken_pct",
+              "defense_pct",
+              "attack_speed_pct",
+              "crit_chance_pct",
+              "evasion_pct",
+              "reflect_magic",
+              "stun",
+              "paralyze",
+              "disarm",
+              "bleed_dot",
+              "poison_dot",
+              "burn_dot",
+              "execute_bonus_pct",
+              "armor_ignore_pct",
+              "multi_hit_count",
+              "taunt",
+              "clone_stacks",
+              "perfection_streak_pct"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "stackingRule": {
+      "type": "string",
+      "enum": [
+        "replace",
+        "refresh",
+        "stack",
+        "independent",
+        "exclusive_posture"
+      ]
+    },
+    "authorityTier": {
+      "type": "string",
+      "enum": [
+        "server-authoritative",
+        "client-estimator",
+        "modernuo-reference",
+        "design-proposal"
+      ]
+    }
+  }
+}
