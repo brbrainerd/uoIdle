@@ -65,9 +65,13 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
+**Wave 1**
 
-- [ ] 02-01: Core combat tick loop, cooldown/haste math, hit/crit/mitigation formulas, and resource regeneration KB pages (`INDEX-01`)
-- [ ] 02-02: Status effect opcodes, progression/equipment systems KB pages, and Engine Capability Matrix audit (`INDEX-01`, `INDEX-02`)
+- [ ] 02-01-PLAN.md — Core combat resources (`resources.md` with `C1..C18` server changelog anchors), tick/cooldown/hotbar engine (`tick-and-cooldowns.md`), damage/heal/defense estimators (`damage-and-defense.md`), and status effects/ability dispatch catalog (`status-effects.md`) (`INDEX-01`)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Progression/unlock trees (`progression-unlocks.md`), equipment/affixes/bestiary scaling (`equipment-affixes.md`), and the verified 3-tier Client/Shared/Server Engine Capability Matrix (`engine-capability-matrix.md`) (`INDEX-01`, `INDEX-02`)
 
 ### Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas
 
