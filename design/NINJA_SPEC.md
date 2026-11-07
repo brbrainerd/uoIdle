@@ -204,7 +204,7 @@ Every Ninja ability is specified in two complementary execution modes:
   - `scalingFormula`: `{ "stat": "ninjitsu", "minMultiplier": 1.05, "maxMultiplier": 1.15 }`.
   - `statusEffect`: `{ "id": "ninja_death_mark", "name": "Death Mark", "effectType": "dot", "durationMs": 4000, "tickIntervalMs": 1000, "tickCount": 4, "modifiers": [], "stackingRule": "refresh", "authorityTier": "design-proposal" }`.
 - **Mode B (Authentic Extension) Behavior:**
-  - Initial strike arms `state.deathStrikeSwingsRemaining = 5` and stores `state.deathStrikePendingDamage` (`1.05x` of hit damage). Each subsequent Ninja weapon swing decrements `deathStrikeSwingsRemaining` (`DeathStrike.AddStep(defender)` on the server); on the 5th connected swing, the mark detonates for instant unmitigated pressure-point damage.
+  - Initial strike arms `state.deathStrikeSwingsRemaining = 3` in single-boss simulation (`5` in multi-wave / canonical `DeathStrike.AddStep(defender)` 5-step timer compressed to 3 subsequent auto-attack swings between active skill casts) and stores `state.deathStrikePendingDamage`. Each subsequent Ninja weapon swing decrements `deathStrikeSwingsRemaining` (`DeathStrike.AddStep(defender)` on the server); when the counter reaches `0`, the mark detonates for instant unmitigated pressure-point damage.
 
 ---
 
@@ -358,9 +358,9 @@ if (MirrorImage.HasClone(defender) && Core.TickCount - defender.NextCloneInterce
     MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone & decrements cloneStacks
     damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
 }
-// 2. OnWeaponSwingHit: 5-Swing DeathStrike Detonation & Stealth Opener Consumption (8 LOC)
+// 2. OnWeaponSwingHit: 3-Swing (5-Step Canonical) DeathStrike & Stealth Opener (8 LOC)
 if (attacker is PlayerMobile nj && nj.ClassId == 115) {
-    DeathStrike.AddStep(defender); // Every connected Ninja swing advances ++Steps toward 5!
+    DeathStrike.AddStep(defender); // Advances step counter (3 auto-swings / 5 canonical steps)!
     if (nj.CombatStealthUntil > Core.TickCount && (move is Backstab || move is SurpriseAttack)) {
         nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
         damage = (int)(damage * 1.15);

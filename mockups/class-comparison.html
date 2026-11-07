@@ -3494,9 +3494,9 @@ if (MirrorImage.HasClone(defender) &amp;&amp; Core.TickCount - defender.NextClon
     MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone &amp; decrements cloneStacks
     damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
 }
-// 2. OnWeaponSwingHit: 3-Swing DeathStrike, Kitsune Claw &amp; Stealth Opener (8 LOC)
+// 2. OnWeaponSwingHit: 3-Swing (5-Step Canonical) DeathStrike &amp; Stealth Opener (8 LOC)
 if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
-    DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
+    DeathStrike.AddStep(defender); // Detonates after 3 connected auto-swings (5-step timer)!
     if (nj.CombatStealthUntil &gt; Core.TickCount &amp;&amp; (move is Backstab || move is SurpriseAttack)) {
         nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
         damage = (int)(damage * 1.15);

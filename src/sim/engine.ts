@@ -1119,6 +1119,8 @@ export function simulateScenarioDetailed(
           mode === 'mode_b' &&
           (skill.id.includes('death') || skill.id.includes('twin_shadow'))
         ) {
+          // Canonical ModernUO DeathStrike.AddStep(defender) requires 5 steps within 5.0s;
+          // compressed to 3 subsequent auto-attack swings here to account for interwoven SpecialMoves.
           state.deathStrikeSwingsRemaining = 3;
           state.deathStrikePendingDamage = out.rawDamagePerHit * 0.45;
         }

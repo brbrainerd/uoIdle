@@ -741,8 +741,8 @@ const MODE_DESCRIPTIONS: Record<string, { modeA: string; modeB: string; qCEstima
   },
   ninja_death: {
     modeA: 'Sole single-rank SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).',
-    modeB: 'DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.',
-    qCEstimator: '1.10x - 1.20x Strike + 4-Tick Trauma DoT / 5-Swing Detonation',
+    modeB: 'DeathStrike: arms 3-swing idle detonation counter (ModernUO 5-step timer compressed for 1D cadence) via DeathStrike.AddStep(defender).',
+    qCEstimator: '1.10x - 1.20x Strike + 4-Tick Trauma DoT / 3-Swing (5-Step) Detonation',
   },
   ninja_animal_form: {
     modeA: 'Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s.',
@@ -3220,9 +3220,9 @@ if (MirrorImage.HasClone(defender) && Core.TickCount - defender.NextCloneInterce
     MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone & decrements cloneStacks
     damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
 }
-// 2. OnWeaponSwingHit: 3-Swing DeathStrike, Kitsune Claw & Stealth Opener (8 LOC)
+// 2. OnWeaponSwingHit: 3-Swing (5-Step Canonical) DeathStrike & Stealth Opener (8 LOC)
 if (attacker is PlayerMobile nj && nj.ClassId == 115) {
-    DeathStrike.AddStep(defender); // Detonates on 3rd connected swing!
+    DeathStrike.AddStep(defender); // Detonates after 3 connected auto-swings (5-step timer)!
     if (nj.CombatStealthUntil > Core.TickCount && (move is Backstab || move is SurpriseAttack)) {
         nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
         damage = (int)(damage * 1.15);
