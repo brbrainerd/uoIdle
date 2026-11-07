@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Gitignored staging cache for unredacted or raw minified bundles
+mechanics/_crawl/
+
+# Environment & credentials
+*.env
+.env*
+*cookies*.json
+*session*.json
+*.har
+
+# Logs & OS artifacts
+*.log
+.DS_Store
+__pycache__/
+*.pyc
