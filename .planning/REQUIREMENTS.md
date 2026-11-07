@@ -25,14 +25,14 @@ Requirements for the v1 deliverable package. Each maps to a roadmap phase.
 
 - [x] **SIM-01**: Developer can consult claim-verified KB pages (`mechanics/classes/modernuo-bushido.md` and `mechanics/classes/modernuo-ninjitsu.md`) and a side-by-side derivation table (`design/MODERNUO_MAPPING.md`) mapping all 8 Bushido mechanics (*Weapon Parry*, *Perfection & Honor*, *Honorable Execution*, *Confidence*, *Counter Attack*, *Lightning Strike*, *Evasion*, *Momentum Strike*) and 9 Ninjitsu mechanics (*Mirror Image*, *Focus Attack*, *Backstab*, *Smoke Bomb & Stealth*, *Shadowjump*, *Surprise Attack*, *Ki Attack*, *Death Strike*, *Animal Form*) from ModernUO C# formulas to automated idle state machines
 - [x] **SIM-02**: Developer can run a deterministic tick-accurate combat simulator (`tools/sim_balance.ts` / `sim/`) reproducing live **Warrior**, **Mage**, and **Ranger** baseline curves across Early, Mid, Late, and Endgame level brackets and enemy archetypes (fast trash waves vs sustained bosses)
-- [ ] **SIM-03**: Developer can verify via automated parity reports (`design/BALANCE_REPORT.md`) that **Samurai** and **Ninja** stay within $\pm 5\text{–}8\%$ of live class benchmarks across Sustained Boss DPS, Trash TTK (accounting for overkill waste), Net Resource Sustainability/min, and Effective HP (EHP)/sec without avoidance-immortality or mana-starvation loops
+- [x] **SIM-03**: Developer can verify via automated parity reports (`design/BALANCE_REPORT.md`) that **Samurai** and **Ninja** stay within $\pm 5\text{–}8\%$ of live class benchmarks across Sustained Boss DPS, Trash TTK (accounting for overkill waste), Net Resource Sustainability/min, and Effective HP (EHP)/sec without avoidance-immortality or mana-starvation loops
 
 ### Samurai & Ninja Skill Lines & Drop-In Deliverables (`CLASS`)
 
-- [ ] **CLASS-01**: Developer receives a complete **Samurai (Bushido)** skill line matching live class unlock tiers and active/passive slot counts, occupying a protected **Perfection Ramp / Weapon Parry-Counter / Execute** combat niche (`design/SAMURAI_SPEC.md`)
-- [ ] **CLASS-02**: Developer receives a complete **Ninja (Ninjitsu)** skill line matching live class unlock tiers and active/passive slot counts, occupying a protected **Ablative Clone Mitigation / Stealth-State Opener / 5-Hit Delayed Detonation** combat niche (`design/NINJA_SPEC.md`)
-- [ ] **CLASS-03**: Developer receives schema-validated, drop-in class and skill definitions (`design/drop-in/samurai.json`, `design/drop-in/ninja.json`, and `design/drop-in/classes-patch.js`) with **Dual Implementation Modes**: Mode A (100% existing UO Idle engine opcodes, zero engine code changes) and Mode B (minimal `<20 LOC` native hook specification for signature clone-interception and 5-hit delayed mark mechanics)
-- [ ] **CLASS-04**: Developer receives class-themed weapon and equipment affix definitions (`design/drop-in/items-bushido-ninjitsu.json` & spec section) covering iconic Tokuno armaments (*Katana*, *No-Dachi*, *Wakizashi*, *Lajatang*, *Tekagi*, *Kama*, *Fukiya*, *Tessen*) balanced against live itemization curves
+- [x] **CLASS-01**: Developer receives a complete **Samurai (Bushido)** skill line matching live class unlock tiers and active/passive slot counts, occupying a protected **Perfection Ramp / Weapon Parry-Counter / Execute** combat niche (`design/SAMURAI_SPEC.md`)
+- [x] **CLASS-02**: Developer receives a complete **Ninja (Ninjitsu)** skill line matching live class unlock tiers and active/passive slot counts, occupying a protected **Ablative Clone Mitigation / Stealth-State Opener / 5-Hit Delayed Detonation** combat niche (`design/NINJA_SPEC.md`)
+- [x] **CLASS-03**: Developer receives schema-validated, drop-in class and skill definitions (`design/drop-in/samurai.json`, `design/drop-in/ninja.json`, and `design/drop-in/classes-patch.js`) with **Dual Implementation Modes**: Mode A (100% existing UO Idle engine opcodes, zero engine code changes) and Mode B (minimal `<20 LOC` native hook specification for signature clone-interception and 5-hit delayed mark mechanics)
+- [x] **CLASS-04**: Developer receives class-themed weapon and equipment affix definitions (`design/drop-in/items-bushido-ninjitsu.json` & spec section) covering iconic Tokuno armaments (*Katana*, *No-Dachi*, *Wakizashi*, *Lajatang*, *Tekagi*, *Kama*, *Fukiya*, *Tessen*) balanced against live itemization curves
 
 ### Visual Beta UI Mockups & Iconography (`VISUAL`)
 
@@ -94,11 +94,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INDEX-04 | Phase 3 | Complete |
 | SIM-01 | Phase 4 | Complete |
 | SIM-02 | Phase 4 | Complete |
-| SIM-03 | Phase 5 | Pending |
-| CLASS-01 | Phase 5 | Pending |
-| CLASS-02 | Phase 5 | Pending |
-| CLASS-03 | Phase 5 | Pending |
-| CLASS-04 | Phase 5 | Pending |
+| SIM-03 | Phase 5 | Complete |
+| CLASS-01 | Phase 5 | Complete |
+| CLASS-02 | Phase 5 | Complete |
+| CLASS-03 | Phase 5 | Complete |
+| CLASS-04 | Phase 5 | Complete |
 | VISUAL-01 | Phase 6 | Pending |
 | VISUAL-02 | Phase 6 | Pending |
 
