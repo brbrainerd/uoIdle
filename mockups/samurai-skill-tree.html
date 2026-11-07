@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UO Idle v0.99.0 Beta — Samurai (Bushido) [Arvore Skill Tree &amp; Hotbar Workbench</title>
+  <style>
+    :root {
+      --bg-canvas: #0b0d0a;
+      --bg-panel: #121510;
+      --bg-card: #181c16;
+      --bg-card-hover: #20261d;
+      --border-subtle: #2a3026;
+      --border-gold: #c9a227;
+      --border-gold-bright: #e5c158;
+      --text-primary: #e8e4d9;
+      --text-secondary: #a39e90;
+      --text-gold: #d4af37;
+      --samurai-accent: #c83e37;
+      --ninja-accent: #2e9e6b;
+      --mana-blue: #4a90e2;
+      --stamina-amber: #e2a04a;
+      --cd-purple: #9b6be2;
+      --class-accent: var(--samurai-accent);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      color: var(--text-primary);
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .mono, code, pre, .num {
+      font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .beta-shell {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+    }
+
+    /* Live uoidle.com/beta .personagem-arvore & .arvore-* structural rules from game-theme.css */
+    .personagem-arvore {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      color: #f6ecd4;
+      gap: 10px;
+    }
+
+    .arvore-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 54px;
+      padding: 8px 14px;
+      border: 1px solid #6d5733;
+      border-top: 2px solid var(--border-gold);
+      border-radius: 4px;
+      background: linear-gradient(180deg, #20221ff0, #0d1112fa);
+      color: #f3e2b3;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    }
+
+    .arvore-nivel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding-right: 16px;
+      border-right: 1px solid #725b31;
+      white-space: nowrap;
+    }
+
+    .arvore-nivel strong {
+      color: #fff2bf;
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 17px;
+      letter-spacing: 0.05em;
+    }
+
+    .arvore-saldos {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 4px;
+    }
+
+    .arvore-saldo {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      padding: 2px 10px;
+      border-left: 1px solid #725b31;
+    }
+
+    .arvore-saldo strong {
+      color: #82d5b0;
+      font-size: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .arvore-saldo small {
+      color: #75bd93;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .arvore-saldo em {
+      justify-self: end;
+      color: #a39e90;
+      font-size: 10px;
+      font-style: normal;
+    }
+
+    .arvore-head-acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .beta-btn, .nav-pill {
+      padding: 5px 10px;
+      border: 1px solid #6d5733;
+      border-radius: 4px;
+      background: #141816;
+      color: #e8e4d9;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .beta-btn:hover, .nav-pill:hover {
+      border-color: var(--border-gold-bright);
+      background: var(--bg-card-hover);
+      color: #fff2bf;
+    }
+
+    .beta-btn.is-active, .nav-pill.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 10px rgba(201, 162, 39, 0.35);
+    }
+
+    .class-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      border: 1px solid var(--class-accent);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hue-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--class-accent);
+      border: 1px solid #fff2bf;
+      display: inline-block;
+    }
+
+    .arvore-secao {
+      min-width: 0;
+      border: 1px solid #5d4a2b;
+      border-radius: 4px;
+      background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.06);
+    }
+
+    .arvore-secao-titulo {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 8px 12px 6px;
+      border-bottom: 1px solid #3c3425;
+      color: var(--text-gold);
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .arvore-secao-titulo .title-left::before {
+      content: '✦ ';
+      color: #c99d3f;
+    }
+
+    .arvore-secao-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .col-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-body {
+      padding: 10px 12px;
+    }
+
+    /* Portrait & Identity */
+    .identity-hero {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .portrait-frame {
+      position: relative;
+      width: 116px;
+      height: 116px;
+      border: 2px solid var(--border-gold);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #080907;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+    }
+
+    .portrait-frame img.main-portrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .portrait-mini-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 4px;
+      background: #0b0d0a;
+    }
+
+    .stat-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .stat-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .stat-chip span {
+      display: block;
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .stat-chip strong {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: #fff2bf;
+    }
+
+    /* Skills & Paperdoll */
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .kv-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .kv-item .k {
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .kv-item .v {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-gold);
+      font-weight: 600;
+    }
+
+    .hotbar-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hotbar-slot {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 5px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--class-accent);
+      border-radius: 4px;
+    }
+
+    .slot-num {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      background: #0d100c;
+      border: 1px solid #5d4a2b;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-gold);
+    }
+
+    /* Winding .arvore-cobra ribbon */
+    .arvore-cobra-wrap {
+      padding: 10px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: rgba(11, 13, 10, 0.55);
+    }
+
+    .arvore-cobra {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 4px;
+      align-items: center;
+    }
+
+    .arvore-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .arvore-lv {
+      color: #e6c36a;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .arvore-circulo {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 2px solid #6d5733;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .arvore-circulo.is-on {
+      border-color: #e6c36a;
+      box-shadow: 0 0 12px #e6c36a73;
+    }
+
+    .arvore-circulo:hover {
+      transform: scale(1.06);
+      border-color: var(--border-gold-bright);
+    }
+
+    .arvore-circulo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .arvore-nome {
+      color: #f6ecd4;
+      font-size: 9px;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 64px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 12 Milestone Cards Grid */
+    .milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .milestone-card {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    }
+
+    .milestone-card.is-capstone {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #241f14, #171a14);
+    }
+
+    .milestone-icon-box {
+      position: relative;
+      width: 52px;
+      height: 52px;
+    }
+
+    .milestone-icon-box img {
+      width: 52px;
+      height: 52px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      display: block;
+    }
+
+    .lv-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #262013;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .type-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      border: 1px solid #3c4436;
+      background: #121611;
+      color: var(--text-secondary);
+    }
+
+    .dual-unlock-banner {
+      margin-top: 6px;
+      padding: 5px 7px;
+      border-radius: 4px;
+      border: 1px dashed var(--ninja-accent);
+      background: rgba(46, 158, 107, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: #b8f5d8;
+    }
+
+    .dual-unlock-banner img {
+      width: 28px;
+      height: 28px;
+      border-radius: 3px;
+      border: 1px solid var(--border-gold);
+    }
+
+    /* Pinned Live Tooltip Inspector (.arvore-dica) */
+    .arvore-dica-pinned {
+      padding: 10px 12px;
+      border: 1px solid var(--border-gold);
+      border-radius: 4px;
+      background: #0c0e0cf7;
+      color: #f6ecd4;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+    }
+
+    .dica-header {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #3c3425;
+      margin-bottom: 8px;
+    }
+
+    .dica-header img {
+      width: 56px;
+      height: 56px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+    }
+
+    /* Ability Catalog Cards */
+    .catalog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 10px 12px;
+    }
+
+    .catalog-card {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      padding: 7px 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .catalog-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+    }
+
+    .catalog-card img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .cost-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .badge-mana {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(74, 144, 226, 0.16);
+      border: 1px solid var(--mana-blue);
+      color: #9ec9ff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-stamina {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(226, 160, 74, 0.16);
+      border: 1px solid var(--stamina-amber);
+      color: #ffd18b;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-cd {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(155, 107, 226, 0.16);
+      border: 1px solid var(--cd-purple);
+      color: #d7bfff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-meta {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #111510;
+      border: 1px solid #333a2e;
+      color: var(--text-secondary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .passive-badges-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px 12px 12px;
+    }
+
+    .passive-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 7px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .passive-badge-item img {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="beta-shell">
+    <div class="personagem-arvore" data-personagem-conteudo="arvore">
+      <!-- Top Header Bar (.arvore-head) -->
+      <header class="arvore-head">
+        <div class="arvore-nivel">
+          <span class="class-badge-pill">
+            <span class="hue-swatch"></span>
+            SM · ID 114
+          </span>
+          <strong>Samurai (Bushido) — [Arvore Progression</strong>
+        </div>
+
+        <div class="arvore-saldos">
+          <div class="arvore-saldo">
+            <div>
+              <strong>Lv. 60</strong>
+              <div><small>Grandmaster Cap</small></div>
+            </div>
+            <em>12 Milestones</em>
+          </div>
+          <div class="arvore-saldo">
+            <div>
+              <strong>50/30/10</strong>
+              <div><small>STR / DEX / INT</small></div>
+            </div>
+            <em>Sum = 90</em>
+          </div>
+          <div class="arvore-saldo">
+            <div>
+              <strong>Hue 1884 (Crimson Lacquer)</strong>
+              <div><small>Starter Robe Hue</small></div>
+            </div>
+            <em>robeHue: 1884</em>
+          </div>
+          <div class="arvore-saldo">
+            <div>
+              <strong>12 Catalog Skills</strong>
+              <div><small>2,000ms Custom Floor</small></div>
+            </div>
+            <em>Mana 25 / Med 100</em>
+          </div>
+        </div>
+
+        <div class="arvore-head-acoes">
+          <button type="button" class="beta-btn is-active" id="btn-lang-en" onclick="setLocale('en')">EN</button>
+          <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
+          <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
+          <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
+          <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
+          <a class="nav-pill" href="class-comparison.html">5-Class Parity</a>
+        </div>
+      </header>
+
+      <!-- 3-Column Beta Workbench -->
+      <div class="workbench-grid">
+        <!-- LEFT COLUMN: Character Identity, 8 Starter Skills, Tokuno Paperdoll & 5-Slot Seeded Hotbar -->
+        <div class="col-stack">
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Character &amp; Resource Profile</span>
+              <span class="arvore-secao-sub">_E / dx[114]</span>
+            </h2>
+            <div class="panel-body">
+              <div class="identity-hero">
+                <div class="portrait-frame">
+                  <img class="main-portrait" src="assets/icons/samurai/portrait-samurai.png" alt="Samurai (Bushido) Portrait" />
+                  <img class="portrait-mini-badge" src="assets/icons/samurai/portrait-samurai-64.png" alt="SM 64x64 Icon" />
+                </div>
+                <div>
+                  <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">Samurai (Bushido)</div>
+                  <div class="mono" style="font-size:11px;color:var(--text-secondary);">classId: "samurai" · numericId: 114 · badge: "SM"</div>
+                  <div class="mono" style="font-size:10px;color:var(--text-gold);margin-top:3px;">
+                    Primary: mana | StartMana: 25 | MedCap: 100 | Reagents: false | Ammo: false
+                  </div>
+                  <div class="stat-chips">
+                    <div class="stat-chip"><span>STR</span><strong>50</strong></div>
+                    <div class="stat-chip"><span>DEX</span><strong>30</strong></div>
+                    <div class="stat-chip"><span>INT</span><strong>10</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">8 Starter Skills &amp; Template</span>
+              <span class="arvore-secao-sub">WE / hE &amp; FE (100%)</span>
+            </h2>
+            <div class="panel-body">
+              <div class="kv-grid">
+                
+      <div class="kv-item">
+        <span class="k">bushido <small class="mono" style="color:var(--text-secondary)">(#52)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">swords <small class="mono" style="color:var(--text-secondary)">(#40)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">tactics <small class="mono" style="color:var(--text-secondary)">(#27)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">parry <small class="mono" style="color:var(--text-secondary)">(#5)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">anatomy <small class="mono" style="color:var(--text-secondary)">(#1)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">healing <small class="mono" style="color:var(--text-secondary)">(#17)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">magicResist <small class="mono" style="color:var(--text-secondary)">(#26)</small></span>
+        <span class="v">30.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">focus <small class="mono" style="color:var(--text-secondary)">(#50)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+              </div>
+              <div style="margin-top:6px;font-size:10px;color:var(--text-secondary);">
+                Shieldless Bushido Weapon Parry scales via Parrying (50) × Bushido (50) ÷ 48,000 (1H) or 41,140 (2H).
+              </div>
+              <div style="margin-top:8px;font-size:10px;font-weight:700;color:var(--text-gold);text-transform:uppercase;">Legacy Template Weights (FE = 100%)</div>
+              <div class="kv-grid" style="margin-top:4px;">
+                
+      <div class="kv-item">
+        <span class="k">swords <small class="mono" style="color:var(--text-secondary)">(#40)</small></span>
+        <span class="v">30%</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">bushido <small class="mono" style="color:var(--text-secondary)">(#52)</small></span>
+        <span class="v">30%</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">tactics <small class="mono" style="color:var(--text-secondary)">(#27)</small></span>
+        <span class="v">20%</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">anatomy <small class="mono" style="color:var(--text-secondary)">(#1)</small></span>
+        <span class="v">20%</span>
+      </div>
+    
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Tokuno Starter Paperdoll</span>
+              <span class="arvore-secao-sub">yE / mx (8 Layers)</span>
+            </h2>
+            <div class="panel-body">
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);margin-bottom:6px;">
+                kitTokens: ["samuraiSet", "katana", "bandages", "potionsMelee", "robeCloak"] · Shieldless TwoHanded Empty (Parry Enabled)
+              </div>
+              <div class="kv-grid">
+                
+      <div class="kv-item">
+        <span class="k">Helm</span>
+        <span class="v">0x2776 (10102)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">InnerTorso</span>
+        <span class="v">0x27C6 (10182)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Arms</span>
+        <span class="v">0x277E (10110)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Pants</span>
+        <span class="v">0x13CB (5067)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Shoes</span>
+        <span class="v">0x2796 (10134)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">OneHanded</span>
+        <span class="v">0x13FF (5119)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">OuterTorso</span>
+        <span class="v">0x1F03 (7939)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Cloak</span>
+        <span class="v">0x1515 (5397)</span>
+      </div>
+    
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">5-Slot Seeded Hotbar Queue</span>
+              <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
+            </h2>
+            <div class="panel-body">
+              <div class="hotbar-slots">
+                
+        <div class="hotbar-slot">
+          <div class="slot-num">1</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Heal <code style="color:var(--text-secondary);font-size:10px;">(lesser_heal_potion)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.hp &lt;= 50%</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">2</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bandage <code style="color:var(--text-secondary);font-size:10px;">(bandage)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.hp &lt;= 80% OR self.poisoned == 1</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">3</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Cure <code style="color:var(--text-secondary);font-size:10px;">(lesser_cure_potion)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.poisoned == 1</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">4</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Mana <code style="color:var(--text-secondary);font-size:10px;">(lesser_mana_potion)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.mana &lt;= 30%</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">5</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bolt <code style="color:var(--text-secondary);font-size:10px;">(samurai_lightning)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">Unconditional Primary Strike (ro(e) Queue)</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- CENTER COLUMN: Winding .arvore-cobra Path & 12 L1-L60 Progression Milestones -->
+        <div class="col-stack">
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">L1–L60 [Arvore Progression Timeline (12 Milestones)</span>
+              <span class="arvore-secao-sub">gE.samurai · Click any node to inspect</span>
+            </h2>
+
+            <!-- Live .arvore-cobra 12-node ribbon -->
+            <div class="arvore-cobra-wrap">
+              <div class="arvore-cobra">
+                
+        <div class="arvore-col" onclick="selectAbility('samurai_way')" title="L1: Way of the Blade / Caminho da Lâmina">
+          <span class="arvore-lv">L1</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
+          </div>
+          <span class="arvore-nome" data-en="Way of the Blade" data-pt="Caminho da Lâmina">Way of the Blade</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_lightning')" title="L5: Lightning Strike / Golpe Relâmpago">
+          <span class="arvore-lv">L5</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_lightning@64.png" alt="Lightning Strike" />
+          </div>
+          <span class="arvore-nome" data-en="Lightning Strike" data-pt="Golpe Relâmpago">Lightning Strike</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_perfection')" title="L10: Honor &amp; Perfection / Honra e Perfeição">
+          <span class="arvore-lv">L10</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_perfection@64.png" alt="Honor &amp; Perfection" />
+          </div>
+          <span class="arvore-nome" data-en="Honor &amp; Perfection" data-pt="Honra e Perfeição">Honor &amp; Perfection</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_honorable')" title="L15: Honorable Execution / Execução Honrosa">
+          <span class="arvore-lv">L15</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_honorable@64.png" alt="Honorable Execution" />
+          </div>
+          <span class="arvore-nome" data-en="Honorable Execution" data-pt="Execução Honrosa">Honorable Execution</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_confidence')" title="L20: Confidence / Confiança">
+          <span class="arvore-lv">L20</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_confidence@64.png" alt="Confidence" />
+          </div>
+          <span class="arvore-nome" data-en="Confidence" data-pt="Confiança">Confidence</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_counter')" title="L25: Counter Attack / Contra-Ataque">
+          <span class="arvore-lv">L25</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_counter@64.png" alt="Counter Attack" />
+          </div>
+          <span class="arvore-nome" data-en="Counter Attack" data-pt="Contra-Ataque">Counter Attack</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_double_strike')" title="L30: Double Strike / Golpe Duplo">
+          <span class="arvore-lv">L30</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_double_strike@64.png" alt="Double Strike" />
+          </div>
+          <span class="arvore-nome" data-en="Double Strike" data-pt="Golpe Duplo">Double Strike</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_evasion')" title="L35: Evasion / Evasão">
+          <span class="arvore-lv">L35</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_evasion@64.png" alt="Evasion" />
+          </div>
+          <span class="arvore-nome" data-en="Evasion" data-pt="Evasão">Evasion</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_momentum_strike')" title="L40: Momentum Strike / Golpe de Ímpeto">
+          <span class="arvore-lv">L40</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_momentum_strike@64.png" alt="Momentum Strike" />
+          </div>
+          <span class="arvore-nome" data-en="Momentum Strike" data-pt="Golpe de Ímpeto">Momentum Strike</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_armor_ignore')" title="L45: Armor Ignore / Ignorar Armadura">
+          <span class="arvore-lv">L45</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_armor_ignore@64.png" alt="Armor Ignore" />
+          </div>
+          <span class="arvore-nome" data-en="Armor Ignore" data-pt="Ignorar Armadura">Armor Ignore</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_lightning_r2')" title="L50: Lightning Strike II / Golpe Relâmpago II">
+          <span class="arvore-lv">L50</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_lightning_r2@64.png" alt="Lightning Strike II" />
+          </div>
+          <span class="arvore-nome" data-en="Lightning Strike II" data-pt="Golpe Relâmpago II">Lightning Strike II</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('samurai_honorable_r2')" title="L60: Honorable Execution II / Execução Honrosa II">
+          <span class="arvore-lv">L60</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/samurai/samurai_honorable_r2@64.png" alt="Honorable Execution II" />
+          </div>
+          <span class="arvore-nome" data-en="Honorable Execution II" data-pt="Execução Honrosa II">Honorable Execution II</span>
+        </div>
+      
+              </div>
+            </div>
+
+            <!-- 12 Interactive Milestone Cards -->
+            <div class="milestone-grid">
+              
+        <div class="milestone-card is-selected " data-milestone-id="samurai_way" onclick="selectAbility('samurai_way')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L1</span>
+              <span class="type-pill">passive</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Way of the Blade" data-pt="Caminho da Lâmina">Way of the Blade</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Caminho da Lâmina</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Automatic weapon swing and shieldless Bushido Weapon Parry mastery with Katana, Wakizashi, No-Dachi, and Daisho." data-pt="Ataque automático da arma e maestria em Aparar de Arma Bushido sem escudo com Katana, Wakizashi, No-Dachi e Daisho.">Automatic weapon swing and shieldless Bushido Weapon Parry mastery with Katana, Wakizashi, No-Dachi, and Daisho.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 0ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_lightning" onclick="selectAbility('samurai_lightning')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_lightning@64.png" alt="Lightning Strike" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L5</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Lightning Strike" data-pt="Golpe Relâmpago">Lightning Strike</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Relâmpago</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="High-accuracy Bushido precision strike (+50 Accuracy) with a critical IgnoreArmor roll and brief stagger." data-pt="Golpe de precisão Bushido (+50 de Precisão) com chance crítica de ignorar armadura e breve desequilíbrio.">High-accuracy Bushido precision strike (+50 Accuracy) with a critical IgnoreArmor roll and brief stagger.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 9000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_perfection" onclick="selectAbility('samurai_perfection')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_perfection@64.png" alt="Honor &amp; Perfection" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L10</span>
+              <span class="type-pill">mechanic</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Honor &amp; Perfection" data-pt="Honra e Perfeição">Honor &amp; Perfection</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Honra e Perfeição</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Focuses Bushido honor on the target, building Perfection consecutive-hit damage stacks and restoring vitals on kill." data-pt="Foca a honra Bushido no alvo, acumulando bônus de dano de Perfeição em golpes consecutivos e restaurando vitais ao abater.">Focuses Bushido honor on the target, building Perfection consecutive-hit damage stacks and restoring vitals on kill.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 14000ms</span>
+                    <span class="badge-mana">Mana 8</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_honorable" onclick="selectAbility('samurai_honorable')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_honorable@64.png" alt="Honorable Execution" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L15</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Honorable Execution" data-pt="Execução Honrosa">Honorable Execution</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Execução Honrosa</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed." data-pt="Finalizador Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.">Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 9000ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 10</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_confidence" onclick="selectAbility('samurai_confidence')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_confidence@64.png" alt="Confidence" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L20</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Confidence" data-pt="Confiança">Confidence</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Confiança</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Defensive Bushido stance that restores health on cast and recovers HP and Stamina on every successful weapon parry." data-pt="Postura defensiva Bushido que restaura vida ao conjurar e recupera Vida e Estamina a cada aparar de arma bem-sucedido.">Defensive Bushido stance that restores health on cast and recovers HP and Stamina on every successful weapon parry.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 18000ms</span>
+                    <span class="badge-mana">Mana 8</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_counter" onclick="selectAbility('samurai_counter')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_counter@64.png" alt="Counter Attack" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L25</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Counter Attack" data-pt="Contra-Ataque">Counter Attack</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Contra-Ataque</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Reactive Bushido stance that empowers weapon damage (+18%) and unleashes an instant counter-swing upon parrying." data-pt="Postura reativa Bushido que amplia o dano da arma (+18%) e desfere um contra-golpe imediato ao aparar.">Reactive Bushido stance that empowers weapon damage (+18%) and unleashes an instant counter-swing upon parrying.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 7000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_double_strike" onclick="selectAbility('samurai_double_strike')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_double_strike@64.png" alt="Double Strike" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L30</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Double Strike" data-pt="Golpe Duplo">Double Strike</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Duplo</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Signature Katana and Daisho technique: delivers two rapid consecutive weapon strikes at 90% damage each." data-pt="Técnica clássica de Katana e Daisho: executa dois golpes rápidos consecutivos causando 90% de dano cada.">Signature Katana and Daisho technique: delivers two rapid consecutive weapon strikes at 90% damage each.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 9000ms</span>
+                    <span class="badge-mana">Mana 12</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_evasion" onclick="selectAbility('samurai_evasion')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_evasion@64.png" alt="Evasion" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L35</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Evasion" data-pt="Evasão">Evasion</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Evasão</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Short burst Bushido posture that amplifies weapon parry chance and intercepts incoming direct-damage spells." data-pt="Postura curta de Bushido que multiplica a chance de aparar com a arma e intercepta magias de dano direto.">Short burst Bushido posture that amplifies weapon parry chance and intercepts incoming direct-damage spells.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 20000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_momentum_strike" onclick="selectAbility('samurai_momentum_strike')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_momentum_strike@64.png" alt="Momentum Strike" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L40</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Momentum Strike" data-pt="Golpe de Ímpeto">Momentum Strike</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe de Ímpeto</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Two-target Bushido cleave that channels weapon momentum through the primary enemy into a second adjacent foe." data-pt="Corte Bushido para dois alvos que transfere o ímpeto da lâmina do alvo principal para um segundo inimigo adjacente.">Two-target Bushido cleave that channels weapon momentum through the primary enemy into a second adjacent foe.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 8000ms</span>
+                    <span class="badge-mana">Mana 12</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_armor_ignore" onclick="selectAbility('samurai_armor_ignore')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_armor_ignore@64.png" alt="Armor Ignore" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L45</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Armor Ignore" data-pt="Ignorar Armadura">Armor Ignore</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Ignorar Armadura</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses." data-pt="Maestria secundária de Katana: perfura as defesas do alvo (-18% de defesa por 7s) e desequilibra chefes blindados.">Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 14000ms</span>
+                    <span class="badge-mana">Mana 14</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="samurai_lightning_r2" onclick="selectAbility('samurai_lightning_r2')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_lightning_r2@64.png" alt="Lightning Strike II" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L50</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Lightning Strike II" data-pt="Golpe Relâmpago II">Lightning Strike II</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Relâmpago II</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash." data-pt="Golpe de precisão Bushido aprimorado com multiplicador superior, perfuração crítica e arco secundário.">Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 8000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  is-capstone" data-milestone-id="samurai_honorable_r2" onclick="selectAbility('samurai_honorable_r2')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/samurai/samurai_honorable_r2@64.png" alt="Honorable Execution II" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L60</span>
+              <span class="type-pill">feature</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Honorable Execution II" data-pt="Execução Honrosa II">Honorable Execution II</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Execução Honrosa II</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage." data-pt="Finalizador supremo de Grão-Mestre Bushido: multiplicador 1.95x abaixo de 35% de vida com +12% de velocidade e +8% de dano.">Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 11000ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 15</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Class Mastery &amp; Passive Milestone Badges</span>
+              <span class="arvore-secao-sub">Custom 64×64 Beveled Gump Seals</span>
+            </h2>
+            <div class="passive-badges-row">
+              
+      <div class="passive-badge-item">
+        <img src="assets/icons/samurai/samurai_bushido_initiate@64.png" alt="Bushido Initiate" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier I (L10) · <code>samurai_bushido_initiate</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Bushido Initiate" data-pt="Iniciado do Bushido">Bushido Initiate</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Unlocks Honor target focus and Perfection streak stacking on consecutive melee hits." data-pt="Libera o foco de Honra e o acúmulo de Perfeição em golpes consecutivos.">Unlocks Honor target focus and Perfection streak stacking on consecutive melee hits.</div>
+        </div>
+      </div>
+    
+
+      <div class="passive-badge-item">
+        <img src="assets/icons/samurai/samurai_inner_calm@64.png" alt="Inner Calm" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier II (L20) · <code>samurai_inner_calm</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Inner Calm" data-pt="Calma Interior">Inner Calm</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Harmonizes Confidence and Parrying to restore HP and Stamina during defensive stances." data-pt="Harmoniza Confiança e Aparar para restaurar Vida e Estamina em posturas defensivas.">Harmonizes Confidence and Parrying to restore HP and Stamina during defensive stances.</div>
+        </div>
+      </div>
+    
+
+      <div class="passive-badge-item">
+        <img src="assets/icons/samurai/samurai_way_of_the_blade@64.png" alt="Way of the Blade Mastery" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier III (L35) · <code>samurai_way_of_the_blade</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Way of the Blade Mastery" data-pt="Maestria do Caminho da Lâmina">Way of the Blade Mastery</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Mastery of Katana, Wakizashi, No-Dachi, and Daisho shieldless parrying and Evasion." data-pt="Maestria em aparar sem escudo e Evasão com Katana, Wakizashi, No-Dachi e Daisho.">Mastery of Katana, Wakizashi, No-Dachi, and Daisho shieldless parrying and Evasion.</div>
+        </div>
+      </div>
+    
+
+      <div class="passive-badge-item">
+        <img src="assets/icons/samurai/samurai_bushido_master@64.png" alt="Grandmaster Bushido Seal" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier IV (L60) · <code>samurai_bushido_master</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Grandmaster Bushido Seal" data-pt="Selo de Grão-Mestre Bushido">Grandmaster Bushido Seal</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Crowns the Samurai with Lightning Strike II and Honorable Execution II (1.95x Execute)." data-pt="Coroa o Samurai com Golpe Relâmpago II e Execução Honrosa II (Execução 1.95x).">Crowns the Samurai with Lightning Strike II and Honorable Execution II (1.95x Execute).</div>
+        </div>
+      </div>
+    
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN: Pinned .arvore-dica Tooltip Inspector & Complete Catalog -->
+        <div class="col-stack">
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Pinned .arvore-dica Tooltip Inspector</span>
+              <span class="arvore-secao-sub" id="inspector-mode-pill">Mode A (100% Existing Engine)</span>
+            </h2>
+            <div class="panel-body">
+              <div class="arvore-dica-pinned" id="live-inspector">
+                <div class="dica-header">
+                  <img id="insp-icon" src="assets/icons/samurai/samurai_way@64.png" alt="Way of the Blade" />
+                  <div>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                      <span class="lv-pill" id="insp-level">L1</span>
+                      <span class="type-pill" id="insp-kind">Passive</span>
+                      <code style="font-size:10px;color:var(--text-secondary);" id="insp-id">samurai_way</code>
+                    </div>
+                    <strong style="display:block;font-size:15px;color:#fff2bf;margin-top:3px;" id="insp-name">Way of the Blade / Caminho da Lâmina</strong>
+                    <div class="mono" style="font-size:10px;color:var(--text-gold);" id="insp-qC">qC Estimator: 1.00x Weapon Auto-Swing + 25.8% (1H) / 29.3% (2H) Parry @ 100 Bushido</div>
+                  </div>
+                </div>
+                <p id="insp-desc" style="margin:0 0 8px;font-size:12px;color:var(--text-primary);">Automatic weapon swing and shieldless Bushido Weapon Parry mastery with Katana, Wakizashi, No-Dachi, and Daisho.</p>
+                <div class="cost-badges" id="insp-badges" style="margin-bottom:8px;">
+                  <span class="badge-cd">CD: 0ms</span>
+                  <span class="badge-cd">CustomCD: 0ms</span>
+                  <span class="badge-mana">Mana: 0</span>
+                  <span class="badge-stamina">Stamina: 0</span>
+                  <span class="badge-meta">Gump: 21536</span>
+                </div>
+                <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
+                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;">Scaling Formula &amp; Status Effect</strong>
+                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">100% weapon damage auto-attack loop plus shieldless Bushido Weapon Parry (Parry * Bushido / 48000 1H or 41140 2H)</div>
+                  <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px;">
+                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;">
+                    <strong style="color:#fff2bf;display:block;">Mode A (Drop-In JSON)</strong>
+                    <span id="insp-mode-a" style="color:var(--text-secondary);">Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.</span>
+                  </div>
+                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;">
+                    <strong style="color:#fff2bf;display:block;">Mode B (&lt;20 LOC C# Hook)</strong>
+                    <span id="insp-mode-b" style="color:var(--text-secondary);">Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Complete Ability Catalog (12 Entries)</span>
+              <span class="arvore-secao-sub">48×48 Icons · 1:1 Schema Fields</span>
+            </h2>
+            <div class="catalog-list">
+              
+        <div class="catalog-card" data-ability-card="samurai_way" onclick="selectAbility('samurai_way')">
+          <img src="assets/icons/samurai/samurai_way@48.png" alt="Way of the Blade" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Way of the Blade" data-pt="Caminho da Lâmina">Way of the Blade</strong>
+              <span class="lv-pill">Tree L1 / Raw 75</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_way</code> · kind: Passive · tab: ability · innate · scope: New · gump: 21536 (idle_samurai_way)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 0ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling." data-mode-b="Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.">
+              Passive auto-attack swing loop + Parrying (ID 5) &amp; Bushido (ID 52) shieldless parry scaling.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_lightning" onclick="selectAbility('samurai_lightning')">
+          <img src="assets/icons/samurai/samurai_lightning@48.png" alt="Lightning Strike" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Lightning Strike" data-pt="Golpe Relâmpago">Lightning Strike</strong>
+              <span class="lv-pill">Tree L5 / Raw 1</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_lightning</code> · kind: SpecialMove · tab: ability · spellId: 404 · scope: UO · gump: 21540 (gump_21540)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 9000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff." data-mode-b="Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll).">
+              SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_perfection" onclick="selectAbility('samurai_perfection')">
+          <img src="assets/icons/samurai/samurai_perfection@48.png" alt="Honor &amp; Perfection" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Honor &amp; Perfection" data-pt="Honra e Perfeição">Honor &amp; Perfection</strong>
+              <span class="lv-pill">Tree L10 / Raw 10</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_perfection</code> · kind: Custom · tab: ability · innate · scope: Idle · gump: 21536 (idle_samurai_perfection)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 14000ms</span>
+              <span class="badge-cd">customCD: 14000ms (&gt;=2000ms)</span>
+              <span class="badge-mana">manaCost: 8</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">self_buff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Custom self-buff (customCooldownMs: 14,000ms &gt;= 2,000ms floor) granting +10% Perfection streak." data-mode-b="Passive BaseWeapon.OnHit auto-Honored target bind (+4%/hit up to +15% cap, +8 HP/Stam/Mana on kill).">
+              Custom self-buff (customCooldownMs: 14,000ms &gt;= 2,000ms floor) granting +10% Perfection streak.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_honorable" onclick="selectAbility('samurai_honorable')">
+          <img src="assets/icons/samurai/samurai_honorable@48.png" alt="Honorable Execution" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Honorable Execution" data-pt="Execução Honrosa">Honorable Execution</strong>
+              <span class="lv-pill">Tree L15 / Raw 10</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_honorable</code> · kind: SpecialMove · tab: ability · spellId: 400 · scope: UO · gump: 21536 (gump_21536)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 9000ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 10</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed." data-mode-b="HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.">
+              SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute &lt;= 35% HP) + 10s +15% Attack Speed.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_confidence" onclick="selectAbility('samurai_confidence')">
+          <img src="assets/icons/samurai/samurai_confidence@48.png" alt="Confidence" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Confidence" data-pt="Confiança">Confidence</strong>
+              <span class="lv-pill">Tree L20 / Raw 20</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_confidence</code> · kind: Spell · tab: spell · spellId: 401 · scope: UO · gump: 21537 (gump_21537)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 18000ms</span>
+              
+              <span class="badge-mana">manaCost: 8</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">heal</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s." data-mode-b="Confidence posture: instant heal + reactive on-parry recovery (+8 HP / +20 Stam, 2.0s ICD).">
+              Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_counter" onclick="selectAbility('samurai_counter')">
+          <img src="assets/icons/samurai/samurai_counter@48.png" alt="Counter Attack" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Counter Attack" data-pt="Contra-Ataque">Counter Attack</strong>
+              <span class="lv-pill">Tree L25 / Raw 5</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_counter</code> · kind: Spell · tab: spell · spellId: 403 · scope: UO · gump: 21539 (gump_21539)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 7000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s." data-mode-b="CounterAttack posture: +18% damage + instant free BaseWeapon.OnSwing counter-attack on parry (2.0s ICD).">
+              Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_double_strike" onclick="selectAbility('samurai_double_strike')">
+          <img src="assets/icons/samurai/samurai_double_strike@48.png" alt="Double Strike" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Double Strike" data-pt="Golpe Duplo">Double Strike</strong>
+              <span class="lv-pill">Tree L30 / Raw 30</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_double_strike</code> · kind: WeaponAbility · tab: ability · weaponRef: 7 · scope: UO · gump: 20998 (gump_20998)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 9000ms</span>
+              
+              <span class="badge-mana">manaCost: 12</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total)." data-mode-b="DoubleStrike (ref: 7) 2-hit combo advancing Perfection streak twice in a single swing.">
+              WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total).
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_evasion" onclick="selectAbility('samurai_evasion')">
+          <img src="assets/icons/samurai/samurai_evasion@48.png" alt="Evasion" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Evasion" data-pt="Evasão">Evasion</strong>
+              <span class="lv-pill">Tree L35 / Raw 35</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_evasion</code> · kind: Spell · tab: spell · spellId: 402 · scope: UO · gump: 21538 (gump_21538)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 20000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">self_buff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection." data-mode-b="Evasion posture: 1.32x Bushido parry multiplier + spell interception for 8.0s (20s CD).">
+              Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_momentum_strike" onclick="selectAbility('samurai_momentum_strike')">
+          <img src="assets/icons/samurai/samurai_momentum_strike@48.png" alt="Momentum Strike" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Momentum Strike" data-pt="Golpe de Ímpeto">Momentum Strike</strong>
+              <span class="lv-pill">Tree L40 / Raw 40</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_momentum_strike</code> · kind: Spell · tab: spell · spellId: 405 · scope: UO · gump: 21541 (gump_21541)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 8000ms</span>
+              
+              <span class="badge-mana">manaCost: 12</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target." data-mode-b="MomentumStrike 2-target cleave transferring full kinetic blade force to secondary enemy.">
+              Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_armor_ignore" onclick="selectAbility('samurai_armor_ignore')">
+          <img src="assets/icons/samurai/samurai_armor_ignore@48.png" alt="Armor Ignore" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Armor Ignore" data-pt="Ignorar Armadura">Armor Ignore</strong>
+              <span class="lv-pill">Tree L45 / Raw 45</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_armor_ignore</code> · kind: WeaponAbility · tab: ability · weaponRef: 1 · scope: UO · gump: 20992 (gump_20992)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 14000ms</span>
+              
+              <span class="badge-mana">manaCost: 14</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">debuff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred." data-mode-b="ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.">
+              WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_lightning_r2" onclick="selectAbility('samurai_lightning_r2')">
+          <img src="assets/icons/samurai/samurai_lightning_r2@48.png" alt="Lightning Strike II" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Lightning Strike II" data-pt="Golpe Relâmpago II">Lightning Strike II</strong>
+              <span class="lv-pill">Tree L50 / Raw 300</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_lightning_r2</code> · kind: SpecialMove · tab: ability · spellId: 404 · scope: UO · gump: 21540 (gump_21540)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 8000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Master SpecialMove (spellId: 404 R2, 15 Stamina) 1.25x-1.35x strike + 45% secondary arc splash." data-mode-b="Grandmaster LightningStrike II with guaranteed IgnoreArmor crit roll and 45% chain lightning.">
+              Master SpecialMove (spellId: 404 R2, 15 Stamina) 1.25x-1.35x strike + 45% secondary arc splash.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="samurai_honorable_r2" onclick="selectAbility('samurai_honorable_r2')">
+          <img src="assets/icons/samurai/samurai_honorable_r2@48.png" alt="Honorable Execution II" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Honorable Execution II" data-pt="Execução Honrosa II">Honorable Execution II</strong>
+              <span class="lv-pill">Tree L60 / Raw 200</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>samurai_honorable_r2</code> · kind: SpecialMove · tab: ability · spellId: 400 · scope: UO · gump: 21536 (gump_21536)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 11000ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 15</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Capstone SpecialMove (spellId: 400 R2, 15 Stamina) 1.95x Execute &lt;= 35% HP + +12% Speed / +8% Damage (10s)." data-mode-b="Grandmaster HonorableExecution II: 1.95x Execute finisher + dual offensive posture.">
+              Capstone SpecialMove (spellId: 400 R2, 15 Stamina) 1.95x Execute &lt;= 35% HP + +12% Speed / +8% Damage (10s).
+            </div>
+          </div>
+        </div>
+      
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script id="mockup-data" type="application/json">{"classData":{"id":"samurai","classNumericId":114,"badge":"SM","role":"melee","baseStats":{"str":50,"dex":30,"int":10},"resourceProfile":{"primaryResource":"mana","startingManaMax":25,"meditationCap":100,"consumesReagents":false,"consumesAmmo":false,"chivalryGoldTithe":false},"starterSkills":[{"skillId":52,"skillKey":"bushido","initialValue":50},{"skillId":40,"skillKey":"swords","initialValue":50},{"skillId":27,"skillKey":"tactics","initialValue":50},{"skillId":5,"skillKey":"parry","initialValue":50},{"skillId":1,"skillKey":"anatomy","initialValue":50},{"skillId":17,"skillKey":"healing","initialValue":50},{"skillId":26,"skillKey":"magicResist","initialValue":30},{"skillId":50,"skillKey":"focus","initialValue":50}],"legacyTemplateSkills":[{"skillId":40,"skillKey":"swords","weight":30},{"skillId":52,"skillKey":"bushido","weight":30},{"skillId":27,"skillKey":"tactics","weight":20},{"skillId":1,"skillKey":"anatomy","weight":20}],"starterEquipment":{"kitTokens":["samuraiSet","katana","bandages","potionsMelee","robeCloak"],"paperdollLayers":[{"layer":"Helm","graphic":10102},{"layer":"InnerTorso","graphic":10182},{"layer":"Arms","graphic":10110},{"layer":"Pants","graphic":5067},{"layer":"Shoes","graphic":10134},{"layer":"OneHanded","graphic":5119},{"layer":"OuterTorso","graphic":7939,"softFlag":"softRobe"},{"layer":"Cloak","graphic":5397,"softFlag":"softCloak"}]},"robeHue":1884,"seededHotbar":[{"slotIndex":0,"kind":"ability","abilityId":"lesser_heal_potion","label":"Lesser Heal","enabled":true,"graphic":3852,"conditions":[{"target":"self","attr":"hp","op":"<=","value":50,"percent":true}]},{"slotIndex":1,"kind":"ability","abilityId":"bandage","label":"Bandage","enabled":true,"graphic":3617,"conditions":[{"target":"self","attr":"hp","op":"<=","value":80,"percent":true},{"target":"self","attr":"poisoned","op":"==","value":1,"join":"or"}]},{"slotIndex":2,"kind":"ability","abilityId":"lesser_cure_potion","label":"Lesser Cure","enabled":true,"graphic":3847,"conditions":[{"target":"self","attr":"poisoned","op":"==","value":1}]},{"slotIndex":3,"kind":"ability","abilityId":"lesser_mana_potion","label":"Lesser Mana","enabled":true,"graphic":3846,"conditions":[{"target":"self","attr":"mana","op":"<=","value":30,"percent":true}]},{"slotIndex":4,"kind":"ability","abilityId":"samurai_lightning","label":"Bolt","enabled":true,"conditions":[]}],"progression":[{"level":1,"id":"samurai_way","nameEn":"Way of the Blade","namePtBr":"Caminho da Lâmina","type":"passive","descEn":"Automatic weapon swing and shieldless Bushido Weapon Parry mastery with Katana, Wakizashi, No-Dachi, and Daisho.","descPtBr":"Ataque automático da arma e maestria em Aparar de Arma Bushido sem escudo com Katana, Wakizashi, No-Dachi e Daisho.","inCatalog":true,"catalogId":"samurai_way"},{"level":5,"id":"samurai_lightning","nameEn":"Lightning Strike","namePtBr":"Golpe Relâmpago","type":"skill","descEn":"High-accuracy Bushido precision strike (+50 Accuracy) with a critical IgnoreArmor roll and brief stagger.","descPtBr":"Golpe de precisão Bushido (+50 de Precisão) com chance crítica de ignorar armadura e breve desequilíbrio.","inCatalog":true,"catalogId":"samurai_lightning"},{"level":10,"id":"samurai_perfection","nameEn":"Honor & Perfection","namePtBr":"Honra e Perfeição","type":"mechanic","descEn":"Focuses Bushido honor on the target, building Perfection consecutive-hit damage stacks and restoring vitals on kill.","descPtBr":"Foca a honra Bushido no alvo, acumulando bônus de dano de Perfeição em golpes consecutivos e restaurando vitais ao abater.","inCatalog":true,"catalogId":"samurai_perfection"},{"level":15,"id":"samurai_honorable","nameEn":"Honorable Execution","namePtBr":"Execução Honrosa","type":"skill","descEn":"Bushido threshold finisher that deals massive execute damage below 35% HP and grants +15% attack speed.","descPtBr":"Finalizador Bushido que causa alto dano de execução abaixo de 35% de vida e concede +15% de velocidade de ataque.","inCatalog":true,"catalogId":"samurai_honorable"},{"level":20,"id":"samurai_confidence","nameEn":"Confidence","namePtBr":"Confiança","type":"spell","descEn":"Defensive Bushido stance that restores health on cast and recovers HP and Stamina on every successful weapon parry.","descPtBr":"Postura defensiva Bushido que restaura vida ao conjurar e recupera Vida e Estamina a cada aparar de arma bem-sucedido.","inCatalog":true,"catalogId":"samurai_confidence"},{"level":25,"id":"samurai_counter","nameEn":"Counter Attack","namePtBr":"Contra-Ataque","type":"spell","descEn":"Reactive Bushido stance that empowers weapon damage (+18%) and unleashes an instant counter-swing upon parrying.","descPtBr":"Postura reativa Bushido que amplia o dano da arma (+18%) e desfere um contra-golpe imediato ao aparar.","inCatalog":true,"catalogId":"samurai_counter"},{"level":30,"id":"samurai_double_strike","nameEn":"Double Strike","namePtBr":"Golpe Duplo","type":"skill","descEn":"Signature Katana and Daisho technique: delivers two rapid consecutive weapon strikes at 90% damage each.","descPtBr":"Técnica clássica de Katana e Daisho: executa dois golpes rápidos consecutivos causando 90% de dano cada.","inCatalog":true,"catalogId":"samurai_double_strike"},{"level":35,"id":"samurai_evasion","nameEn":"Evasion","namePtBr":"Evasão","type":"spell","descEn":"Short burst Bushido posture that amplifies weapon parry chance and intercepts incoming direct-damage spells.","descPtBr":"Postura curta de Bushido que multiplica a chance de aparar com a arma e intercepta magias de dano direto.","inCatalog":true,"catalogId":"samurai_evasion"},{"level":40,"id":"samurai_momentum_strike","nameEn":"Momentum Strike","namePtBr":"Golpe de Ímpeto","type":"spell","descEn":"Two-target Bushido cleave that channels weapon momentum through the primary enemy into a second adjacent foe.","descPtBr":"Corte Bushido para dois alvos que transfere o ímpeto da lâmina do alvo principal para um segundo inimigo adjacente.","inCatalog":true,"catalogId":"samurai_momentum_strike"},{"level":45,"id":"samurai_armor_ignore","nameEn":"Armor Ignore","namePtBr":"Ignorar Armadura","type":"skill","descEn":"Katana secondary mastery: pierces target defenses (-18% defense for 7s) and staggers heavily armored bosses.","descPtBr":"Maestria secundária de Katana: perfura as defesas do alvo (-18% de defesa por 7s) e desequilibra chefes blindados.","inCatalog":true,"catalogId":"samurai_armor_ignore"},{"level":50,"id":"samurai_lightning_r2","nameEn":"Lightning Strike II","namePtBr":"Golpe Relâmpago II","type":"skill","descEn":"Master Bushido precision strike with enhanced multiplier, critical armor bypass, and secondary arc splash.","descPtBr":"Golpe de precisão Bushido aprimorado com multiplicador superior, perfuração crítica e arco secundário.","inCatalog":true,"catalogId":"samurai_lightning_r2"},{"level":60,"id":"samurai_honorable_r2","nameEn":"Honorable Execution II","namePtBr":"Execução Honrosa II","type":"feature","descEn":"Grandmaster Bushido capstone finisher: 1.95x execute multiplier below 35% HP plus +12% attack speed and +8% damage.","descPtBr":"Finalizador supremo de Grão-Mestre Bushido: multiplicador 1.95x abaixo de 35% de vida com +12% de velocidade e +8% de dano.","inCatalog":true,"catalogId":"samurai_honorable_r2"}],"abilities":[{"id":"samurai_way","aliasOf":null,"name":"Way of the Blade","namePtBr":"Caminho da Lâmina","category":"samurai","kind":"Passive","tab":"ability","cooldownMs":0,"customCooldownMs":0,"manaCost":0,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":null,"weaponAbilityRef":null,"spellId":null,"itemId":null,"mapScope":"New","gumpIcon":21536,"iconKey":"idle_samurai_way","scalingFormula":{"summary":"100% weapon damage auto-attack loop plus shieldless Bushido Weapon Parry (Parry * Bushido / 48000 1H or 41140 2H)","stat":"bushido","minMultiplier":1,"maxMultiplier":1},"unlockLevel":75,"progressionTreeLevel":1,"inCatalog":true},{"id":"samurai_lightning","aliasOf":null,"name":"Lightning Strike","namePtBr":"Golpe Relâmpago","category":"samurai","kind":"SpecialMove","tab":"ability","cooldownMs":9000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"samurai_lightning_stagger","name":"Lightning Stagger","effectType":"debuff","durationMs":3000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"disarm","value":1}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":404,"itemId":null,"mapScope":"UO","gumpIcon":21540,"iconKey":"gump_21540","scalingFormula":{"summary":"UO LightningStrike (ref 404): +50 Accuracy precision strike with Bushido^2/72000 IgnoreArmor critical roll","stat":"bushido","minMultiplier":1.1,"maxMultiplier":1.2},"unlockLevel":1,"progressionTreeLevel":5,"inCatalog":true},{"id":"samurai_perfection","aliasOf":null,"name":"Honor & Perfection","namePtBr":"Honra e Perfeição","category":"samurai","kind":"Custom","tab":"ability","cooldownMs":14000,"customCooldownMs":14000,"manaCost":8,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"self_buff","statusEffect":{"id":"samurai_perfection_buff","name":"Perfection","effectType":"self_buff","durationMs":9000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"perfection_streak_pct","value":10}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":null,"itemId":null,"mapScope":"Idle","gumpIcon":21536,"iconKey":"idle_samurai_perfection","scalingFormula":{"summary":"ModernUO HonorContext Perfection ramp: grants +10% Perfection streak bonus in Mode A or per-hit streak scaling in Mode B","stat":"bushido"},"unlockLevel":10,"progressionTreeLevel":10,"inCatalog":true},{"id":"samurai_honorable","aliasOf":null,"name":"Honorable Execution","namePtBr":"Execução Honrosa","category":"samurai","kind":"SpecialMove","tab":"ability","cooldownMs":9000,"customCooldownMs":0,"manaCost":0,"staminaCost":10,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"samurai_honorable_haste","name":"Honorable Haste","effectType":"self_buff","durationMs":9000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"attack_speed_pct","value":15}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":400,"itemId":null,"mapScope":"UO","gumpIcon":21536,"iconKey":"gump_21536","scalingFormula":{"summary":"UO HonorableExecution (ref 400): 1.35x-1.45x Bushido strike (1.85x execute below 35% HP) granting +15% attack speed","stat":"bushido","minMultiplier":1.35,"maxMultiplier":1.45,"executeThresholdHpPct":35,"executeMultiplier":1.85},"unlockLevel":10,"progressionTreeLevel":15,"inCatalog":true},{"id":"samurai_confidence","aliasOf":null,"name":"Confidence","namePtBr":"Confiança","category":"samurai","kind":"Spell","tab":"spell","cooldownMs":18000,"customCooldownMs":0,"manaCost":8,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"heal","statusEffect":null,"weaponAbilityRef":null,"spellId":401,"itemId":null,"mapScope":"UO","gumpIcon":21537,"iconKey":"gump_21537","scalingFormula":{"summary":"UO Confidence (ref 401): emergency Bushido self-recovery (15 + Bushido^2/576 HP) plus on-parry HP/Stamina restore in Mode B","stat":"bushido","minMultiplier":0.02,"maxMultiplier":0.02},"unlockLevel":20,"progressionTreeLevel":20,"inCatalog":true},{"id":"samurai_counter","aliasOf":null,"name":"Counter Attack","namePtBr":"Contra-Ataque","category":"samurai","kind":"Spell","tab":"spell","cooldownMs":7000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"samurai_counter_stance","name":"Counter Stance","effectType":"self_buff","durationMs":7000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"damage_dealt_pct","value":18}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":403,"itemId":null,"mapScope":"UO","gumpIcon":21539,"iconKey":"gump_21539","scalingFormula":{"summary":"UO CounterAttack (ref 403): reactive Bushido counter-strike (1.50x-1.60x) and +18% counter stance damage","stat":"bushido","minMultiplier":1.5,"maxMultiplier":1.6},"unlockLevel":5,"progressionTreeLevel":25,"inCatalog":true},{"id":"samurai_double_strike","aliasOf":"warrior_double_strike","name":"Double Strike","namePtBr":"Golpe Duplo","category":"samurai","kind":"WeaponAbility","tab":"ability","cooldownMs":9000,"customCooldownMs":0,"manaCost":12,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":null,"weaponAbilityRef":7,"spellId":null,"itemId":null,"mapScope":"UO","gumpIcon":20998,"iconKey":"gump_20998","scalingFormula":{"summary":"UO DoubleStrike (ref 7, Katana/Daisho/Wakizashi): rapid twin-blade strike at 0.90x weapon multiplier","stat":"weapon","minMultiplier":0.9,"maxMultiplier":0.9,"hits":1},"unlockLevel":30,"progressionTreeLevel":30,"inCatalog":true},{"id":"samurai_evasion","aliasOf":null,"name":"Evasion","namePtBr":"Evasão","category":"samurai","kind":"Spell","tab":"spell","cooldownMs":20000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"self_buff","statusEffect":{"id":"samurai_evasion_stance","name":"Evasion Stance","effectType":"posture","durationMs":5000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"defense_pct","value":4}],"stackingRule":"exclusive_posture","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":402,"itemId":null,"mapScope":"UO","gumpIcon":21538,"iconKey":"gump_21538","scalingFormula":{"summary":"UO Evasion (ref 402): 5s defensive Bushido posture (+4% defense in Mode A; 1.16x-1.50x Parry scalar + spell evasion in Mode B)","stat":"bushido"},"unlockLevel":35,"progressionTreeLevel":35,"inCatalog":true},{"id":"samurai_momentum_strike","aliasOf":null,"name":"Momentum Strike","namePtBr":"Golpe de Ímpeto","category":"samurai","kind":"Spell","tab":"spell","cooldownMs":8000,"customCooldownMs":0,"manaCost":12,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"samurai_momentum_stagger","name":"Momentum Stagger","effectType":"debuff","durationMs":3000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"disarm","value":1}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":405,"itemId":null,"mapScope":"UO","gumpIcon":21541,"iconKey":"gump_21541","scalingFormula":{"summary":"UO MomentumStrike (ref 405): 2-target Bushido cleave transferring 115% weapon momentum to an adjacent enemy","stat":"bushido","minMultiplier":1,"maxMultiplier":1.1,"hits":1,"splashRatio":1.15},"unlockLevel":40,"progressionTreeLevel":40,"inCatalog":true},{"id":"samurai_armor_ignore","aliasOf":"duelist_armor_ignore","name":"Armor Ignore","namePtBr":"Ignorar Armadura","category":"samurai","kind":"WeaponAbility","tab":"ability","cooldownMs":14000,"customCooldownMs":0,"manaCost":14,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"debuff","statusEffect":{"id":"samurai_armor_shred","name":"Armor Shred","effectType":"debuff","durationMs":7000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"defense_pct","value":-18},{"stat":"disarm","value":1}],"stackingRule":"refresh","authorityTier":"server-authoritative"},"weaponAbilityRef":1,"spellId":null,"itemId":null,"mapScope":"UO","gumpIcon":20992,"iconKey":"gump_20992","scalingFormula":{"summary":"UO ArmorIgnore (ref 1, Katana secondary): weakens enemy physical defense (-18% for 7s) and staggers target","stat":"weapon","minMultiplier":1,"maxMultiplier":1},"unlockLevel":45,"progressionTreeLevel":45,"inCatalog":true},{"id":"samurai_lightning_r2","aliasOf":null,"name":"Lightning Strike II","namePtBr":"Golpe Relâmpago II","category":"samurai","kind":"SpecialMove","tab":"ability","cooldownMs":8000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"samurai_lightning_r2_stagger","name":"Lightning Stagger II","effectType":"debuff","durationMs":3000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"disarm","value":1}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":404,"itemId":null,"mapScope":"UO","gumpIcon":21540,"iconKey":"gump_21540","scalingFormula":{"summary":"Master LightningStrike (ref 404 Rank II): 1.15x-1.25x precision strike with 50% secondary arc splash","stat":"bushido","minMultiplier":1.15,"maxMultiplier":1.25,"hits":1,"splashRatio":0.5},"unlockLevel":300,"progressionTreeLevel":50,"inCatalog":true},{"id":"samurai_honorable_r2","aliasOf":null,"name":"Honorable Execution II","namePtBr":"Execução Honrosa II","category":"samurai","kind":"SpecialMove","tab":"ability","cooldownMs":11000,"customCooldownMs":0,"manaCost":0,"staminaCost":15,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"samurai_honorable_r2_haste","name":"Honorable Haste II","effectType":"self_buff","durationMs":10000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"attack_speed_pct","value":12},{"stat":"damage_dealt_pct","value":8}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":400,"itemId":null,"mapScope":"UO","gumpIcon":21536,"iconKey":"gump_21536","scalingFormula":{"summary":"Grandmaster HonorableExecution (ref 400 Rank II): 1.15x-1.25x strike (1.95x below 35% HP) granting +12% haste and +8% damage","stat":"bushido","minMultiplier":1.15,"maxMultiplier":1.25,"executeThresholdHpPct":35,"executeMultiplier":1.95},"unlockLevel":200,"progressionTreeLevel":60,"inCatalog":true}]},"modeDescriptions":{"samurai_way":{"modeA":"Passive auto-attack swing loop + Parrying (ID 5) & Bushido (ID 52) shieldless parry scaling.","modeB":"Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.","qCEstimator":"1.00x Weapon Auto-Swing + 25.8% (1H) / 29.3% (2H) Parry @ 100 Bushido"},"samurai_lightning":{"modeA":"SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.","modeB":"Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll).","qCEstimator":"1.10x - 1.20x Melee + 13.9% IgnoreArmor Crit @ 100 Bushido"},"samurai_perfection":{"modeA":"Custom self-buff (customCooldownMs: 14,000ms >= 2,000ms floor) granting +10% Perfection streak.","modeB":"Passive BaseWeapon.OnHit auto-Honored target bind (+4%/hit up to +15% cap, +8 HP/Stam/Mana on kill).","qCEstimator":"+10% Damage Dealt (8.0s Mode A) / +15% Streak Cap + Vital Restore (Mode B)"},"samurai_honorable":{"modeA":"SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute <= 35% HP) + 10s +15% Attack Speed.","modeB":"HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.","qCEstimator":"1.15x - 1.25x (1.60x <= 35% HP) + 15% Swing Haste (10s)"},"samurai_confidence":{"modeA":"Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s.","modeB":"Confidence posture: instant heal + reactive on-parry recovery (+8 HP / +20 Stam, 2.0s ICD).","qCEstimator":"38 - 52 HP Instant Heal + 4x Regen Ticks / On-Parry Recovery"},"samurai_counter":{"modeA":"Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s.","modeB":"CounterAttack posture: +18% damage + instant free BaseWeapon.OnSwing counter-attack on parry (2.0s ICD).","qCEstimator":"+18% Melee Damage (8.0s) + Reactive Parry Counter-Swing"},"samurai_double_strike":{"modeA":"WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total).","modeB":"DoubleStrike (ref: 7) 2-hit combo advancing Perfection streak twice in a single swing.","qCEstimator":"2 Hits x 0.90x (1.80x Total Weapon Damage)"},"samurai_evasion":{"modeA":"Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection.","modeB":"Evasion posture: 1.32x Bushido parry multiplier + spell interception for 8.0s (20s CD).","qCEstimator":"-15% Damage Taken & Spell Reflect (8.0s)"},"samurai_momentum_strike":{"modeA":"Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target.","modeB":"MomentumStrike 2-target cleave transferring full kinetic blade force to secondary enemy.","qCEstimator":"1.15x - 1.25x Primary + 100% 2nd-Target Cleave"},"samurai_armor_ignore":{"modeA":"WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred.","modeB":"ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.","qCEstimator":"1.25x - 1.35x Direct Pierce + -18% Enemy Defense (7.0s)"},"samurai_lightning_r2":{"modeA":"Master SpecialMove (spellId: 404 R2, 15 Stamina) 1.25x-1.35x strike + 45% secondary arc splash.","modeB":"Grandmaster LightningStrike II with guaranteed IgnoreArmor crit roll and 45% chain lightning.","qCEstimator":"1.25x - 1.35x Primary + 45% Arc Splash (15 Stamina)"},"samurai_honorable_r2":{"modeA":"Capstone SpecialMove (spellId: 400 R2, 15 Stamina) 1.95x Execute <= 35% HP + +12% Speed / +8% Damage (10s).","modeB":"Grandmaster HonorableExecution II: 1.95x Execute finisher + dual offensive posture.","qCEstimator":"1.15x - 1.25x (1.95x Execute <= 35% HP) + 12% Haste / +8% Dmg"},"ninja_shadowjump":{"modeA":"Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) & Stealth (ID 47) scaling.","modeB":"Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.","qCEstimator":"1.00x High-Speed Fencing Auto-Swing (Speed 53-55)"},"ninja_focus":{"modeA":"SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff.","modeB":"FocusAttack (spellId: 500) shieldless 1H/2H multiplier + +20% on-hit property amplification.","qCEstimator":"1.15x - 1.25x Strike + +8% Focused Ki (4.0s)"},"ninja_mirror":{"modeA":"Spell (spellId: 507) summons illusory shadow clone granting -8% damage taken for 8.0s.","modeB":"MirrorImage clone stack: intercepts incoming hit at Ninjitsu/150 chance (70% ablative absorb, 1.5s ICD).","qCEstimator":"1 Shadow Clone (-8% Damage Taken Mode A / 70% Intercept Mode B)"},"ninja_backstab":{"modeA":"SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff.","modeB":"Backstab consuming CombatStealthUntil window for 1.15x multiplicative stealth opener bonus.","qCEstimator":"1.15x - 1.25x Ambush + +6% Damage Dealt (5.0s)"},"ninja_death":{"modeA":"SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).","modeB":"DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.","qCEstimator":"1.10x - 1.20x Strike + 4-Tick Trauma DoT / 5-Swing Detonation"},"ninja_animal_form":{"modeA":"Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s.","modeB":"Combat AnimalForm posture increasing Fencing swing cadence by +10% without polymorph lock.","qCEstimator":"+10% Weapon Attack Speed (8.0s Wolf/Kitsune Aspect)"},"ninja_infectious_strike":{"modeA":"WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s.","modeB":"InfectiousStrike (ref: 11) applying Poisoning-scaled Deadly/Lethal assassin venom.","qCEstimator":"0.90x - 1.00x Strike + 3x Virulent Venom Ticks (6.0s)"},"ninja_smoke_bomb":{"modeA":"Custom ability (itemId: 10248, customCooldownMs: 20,000ms >= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken).","modeB":"Triggers Hiding.CombatOverride = true & sets CombatStealthUntil for Backstab / SurpriseAttack openers.","qCEstimator":"6.0s Mid-Combat Stealth Veil (-8% Damage Taken + Opener Ready)"},"ninja_shuriken":{"modeA":"Bonus L35 Custom projectile volley (itemId: 10248 / gump 10156, customCooldownMs: 11,000ms) with 75% 2nd-target splash.","modeB":"Cooldown-gated Shuriken & Fukiya dart volley (zero backpack ammo micro) with Poison coat synergy.","qCEstimator":"0.75x - 0.85x Ranged Volley + 75% Secondary Splash"},"ninja_ki_attack":{"modeA":"SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy.","modeB":"KiAttack gap-closer simulating optimal distance bonus in 1D combat with 85% cleave splash.","qCEstimator":"1.15x - 1.25x Primary Dash + 85% Kinetic Cleave"},"ninja_surprise_attack":{"modeA":"SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred.","modeB":"SurpriseAttack consuming stealth window to apply -8% defense vulnerability before DeathStrike.","qCEstimator":"1.10x - 1.20x Strike + -8% Target Defense Shred (6.0s)"},"ninja_mirror_r2":{"modeA":"Master Spell (spellId: 507 R2) deploying coordinated shadow clones (-10% dmg taken, +8% dmg dealt for 7.0s).","modeB":"Summons 2 ablative shadow clones (70% hit interception each, 1.5s ICD) + +8% offensive clone sync.","qCEstimator":"2 Shadow Clones (-10% Dmg Taken & +8% Dmg Dealt, 7.0s)"},"ninja_death_r2":{"modeA":"Capstone SpecialMove (spellId: 501 R2, 18 Stamina) 1.25x-1.35x (1.95x Execute <= 35% HP) + 4-tick Death Mark II.","modeB":"Grandmaster DeathStrike II: 1.95x Execute below 35% HP + 5-swing delayed assassination detonation.","qCEstimator":"1.25x - 1.35x (1.95x Execute <= 35% HP) + 4-Tick Mark (18 Stamina)"}}}</script>
+  <script>
+    (function() {
+      var raw = document.getElementById('mockup-data').textContent;
+      var payload = JSON.parse(raw);
+      var cls = payload.classData;
+      var modeMap = payload.modeDescriptions;
+      var currentLocale = 'en';
+      var currentMode = 'mode_a';
+
+      window.setLocale = function(lang) {
+        currentLocale = lang;
+        document.getElementById('btn-lang-en').classList.toggle('is-active', lang === 'en');
+        document.getElementById('btn-lang-pt').classList.toggle('is-active', lang === 'pt');
+        var nodes = document.querySelectorAll('[data-en][data-pt]');
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].textContent = lang === 'pt' ? nodes[i].getAttribute('data-pt') : nodes[i].getAttribute('data-en');
+        }
+      };
+
+      window.setExecMode = function(mode) {
+        currentMode = mode;
+        document.getElementById('btn-mode-a').classList.toggle('is-active', mode === 'mode_a');
+        document.getElementById('btn-mode-b').classList.toggle('is-active', mode === 'mode_b');
+        document.getElementById('inspector-mode-pill').textContent =
+          mode === 'mode_b' ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+        var modeNodes = document.querySelectorAll('.mode-text');
+        for (var i = 0; i < modeNodes.length; i++) {
+          modeNodes[i].textContent =
+            mode === 'mode_b' ? modeNodes[i].getAttribute('data-mode-b') : modeNodes[i].getAttribute('data-mode-a');
+        }
+      };
+
+      window.selectAbility = function(abilityId) {
+        var ab = null;
+        for (var i = 0; i < cls.abilities.length; i++) {
+          if (cls.abilities[i].id === abilityId) {
+            ab = cls.abilities[i];
+            break;
+          }
+        }
+        if (!ab) return;
+        var ms = null;
+        for (var j = 0; j < cls.progression.length; j++) {
+          if (cls.progression[j].id === abilityId) {
+            ms = cls.progression[j];
+            break;
+          }
+        }
+        var cards = document.querySelectorAll('.milestone-card');
+        for (var k = 0; k < cards.length; k++) {
+          cards[k].classList.toggle('is-selected', cards[k].getAttribute('data-milestone-id') === abilityId);
+        }
+        var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
+        document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
+        document.getElementById('insp-level').textContent = 'L' + ab.progressionTreeLevel;
+        document.getElementById('insp-kind').textContent = ab.kind;
+        document.getElementById('insp-id').textContent = ab.id;
+        document.getElementById('insp-name').textContent = ab.name + ' / ' + ab.namePtBr;
+        document.getElementById('insp-qC').textContent = 'qC Estimator: ' + mInfo.qCEstimator;
+        document.getElementById('insp-desc').textContent = ms
+          ? (currentLocale === 'pt' ? ms.descPtBr : ms.descEn)
+          : ab.scalingFormula.summary;
+        document.getElementById('insp-formula').textContent = ab.scalingFormula.summary;
+        if (ab.statusEffect) {
+          var mods = ab.statusEffect.modifiers.map(function(m) { return m.stat + ': ' + m.value; }).join(', ');
+          document.getElementById('insp-status').textContent =
+            'StatusEffect: ' + ab.statusEffect.name + ' (' + ab.statusEffect.durationMs + 'ms, ' + ab.statusEffect.stackingRule + ') [' + mods + ']';
+        } else {
+          document.getElementById('insp-status').textContent = 'StatusEffect: None (Direct / Innate)';
+        }
+        document.getElementById('insp-mode-a').textContent = mInfo.modeA;
+        document.getElementById('insp-mode-b').textContent = mInfo.modeB;
+      };
+    })();
+  </script>
+</body>
+</html>

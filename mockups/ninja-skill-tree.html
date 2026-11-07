@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UO Idle v0.99.0 Beta — Ninja (Ninjitsu) [Arvore Skill Tree &amp; Hotbar Workbench</title>
+  <style>
+    :root {
+      --bg-canvas: #0b0d0a;
+      --bg-panel: #121510;
+      --bg-card: #181c16;
+      --bg-card-hover: #20261d;
+      --border-subtle: #2a3026;
+      --border-gold: #c9a227;
+      --border-gold-bright: #e5c158;
+      --text-primary: #e8e4d9;
+      --text-secondary: #a39e90;
+      --text-gold: #d4af37;
+      --samurai-accent: #c83e37;
+      --ninja-accent: #2e9e6b;
+      --mana-blue: #4a90e2;
+      --stamina-amber: #e2a04a;
+      --cd-purple: #9b6be2;
+      --class-accent: var(--ninja-accent);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      color: var(--text-primary);
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .mono, code, pre, .num {
+      font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .beta-shell {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+    }
+
+    /* Live uoidle.com/beta .personagem-arvore & .arvore-* structural rules from game-theme.css */
+    .personagem-arvore {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      color: #f6ecd4;
+      gap: 10px;
+    }
+
+    .arvore-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 54px;
+      padding: 8px 14px;
+      border: 1px solid #6d5733;
+      border-top: 2px solid var(--border-gold);
+      border-radius: 4px;
+      background: linear-gradient(180deg, #20221ff0, #0d1112fa);
+      color: #f3e2b3;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    }
+
+    .arvore-nivel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding-right: 16px;
+      border-right: 1px solid #725b31;
+      white-space: nowrap;
+    }
+
+    .arvore-nivel strong {
+      color: #fff2bf;
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 17px;
+      letter-spacing: 0.05em;
+    }
+
+    .arvore-saldos {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 4px;
+    }
+
+    .arvore-saldo {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      padding: 2px 10px;
+      border-left: 1px solid #725b31;
+    }
+
+    .arvore-saldo strong {
+      color: #82d5b0;
+      font-size: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .arvore-saldo small {
+      color: #75bd93;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .arvore-saldo em {
+      justify-self: end;
+      color: #a39e90;
+      font-size: 10px;
+      font-style: normal;
+    }
+
+    .arvore-head-acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .beta-btn, .nav-pill {
+      padding: 5px 10px;
+      border: 1px solid #6d5733;
+      border-radius: 4px;
+      background: #141816;
+      color: #e8e4d9;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .beta-btn:hover, .nav-pill:hover {
+      border-color: var(--border-gold-bright);
+      background: var(--bg-card-hover);
+      color: #fff2bf;
+    }
+
+    .beta-btn.is-active, .nav-pill.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 10px rgba(201, 162, 39, 0.35);
+    }
+
+    .class-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      border: 1px solid var(--class-accent);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hue-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--class-accent);
+      border: 1px solid #fff2bf;
+      display: inline-block;
+    }
+
+    .arvore-secao {
+      min-width: 0;
+      border: 1px solid #5d4a2b;
+      border-radius: 4px;
+      background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.06);
+    }
+
+    .arvore-secao-titulo {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 8px 12px 6px;
+      border-bottom: 1px solid #3c3425;
+      color: var(--text-gold);
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .arvore-secao-titulo .title-left::before {
+      content: '✦ ';
+      color: #c99d3f;
+    }
+
+    .arvore-secao-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .col-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-body {
+      padding: 10px 12px;
+    }
+
+    /* Portrait & Identity */
+    .identity-hero {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .portrait-frame {
+      position: relative;
+      width: 116px;
+      height: 116px;
+      border: 2px solid var(--border-gold);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #080907;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+    }
+
+    .portrait-frame img.main-portrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .portrait-mini-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 4px;
+      background: #0b0d0a;
+    }
+
+    .stat-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .stat-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .stat-chip span {
+      display: block;
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .stat-chip strong {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: #fff2bf;
+    }
+
+    /* Skills & Paperdoll */
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .kv-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .kv-item .k {
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .kv-item .v {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-gold);
+      font-weight: 600;
+    }
+
+    .hotbar-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hotbar-slot {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 5px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--class-accent);
+      border-radius: 4px;
+    }
+
+    .slot-num {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      background: #0d100c;
+      border: 1px solid #5d4a2b;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-gold);
+    }
+
+    /* Winding .arvore-cobra ribbon */
+    .arvore-cobra-wrap {
+      padding: 10px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: rgba(11, 13, 10, 0.55);
+    }
+
+    .arvore-cobra {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 4px;
+      align-items: center;
+    }
+
+    .arvore-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .arvore-lv {
+      color: #e6c36a;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .arvore-circulo {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 2px solid #6d5733;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .arvore-circulo.is-on {
+      border-color: #e6c36a;
+      box-shadow: 0 0 12px #e6c36a73;
+    }
+
+    .arvore-circulo:hover {
+      transform: scale(1.06);
+      border-color: var(--border-gold-bright);
+    }
+
+    .arvore-circulo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .arvore-nome {
+      color: #f6ecd4;
+      font-size: 9px;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 64px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 12 Milestone Cards Grid */
+    .milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .milestone-card {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    }
+
+    .milestone-card.is-capstone {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #241f14, #171a14);
+    }
+
+    .milestone-icon-box {
+      position: relative;
+      width: 52px;
+      height: 52px;
+    }
+
+    .milestone-icon-box img {
+      width: 52px;
+      height: 52px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      display: block;
+    }
+
+    .lv-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #262013;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .type-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      border: 1px solid #3c4436;
+      background: #121611;
+      color: var(--text-secondary);
+    }
+
+    .dual-unlock-banner {
+      margin-top: 6px;
+      padding: 5px 7px;
+      border-radius: 4px;
+      border: 1px dashed var(--ninja-accent);
+      background: rgba(46, 158, 107, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: #b8f5d8;
+    }
+
+    .dual-unlock-banner img {
+      width: 28px;
+      height: 28px;
+      border-radius: 3px;
+      border: 1px solid var(--border-gold);
+    }
+
+    /* Pinned Live Tooltip Inspector (.arvore-dica) */
+    .arvore-dica-pinned {
+      padding: 10px 12px;
+      border: 1px solid var(--border-gold);
+      border-radius: 4px;
+      background: #0c0e0cf7;
+      color: #f6ecd4;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+    }
+
+    .dica-header {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #3c3425;
+      margin-bottom: 8px;
+    }
+
+    .dica-header img {
+      width: 56px;
+      height: 56px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+    }
+
+    /* Ability Catalog Cards */
+    .catalog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 10px 12px;
+    }
+
+    .catalog-card {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      padding: 7px 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .catalog-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+    }
+
+    .catalog-card img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .cost-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .badge-mana {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(74, 144, 226, 0.16);
+      border: 1px solid var(--mana-blue);
+      color: #9ec9ff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-stamina {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(226, 160, 74, 0.16);
+      border: 1px solid var(--stamina-amber);
+      color: #ffd18b;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-cd {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(155, 107, 226, 0.16);
+      border: 1px solid var(--cd-purple);
+      color: #d7bfff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-meta {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #111510;
+      border: 1px solid #333a2e;
+      color: var(--text-secondary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .passive-badges-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px 12px 12px;
+    }
+
+    .passive-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 7px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .passive-badge-item img {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="beta-shell">
+    <div class="personagem-arvore" data-personagem-conteudo="arvore">
+      <!-- Top Header Bar (.arvore-head) -->
+      <header class="arvore-head">
+        <div class="arvore-nivel">
+          <span class="class-badge-pill">
+            <span class="hue-swatch"></span>
+            NJ · ID 115
+          </span>
+          <strong>Ninja (Ninjitsu) — [Arvore Progression</strong>
+        </div>
+
+        <div class="arvore-saldos">
+          <div class="arvore-saldo">
+            <div>
+              <strong>Lv. 60</strong>
+              <div><small>Grandmaster Cap</small></div>
+            </div>
+            <em>12 Milestones</em>
+          </div>
+          <div class="arvore-saldo">
+            <div>
+              <strong>30/50/10</strong>
+              <div><small>STR / DEX / INT</small></div>
+            </div>
+            <em>Sum = 90</em>
+          </div>
+          <div class="arvore-saldo">
+            <div>
+              <strong>Hue 1175 (Midnight Shinobi)</strong>
+              <div><small>Starter Robe Hue</small></div>
+            </div>
+            <em>robeHue: 1175</em>
+          </div>
+          <div class="arvore-saldo">
+            <div>
+              <strong>13 Catalog Skills</strong>
+              <div><small>2,000ms Custom Floor</small></div>
+            </div>
+            <em>Mana 25 / Med 100</em>
+          </div>
+        </div>
+
+        <div class="arvore-head-acoes">
+          <button type="button" class="beta-btn is-active" id="btn-lang-en" onclick="setLocale('en')">EN</button>
+          <button type="button" class="beta-btn" id="btn-lang-pt" onclick="setLocale('pt')">PT-BR</button>
+          <button type="button" class="beta-btn is-active" id="btn-mode-a" onclick="setExecMode('mode_a')">Mode A (100% Engine)</button>
+          <button type="button" class="beta-btn" id="btn-mode-b" onclick="setExecMode('mode_b')">Mode B (&lt;20 LOC C#)</button>
+          <a class="nav-pill" href="samurai-skill-tree.html">Samurai (SM 114)</a>
+          <a class="nav-pill" href="class-comparison.html">5-Class Parity</a>
+        </div>
+      </header>
+
+      <!-- 3-Column Beta Workbench -->
+      <div class="workbench-grid">
+        <!-- LEFT COLUMN: Character Identity, 8 Starter Skills, Tokuno Paperdoll & 5-Slot Seeded Hotbar -->
+        <div class="col-stack">
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Character &amp; Resource Profile</span>
+              <span class="arvore-secao-sub">_E / dx[115]</span>
+            </h2>
+            <div class="panel-body">
+              <div class="identity-hero">
+                <div class="portrait-frame">
+                  <img class="main-portrait" src="assets/icons/ninja/portrait-ninja.png" alt="Ninja (Ninjitsu) Portrait" />
+                  <img class="portrait-mini-badge" src="assets/icons/ninja/portrait-ninja-64.png" alt="NJ 64x64 Icon" />
+                </div>
+                <div>
+                  <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">Ninja (Ninjitsu)</div>
+                  <div class="mono" style="font-size:11px;color:var(--text-secondary);">classId: "ninja" · numericId: 115 · badge: "NJ"</div>
+                  <div class="mono" style="font-size:10px;color:var(--text-gold);margin-top:3px;">
+                    Primary: mana | StartMana: 25 | MedCap: 100 | Reagents: false | Ammo: false
+                  </div>
+                  <div class="stat-chips">
+                    <div class="stat-chip"><span>STR</span><strong>30</strong></div>
+                    <div class="stat-chip"><span>DEX</span><strong>50</strong></div>
+                    <div class="stat-chip"><span>INT</span><strong>10</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">8 Starter Skills &amp; Template</span>
+              <span class="arvore-secao-sub">WE / hE &amp; FE (100%)</span>
+            </h2>
+            <div class="panel-body">
+              <div class="kv-grid">
+                
+      <div class="kv-item">
+        <span class="k">ninjitsu <small class="mono" style="color:var(--text-secondary)">(#53)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">fencing <small class="mono" style="color:var(--text-secondary)">(#42)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">tactics <small class="mono" style="color:var(--text-secondary)">(#27)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">hiding <small class="mono" style="color:var(--text-secondary)">(#21)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">stealth <small class="mono" style="color:var(--text-secondary)">(#47)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">anatomy <small class="mono" style="color:var(--text-secondary)">(#1)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">magicResist <small class="mono" style="color:var(--text-secondary)">(#26)</small></span>
+        <span class="v">30.0</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">focus <small class="mono" style="color:var(--text-secondary)">(#50)</small></span>
+        <span class="v">50.0</span>
+      </div>
+    
+              </div>
+              <div style="margin-top:6px;font-size:10px;color:var(--text-secondary);">
+                Synergizes with Poisoning (#30) for Infectious Strike, Shuriken, and Fukiya virulent toxin application.
+              </div>
+              <div style="margin-top:8px;font-size:10px;font-weight:700;color:var(--text-gold);text-transform:uppercase;">Legacy Template Weights (FE = 100%)</div>
+              <div class="kv-grid" style="margin-top:4px;">
+                
+      <div class="kv-item">
+        <span class="k">fencing <small class="mono" style="color:var(--text-secondary)">(#42)</small></span>
+        <span class="v">30%</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">ninjitsu <small class="mono" style="color:var(--text-secondary)">(#53)</small></span>
+        <span class="v">30%</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">hiding <small class="mono" style="color:var(--text-secondary)">(#21)</small></span>
+        <span class="v">20%</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">stealth <small class="mono" style="color:var(--text-secondary)">(#47)</small></span>
+        <span class="v">20%</span>
+      </div>
+    
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Tokuno Starter Paperdoll</span>
+              <span class="arvore-secao-sub">yE / mx (9 Layers)</span>
+            </h2>
+            <div class="panel-body">
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);margin-bottom:6px;">
+                kitTokens: ["ninjaSet", "kryss", "bandages", "potionsMelee", "robeCloak"] · Off-Hand Free (FocusAttack &amp; Throws Enabled)
+              </div>
+              <div class="kv-grid">
+                
+      <div class="kv-item">
+        <span class="k">Helm</span>
+        <span class="v">0x2790 (10128)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">InnerTorso</span>
+        <span class="v">0x2793 (10131)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Arms</span>
+        <span class="v">0x2794 (10132)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Gloves</span>
+        <span class="v">0x2792 (10130)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Pants</span>
+        <span class="v">0x2791 (10129)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Shoes</span>
+        <span class="v">0x2795 (10133)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">OneHanded</span>
+        <span class="v">0x1401 (5121)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">OuterTorso</span>
+        <span class="v">0x1F03 (7939)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <span class="k">Cloak</span>
+        <span class="v">0x1515 (5397)</span>
+      </div>
+    
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">5-Slot Seeded Hotbar Queue</span>
+              <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
+            </h2>
+            <div class="panel-body">
+              <div class="hotbar-slots">
+                
+        <div class="hotbar-slot">
+          <div class="slot-num">1</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Heal <code style="color:var(--text-secondary);font-size:10px;">(lesser_heal_potion)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.hp &lt;= 50%</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">2</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bandage <code style="color:var(--text-secondary);font-size:10px;">(bandage)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.hp &lt;= 80% OR self.poisoned == 1</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">3</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Cure <code style="color:var(--text-secondary);font-size:10px;">(lesser_cure_potion)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.poisoned == 1</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">4</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Mana <code style="color:var(--text-secondary);font-size:10px;">(lesser_mana_potion)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.mana &lt;= 30%</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+
+        <div class="hotbar-slot">
+          <div class="slot-num">5</div>
+          <div>
+            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bolt <code style="color:var(--text-secondary);font-size:10px;">(ninja_focus)</code></div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">Unconditional Primary Strike (ro(e) Queue)</div>
+          </div>
+          <span class="badge-cd">2,000ms CD Floor</span>
+        </div>
+      
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- CENTER COLUMN: Winding .arvore-cobra Path & 12 L1-L60 Progression Milestones -->
+        <div class="col-stack">
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">L1–L60 [Arvore Progression Timeline (12 Milestones)</span>
+              <span class="arvore-secao-sub">gE.ninja · Click any node to inspect</span>
+            </h2>
+
+            <!-- Live .arvore-cobra 12-node ribbon -->
+            <div class="arvore-cobra-wrap">
+              <div class="arvore-cobra">
+                
+        <div class="arvore-col" onclick="selectAbility('ninja_shadowjump')" title="L1: Shadowjump / Salto das Sombras">
+          <span class="arvore-lv">L1</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
+          </div>
+          <span class="arvore-nome" data-en="Shadowjump" data-pt="Salto das Sombras">Shadowjump</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_focus')" title="L5: Focus Attack / Ataque Focado">
+          <span class="arvore-lv">L5</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_focus@64.png" alt="Focus Attack" />
+          </div>
+          <span class="arvore-nome" data-en="Focus Attack" data-pt="Ataque Focado">Focus Attack</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_mirror')" title="L10: Mirror Image / Imagem Espelhada">
+          <span class="arvore-lv">L10</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_mirror@64.png" alt="Mirror Image" />
+          </div>
+          <span class="arvore-nome" data-en="Mirror Image" data-pt="Imagem Espelhada">Mirror Image</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_backstab')" title="L15: Backstab / Punhalada pelas Costas">
+          <span class="arvore-lv">L15</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_backstab@64.png" alt="Backstab" />
+          </div>
+          <span class="arvore-nome" data-en="Backstab" data-pt="Punhalada pelas Costas">Backstab</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_death')" title="L20: Death Strike / Golpe Mortal">
+          <span class="arvore-lv">L20</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_death@64.png" alt="Death Strike" />
+          </div>
+          <span class="arvore-nome" data-en="Death Strike" data-pt="Golpe Mortal">Death Strike</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_animal_form')" title="L25: Animal Form / Forma Animal">
+          <span class="arvore-lv">L25</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_animal_form@64.png" alt="Animal Form" />
+          </div>
+          <span class="arvore-nome" data-en="Animal Form" data-pt="Forma Animal">Animal Form</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_infectious_strike')" title="L30: Infectious Strike / Golpe Infeccioso">
+          <span class="arvore-lv">L30</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_infectious_strike@64.png" alt="Infectious Strike" />
+          </div>
+          <span class="arvore-nome" data-en="Infectious Strike" data-pt="Golpe Infeccioso">Infectious Strike</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_smoke_bomb')" title="L35: Smoke Bomb / Bomba de Fumaça">
+          <span class="arvore-lv">L35</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_smoke_bomb@64.png" alt="Smoke Bomb" />
+          </div>
+          <span class="arvore-nome" data-en="Smoke Bomb" data-pt="Bomba de Fumaça">Smoke Bomb</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_ki_attack')" title="L40: Ki Attack / Ataque de Ki">
+          <span class="arvore-lv">L40</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_ki_attack@64.png" alt="Ki Attack" />
+          </div>
+          <span class="arvore-nome" data-en="Ki Attack" data-pt="Ataque de Ki">Ki Attack</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_surprise_attack')" title="L45: Surprise Attack / Ataque Surpresa">
+          <span class="arvore-lv">L45</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_surprise_attack@64.png" alt="Surprise Attack" />
+          </div>
+          <span class="arvore-nome" data-en="Surprise Attack" data-pt="Ataque Surpresa">Surprise Attack</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_mirror_r2')" title="L50: Mirror Image II / Imagem Espelhada II">
+          <span class="arvore-lv">L50</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_mirror_r2@64.png" alt="Mirror Image II" />
+          </div>
+          <span class="arvore-nome" data-en="Mirror Image II" data-pt="Imagem Espelhada II">Mirror Image II</span>
+        </div>
+      
+
+        <div class="arvore-col" onclick="selectAbility('ninja_death_r2')" title="L60: Death Strike II / Golpe Mortal II">
+          <span class="arvore-lv">L60</span>
+          <div class="arvore-circulo is-on">
+            <img src="assets/icons/ninja/ninja_death_r2@64.png" alt="Death Strike II" />
+          </div>
+          <span class="arvore-nome" data-en="Death Strike II" data-pt="Golpe Mortal II">Death Strike II</span>
+        </div>
+      
+              </div>
+            </div>
+
+            <!-- 12 Interactive Milestone Cards -->
+            <div class="milestone-grid">
+              
+        <div class="milestone-card is-selected " data-milestone-id="ninja_shadowjump" onclick="selectAbility('ninja_shadowjump')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L1</span>
+              <span class="type-pill">passive</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Shadowjump" data-pt="Salto das Sombras">Shadowjump</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Salto das Sombras</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai." data-pt="Movimentação inata de passo das sombras Ninjitsu e maestria de ataque automático rápido de Esgrima com Kryss, Tekagi, Kama e Sai.">Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 0ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_focus" onclick="selectAbility('ninja_focus')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_focus@64.png" alt="Focus Attack" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L5</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Focus Attack" data-pt="Ataque Focado">Focus Attack</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Ataque Focado</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Shieldless Ninjitsu precision strike that concentrates ki into a single blow (1.15x-1.25x) and staggers the target&#39;s nerves." data-pt="Golpe de precisão Ninjitsu sem escudo que concentra ki em um único ataque (1.15x-1.25x) e paralisa os nervos do alvo.">Shieldless Ninjitsu precision strike that concentrates ki into a single blow (1.15x-1.25x) and staggers the target&#39;s nerves.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 7000ms</span>
+                    <span class="badge-mana">Mana 8</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_mirror" onclick="selectAbility('ninja_mirror')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_mirror@64.png" alt="Mirror Image" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L10</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Mirror Image" data-pt="Imagem Espelhada">Mirror Image</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Imagem Espelhada</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Summons an illusory Ninjitsu clone that diverts incoming melee attacks and reduces damage taken by 8%." data-pt="Conjura um clone ilusório de Ninjitsu que desvia ataques corpo a corpo recebidos e reduz o dano sofrido em 8%.">Summons an illusory Ninjitsu clone that diverts incoming melee attacks and reduces damage taken by 8%.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 18000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_backstab" onclick="selectAbility('ninja_backstab')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_backstab@64.png" alt="Backstab" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L15</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Backstab" data-pt="Punhalada pelas Costas">Backstab</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Punhalada pelas Costas</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Ambush strike from the shadows that deals 1.15x-1.25x Ninjitsu damage and grants a 5s stealth damage window (+6%)." data-pt="Ataque de emboscada das sombras que causa 1.15x-1.25x de dano Ninjitsu e concede 5s de janela furtiva (+6% de dano).">Ambush strike from the shadows that deals 1.15x-1.25x Ninjitsu damage and grants a 5s stealth damage window (+6%).</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 10000ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 10</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_death" onclick="selectAbility('ninja_death')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_death@64.png" alt="Death Strike" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L20</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Death Strike" data-pt="Golpe Mortal">Death Strike</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Mortal</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Strikes vital pressure points and plants a lethal Ninjitsu mark that detonates after 5 combat swings or 4s of internal trauma." data-pt="Atinge pontos vitais de pressão e planta uma marca letal de Ninjitsu que detona após 5 golpes de combate ou 4s de trauma interno.">Strikes vital pressure points and plants a lethal Ninjitsu mark that detonates after 5 combat swings or 4s of internal trauma.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 12000ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 12</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_animal_form" onclick="selectAbility('ninja_animal_form')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_animal_form@64.png" alt="Animal Form" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L25</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Animal Form" data-pt="Forma Animal">Animal Form</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Forma Animal</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Channels the Grey Wolf and Bake Kitsune Ninjitsu aspect, increasing weapon attack speed by 10% for 8s." data-pt="Canaliza o aspecto Ninjitsu de Lobo Cinzento e Bake Kitsune, aumentando a velocidade de ataque em 10% por 8s.">Channels the Grey Wolf and Bake Kitsune Ninjitsu aspect, increasing weapon attack speed by 10% for 8s.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 18000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_infectious_strike" onclick="selectAbility('ninja_infectious_strike')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_infectious_strike@64.png" alt="Infectious Strike" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L30</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Infectious Strike" data-pt="Golpe Infeccioso">Infectious Strike</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Infeccioso</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Kryss primary mastery: coats the blade in virulent assassin venom, inflicting 3 poison ticks over 6s." data-pt="Maestria primária de Kryss: reveste a lâmina com veneno virulento de assassino, aplicando 3 pulsos de veneno em 6s.">Kryss primary mastery: coats the blade in virulent assassin venom, inflicting 3 poison ticks over 6s.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 12000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_smoke_bomb" onclick="selectAbility('ninja_smoke_bomb')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_smoke_bomb@64.png" alt="Smoke Bomb" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L35</span>
+              <span class="type-pill">mechanic</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Smoke Bomb" data-pt="Bomba de Fumaça">Smoke Bomb</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Bomba de Fumaça</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Detonates a Tokuno smoke bomb to enter mid-combat stealth (-8% damage taken for 6s) and unlocks Shuriken &amp; Fukiya volleys." data-pt="Detona uma bomba de fumaça de Tokuno para entrar em furtividade de combate (-8% de dano recebido por 6s) e libera Shuriken e Fukiya.">Detonates a Tokuno smoke bomb to enter mid-combat stealth (-8% damage taken for 6s) and unlocks Shuriken &amp; Fukiya volleys.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 20000ms</span>
+                    <span class="badge-mana">Mana 10</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+            <div class="dual-unlock-banner" onclick="event.stopPropagation(); selectAbility('ninja_shuriken');">
+              <img src="assets/icons/ninja/ninja_shuriken@48.png" alt="Shuriken &amp; Fukiya Volley" />
+              <div>
+                <strong>+ Dual L35 Unlock: <span data-en="Shuriken &amp; Fukiya Volley" data-pt="Saraivada de Shuriken e Fukiya">Shuriken &amp; Fukiya Volley</span></strong>
+                <div class="mono" style="font-size:9px;color:#a39e90;">id: ninja_shuriken | CD: 11000ms | Mana: 8 | gump: 10156</div>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_ki_attack" onclick="selectAbility('ninja_ki_attack')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_ki_attack@64.png" alt="Ki Attack" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L40</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Ki Attack" data-pt="Ataque de Ki">Ki Attack</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Ataque de Ki</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="High-velocity Ninjitsu dash strike that closes the gap and splashes 85% kinetic ki damage onto a second target." data-pt="Investida veloz de Ninjitsu que fecha a distância e espalha 85% de dano cinético de ki em um segundo alvo.">High-velocity Ninjitsu dash strike that closes the gap and splashes 85% kinetic ki damage onto a second target.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 10000ms</span>
+                    <span class="badge-mana">Mana 12</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_surprise_attack" onclick="selectAbility('ninja_surprise_attack')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_surprise_attack@64.png" alt="Surprise Attack" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L45</span>
+              <span class="type-pill">skill</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Surprise Attack" data-pt="Ataque Surpresa">Surprise Attack</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Ataque Surpresa</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Blindsides the enemy from stealth, shredding target physical defense by 8% for 6s to expose them to Death Strike." data-pt="Surpreende o inimigo a partir da furtividade, reduzindo a defesa física do alvo em 8% por 6s para expô-lo ao Golpe Mortal.">Blindsides the enemy from stealth, shredding target physical defense by 8% for 6s to expose them to Death Strike.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 16000ms</span>
+                    <span class="badge-mana">Mana 12</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  " data-milestone-id="ninja_mirror_r2" onclick="selectAbility('ninja_mirror_r2')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_mirror_r2@64.png" alt="Mirror Image II" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L50</span>
+              <span class="type-pill">spell</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Mirror Image II" data-pt="Imagem Espelhada II">Mirror Image II</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Imagem Espelhada II</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Master Ninjitsu clone technique: deploys coordinated shadow decoys (-10% damage taken and +8% damage dealt for 7s)." data-pt="Técnica mestre de clones Ninjitsu: invoca chamarizes sombrios coordenados (-10% de dano recebido e +8% de dano causado por 7s).">Master Ninjitsu clone technique: deploys coordinated shadow decoys (-10% damage taken and +8% damage dealt for 7s).</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 18000ms</span>
+                    <span class="badge-mana">Mana 14</span>
+                    <span class="badge-stamina">Stam 0</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+
+        <div class="milestone-card  is-capstone" data-milestone-id="ninja_death_r2" onclick="selectAbility('ninja_death_r2')">
+          <div class="milestone-icon-box">
+            <img src="assets/icons/ninja/ninja_death_r2@64.png" alt="Death Strike II" />
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+              <span class="lv-pill">L60</span>
+              <span class="type-pill">feature</span>
+            </div>
+            <div style="font-weight:700;color:#fff2bf;font-size:13px;margin-top:3px;" data-en="Death Strike II" data-pt="Golpe Mortal II">Death Strike II</div>
+            <div style="font-size:10px;color:var(--text-secondary);font-family:'IBM Plex Mono',monospace;">Golpe Mortal II</div>
+            <p style="margin:4px 0 0;font-size:11px;color:var(--text-primary);" data-en="Grandmaster Ninjitsu capstone assassination: 1.25x-1.35x strike (1.95x execute below 35% HP) plus a 4-tick lethal detonation mark." data-pt="Assassinato supremo de Grão-Mestre Ninjitsu: golpe de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) e marca letal de 4 pulsos.">Grandmaster Ninjitsu capstone assassination: 1.25x-1.35x strike (1.95x execute below 35% HP) plus a 4-tick lethal detonation mark.</p>
+            <div class="cost-badges">
+                    <span class="badge-cd">CD 11000ms</span>
+                    <span class="badge-mana">Mana 0</span>
+                    <span class="badge-stamina">Stam 18</span>
+                  </div>
+            
+          </div>
+        </div>
+      
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Class Mastery &amp; Passive Milestone Badges</span>
+              <span class="arvore-secao-sub">Custom 64×64 Beveled Gump Seals</span>
+            </h2>
+            <div class="passive-badges-row">
+              
+      <div class="passive-badge-item">
+        <img src="assets/icons/ninja/ninja_way_of_stealth@64.png" alt="Way of Stealth" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier I (L1) · <code>ninja_way_of_stealth</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Way of Stealth" data-pt="Caminho da Furtividade">Way of Stealth</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Innate shadow-step footwork combining Ninjitsu, Hiding, and Stealth in idle combat." data-pt="Movimentação inata das sombras combinando Ninjitsu, Esconder-se e Furtividade.">Innate shadow-step footwork combining Ninjitsu, Hiding, and Stealth in idle combat.</div>
+        </div>
+      </div>
+    
+
+      <div class="passive-badge-item">
+        <img src="assets/icons/ninja/ninja_shadow_discipline@64.png" alt="Shadow Discipline" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier II (L25) · <code>ninja_shadow_discipline</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Shadow Discipline" data-pt="Disciplina das Sombras">Shadow Discipline</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Sustains Mirror Image decoys and Animal Form attack speed aspect without polymorph lock." data-pt="Sustenta clones de Imagem Espelhada e velocidade de Forma Animal em combate.">Sustains Mirror Image decoys and Animal Form attack speed aspect without polymorph lock.</div>
+        </div>
+      </div>
+    
+
+      <div class="passive-badge-item">
+        <img src="assets/icons/ninja/ninja_lethal_toxins@64.png" alt="Lethal Toxins &amp; Tools" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier III (L30) · <code>ninja_lethal_toxins</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Lethal Toxins &amp; Tools" data-pt="Toxinas e Ferramentas Letais">Lethal Toxins &amp; Tools</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Combines Kryss Infectious Strike venom with Smoke Bomb stealth and Shuriken/Fukiya volleys." data-pt="Combina o veneno de Golpe Infeccioso com Bomba de Fumaça e saraivadas de Shuriken/Fukiya.">Combines Kryss Infectious Strike venom with Smoke Bomb stealth and Shuriken/Fukiya volleys.</div>
+        </div>
+      </div>
+    
+
+      <div class="passive-badge-item">
+        <img src="assets/icons/ninja/ninja_master_assassin@64.png" alt="Grandmaster Assassin Seal" />
+        <div>
+          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier IV (L60) · <code>ninja_master_assassin</code></div>
+          <strong style="font-size:11px;color:#fff2bf;" data-en="Grandmaster Assassin Seal" data-pt="Selo de Mestre Assassino">Grandmaster Assassin Seal</strong>
+          <div style="font-size:10px;color:var(--text-secondary);" data-en="Unlocks Mirror Image II and Death Strike II (1.95x Execute + 5-swing lethal detonation)." data-pt="Libera Imagem Espelhada II e Golpe Mortal II (Execução 1.95x + detonação de 5 golpes).">Unlocks Mirror Image II and Death Strike II (1.95x Execute + 5-swing lethal detonation).</div>
+        </div>
+      </div>
+    
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN: Pinned .arvore-dica Tooltip Inspector & Complete Catalog -->
+        <div class="col-stack">
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Pinned .arvore-dica Tooltip Inspector</span>
+              <span class="arvore-secao-sub" id="inspector-mode-pill">Mode A (100% Existing Engine)</span>
+            </h2>
+            <div class="panel-body">
+              <div class="arvore-dica-pinned" id="live-inspector">
+                <div class="dica-header">
+                  <img id="insp-icon" src="assets/icons/ninja/ninja_shadowjump@64.png" alt="Shadowjump" />
+                  <div>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                      <span class="lv-pill" id="insp-level">L1</span>
+                      <span class="type-pill" id="insp-kind">Passive</span>
+                      <code style="font-size:10px;color:var(--text-secondary);" id="insp-id">ninja_shadowjump</code>
+                    </div>
+                    <strong style="display:block;font-size:15px;color:#fff2bf;margin-top:3px;" id="insp-name">Shadowjump / Salto das Sombras</strong>
+                    <div class="mono" style="font-size:10px;color:var(--text-gold);" id="insp-qC">qC Estimator: 1.00x High-Speed Fencing Auto-Swing (Speed 53-55)</div>
+                  </div>
+                </div>
+                <p id="insp-desc" style="margin:0 0 8px;font-size:12px;color:var(--text-primary);">Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai.</p>
+                <div class="cost-badges" id="insp-badges" style="margin-bottom:8px;">
+                  <span class="badge-cd">CD: 0ms</span>
+                  <span class="badge-cd">CustomCD: 0ms</span>
+                  <span class="badge-mana">Mana: 0</span>
+                  <span class="badge-stamina">Stamina: 0</span>
+                  <span class="badge-meta">Gump: 21286</span>
+                </div>
+                <div style="padding:6px 8px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;margin-bottom:6px;">
+                  <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;">Scaling Formula &amp; Status Effect</strong>
+                  <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">UO Shadowjump (ref 506): innate shadow-step positioning and 100% Fencing/Ninjitsu auto-attack loop</div>
+                  <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px;">
+                  <div style="padding:6px;background:#141812;border:1px solid var(--border-gold);border-radius:4px;">
+                    <strong style="color:#fff2bf;display:block;">Mode A (Drop-In JSON)</strong>
+                    <span id="insp-mode-a" style="color:var(--text-secondary);">Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</span>
+                  </div>
+                  <div style="padding:6px;background:#141812;border:1px solid var(--class-accent);border-radius:4px;">
+                    <strong style="color:#fff2bf;display:block;">Mode B (&lt;20 LOC C# Hook)</strong>
+                    <span id="insp-mode-b" style="color:var(--text-secondary);">Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="arvore-secao">
+            <h2 class="arvore-secao-titulo">
+              <span class="title-left">Complete Ability Catalog (13 Entries)</span>
+              <span class="arvore-secao-sub">48×48 Icons · 1:1 Schema Fields</span>
+            </h2>
+            <div class="catalog-list">
+              
+        <div class="catalog-card" data-ability-card="ninja_shadowjump" onclick="selectAbility('ninja_shadowjump')">
+          <img src="assets/icons/ninja/ninja_shadowjump@48.png" alt="Shadowjump" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Shadowjump" data-pt="Salto das Sombras">Shadowjump</strong>
+              <span class="lv-pill">Tree L1 / Raw 75</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_shadowjump</code> · kind: Passive · tab: ability · spellId: 506 · scope: UO · gump: 21286 (gump_21286)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 0ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling." data-mode-b="Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.">
+              Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_focus" onclick="selectAbility('ninja_focus')">
+          <img src="assets/icons/ninja/ninja_focus@48.png" alt="Focus Attack" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Focus Attack" data-pt="Ataque Focado">Focus Attack</strong>
+              <span class="lv-pill">Tree L5 / Raw 1</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_focus</code> · kind: SpecialMove · tab: ability · spellId: 500 · scope: UO · gump: 21280 (gump_21280)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 7000ms</span>
+              
+              <span class="badge-mana">manaCost: 8</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff." data-mode-b="FocusAttack (spellId: 500) shieldless 1H/2H multiplier + +20% on-hit property amplification.">
+              SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_mirror" onclick="selectAbility('ninja_mirror')">
+          <img src="assets/icons/ninja/ninja_mirror@48.png" alt="Mirror Image" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Mirror Image" data-pt="Imagem Espelhada">Mirror Image</strong>
+              <span class="lv-pill">Tree L10 / Raw 10</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_mirror</code> · kind: Spell · tab: spell · spellId: 507 · scope: UO · gump: 21287 (gump_21287)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 18000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">self_buff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Spell (spellId: 507) summons illusory shadow clone granting -8% damage taken for 8.0s." data-mode-b="MirrorImage clone stack: intercepts incoming hit at Ninjitsu/150 chance (70% ablative absorb, 1.5s ICD).">
+              Spell (spellId: 507) summons illusory shadow clone granting -8% damage taken for 8.0s.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_backstab" onclick="selectAbility('ninja_backstab')">
+          <img src="assets/icons/ninja/ninja_backstab@48.png" alt="Backstab" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Backstab" data-pt="Punhalada pelas Costas">Backstab</strong>
+              <span class="lv-pill">Tree L15 / Raw 15</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_backstab</code> · kind: SpecialMove · tab: ability · spellId: 504 · scope: UO · gump: 21284 (gump_21284)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 10000ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 10</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff." data-mode-b="Backstab consuming CombatStealthUntil window for 1.15x multiplicative stealth opener bonus.">
+              SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_death" onclick="selectAbility('ninja_death')">
+          <img src="assets/icons/ninja/ninja_death@48.png" alt="Death Strike" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Death Strike" data-pt="Golpe Mortal">Death Strike</strong>
+              <span class="lv-pill">Tree L20 / Raw 5</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_death</code> · kind: SpecialMove · tab: ability · spellId: 501 · scope: UO · gump: 21281 (gump_21281)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 12000ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 12</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s)." data-mode-b="DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.">
+              SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_animal_form" onclick="selectAbility('ninja_animal_form')">
+          <img src="assets/icons/ninja/ninja_animal_form@48.png" alt="Animal Form" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Animal Form" data-pt="Forma Animal">Animal Form</strong>
+              <span class="lv-pill">Tree L25 / Raw 25</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_animal_form</code> · kind: Spell · tab: spell · spellId: 502 · scope: UO · gump: 21282 (gump_21282)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 18000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">self_buff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s." data-mode-b="Combat AnimalForm posture increasing Fencing swing cadence by +10% without polymorph lock.">
+              Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_infectious_strike" onclick="selectAbility('ninja_infectious_strike')">
+          <img src="assets/icons/ninja/ninja_infectious_strike@48.png" alt="Infectious Strike" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Infectious Strike" data-pt="Golpe Infeccioso">Infectious Strike</strong>
+              <span class="lv-pill">Tree L30 / Raw 30</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_infectious_strike</code> · kind: WeaponAbility · tab: ability · weaponRef: 11 · scope: UO · gump: 20999 (gump_20999)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 12000ms</span>
+              
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s." data-mode-b="InfectiousStrike (ref: 11) applying Poisoning-scaled Deadly/Lethal assassin venom.">
+              WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_smoke_bomb" onclick="selectAbility('ninja_smoke_bomb')">
+          <img src="assets/icons/ninja/ninja_smoke_bomb@48.png" alt="Smoke Bomb" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Smoke Bomb" data-pt="Bomba de Fumaça">Smoke Bomb</strong>
+              <span class="lv-pill">Tree L35 / Raw 35</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_smoke_bomb</code> · kind: Custom · tab: ability · itemId: 10248 · scope: Idle · gump: 10248 (idle_ninja_smoke_bomb)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 20000ms</span>
+              <span class="badge-cd">customCD: 20000ms (&gt;=2000ms)</span>
+              <span class="badge-mana">manaCost: 10</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">self_buff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Custom ability (itemId: 10248, customCooldownMs: 20,000ms &gt;= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken)." data-mode-b="Triggers Hiding.CombatOverride = true &amp; sets CombatStealthUntil for Backstab / SurpriseAttack openers.">
+              Custom ability (itemId: 10248, customCooldownMs: 20,000ms &gt;= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken).
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_shuriken" onclick="selectAbility('ninja_shuriken')">
+          <img src="assets/icons/ninja/ninja_shuriken@48.png" alt="Shuriken &amp; Fukiya Volley" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Shuriken &amp; Fukiya Volley" data-pt="Saraivada de Shuriken e Fukiya">Shuriken &amp; Fukiya Volley</strong>
+              <span class="lv-pill">Tree L35 / Raw 20</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_shuriken</code> · kind: Custom · tab: ability · itemId: 10248 · scope: Idle · gump: 10156 (idle_ninja_shuriken)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 11000ms</span>
+              <span class="badge-cd">customCD: 11000ms (&gt;=2000ms)</span>
+              <span class="badge-mana">manaCost: 8</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Bonus L35 Custom projectile volley (itemId: 10248 / gump 10156, customCooldownMs: 11,000ms) with 75% 2nd-target splash." data-mode-b="Cooldown-gated Shuriken &amp; Fukiya dart volley (zero backpack ammo micro) with Poison coat synergy.">
+              Bonus L35 Custom projectile volley (itemId: 10248 / gump 10156, customCooldownMs: 11,000ms) with 75% 2nd-target splash.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_ki_attack" onclick="selectAbility('ninja_ki_attack')">
+          <img src="assets/icons/ninja/ninja_ki_attack@48.png" alt="Ki Attack" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Ki Attack" data-pt="Ataque de Ki">Ki Attack</strong>
+              <span class="lv-pill">Tree L40 / Raw 40</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_ki_attack</code> · kind: SpecialMove · tab: ability · spellId: 503 · scope: UO · gump: 21283 (gump_21283)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 10000ms</span>
+              
+              <span class="badge-mana">manaCost: 12</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy." data-mode-b="KiAttack gap-closer simulating optimal distance bonus in 1D combat with 85% cleave splash.">
+              SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_surprise_attack" onclick="selectAbility('ninja_surprise_attack')">
+          <img src="assets/icons/ninja/ninja_surprise_attack@48.png" alt="Surprise Attack" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Surprise Attack" data-pt="Ataque Surpresa">Surprise Attack</strong>
+              <span class="lv-pill">Tree L45 / Raw 45</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_surprise_attack</code> · kind: SpecialMove · tab: ability · spellId: 505 · scope: UO · gump: 21285 (gump_21285)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 16000ms</span>
+              
+              <span class="badge-mana">manaCost: 12</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">debuff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred." data-mode-b="SurpriseAttack consuming stealth window to apply -8% defense vulnerability before DeathStrike.">
+              SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred.
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_mirror_r2" onclick="selectAbility('ninja_mirror_r2')">
+          <img src="assets/icons/ninja/ninja_mirror_r2@48.png" alt="Mirror Image II" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Mirror Image II" data-pt="Imagem Espelhada II">Mirror Image II</strong>
+              <span class="lv-pill">Tree L50 / Raw 300</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_mirror_r2</code> · kind: Spell · tab: spell · spellId: 507 · scope: UO · gump: 21287 (gump_21287)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 18000ms</span>
+              
+              <span class="badge-mana">manaCost: 14</span>
+              <span class="badge-stamina">staminaCost: 0</span>
+              <span class="badge-meta">self_buff</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Master Spell (spellId: 507 R2) deploying coordinated shadow clones (-10% dmg taken, +8% dmg dealt for 7.0s)." data-mode-b="Summons 2 ablative shadow clones (70% hit interception each, 1.5s ICD) + +8% offensive clone sync.">
+              Master Spell (spellId: 507 R2) deploying coordinated shadow clones (-10% dmg taken, +8% dmg dealt for 7.0s).
+            </div>
+          </div>
+        </div>
+      
+
+        <div class="catalog-card" data-ability-card="ninja_death_r2" onclick="selectAbility('ninja_death_r2')">
+          <img src="assets/icons/ninja/ninja_death_r2@48.png" alt="Death Strike II" />
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <strong style="color:#fff2bf;font-size:12px;" data-en="Death Strike II" data-pt="Golpe Mortal II">Death Strike II</strong>
+              <span class="lv-pill">Tree L60 / Raw 200</span>
+            </div>
+            <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+              id: <code>ninja_death_r2</code> · kind: SpecialMove · tab: ability · spellId: 501 · scope: UO · gump: 21281 (gump_21281)
+            </div>
+            <div class="cost-badges">
+              <span class="badge-cd">cooldownMs: 11000ms</span>
+              
+              <span class="badge-mana">manaCost: 0</span>
+              <span class="badge-stamina">staminaCost: 18</span>
+              <span class="badge-meta">direct_damage</span>
+            </div>
+            <div style="margin-top:4px;font-size:11px;color:var(--text-primary);" class="mode-text" data-mode-a="Capstone SpecialMove (spellId: 501 R2, 18 Stamina) 1.25x-1.35x (1.95x Execute &lt;= 35% HP) + 4-tick Death Mark II." data-mode-b="Grandmaster DeathStrike II: 1.95x Execute below 35% HP + 5-swing delayed assassination detonation.">
+              Capstone SpecialMove (spellId: 501 R2, 18 Stamina) 1.25x-1.35x (1.95x Execute &lt;= 35% HP) + 4-tick Death Mark II.
+            </div>
+          </div>
+        </div>
+      
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script id="mockup-data" type="application/json">{"classData":{"id":"ninja","classNumericId":115,"badge":"NJ","role":"melee","baseStats":{"str":30,"dex":50,"int":10},"resourceProfile":{"primaryResource":"mana","startingManaMax":25,"meditationCap":100,"consumesReagents":false,"consumesAmmo":false,"chivalryGoldTithe":false},"starterSkills":[{"skillId":53,"skillKey":"ninjitsu","initialValue":50},{"skillId":42,"skillKey":"fencing","initialValue":50},{"skillId":27,"skillKey":"tactics","initialValue":50},{"skillId":21,"skillKey":"hiding","initialValue":50},{"skillId":47,"skillKey":"stealth","initialValue":50},{"skillId":1,"skillKey":"anatomy","initialValue":50},{"skillId":26,"skillKey":"magicResist","initialValue":30},{"skillId":50,"skillKey":"focus","initialValue":50}],"legacyTemplateSkills":[{"skillId":42,"skillKey":"fencing","weight":30},{"skillId":53,"skillKey":"ninjitsu","weight":30},{"skillId":21,"skillKey":"hiding","weight":20},{"skillId":47,"skillKey":"stealth","weight":20}],"starterEquipment":{"kitTokens":["ninjaSet","kryss","bandages","potionsMelee","robeCloak"],"paperdollLayers":[{"layer":"Helm","graphic":10128},{"layer":"InnerTorso","graphic":10131},{"layer":"Arms","graphic":10132},{"layer":"Gloves","graphic":10130},{"layer":"Pants","graphic":10129},{"layer":"Shoes","graphic":10133},{"layer":"OneHanded","graphic":5121},{"layer":"OuterTorso","graphic":7939,"softFlag":"softRobe"},{"layer":"Cloak","graphic":5397,"softFlag":"softCloak"}]},"robeHue":1175,"seededHotbar":[{"slotIndex":0,"kind":"ability","abilityId":"lesser_heal_potion","label":"Lesser Heal","enabled":true,"graphic":3852,"conditions":[{"target":"self","attr":"hp","op":"<=","value":50,"percent":true}]},{"slotIndex":1,"kind":"ability","abilityId":"bandage","label":"Bandage","enabled":true,"graphic":3617,"conditions":[{"target":"self","attr":"hp","op":"<=","value":80,"percent":true},{"target":"self","attr":"poisoned","op":"==","value":1,"join":"or"}]},{"slotIndex":2,"kind":"ability","abilityId":"lesser_cure_potion","label":"Lesser Cure","enabled":true,"graphic":3847,"conditions":[{"target":"self","attr":"poisoned","op":"==","value":1}]},{"slotIndex":3,"kind":"ability","abilityId":"lesser_mana_potion","label":"Lesser Mana","enabled":true,"graphic":3846,"conditions":[{"target":"self","attr":"mana","op":"<=","value":30,"percent":true}]},{"slotIndex":4,"kind":"ability","abilityId":"ninja_focus","label":"Bolt","enabled":true,"conditions":[]}],"progression":[{"level":1,"id":"ninja_shadowjump","nameEn":"Shadowjump","namePtBr":"Salto das Sombras","type":"passive","descEn":"Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai.","descPtBr":"Movimentação inata de passo das sombras Ninjitsu e maestria de ataque automático rápido de Esgrima com Kryss, Tekagi, Kama e Sai.","inCatalog":true,"catalogId":"ninja_shadowjump"},{"level":5,"id":"ninja_focus","nameEn":"Focus Attack","namePtBr":"Ataque Focado","type":"skill","descEn":"Shieldless Ninjitsu precision strike that concentrates ki into a single blow (1.15x-1.25x) and staggers the target's nerves.","descPtBr":"Golpe de precisão Ninjitsu sem escudo que concentra ki em um único ataque (1.15x-1.25x) e paralisa os nervos do alvo.","inCatalog":true,"catalogId":"ninja_focus"},{"level":10,"id":"ninja_mirror","nameEn":"Mirror Image","namePtBr":"Imagem Espelhada","type":"spell","descEn":"Summons an illusory Ninjitsu clone that diverts incoming melee attacks and reduces damage taken by 8%.","descPtBr":"Conjura um clone ilusório de Ninjitsu que desvia ataques corpo a corpo recebidos e reduz o dano sofrido em 8%.","inCatalog":true,"catalogId":"ninja_mirror"},{"level":15,"id":"ninja_backstab","nameEn":"Backstab","namePtBr":"Punhalada pelas Costas","type":"skill","descEn":"Ambush strike from the shadows that deals 1.15x-1.25x Ninjitsu damage and grants a 5s stealth damage window (+6%).","descPtBr":"Ataque de emboscada das sombras que causa 1.15x-1.25x de dano Ninjitsu e concede 5s de janela furtiva (+6% de dano).","inCatalog":true,"catalogId":"ninja_backstab"},{"level":20,"id":"ninja_death","nameEn":"Death Strike","namePtBr":"Golpe Mortal","type":"skill","descEn":"Strikes vital pressure points and plants a lethal Ninjitsu mark that detonates after 5 combat swings or 4s of internal trauma.","descPtBr":"Atinge pontos vitais de pressão e planta uma marca letal de Ninjitsu que detona após 5 golpes de combate ou 4s de trauma interno.","inCatalog":true,"catalogId":"ninja_death"},{"level":25,"id":"ninja_animal_form","nameEn":"Animal Form","namePtBr":"Forma Animal","type":"spell","descEn":"Channels the Grey Wolf and Bake Kitsune Ninjitsu aspect, increasing weapon attack speed by 10% for 8s.","descPtBr":"Canaliza o aspecto Ninjitsu de Lobo Cinzento e Bake Kitsune, aumentando a velocidade de ataque em 10% por 8s.","inCatalog":true,"catalogId":"ninja_animal_form"},{"level":30,"id":"ninja_infectious_strike","nameEn":"Infectious Strike","namePtBr":"Golpe Infeccioso","type":"skill","descEn":"Kryss primary mastery: coats the blade in virulent assassin venom, inflicting 3 poison ticks over 6s.","descPtBr":"Maestria primária de Kryss: reveste a lâmina com veneno virulento de assassino, aplicando 3 pulsos de veneno em 6s.","inCatalog":true,"catalogId":"ninja_infectious_strike"},{"level":35,"id":"ninja_smoke_bomb","nameEn":"Smoke Bomb","namePtBr":"Bomba de Fumaça","type":"mechanic","descEn":"Detonates a Tokuno smoke bomb to enter mid-combat stealth (-8% damage taken for 6s) and unlocks Shuriken & Fukiya volleys.","descPtBr":"Detona uma bomba de fumaça de Tokuno para entrar em furtividade de combate (-8% de dano recebido por 6s) e libera Shuriken e Fukiya.","inCatalog":true,"catalogId":"ninja_smoke_bomb"},{"level":40,"id":"ninja_ki_attack","nameEn":"Ki Attack","namePtBr":"Ataque de Ki","type":"skill","descEn":"High-velocity Ninjitsu dash strike that closes the gap and splashes 85% kinetic ki damage onto a second target.","descPtBr":"Investida veloz de Ninjitsu que fecha a distância e espalha 85% de dano cinético de ki em um segundo alvo.","inCatalog":true,"catalogId":"ninja_ki_attack"},{"level":45,"id":"ninja_surprise_attack","nameEn":"Surprise Attack","namePtBr":"Ataque Surpresa","type":"skill","descEn":"Blindsides the enemy from stealth, shredding target physical defense by 8% for 6s to expose them to Death Strike.","descPtBr":"Surpreende o inimigo a partir da furtividade, reduzindo a defesa física do alvo em 8% por 6s para expô-lo ao Golpe Mortal.","inCatalog":true,"catalogId":"ninja_surprise_attack"},{"level":50,"id":"ninja_mirror_r2","nameEn":"Mirror Image II","namePtBr":"Imagem Espelhada II","type":"spell","descEn":"Master Ninjitsu clone technique: deploys coordinated shadow decoys (-10% damage taken and +8% damage dealt for 7s).","descPtBr":"Técnica mestre de clones Ninjitsu: invoca chamarizes sombrios coordenados (-10% de dano recebido e +8% de dano causado por 7s).","inCatalog":true,"catalogId":"ninja_mirror_r2"},{"level":60,"id":"ninja_death_r2","nameEn":"Death Strike II","namePtBr":"Golpe Mortal II","type":"feature","descEn":"Grandmaster Ninjitsu capstone assassination: 1.25x-1.35x strike (1.95x execute below 35% HP) plus a 4-tick lethal detonation mark.","descPtBr":"Assassinato supremo de Grão-Mestre Ninjitsu: golpe de 1.25x-1.35x (execução de 1.95x abaixo de 35% de vida) e marca letal de 4 pulsos.","inCatalog":true,"catalogId":"ninja_death_r2"}],"abilities":[{"id":"ninja_shadowjump","aliasOf":null,"name":"Shadowjump","namePtBr":"Salto das Sombras","category":"ninja","kind":"Passive","tab":"ability","cooldownMs":0,"customCooldownMs":0,"manaCost":0,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":null,"weaponAbilityRef":null,"spellId":506,"itemId":null,"mapScope":"UO","gumpIcon":21286,"iconKey":"gump_21286","scalingFormula":{"summary":"UO Shadowjump (ref 506): innate shadow-step positioning and 100% Fencing/Ninjitsu auto-attack loop","stat":"ninjitsu","minMultiplier":1,"maxMultiplier":1},"unlockLevel":75,"progressionTreeLevel":1,"inCatalog":true},{"id":"ninja_focus","aliasOf":null,"name":"Focus Attack","namePtBr":"Ataque Focado","category":"ninja","kind":"SpecialMove","tab":"ability","cooldownMs":7000,"customCooldownMs":0,"manaCost":8,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"ninja_focus_nerve","name":"Focus Nerve","effectType":"debuff","durationMs":3000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"disarm","value":1}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":500,"itemId":null,"mapScope":"UO","gumpIcon":21280,"iconKey":"gump_21280","scalingFormula":{"summary":"UO FocusAttack (ref 500): shieldless Ninjitsu precision strike (1 + Ninjitsu^2/43636) with nerve-stagger debuff","stat":"ninjitsu","minMultiplier":1.15,"maxMultiplier":1.25},"unlockLevel":1,"progressionTreeLevel":5,"inCatalog":true},{"id":"ninja_mirror","aliasOf":null,"name":"Mirror Image","namePtBr":"Imagem Espelhada","category":"ninja","kind":"Spell","tab":"spell","cooldownMs":18000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"self_buff","statusEffect":{"id":"ninja_mirror_clone","name":"Mirror Image","effectType":"posture","durationMs":6000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"damage_taken_pct","value":-8}],"stackingRule":"exclusive_posture","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":507,"itemId":null,"mapScope":"UO","gumpIcon":21287,"iconKey":"gump_21287","scalingFormula":{"summary":"UO MirrorImage (ref 507): summons an ablative shadow clone (-8% damage taken in Mode A; Ninjitsu/150 hit interception in Mode B)","stat":"ninjitsu"},"unlockLevel":10,"progressionTreeLevel":10,"inCatalog":true},{"id":"ninja_backstab","aliasOf":null,"name":"Backstab","namePtBr":"Punhalada pelas Costas","category":"ninja","kind":"SpecialMove","tab":"ability","cooldownMs":10000,"customCooldownMs":0,"manaCost":0,"staminaCost":10,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"ninja_backstab_stealth","name":"Backstab Stealth","effectType":"stealth","durationMs":5000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"damage_dealt_pct","value":6}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":504,"itemId":null,"mapScope":"UO","gumpIcon":21284,"iconKey":"gump_21284","scalingFormula":{"summary":"UO Backstab (ref 504): stealth-empowered Ninjitsu ambush strike (1 + Ninjitsu/360 + StalkingBonus/100) granting +6% stealth damage","stat":"ninjitsu","minMultiplier":1.15,"maxMultiplier":1.25},"unlockLevel":15,"progressionTreeLevel":15,"inCatalog":true},{"id":"ninja_death","aliasOf":null,"name":"Death Strike","namePtBr":"Golpe Mortal","category":"ninja","kind":"SpecialMove","tab":"ability","cooldownMs":12000,"customCooldownMs":0,"manaCost":0,"staminaCost":12,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"ninja_death_mark","name":"Death Mark","effectType":"dot","durationMs":4000,"tickIntervalMs":1000,"tickCount":4,"modifiers":[],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":501,"itemId":null,"mapScope":"UO","gumpIcon":21281,"iconKey":"gump_21281","scalingFormula":{"summary":"UO DeathStrike (ref 501): pressure-point strike planting a 4-tick internal bleed in Mode A or 5-swing delayed detonation in Mode B","stat":"ninjitsu","minMultiplier":1.05,"maxMultiplier":1.15},"unlockLevel":5,"progressionTreeLevel":20,"inCatalog":true},{"id":"ninja_animal_form","aliasOf":null,"name":"Animal Form","namePtBr":"Forma Animal","category":"ninja","kind":"Spell","tab":"spell","cooldownMs":18000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"self_buff","statusEffect":{"id":"ninja_animal_aspect","name":"Animal Aspect","effectType":"self_buff","durationMs":8000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"attack_speed_pct","value":10}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":502,"itemId":null,"mapScope":"UO","gumpIcon":21282,"iconKey":"gump_21282","scalingFormula":{"summary":"UO AnimalForm (ref 502): Grey Wolf / Bake Kitsune combat aspect granting +10% attack speed without weapon-lock","stat":"ninjitsu"},"unlockLevel":25,"progressionTreeLevel":25,"inCatalog":true},{"id":"ninja_infectious_strike","aliasOf":"duelist_infectious_strike","name":"Infectious Strike","namePtBr":"Golpe Infeccioso","category":"ninja","kind":"WeaponAbility","tab":"ability","cooldownMs":12000,"customCooldownMs":0,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"ninja_infectious_venom","name":"Infectious Venom","effectType":"dot","durationMs":6000,"tickIntervalMs":2000,"tickCount":3,"modifiers":[],"stackingRule":"refresh","authorityTier":"server-authoritative"},"weaponAbilityRef":11,"spellId":null,"itemId":null,"mapScope":"UO","gumpIcon":20999,"iconKey":"gump_20999","scalingFormula":{"summary":"UO InfectiousStrike (ref 11, Kryss primary): 0.90x-1.00x Fencing strike applying a 3-tick virulent poison DoT over 6s","stat":"weapon","minMultiplier":0.9,"maxMultiplier":1},"unlockLevel":30,"progressionTreeLevel":30,"inCatalog":true},{"id":"ninja_smoke_bomb","aliasOf":null,"name":"Smoke Bomb","namePtBr":"Bomba de Fumaça","category":"ninja","kind":"Custom","tab":"ability","cooldownMs":20000,"customCooldownMs":20000,"manaCost":10,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"self_buff","statusEffect":{"id":"ninja_smoke_veil","name":"Smoke Veil","effectType":"stealth","durationMs":6000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"damage_taken_pct","value":-8}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":null,"itemId":10248,"mapScope":"Idle","gumpIcon":10248,"iconKey":"idle_ninja_smoke_bomb","scalingFormula":{"summary":"UO SmokeBomb / EggBomb (itemId 10248): mid-combat Hiding.CombatOverride veil granting 6s stealth and -8% damage taken","stat":"ninjitsu"},"unlockLevel":35,"progressionTreeLevel":35,"inCatalog":true},{"id":"ninja_shuriken","aliasOf":null,"name":"Shuriken & Fukiya Volley","namePtBr":"Saraivada de Shuriken e Fukiya","category":"ninja","kind":"Custom","tab":"ability","cooldownMs":11000,"customCooldownMs":11000,"manaCost":8,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":null,"weaponAbilityRef":null,"spellId":null,"itemId":10248,"mapScope":"Idle","gumpIcon":10156,"iconKey":"idle_ninja_shuriken","scalingFormula":{"summary":"UO LeatherNinjaBelt Shuriken (10156) & Fukiya Darts (10154): cooldown-gated Ninjitsu projectile volley with 75% secondary splash","stat":"ninjitsu","minMultiplier":0.75,"maxMultiplier":0.85,"hits":1,"splashRatio":0.75},"unlockLevel":20,"progressionTreeLevel":35,"inCatalog":true},{"id":"ninja_ki_attack","aliasOf":null,"name":"Ki Attack","namePtBr":"Ataque de Ki","category":"ninja","kind":"SpecialMove","tab":"ability","cooldownMs":10000,"customCooldownMs":0,"manaCost":12,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":null,"weaponAbilityRef":null,"spellId":503,"itemId":null,"mapScope":"UO","gumpIcon":21283,"iconKey":"gump_21283","scalingFormula":{"summary":"UO KiAttack (ref 503): gap-closing Ninjitsu dash strike (0.95x-1.05x) with 85% kinetic cleave onto a second target","stat":"ninjitsu","minMultiplier":0.95,"maxMultiplier":1.05,"hits":1,"splashRatio":0.85},"unlockLevel":40,"progressionTreeLevel":40,"inCatalog":true},{"id":"ninja_surprise_attack","aliasOf":null,"name":"Surprise Attack","namePtBr":"Ataque Surpresa","category":"ninja","kind":"SpecialMove","tab":"ability","cooldownMs":16000,"customCooldownMs":0,"manaCost":12,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"debuff","statusEffect":{"id":"ninja_surprise_malus","name":"Surprise Malus","effectType":"debuff","durationMs":6000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"defense_pct","value":-8}],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":505,"itemId":null,"mapScope":"UO","gumpIcon":21285,"iconKey":"gump_21285","scalingFormula":{"summary":"UO SurpriseAttack (ref 505): stealth-opener strike applying a 6s defense malus (-8% defense_pct; Ninjitsu.Fixed/60 + StalkingBonus DCI shred)","stat":"ninjitsu","minMultiplier":1,"maxMultiplier":1},"unlockLevel":45,"progressionTreeLevel":45,"inCatalog":true},{"id":"ninja_mirror_r2","aliasOf":null,"name":"Mirror Image II","namePtBr":"Imagem Espelhada II","category":"ninja","kind":"Spell","tab":"spell","cooldownMs":18000,"customCooldownMs":0,"manaCost":14,"staminaCost":0,"goldCost":0,"reagentsRequired":false,"effectType":"self_buff","statusEffect":{"id":"ninja_mirror_r2_clone","name":"Mirror Image II","effectType":"posture","durationMs":7000,"tickIntervalMs":0,"tickCount":0,"modifiers":[{"stat":"damage_taken_pct","value":-10},{"stat":"damage_dealt_pct","value":8}],"stackingRule":"exclusive_posture","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":507,"itemId":null,"mapScope":"UO","gumpIcon":21287,"iconKey":"gump_21287","scalingFormula":{"summary":"Master MirrorImage (ref 507 Rank II): multi-clone shadow posture granting -10% damage taken and +8% coordinated clone damage","stat":"ninjitsu"},"unlockLevel":300,"progressionTreeLevel":50,"inCatalog":true},{"id":"ninja_death_r2","aliasOf":null,"name":"Death Strike II","namePtBr":"Golpe Mortal II","category":"ninja","kind":"SpecialMove","tab":"ability","cooldownMs":11000,"customCooldownMs":0,"manaCost":0,"staminaCost":18,"goldCost":0,"reagentsRequired":false,"effectType":"direct_damage","statusEffect":{"id":"ninja_death_r2_mark","name":"Death Mark II","effectType":"dot","durationMs":4000,"tickIntervalMs":1000,"tickCount":4,"modifiers":[],"stackingRule":"refresh","authorityTier":"design-proposal"},"weaponAbilityRef":null,"spellId":501,"itemId":null,"mapScope":"UO","gumpIcon":21281,"iconKey":"gump_21281","scalingFormula":{"summary":"Grandmaster DeathStrike (ref 501 Rank II): 1.25x-1.35x strike (1.95x execute below 35% HP) with 4-tick mark / 5-swing detonation","stat":"ninjitsu","minMultiplier":1.25,"maxMultiplier":1.35,"executeThresholdHpPct":35,"executeMultiplier":1.95},"unlockLevel":200,"progressionTreeLevel":60,"inCatalog":true}]},"modeDescriptions":{"samurai_way":{"modeA":"Passive auto-attack swing loop + Parrying (ID 5) & Bushido (ID 52) shieldless parry scaling.","modeB":"Native BaseWeapon.CheckParry shieldless 1H (48,000) / 2H (41,140) Bushido Weapon Parry formula.","qCEstimator":"1.00x Weapon Auto-Swing + 25.8% (1H) / 29.3% (2H) Parry @ 100 Bushido"},"samurai_lightning":{"modeA":"SpecialMove (spellId: 404) 1.10x-1.20x precision strike + 3.0s Lightning Stagger debuff.","modeB":"Authentic LightningStrike (+50% Hit Chance, Bushido^2/72,000 critical IgnoreArmor roll).","qCEstimator":"1.10x - 1.20x Melee + 13.9% IgnoreArmor Crit @ 100 Bushido"},"samurai_perfection":{"modeA":"Custom self-buff (customCooldownMs: 14,000ms >= 2,000ms floor) granting +10% Perfection streak.","modeB":"Passive BaseWeapon.OnHit auto-Honored target bind (+4%/hit up to +15% cap, +8 HP/Stam/Mana on kill).","qCEstimator":"+10% Damage Dealt (8.0s Mode A) / +15% Streak Cap + Vital Restore (Mode B)"},"samurai_honorable":{"modeA":"SpecialMove (spellId: 400) 1.15x-1.25x strike (1.60x Execute <= 35% HP) + 10s +15% Attack Speed.","modeB":"HonorableExecution finisher with zero penalties and 10.0s +15% swing speed buff.","qCEstimator":"1.15x - 1.25x (1.60x <= 35% HP) + 15% Swing Haste (10s)"},"samurai_confidence":{"modeA":"Spell (spellId: 401) 0.50x-0.65x Bushido self-heal + 4-tick Confidence Regen over 4.0s.","modeB":"Confidence posture: instant heal + reactive on-parry recovery (+8 HP / +20 Stam, 2.0s ICD).","qCEstimator":"38 - 52 HP Instant Heal + 4x Regen Ticks / On-Parry Recovery"},"samurai_counter":{"modeA":"Spell (spellId: 403) exclusive posture granting +18% damage dealt for 8.0s.","modeB":"CounterAttack posture: +18% damage + instant free BaseWeapon.OnSwing counter-attack on parry (2.0s ICD).","qCEstimator":"+18% Melee Damage (8.0s) + Reactive Parry Counter-Swing"},"samurai_double_strike":{"modeA":"WeaponAbility (ref: 7, Katana/Daisho/Wakizashi) 2-hit rapid strike at 90% damage per swing (1.80x total).","modeB":"DoubleStrike (ref: 7) 2-hit combo advancing Perfection streak twice in a single swing.","qCEstimator":"2 Hits x 0.90x (1.80x Total Weapon Damage)"},"samurai_evasion":{"modeA":"Spell (spellId: 402) 8.0s defensive posture granting -15% damage taken and spell reflection.","modeB":"Evasion posture: 1.32x Bushido parry multiplier + spell interception for 8.0s (20s CD).","qCEstimator":"-15% Damage Taken & Spell Reflect (8.0s)"},"samurai_momentum_strike":{"modeA":"Spell (spellId: 405) 1.15x-1.25x primary strike + 100% splash cleave onto a 2nd adjacent target.","modeB":"MomentumStrike 2-target cleave transferring full kinetic blade force to secondary enemy.","qCEstimator":"1.15x - 1.25x Primary + 100% 2nd-Target Cleave"},"samurai_armor_ignore":{"modeA":"WeaponAbility (ref: 1, Katana secondary) 1.25x-1.35x armor-piercing blow + 7.0s -18% defense shred.","modeB":"ArmorIgnore (ref: 1) bypassing target physical resistance and applying 7.0s Breach Armor.","qCEstimator":"1.25x - 1.35x Direct Pierce + -18% Enemy Defense (7.0s)"},"samurai_lightning_r2":{"modeA":"Master SpecialMove (spellId: 404 R2, 15 Stamina) 1.25x-1.35x strike + 45% secondary arc splash.","modeB":"Grandmaster LightningStrike II with guaranteed IgnoreArmor crit roll and 45% chain lightning.","qCEstimator":"1.25x - 1.35x Primary + 45% Arc Splash (15 Stamina)"},"samurai_honorable_r2":{"modeA":"Capstone SpecialMove (spellId: 400 R2, 15 Stamina) 1.95x Execute <= 35% HP + +12% Speed / +8% Damage (10s).","modeB":"Grandmaster HonorableExecution II: 1.95x Execute finisher + dual offensive posture.","qCEstimator":"1.15x - 1.25x (1.95x Execute <= 35% HP) + 12% Haste / +8% Dmg"},"ninja_shadowjump":{"modeA":"Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) & Stealth (ID 47) scaling.","modeB":"Innate shadow-step footwork enabling mid-combat Stealth openers without manual tile targeting.","qCEstimator":"1.00x High-Speed Fencing Auto-Swing (Speed 53-55)"},"ninja_focus":{"modeA":"SpecialMove (spellId: 500) 1.15x-1.25x precision strike + 4.0s +8% crit/damage Focus Ki buff.","modeB":"FocusAttack (spellId: 500) shieldless 1H/2H multiplier + +20% on-hit property amplification.","qCEstimator":"1.15x - 1.25x Strike + +8% Focused Ki (4.0s)"},"ninja_mirror":{"modeA":"Spell (spellId: 507) summons illusory shadow clone granting -8% damage taken for 8.0s.","modeB":"MirrorImage clone stack: intercepts incoming hit at Ninjitsu/150 chance (70% ablative absorb, 1.5s ICD).","qCEstimator":"1 Shadow Clone (-8% Damage Taken Mode A / 70% Intercept Mode B)"},"ninja_backstab":{"modeA":"SpecialMove (spellId: 504) 1.15x-1.25x ambush strike + 5.0s +6% Shadow Ambush damage buff.","modeB":"Backstab consuming CombatStealthUntil window for 1.15x multiplicative stealth opener bonus.","qCEstimator":"1.15x - 1.25x Ambush + +6% Damage Dealt (5.0s)"},"ninja_death":{"modeA":"SpecialMove (spellId: 501) 1.10x-1.20x vital strike + 4-tick Death Mark internal trauma DoT (4.0s).","modeB":"DeathStrike: arms 5-swing counter via DeathStrike.AddStep(defender), detonating on 5th connected hit.","qCEstimator":"1.10x - 1.20x Strike + 4-Tick Trauma DoT / 5-Swing Detonation"},"ninja_animal_form":{"modeA":"Spell (spellId: 502) Grey Wolf / Bake Kitsune aspect granting +10% attack speed for 8.0s.","modeB":"Combat AnimalForm posture increasing Fencing swing cadence by +10% without polymorph lock.","qCEstimator":"+10% Weapon Attack Speed (8.0s Wolf/Kitsune Aspect)"},"ninja_infectious_strike":{"modeA":"WeaponAbility (ref: 11, Kryss primary) 0.90x-1.00x strike + 3-tick virulent poison DoT over 6.0s.","modeB":"InfectiousStrike (ref: 11) applying Poisoning-scaled Deadly/Lethal assassin venom.","qCEstimator":"0.90x - 1.00x Strike + 3x Virulent Venom Ticks (6.0s)"},"ninja_smoke_bomb":{"modeA":"Custom ability (itemId: 10248, customCooldownMs: 20,000ms >= 2,000ms floor) granting 6.0s Smoke Veil (-8% dmg taken).","modeB":"Triggers Hiding.CombatOverride = true & sets CombatStealthUntil for Backstab / SurpriseAttack openers.","qCEstimator":"6.0s Mid-Combat Stealth Veil (-8% Damage Taken + Opener Ready)"},"ninja_shuriken":{"modeA":"Bonus L35 Custom projectile volley (itemId: 10248 / gump 10156, customCooldownMs: 11,000ms) with 75% 2nd-target splash.","modeB":"Cooldown-gated Shuriken & Fukiya dart volley (zero backpack ammo micro) with Poison coat synergy.","qCEstimator":"0.75x - 0.85x Ranged Volley + 75% Secondary Splash"},"ninja_ki_attack":{"modeA":"SpecialMove (spellId: 503) 1.15x-1.25x high-velocity dash strike + 85% kinetic splash on 2nd enemy.","modeB":"KiAttack gap-closer simulating optimal distance bonus in 1D combat with 85% cleave splash.","qCEstimator":"1.15x - 1.25x Primary Dash + 85% Kinetic Cleave"},"ninja_surprise_attack":{"modeA":"SpecialMove (spellId: 505) 1.10x-1.20x stealth blindside + 6.0s -8% target defense shred.","modeB":"SurpriseAttack consuming stealth window to apply -8% defense vulnerability before DeathStrike.","qCEstimator":"1.10x - 1.20x Strike + -8% Target Defense Shred (6.0s)"},"ninja_mirror_r2":{"modeA":"Master Spell (spellId: 507 R2) deploying coordinated shadow clones (-10% dmg taken, +8% dmg dealt for 7.0s).","modeB":"Summons 2 ablative shadow clones (70% hit interception each, 1.5s ICD) + +8% offensive clone sync.","qCEstimator":"2 Shadow Clones (-10% Dmg Taken & +8% Dmg Dealt, 7.0s)"},"ninja_death_r2":{"modeA":"Capstone SpecialMove (spellId: 501 R2, 18 Stamina) 1.25x-1.35x (1.95x Execute <= 35% HP) + 4-tick Death Mark II.","modeB":"Grandmaster DeathStrike II: 1.95x Execute below 35% HP + 5-swing delayed assassination detonation.","qCEstimator":"1.25x - 1.35x (1.95x Execute <= 35% HP) + 4-Tick Mark (18 Stamina)"}}}</script>
+  <script>
+    (function() {
+      var raw = document.getElementById('mockup-data').textContent;
+      var payload = JSON.parse(raw);
+      var cls = payload.classData;
+      var modeMap = payload.modeDescriptions;
+      var currentLocale = 'en';
+      var currentMode = 'mode_a';
+
+      window.setLocale = function(lang) {
+        currentLocale = lang;
+        document.getElementById('btn-lang-en').classList.toggle('is-active', lang === 'en');
+        document.getElementById('btn-lang-pt').classList.toggle('is-active', lang === 'pt');
+        var nodes = document.querySelectorAll('[data-en][data-pt]');
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].textContent = lang === 'pt' ? nodes[i].getAttribute('data-pt') : nodes[i].getAttribute('data-en');
+        }
+      };
+
+      window.setExecMode = function(mode) {
+        currentMode = mode;
+        document.getElementById('btn-mode-a').classList.toggle('is-active', mode === 'mode_a');
+        document.getElementById('btn-mode-b').classList.toggle('is-active', mode === 'mode_b');
+        document.getElementById('inspector-mode-pill').textContent =
+          mode === 'mode_b' ? 'Mode B (<20 LOC C# Hook)' : 'Mode A (100% Existing Engine)';
+        var modeNodes = document.querySelectorAll('.mode-text');
+        for (var i = 0; i < modeNodes.length; i++) {
+          modeNodes[i].textContent =
+            mode === 'mode_b' ? modeNodes[i].getAttribute('data-mode-b') : modeNodes[i].getAttribute('data-mode-a');
+        }
+      };
+
+      window.selectAbility = function(abilityId) {
+        var ab = null;
+        for (var i = 0; i < cls.abilities.length; i++) {
+          if (cls.abilities[i].id === abilityId) {
+            ab = cls.abilities[i];
+            break;
+          }
+        }
+        if (!ab) return;
+        var ms = null;
+        for (var j = 0; j < cls.progression.length; j++) {
+          if (cls.progression[j].id === abilityId) {
+            ms = cls.progression[j];
+            break;
+          }
+        }
+        var cards = document.querySelectorAll('.milestone-card');
+        for (var k = 0; k < cards.length; k++) {
+          cards[k].classList.toggle('is-selected', cards[k].getAttribute('data-milestone-id') === abilityId);
+        }
+        var mInfo = modeMap[ab.id] || { modeA: ab.scalingFormula.summary, modeB: ab.scalingFormula.summary, qCEstimator: ab.scalingFormula.summary };
+        document.getElementById('insp-icon').src = 'assets/icons/' + cls.id + '/' + ab.id + '@64.png';
+        document.getElementById('insp-level').textContent = 'L' + ab.progressionTreeLevel;
+        document.getElementById('insp-kind').textContent = ab.kind;
+        document.getElementById('insp-id').textContent = ab.id;
+        document.getElementById('insp-name').textContent = ab.name + ' / ' + ab.namePtBr;
+        document.getElementById('insp-qC').textContent = 'qC Estimator: ' + mInfo.qCEstimator;
+        document.getElementById('insp-desc').textContent = ms
+          ? (currentLocale === 'pt' ? ms.descPtBr : ms.descEn)
+          : ab.scalingFormula.summary;
+        document.getElementById('insp-formula').textContent = ab.scalingFormula.summary;
+        if (ab.statusEffect) {
+          var mods = ab.statusEffect.modifiers.map(function(m) { return m.stat + ': ' + m.value; }).join(', ');
+          document.getElementById('insp-status').textContent =
+            'StatusEffect: ' + ab.statusEffect.name + ' (' + ab.statusEffect.durationMs + 'ms, ' + ab.statusEffect.stackingRule + ') [' + mods + ']';
+        } else {
+          document.getElementById('insp-status').textContent = 'StatusEffect: None (Direct / Innate)';
+        }
+        document.getElementById('insp-mode-a').textContent = mInfo.modeA;
+        document.getElementById('insp-mode-b').textContent = mInfo.modeB;
+      };
+    })();
+  </script>
+</body>
+</html>

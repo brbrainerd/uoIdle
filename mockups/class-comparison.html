@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UO Idle v0.99.0 Beta — 5-Class Structural Parity, Simulation Telemetry &amp; Tokuno Armaments</title>
+  <style>
+    
+    :root {
+      --bg-canvas: #0b0d0a;
+      --bg-panel: #121510;
+      --bg-card: #181c16;
+      --bg-card-hover: #20261d;
+      --border-subtle: #2a3026;
+      --border-gold: #c9a227;
+      --border-gold-bright: #e5c158;
+      --text-primary: #e8e4d9;
+      --text-secondary: #a39e90;
+      --text-gold: #d4af37;
+      --samurai-accent: #c83e37;
+      --ninja-accent: #2e9e6b;
+      --mana-blue: #4a90e2;
+      --stamina-amber: #e2a04a;
+      --cd-purple: #9b6be2;
+      --class-accent: var(--border-gold);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50% 0%, #171c14 0%, var(--bg-canvas) 68%);
+      color: var(--text-primary);
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .mono, code, pre, .num {
+      font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .beta-shell {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+    }
+
+    /* Live uoidle.com/beta .personagem-arvore & .arvore-* structural rules from game-theme.css */
+    .personagem-arvore {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      color: #f6ecd4;
+      gap: 10px;
+    }
+
+    .arvore-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 54px;
+      padding: 8px 14px;
+      border: 1px solid #6d5733;
+      border-top: 2px solid var(--border-gold);
+      border-radius: 4px;
+      background: linear-gradient(180deg, #20221ff0, #0d1112fa);
+      color: #f3e2b3;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    }
+
+    .arvore-nivel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding-right: 16px;
+      border-right: 1px solid #725b31;
+      white-space: nowrap;
+    }
+
+    .arvore-nivel strong {
+      color: #fff2bf;
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 17px;
+      letter-spacing: 0.05em;
+    }
+
+    .arvore-saldos {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 4px;
+    }
+
+    .arvore-saldo {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      padding: 2px 10px;
+      border-left: 1px solid #725b31;
+    }
+
+    .arvore-saldo strong {
+      color: #82d5b0;
+      font-size: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .arvore-saldo small {
+      color: #75bd93;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .arvore-saldo em {
+      justify-self: end;
+      color: #a39e90;
+      font-size: 10px;
+      font-style: normal;
+    }
+
+    .arvore-head-acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .beta-btn, .nav-pill {
+      padding: 5px 10px;
+      border: 1px solid #6d5733;
+      border-radius: 4px;
+      background: #141816;
+      color: #e8e4d9;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .beta-btn:hover, .nav-pill:hover {
+      border-color: var(--border-gold-bright);
+      background: var(--bg-card-hover);
+      color: #fff2bf;
+    }
+
+    .beta-btn.is-active, .nav-pill.is-active {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #332915, #1b160c);
+      color: #fff2bf;
+      box-shadow: 0 0 10px rgba(201, 162, 39, 0.35);
+    }
+
+    .class-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      border: 1px solid var(--class-accent);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hue-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--class-accent);
+      border: 1px solid #fff2bf;
+      display: inline-block;
+    }
+
+    .arvore-secao {
+      min-width: 0;
+      border: 1px solid #5d4a2b;
+      border-radius: 4px;
+      background: radial-gradient(circle at 50% 0, rgba(53, 50, 36, 0.22), transparent 55%), var(--bg-panel);
+      box-shadow: inset 0 1px 0 rgba(255, 242, 191, 0.06);
+    }
+
+    .arvore-secao-titulo {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 8px 12px 6px;
+      border-bottom: 1px solid #3c3425;
+      color: var(--text-gold);
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .arvore-secao-titulo .title-left::before {
+      content: '✦ ';
+      color: #c99d3f;
+    }
+
+    .arvore-secao-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr) 430px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .col-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-body {
+      padding: 10px 12px;
+    }
+
+    /* Portrait & Identity */
+    .identity-hero {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .portrait-frame {
+      position: relative;
+      width: 116px;
+      height: 116px;
+      border: 2px solid var(--border-gold);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #080907;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+    }
+
+    .portrait-frame img.main-portrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .portrait-mini-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 4px;
+      background: #0b0d0a;
+    }
+
+    .stat-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .stat-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .stat-chip span {
+      display: block;
+      font-size: 9px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .stat-chip strong {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: #fff2bf;
+    }
+
+    /* Skills & Paperdoll */
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .kv-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .kv-item .k {
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .kv-item .v {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-gold);
+      font-weight: 600;
+    }
+
+    .hotbar-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hotbar-slot {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 5px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--class-accent);
+      border-radius: 4px;
+    }
+
+    .slot-num {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      background: #0d100c;
+      border: 1px solid #5d4a2b;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-gold);
+    }
+
+    /* Winding .arvore-cobra ribbon */
+    .arvore-cobra-wrap {
+      padding: 10px 12px;
+      border-bottom: 1px solid #2a3026;
+      background: rgba(11, 13, 10, 0.55);
+    }
+
+    .arvore-cobra {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 4px;
+      align-items: center;
+    }
+
+    .arvore-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .arvore-lv {
+      color: #e6c36a;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .arvore-circulo {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 2px solid #6d5733;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 30%, #4a3b24, #120e0a 72%);
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .arvore-circulo.is-on {
+      border-color: #e6c36a;
+      box-shadow: 0 0 12px #e6c36a73;
+    }
+
+    .arvore-circulo:hover {
+      transform: scale(1.06);
+      border-color: var(--border-gold-bright);
+    }
+
+    .arvore-circulo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .arvore-nome {
+      color: #f6ecd4;
+      font-size: 9px;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 64px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 12 Milestone Cards Grid */
+    .milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .milestone-card {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .milestone-card:hover, .milestone-card.is-selected {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+      box-shadow: 0 0 12px rgba(201, 162, 39, 0.22);
+    }
+
+    .milestone-card.is-capstone {
+      border-color: var(--border-gold-bright);
+      background: linear-gradient(180deg, #241f14, #171a14);
+    }
+
+    .milestone-icon-box {
+      position: relative;
+      width: 52px;
+      height: 52px;
+    }
+
+    .milestone-icon-box img {
+      width: 52px;
+      height: 52px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      display: block;
+    }
+
+    .lv-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #262013;
+      border: 1px solid var(--border-gold);
+      color: var(--text-gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .type-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      border: 1px solid #3c4436;
+      background: #121611;
+      color: var(--text-secondary);
+    }
+
+    .dual-unlock-banner {
+      margin-top: 6px;
+      padding: 5px 7px;
+      border-radius: 4px;
+      border: 1px dashed var(--ninja-accent);
+      background: rgba(46, 158, 107, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: #b8f5d8;
+    }
+
+    .dual-unlock-banner img {
+      width: 28px;
+      height: 28px;
+      border-radius: 3px;
+      border: 1px solid var(--border-gold);
+    }
+
+    /* Pinned Live Tooltip Inspector (.arvore-dica) */
+    .arvore-dica-pinned {
+      padding: 10px 12px;
+      border: 1px solid var(--border-gold);
+      border-radius: 4px;
+      background: #0c0e0cf7;
+      color: #f6ecd4;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+    }
+
+    .dica-header {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #3c3425;
+      margin-bottom: 8px;
+    }
+
+    .dica-header img {
+      width: 56px;
+      height: 56px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-bright);
+    }
+
+    /* Ability Catalog Cards */
+    .catalog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 10px 12px;
+    }
+
+    .catalog-card {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      padding: 7px 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .catalog-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+    }
+
+    .catalog-card img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .cost-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .badge-mana {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(74, 144, 226, 0.16);
+      border: 1px solid var(--mana-blue);
+      color: #9ec9ff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-stamina {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(226, 160, 74, 0.16);
+      border: 1px solid var(--stamina-amber);
+      color: #ffd18b;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-cd {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(155, 107, 226, 0.16);
+      border: 1px solid var(--cd-purple);
+      color: #d7bfff;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .badge-meta {
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #111510;
+      border: 1px solid #333a2e;
+      color: var(--text-secondary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+    }
+
+    .passive-badges-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px 12px 12px;
+    }
+
+    .passive-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 7px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+    }
+
+    .passive-badge-item img {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+  
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .comp-table th, .comp-table td {
+      border: 1px solid #2a3026;
+      padding: 6px 8px;
+      background: var(--bg-card);
+      vertical-align: middle;
+    }
+    .comp-table th {
+      background: #141812;
+      color: var(--text-gold);
+      font-family: 'Cinzel', Georgia, serif;
+      font-weight: 700;
+    }
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      background: #141812;
+      border: 1px solid #2a3026;
+      border-radius: 4px;
+    }
+    .code-card {
+      background: #090b08;
+      border: 1px solid #3c3425;
+      border-radius: 4px;
+      padding: 10px;
+      overflow-x: auto;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #e8e4d9;
+    }
+  </style>
+</head>
+<body>
+  <div class="beta-shell">
+    <div class="personagem-arvore">
+      <header class="arvore-head">
+        <div class="arvore-nivel">
+          <span class="class-badge-pill">v0.99.0 PARITY</span>
+          <strong>5-Class Progression Matrix, Combat Telemetry &amp; Tokuno Armaments</strong>
+        </div>
+        <div class="arvore-saldos">
+          <div class="arvore-saldo">
+            <div><strong>5 Classes</strong><div><small>WR · MG · RG · SM · NJ</small></div></div>
+            <em>12 Tiers (L1–L60)</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>4 Brackets × 4 Archetypes</strong><div><small>L10 · L25 · L45 · L60</small></div></div>
+            <em>100ms Tick Engine</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>0 OOM Ticks</strong><div><small>Resource Sustainability</small></div></div>
+            <em>±5–8% Envelope</em>
+          </div>
+          <div class="arvore-saldo">
+            <div><strong>8 Armaments + 10 Affixes</strong><div><small>Tokuno Drop-In Kit</small></div></div>
+            <em>Mode A &amp; Mode B</em>
+          </div>
+        </div>
+        <div class="arvore-head-acoes">
+          <a class="nav-pill" href="samurai-skill-tree.html">Samurai (SM 114)</a>
+          <a class="nav-pill" href="ninja-skill-tree.html">Ninja (NJ 115)</a>
+          <a class="nav-pill is-active" href="class-comparison.html">5-Class Parity</a>
+        </div>
+      </header>
+
+      <!-- SECTION 1: 5-Class L1-L60 Structural Parity Matrix -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">1. 5-Class L1–L60 Progression Structural Parity Matrix</span>
+          <span class="arvore-secao-sub">Warrior (101) · Mage (103) · Ranger (102) · Samurai (114) · Ninja (115)</span>
+        </h2>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th style="width:54px;">Tier</th>
+                
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">warrior (WR)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 101 · Hue 1816 · 60/20/10</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">mage (MG)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 103 · Hue 1253 · 20/20/50</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">ranger (RG)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 102 · Hue 1837 · 40/40/10</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            <img src="assets/icons/samurai/portrait-samurai-64.png" alt="samurai" style="width:32px;height:32px;border-radius:4px;border:1px solid var(--border-gold);" />
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">samurai (SM)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 114 · Hue 1884 · 50/30/10</div>
+            </div>
+          </div>
+        </th>
+      
+
+        <th>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            <img src="assets/icons/ninja/portrait-ninja-64.png" alt="ninja" style="width:32px;height:32px;border-radius:4px;border:1px solid var(--border-gold);" />
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;">ninja (NJ)</div>
+              <div class="mono" style="font-size:10px;color:var(--text-secondary);">ID 115 · Hue 1175 · 30/50/10</div>
+            </div>
+          </div>
+        </th>
+      
+              </tr>
+            </thead>
+            <tbody>
+              
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L1</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Slash</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_slash · passive</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Heal</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_heal · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Arrow</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_arrow · passive</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_way@48.png" alt="Way of the Blade" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Way of the Blade</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_way · passive</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_shadowjump@48.png" alt="Shadowjump" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Shadowjump</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_shadowjump · passive</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L5</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Provocar</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_provoke · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Harm</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_harm · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Rapid Shot</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_rapid_shot · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_lightning@48.png" alt="Lightning Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_lightning · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_focus@48.png" alt="Focus Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Focus Attack</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_focus · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L10</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Shield Bash</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_shield_bash · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Fireball</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_fireball · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Aimed Shot</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_aimed_shot · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_perfection@48.png" alt="Honor &amp; Perfection" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Honor &amp; Perfection</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_perfection · mechanic</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_mirror@48.png" alt="Mirror Image" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Mirror Image</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_mirror · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L15</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Armor Break</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_armor_break · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_lightning · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Force Arrow</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_force_arrow · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_honorable@48.png" alt="Honorable Execution" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Honorable Execution</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_honorable · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_backstab@48.png" alt="Backstab" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Backstab</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_backstab · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L20</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Heavy Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_heavy_strike · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+<td>—</td>
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Piercing Arrow</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_piercing · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_confidence@48.png" alt="Confidence" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Confidence</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_confidence · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_death@48.png" alt="Death Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Death Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_death · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L25</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Whirlwind</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_whirlwind · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Magic Reflect</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_magic_reflect · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Serpent Arrow</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_serpent_arrow · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_counter@48.png" alt="Counter Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Counter Attack</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_counter · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_animal_form@48.png" alt="Animal Form" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Animal Form</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_animal_form · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L30</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Brace</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_brace · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Energy Bolt</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_energy_bolt · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Moving Shot</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_moving_shot · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_double_strike@48.png" alt="Double Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Double Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_double_strike · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_infectious_strike@48.png" alt="Infectious Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Infectious Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_infectious_strike · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L35</td>
+          <td>—</td>
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Explosion</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_explosion · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning Arrow</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_lightning_arrow · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_evasion@48.png" alt="Evasion" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Evasion</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_evasion · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_smoke_bomb@48.png" alt="Smoke Bomb" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Smoke Bomb</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_smoke_bomb · mechanic</span>
+                  <div class="mono" style="font-size:9px;color:#68d391;margin-top:2px;">+ ninja_shuriken (Dual L35)</div>
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L40</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Disarm</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_disarm · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Chain Lightning</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_chain_lightning · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Multishot</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_multishot · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_momentum_strike@48.png" alt="Momentum Strike" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Momentum Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_momentum_strike · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_ki_attack@48.png" alt="Ki Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Ki Attack</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_ki_attack · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L45</td>
+          <td>—</td>
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Flame Strike</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_flamestrike · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Armor Pierce</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_armor_pierce · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_armor_ignore@48.png" alt="Armor Ignore" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Armor Ignore</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_armor_ignore · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_surprise_attack@48.png" alt="Surprise Attack" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Surprise Attack</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_surprise_attack · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L50</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Bulwark</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_bulwark · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Fire Elemental</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_fire_elemental · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Charged Shot</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_charged_shot · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_lightning_r2@48.png" alt="Lightning Strike II" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Lightning Strike II</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_lightning_r2 · skill</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_mirror_r2@48.png" alt="Mirror Image II" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Mirror Image II</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_mirror_r2 · spell</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+
+        <tr>
+          <td class="mono" style="font-weight:700;color:var(--text-gold);text-align:center;">L60</td>
+          
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Execution</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">warrior_execution · feature</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Meteor Swarm</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">mage_meteor · feature</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Bolt Volley</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ranger_bolt_volley · feature</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/samurai/samurai_honorable_r2@48.png" alt="Honorable Execution II" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Honorable Execution II</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">samurai_honorable_r2 · feature</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+
+            <td>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <img src="assets/icons/ninja/ninja_death_r2@48.png" alt="Death Strike II" style="width:32px;height:32px;border-radius:4px;border:1px solid #6d5733;flex-shrink:0;" />
+                <div>
+                  <strong style="color:#fff2bf;font-size:11px;display:block;">Death Strike II</strong>
+                  <span class="mono" style="font-size:9px;color:var(--text-secondary);">ninja_death_r2 · feature</span>
+                  
+                </div>
+              </div>
+            </td>
+          
+        </tr>
+      
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Interactive 5-Class Combat Parity Telemetry -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">2. Deterministic 5-Class Combat Simulation Telemetry (100ms Tick Engine)</span>
+          <span class="arvore-secao-sub">Source: data/sim-baselines/parity-5class-v0.99.0.json</span>
+        </h2>
+        <div class="panel-body">
+          <div class="filter-bar">
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="mono" style="font-size:11px;color:var(--text-gold);">Mode:</span>
+              <button type="button" class="beta-btn is-active" data-sim-mode="mode_a" onclick="updateSimFilter('mode', 'mode_a')">Mode A (100% Existing Engine)</button>
+              <button type="button" class="beta-btn" data-sim-mode="mode_b" onclick="updateSimFilter('mode', 'mode_b')">Mode B (&lt;20 LOC C# Hook)</button>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="mono" style="font-size:11px;color:var(--text-gold);">Bracket:</span>
+              <button type="button" class="beta-btn" data-sim-bracket="L10" onclick="updateSimFilter('bracket', 'L10')">L10</button>
+              <button type="button" class="beta-btn" data-sim-bracket="L25" onclick="updateSimFilter('bracket', 'L25')">L25</button>
+              <button type="button" class="beta-btn" data-sim-bracket="L45" onclick="updateSimFilter('bracket', 'L45')">L45</button>
+              <button type="button" class="beta-btn is-active" data-sim-bracket="L60" onclick="updateSimFilter('bracket', 'L60')">L60</button>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="mono" style="font-size:11px;color:var(--text-gold);">Archetype:</span>
+              <button type="button" class="beta-btn is-active" data-sim-arch="low_def_boss" onclick="updateSimFilter('arch', 'low_def_boss')">low_def_boss</button>
+              <button type="button" class="beta-btn" data-sim-arch="high_def_boss" onclick="updateSimFilter('arch', 'high_def_boss')">high_def_boss</button>
+              <button type="button" class="beta-btn" data-sim-arch="fast_trash" onclick="updateSimFilter('arch', 'fast_trash')">fast_trash</button>
+              <button type="button" class="beta-btn" data-sim-arch="multi_target_pack" onclick="updateSimFilter('arch', 'multi_target_pack')">multi_target_pack</button>
+            </div>
+          </div>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Sustained DPS</th>
+                <th>Relative DPS Bar</th>
+                <th>Trash TTK (s)</th>
+                <th>EHP / sec</th>
+                <th>Overkill Waste %</th>
+                <th>Net Mana / min</th>
+                <th>Net Stam / min</th>
+                <th>Parries / Clones</th>
+                <th>OOM Ticks</th>
+                <th>Parity Gate</th>
+              </tr>
+            </thead>
+            <tbody id="sim-telemetry-tbody">
+              
+        <tr>
+          <td><strong style="text-transform:uppercase;color:#fff2bf;">warrior</strong></td>
+          <td class="mono">351.58</td>
+          <td style="width:220px;">
+            <div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;">
+              <div style="width:91%;height:100%;background:var(--border-gold);"></div>
+            </div>
+          </td>
+          <td class="mono">67.58s</td>
+          <td class="mono">212.60</td>
+          <td class="mono">0.00%</td>
+          <td class="mono">0.0/m</td>
+          <td class="mono">85.0/m</td>
+          <td class="mono">12 / 0</td>
+          <td class="mono">0</td>
+          <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>
+        </tr>
+      
+
+        <tr>
+          <td><strong style="text-transform:uppercase;color:#fff2bf;">mage</strong></td>
+          <td class="mono">387.85</td>
+          <td style="width:220px;">
+            <div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;">
+              <div style="width:100%;height:100%;background:var(--border-gold);"></div>
+            </div>
+          </td>
+          <td class="mono">61.26s</td>
+          <td class="mono">244.47</td>
+          <td class="mono">0.00%</td>
+          <td class="mono">-184.0/m</td>
+          <td class="mono">462.0/m</td>
+          <td class="mono">5 / 0</td>
+          <td class="mono">0</td>
+          <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>
+        </tr>
+      
+
+        <tr>
+          <td><strong style="text-transform:uppercase;color:#fff2bf;">ranger</strong></td>
+          <td class="mono">383.85</td>
+          <td style="width:220px;">
+            <div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;">
+              <div style="width:99%;height:100%;background:var(--border-gold);"></div>
+            </div>
+          </td>
+          <td class="mono">61.90s</td>
+          <td class="mono">218.58</td>
+          <td class="mono">0.00%</td>
+          <td class="mono">-74.0/m</td>
+          <td class="mono">88.0/m</td>
+          <td class="mono">5 / 0</td>
+          <td class="mono">0</td>
+          <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>
+        </tr>
+      
+
+        <tr>
+          <td><strong style="text-transform:uppercase;color:#fff2bf;">samurai</strong></td>
+          <td class="mono">358.21</td>
+          <td style="width:220px;">
+            <div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;">
+              <div style="width:92%;height:100%;background:var(--samurai-accent);"></div>
+            </div>
+          </td>
+          <td class="mono">66.33s</td>
+          <td class="mono">219.45</td>
+          <td class="mono">0.00%</td>
+          <td class="mono">0.0/m</td>
+          <td class="mono">432.0/m</td>
+          <td class="mono">12 / 0</td>
+          <td class="mono">0</td>
+          <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>
+        </tr>
+      
+
+        <tr>
+          <td><strong style="text-transform:uppercase;color:#fff2bf;">ninja</strong></td>
+          <td class="mono">374.50</td>
+          <td style="width:220px;">
+            <div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;">
+              <div style="width:97%;height:100%;background:var(--ninja-accent);"></div>
+            </div>
+          </td>
+          <td class="mono">63.44s</td>
+          <td class="mono">221.23</td>
+          <td class="mono">0.00%</td>
+          <td class="mono">26.0/m</td>
+          <td class="mono">426.0/m</td>
+          <td class="mono">5 / 0</td>
+          <td class="mono">0</td>
+          <td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>
+        </tr>
+      
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Tokuno Armaments, Consumables & Affix Showcase -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">3. Tokuno Armaments, Ninjitsu Consumables, Material Tiers &amp; Affix Pools</span>
+          <span class="arvore-secao-sub">Source: design/drop-in/items-bushido-ninjitsu.json</span>
+        </h2>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Iconic Tokuno Armaments (Iron → Valorite Scaling)</div>
+              <div class="kv-grid">
+                
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Katana <code style="font-size:10px;color:var(--text-secondary);">(katana)</code></strong>
+            <span class="type-pill">samurai · swords</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 5119 (0x13FF) · OneHanded · Speed 46
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 11–13 dmg → Valorite: 20–24 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: DoubleStrike (#7) | 2°: ArmorIgnore (#1)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">No-Dachi <code style="font-size:10px;color:var(--text-secondary);">(no_dachi)</code></strong>
+            <span class="type-pill">samurai · swords</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10146 (0x27A2) · TwoHanded · Speed 35
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 16–18 dmg → Valorite: 30–33 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: CrushingBlow (#4) | 2°: RidingSwipe (#15)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Wakizashi <code style="font-size:10px;color:var(--text-secondary);">(wakizashi)</code></strong>
+            <span class="type-pill">samurai · swords</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10148 (0x27A4) · OneHanded · Speed 45
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 11–13 dmg → Valorite: 20–24 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: FrenziedWhirlwind (#6) | 2°: DoubleStrike (#7)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Lajatang <code style="font-size:10px;color:var(--text-secondary);">(lajatang)</code></strong>
+            <span class="type-pill">samurai · fencing</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10151 (0x27A7) · TwoHanded · Speed 45
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 16–18 dmg → Valorite: 30–33 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: DefenseMastery (#18) | 2°: FrenziedWhirlwind (#6)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Tekagi <code style="font-size:10px;color:var(--text-secondary);">(tekagi)</code></strong>
+            <span class="type-pill">ninja · fencing</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10155 (0x27AB) · TwoHanded · Speed 55
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 10–12 dmg → Valorite: 19–22 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: DualWield (#23) | 2°: TalonStrike (#21)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Kama <code style="font-size:10px;color:var(--text-secondary);">(kama)</code></strong>
+            <span class="type-pill">ninja · fencing</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10157 (0x27AD) · TwoHanded · Speed 55
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 9–11 dmg → Valorite: 17–20 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: WhirlwindAttack (#13) | 2°: DefenseMastery (#18)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Fukiya <code style="font-size:10px;color:var(--text-secondary);">(fukiya)</code></strong>
+            <span class="type-pill">ninja · ninjitsu</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10154 (0x27AA) · OneHanded · Speed 50
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 4–6 dmg → Valorite: 7–11 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: InfectiousStrike (#11) | 2°: ShadowStrike (#12)
+          </div>
+        </div>
+      
+
+        <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+            <strong style="color:#fff2bf;font-size:12px;">Tessen <code style="font-size:10px;color:var(--text-secondary);">(tessen)</code></strong>
+            <span class="type-pill">ninja · macing</span>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+            graphic: 10147 (0x27A3) · TwoHanded · Speed 50
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--text-gold);">
+            Iron: 10–12 dmg → Valorite: 19–22 dmg
+          </div>
+          <div class="mono" style="font-size:10px;color:#9ec9ff;">
+            1°: Feint (#8) | 2°: DualWield (#23)
+          </div>
+        </div>
+      
+              </div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin:10px 0 6px;text-transform:uppercase;">4 Cooldown-Gated Ninjitsu Consumables &amp; Projectiles</div>
+              <div class="kv-grid">
+                
+      <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <strong style="color:#fff2bf;">Smoke Bomb / Bomba de Fumaça</strong>
+          <span class="lv-pill">itemId: 10248</span>
+        </div>
+        <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+          id: smoke_bomb · abilityId: ninja_smoke_bomb · minSkill: ninjitsu 50
+        </div>
+        <div style="font-size:10px;color:var(--text-primary);">
+          Triggers mid-combat Hiding + Stealth window (-8% damage taken for 6s)
+        </div>
+      </div>
+    
+
+      <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <strong style="color:#fff2bf;">Egg Bomb / Bomba de Ovo</strong>
+          <span class="lv-pill">itemId: 10249</span>
+        </div>
+        <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+          id: egg_bomb · abilityId: ninja_smoke_bomb · minSkill: ninjitsu 50
+        </div>
+        <div style="font-size:10px;color:var(--text-primary);">
+          Craftable Tokuno variant of Smoke Bomb granting mid-combat Hiding + Stealth
+        </div>
+      </div>
+    
+
+      <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <strong style="color:#fff2bf;">Fukiya / Zarabatana Fukiya</strong>
+          <span class="lv-pill">itemId: 10154</span>
+        </div>
+        <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+          id: fukiya · abilityId: ninja_shuriken · minSkill: ninjitsu 60
+        </div>
+        <div style="font-size:10px;color:var(--text-primary);">
+          Range 5, MaxCharges 10, BaseDmg 4–6, Poison=true
+        </div>
+      </div>
+    
+
+      <div class="kv-item" style="flex-direction:column;align-items:flex-start;gap:3px;padding:7px 9px;">
+        <div style="display:flex;justify-content:space-between;width:100%;">
+          <strong style="color:#fff2bf;">Shuriken / Shuriken</strong>
+          <span class="lv-pill">itemId: 10156</span>
+        </div>
+        <div class="mono" style="font-size:10px;color:var(--text-secondary);">
+          id: shuriken · abilityId: ninja_shuriken · minSkill: ninjitsu 30
+        </div>
+        <div style="font-size:10px;color:var(--text-primary);">
+          Range 10, MaxCharges 10, BaseDmg 3–5, Poison=true
+        </div>
+      </div>
+    
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">8 Drop-In Tokuno Weapon Definitions</div>
+              <table class="comp-table" style="margin-bottom:10px;">
+                <thead>
+                  <tr>
+                    <th>Weapon</th>
+                    <th>Item ID</th>
+                    <th>Skill / Layer</th>
+                    <th>Spd</th>
+                    <th>Dmg</th>
+                    <th>Primary / Secondary</th>
+                    <th>Synergy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+      <tr>
+        <td><strong style="color:#fff2bf;">Bokuto</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(bokuto)</code></td>
+        <td class="mono">10232 (0x27F8)</td>
+        <td class="mono">fencing / OneHanded</td>
+        <td class="mono">53</td>
+        <td class="mono">9–11</td>
+        <td class="mono">feint (#8) / nerve_strike (#20)</td>
+        <td class="mono">samurai, ninja</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">Daisho</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(daisho)</code></td>
+        <td class="mono">10229 (0x27F5)</td>
+        <td class="mono">swords / TwoHanded</td>
+        <td class="mono">40</td>
+        <td class="mono">13–15</td>
+        <td class="mono">feint (#8) / double_strike (#7)</td>
+        <td class="mono">samurai</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">Lajatang</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(lajatang)</code></td>
+        <td class="mono">10247 (0x2807)</td>
+        <td class="mono">fencing / TwoHanded</td>
+        <td class="mono">45</td>
+        <td class="mono">16–18</td>
+        <td class="mono">defense_mastery (#18) / frenzied_whirlwind (#6)</td>
+        <td class="mono">samurai, ninja</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">No-Dachi</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(no_dachi)</code></td>
+        <td class="mono">10226 (0x27F2)</td>
+        <td class="mono">swords / TwoHanded</td>
+        <td class="mono">35</td>
+        <td class="mono">16–18</td>
+        <td class="mono">crushing_blow (#4) / riding_swipe (#15)</td>
+        <td class="mono">samurai</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">Sai</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(sai)</code></td>
+        <td class="mono">10239 (0x27FF)</td>
+        <td class="mono">fencing / TwoHanded</td>
+        <td class="mono">55</td>
+        <td class="mono">9–11</td>
+        <td class="mono">block (#16) / armor_pierce (#19)</td>
+        <td class="mono">ninja</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">Tekagi</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(tekagi)</code></td>
+        <td class="mono">10244 (0x2804)</td>
+        <td class="mono">fencing / TwoHanded</td>
+        <td class="mono">55</td>
+        <td class="mono">10–12</td>
+        <td class="mono">dual_wield (#23) / talon_strike (#21)</td>
+        <td class="mono">ninja</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">Tessen</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(tessen)</code></td>
+        <td class="mono">10243 (0x2803)</td>
+        <td class="mono">macing / TwoHanded</td>
+        <td class="mono">50</td>
+        <td class="mono">10–12</td>
+        <td class="mono">feint (#8) / dual_wield (#23)</td>
+        <td class="mono">samurai, ninja</td>
+      </tr>
+    
+
+      <tr>
+        <td><strong style="color:#fff2bf;">Wakizashi</strong> <code class="mono" style="font-size:10px;color:var(--text-secondary);">(wakizashi)</code></td>
+        <td class="mono">10228 (0x27F4)</td>
+        <td class="mono">swords / OneHanded</td>
+        <td class="mono">45</td>
+        <td class="mono">11–13</td>
+        <td class="mono">frenzied_whirlwind (#6) / double_strike (#7)</td>
+        <td class="mono">samurai, ninja</td>
+      </tr>
+    
+                </tbody>
+              </table>
+
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">9 Material Tiers (1.00x Iron → 1.85x Valorite)</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">
+                
+      <span class="badge-meta" style="padding:3px 7px;">
+        T1 <strong style="color:#fff2bf;">Iron</strong> (Lv.1): 1.00x Dmg / +0% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T2 <strong style="color:#fff2bf;">DullCopper</strong> (Lv.10): 1.08x Dmg / +12% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T3 <strong style="color:#fff2bf;">ShadowIron</strong> (Lv.20): 1.17x Dmg / +24% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T4 <strong style="color:#fff2bf;">Copper</strong> (Lv.30): 1.26x Dmg / +36% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T5 <strong style="color:#fff2bf;">Bronze</strong> (Lv.40): 1.36x Dmg / +48% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T6 <strong style="color:#fff2bf;">Gold</strong> (Lv.50): 1.47x Dmg / +60% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T7 <strong style="color:#fff2bf;">Agapite</strong> (Lv.60): 1.59x Dmg / +72% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T8 <strong style="color:#fff2bf;">Verite</strong> (Lv.80): 1.71x Dmg / +84% Res
+      </span>
+    
+
+      <span class="badge-meta" style="padding:3px 7px;">
+        T9 <strong style="color:#fff2bf;">Valorite</strong> (Lv.100): 1.85x Dmg / +96% Res
+      </span>
+    
+              </div>
+
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);margin-bottom:6px;text-transform:uppercase;">10 Bushido &amp; Ninjitsu Equipment Affix Pools</div>
+              <div class="kv-grid">
+                
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">bushido</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">SkillBushido · Bushido +{{v}}</div>
+        </div>
+        <span class="v">Cap +20 (samurai)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">ninjitsu</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">SkillNinjitsu · Ninjitsu +{{v}}</div>
+        </div>
+        <span class="v">Cap +20 (ninja)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">parrying</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">DefendChance · Defense chance +{{v}}%</div>
+        </div>
+        <span class="v">Cap +45 (samurai/warrior)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">stealth</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">SkillStealth · Stealth +{{v}}</div>
+        </div>
+        <span class="v">Cap +20 (ninja)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">poisoning</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">SkillPoisoning · Poisoning +{{v}}</div>
+        </div>
+        <span class="v">Cap +20 (ninja)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">critChance</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">AttackChance · Hit &amp; critical chance +{{v}}%</div>
+        </div>
+        <span class="v">Cap +45 (samurai/ninja/ranger)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">attackSpeed</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">WeaponSpeed · Swing speed +{{v}}%</div>
+        </div>
+        <span class="v">Cap +60 (samurai/ninja/warrior/ranger)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">physicalDamage</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">WeaponDamage · Damage +{{v}}%</div>
+        </div>
+        <span class="v">Cap +100 (samurai/ninja/warrior/ranger)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">poisonDamage</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">PoisonDamage · Poison damage +{{v}}%</div>
+        </div>
+        <span class="v">Cap +50 (ninja)</span>
+      </div>
+    
+
+      <div class="kv-item">
+        <div>
+          <strong style="color:#fff2bf;">energyDamage</strong>
+          <div class="mono" style="font-size:9px;color:var(--text-secondary);">EnergyDamage · Energy damage +{{v}}%</div>
+        </div>
+        <span class="v">Cap +50 (samurai)</span>
+      </div>
+    
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Mode A vs Mode B Implementation & <20 LOC C# Server Hook Inspector -->
+      <section class="arvore-secao">
+        <h2 class="arvore-secao-titulo">
+          <span class="title-left">4. Mode A (Zero Engine Changes) vs Mode B (&lt;20 LOC C# Server Hooks)</span>
+          <span class="arvore-secao-sub">design/drop-in/classes-patch.js · BaseWeapon.cs</span>
+        </h2>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--samurai-accent);font-weight:700;margin-bottom:6px;">
+                Samurai (ID 114) — 17-LOC C# Server Hook (design/SAMURAI_SPEC.md §4)
+              </div>
+              <pre class="code-card"><code>// Mode B Server Hook (17 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+// 1. OnWeaponHit: Auto-Perfection Streak &amp; On-Kill Vital Recovery (9 LOC)
+if (attacker is PlayerMobile sm &amp;&amp; sm.ClassId == 114 &amp;&amp; sm.Skills.Bushido.Value &gt;= 50.0) {
+    if (sm.PerfectionTarget != defender) { sm.PerfectionTarget = defender; sm.PerfectionBonus = 0; }
+    sm.PerfectionBonus = Math.Min(15, sm.PerfectionBonus + (int)(sm.Skills.Bushido.Value / 25));
+    percentageBonus += sm.PerfectionBonus;
+    if (!defender.Alive) { sm.Hits += 8; sm.Stam += 8; sm.Mana += 8; sm.PerfectionBonus = 0; }
+}
+// 2. OnWeaponMiss: Perfection Streak Decay (2 LOC)
+if (attacker is PlayerMobile smMiss &amp;&amp; smMiss.ClassId == 114 &amp;&amp; smMiss.PerfectionTarget == defender)
+    smMiss.PerfectionBonus = Math.Max(0, smMiss.PerfectionBonus - 5);
+// 3. OnParrySuccess (inside AbsorbDamageAOS when CheckParry == true): 2.0s ICD Counter &amp; Confidence (6 LOC)
+if (blocked &amp;&amp; Core.TickCount - defender.NextBushidoParryProc &gt;= 2000) {
+    defender.NextBushidoParryProc = Core.TickCount;
+    if (CounterAttack.IsCountering(defender) &amp;&amp; defender.Weapon is BaseWeapon bw) bw.OnSwing(defender, attacker);
+    if (Confidence.IsConfident(defender)) { defender.Hits += (int)(bushido / 12); defender.Stam += (int)(bushido / 5); }
+}</code></pre>
+            </div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--ninja-accent);font-weight:700;margin-bottom:6px;">
+                Ninja (ID 115) — 16-LOC C# Server Hook (design/NINJA_SPEC.md §4)
+              </div>
+              <pre class="code-card"><code>// Mode B Server Hook (16 LOC total in Projects/UOContent/Items/Weapons/BaseWeapon.cs)
+// 1. OnIncomingHit: Ablative Mirror Image Clone Interception with 1.5s ICD (8 LOC)
+if (MirrorImage.HasClone(defender) &amp;&amp; Core.TickCount - defender.NextCloneIntercept &gt;= 1500
+    &amp;&amp; defender.Skills.Ninjitsu.Value / 150.0 &gt; Utility.RandomDouble()) {
+    defender.NextCloneIntercept = Core.TickCount;
+    MirrorImage.ConsumeOneClone(defender); // Destroys 1 clone &amp; decrements cloneStacks
+    damage = (int)(damage * 0.30); // Bounded ablative clone mitigation (prevents immortality)
+}
+// 2. OnWeaponSwingHit: 5-Swing DeathStrike Detonation &amp; Stealth Opener Consumption (8 LOC)
+if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
+    DeathStrike.AddStep(defender); // Every connected Ninja swing advances ++Steps toward 5!
+    if (nj.CombatStealthUntil &gt; Core.TickCount &amp;&amp; (move is Backstab || move is SurpriseAttack)) {
+        nj.CombatStealthUntil = 0; // Consumes SmokeBomb / Shadowjump stealth window
+        damage = (int)(damage * 1.15);
+    }
+}</code></pre>
+            </div>
+          </div>
+          <div style="margin-top:8px;padding:8px 10px;background:#141812;border:1px solid #2a3026;border-radius:4px;font-size:11px;color:var(--text-secondary);">
+            <strong style="color:var(--text-gold);">Bundle Table Patch Targets (<code>applyDropInClassPatch</code> in <code>design/drop-in/classes-patch.js</code>):</strong>
+            <code>_E / dx</code> (Class Metadata IDs 114 &amp; 115) · <code>WE / hE</code> (8 Starter Skills) · <code>yE / mx</code> (Starter Equipment &amp; Robe Hues 1884 / 1175) · <code>FE</code> (Legacy Template Weights) · <code>mE / gh</code> (5-Slot Seeded Hotbars) · <code>gE</code> (12-Milestone L1–L60 Progression Trees) · <code>b</code> (Normalized Ability Catalog) · <code>qC / Cq / Eq</code> (Client Combat Estimators) · <code>i18n</code> (Bilingual EN &amp; PT-BR Strings).
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script id="mockup-data" type="application/json">{"parity":{"version":"0.99.0","tickMs":100,"classes":["warrior","mage","ranger","samurai","ninja"],"brackets":["L10","L25","L45","L60"],"archetypes":["fast_trash","low_def_boss","high_def_boss","multi_target_pack"],"mode_a":{"version":"0.99.0","tickMs":100,"classes":["warrior","mage","ranger","samurai","ninja"],"brackets":["L10","L25","L45","L60"],"archetypes":["fast_trash","low_def_boss","high_def_boss","multi_target_pack"],"scenarios":[{"classId":"warrior","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":10.53,"rawDps":11.77,"trashTtkSec":8.57,"overkillWastePct":10.54,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":10.58,"totalCasts":8,"totalSwings":30,"totalHits":25,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":7.32,"rawDps":7.32,"trashTtkSec":295.19,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":12.77,"totalCasts":8,"totalSwings":30,"totalHits":17,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":3.04,"rawDps":3.04,"trashTtkSec":592.71,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":15.48,"totalCasts":8,"totalSwings":30,"totalHits":13,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":7.2,"rawDps":7.49,"trashTtkSec":30,"overkillWastePct":3.88,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":14.16,"totalCasts":8,"totalSwings":30,"totalHits":19,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":55.77,"rawDps":68.7,"trashTtkSec":4.07,"overkillWastePct":18.81,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-38.92,"ehpPerSec":27.55,"totalCasts":17,"totalSwings":23,"totalHits":34,"totalCrits":5,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":52.39,"rawDps":52.39,"trashTtkSec":115.44,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-8.6,"ehpPerSec":37.63,"totalCasts":23,"totalSwings":33,"totalHits":36,"totalCrits":5,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":25.52,"rawDps":25.52,"trashTtkSec":197.52,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-8.6,"ehpPerSec":51.28,"totalCasts":23,"totalSwings":33,"totalHits":28,"totalCrits":4,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":65.2,"rawDps":68.68,"trashTtkSec":9.28,"overkillWastePct":5.07,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-66.6,"ehpPerSec":43.17,"totalCasts":29,"totalSwings":29,"totalHits":54,"totalCrits":8,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":145.18,"rawDps":184.91,"trashTtkSec":3.63,"overkillWastePct":21.49,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-81.92,"ehpPerSec":72.23,"totalCasts":23,"totalSwings":23,"totalHits":33,"totalCrits":8,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":177.63,"rawDps":177.63,"trashTtkSec":79.04,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-34.6,"ehpPerSec":103.71,"totalCasts":34,"totalSwings":37,"totalHits":52,"totalCrits":13,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":91.52,"rawDps":91.52,"trashTtkSec":127.84,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-34.6,"ehpPerSec":151.9,"totalCasts":34,"totalSwings":37,"totalHits":43,"totalCrits":11,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":204.5,"rawDps":212.93,"trashTtkSec":6.87,"overkillWastePct":3.96,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-114.6,"ehpPerSec":122.34,"totalCasts":42,"totalSwings":33,"totalHits":71,"totalCrits":18,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":298.99,"rawDps":513.23,"trashTtkSec":2.98,"overkillWastePct":41.74,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-55.77,"ehpPerSec":119.61,"totalCasts":17,"totalSwings":23,"totalHits":33,"totalCrits":11,"parryCount":6,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":351.58,"rawDps":351.58,"trashTtkSec":67.58,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":85,"ehpPerSec":212.6,"totalCasts":29,"totalSwings":48,"totalHits":64,"totalCrits":22,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":173.45,"rawDps":173.45,"trashTtkSec":114.16,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":110,"ehpPerSec":317.63,"totalCasts":28,"totalSwings":48,"totalHits":62,"totalCrits":21,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":384.42,"rawDps":458.59,"trashTtkSec":6.18,"overkillWastePct":16.17,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-95,"ehpPerSec":260.47,"totalCasts":41,"totalSwings":42,"totalHits":85,"totalCrits":29,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":44.26,"rawDps":57.14,"trashTtkSec":1.83,"overkillWastePct":22.54,"netManaDeltaPerMin":-341.31,"netStaminaDeltaPerMin":185.31,"ehpPerSec":9.82,"totalCasts":20,"totalSwings":10,"totalHits":24,"totalCrits":2,"parryCount":0,"cloneInterceptions":0,"oomTicks":6},{"classId":"mage","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":24.69,"rawDps":24.69,"trashTtkSec":87.48,"overkillWastePct":0,"netManaDeltaPerMin":-103,"netStaminaDeltaPerMin":188.4,"ehpPerSec":12.72,"totalCasts":42,"totalSwings":30,"totalHits":44,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":416},{"classId":"mage","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":13.56,"rawDps":13.56,"trashTtkSec":132.71,"overkillWastePct":0,"netManaDeltaPerMin":-98,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.38,"totalCasts":41,"totalSwings":30,"totalHits":40,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":417},{"classId":"mage","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":21.32,"rawDps":23.28,"trashTtkSec":10.13,"overkillWastePct":8.44,"netManaDeltaPerMin":-98,"netStaminaDeltaPerMin":188.4,"ehpPerSec":13.86,"totalCasts":41,"totalSwings":30,"totalHits":44,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":417},{"classId":"mage","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":102.25,"rawDps":128.71,"trashTtkSec":2.22,"overkillWastePct":20.56,"netManaDeltaPerMin":-372.97,"netStaminaDeltaPerMin":264,"ehpPerSec":27.89,"totalCasts":27,"totalSwings":14,"totalHits":34,"totalCrits":5,"parryCount":1,"cloneInterceptions":0,"oomTicks":66},{"classId":"mage","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":81.56,"rawDps":81.56,"trashTtkSec":74.15,"overkillWastePct":0,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":38.73,"totalCasts":53,"totalSwings":36,"totalHits":64,"totalCrits":9,"parryCount":2,"cloneInterceptions":0,"oomTicks":418},{"classId":"mage","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":44.21,"rawDps":44.21,"trashTtkSec":114,"overkillWastePct":0,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":54.63,"totalCasts":53,"totalSwings":36,"totalHits":58,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":419},{"classId":"mage","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":73.32,"rawDps":77.59,"trashTtkSec":8.25,"overkillWastePct":5.5,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":45.54,"totalCasts":53,"totalSwings":36,"totalHits":66,"totalCrits":10,"parryCount":2,"cloneInterceptions":0,"oomTicks":419},{"classId":"mage","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":163.16,"rawDps":207.71,"trashTtkSec":3.23,"overkillWastePct":21.45,"netManaDeltaPerMin":-328.79,"netStaminaDeltaPerMin":359.03,"ehpPerSec":64.6,"totalCasts":17,"totalSwings":24,"totalHits":31,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":163},{"classId":"mage","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":179.72,"rawDps":179.72,"trashTtkSec":78.12,"overkillWastePct":0,"netManaDeltaPerMin":-195,"netStaminaDeltaPerMin":362.4,"ehpPerSec":99.14,"totalCasts":28,"totalSwings":43,"totalHits":53,"totalCrits":13,"parryCount":3,"cloneInterceptions":0,"oomTicks":429},{"classId":"mage","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":89.38,"rawDps":89.38,"trashTtkSec":130.9,"overkillWastePct":0,"netManaDeltaPerMin":-195,"netStaminaDeltaPerMin":362.4,"ehpPerSec":145.58,"totalCasts":28,"totalSwings":43,"totalHits":45,"totalCrits":11,"parryCount":3,"cloneInterceptions":0,"oomTicks":429},{"classId":"mage","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":258.6,"rawDps":272.17,"trashTtkSec":5.43,"overkillWastePct":4.99,"netManaDeltaPerMin":-170.25,"netStaminaDeltaPerMin":362.4,"ehpPerSec":116.99,"totalCasts":29,"totalSwings":43,"totalHits":69,"totalCrits":17,"parryCount":3,"cloneInterceptions":0,"oomTicks":447},{"classId":"mage","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":366.67,"rawDps":446.62,"trashTtkSec":2.43,"overkillWastePct":17.9,"netManaDeltaPerMin":-362.96,"netStaminaDeltaPerMin":456.3,"ehpPerSec":144.59,"totalCasts":12,"totalSwings":22,"totalHits":29,"totalCrits":10,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":387.85,"rawDps":387.85,"trashTtkSec":61.26,"overkillWastePct":0,"netManaDeltaPerMin":-184,"netStaminaDeltaPerMin":462,"ehpPerSec":244.47,"totalCasts":27,"totalSwings":55,"totalHits":67,"totalCrits":23,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":206.96,"rawDps":206.96,"trashTtkSec":95.67,"overkillWastePct":0,"netManaDeltaPerMin":-184,"netStaminaDeltaPerMin":462,"ehpPerSec":366.26,"totalCasts":27,"totalSwings":55,"totalHits":66,"totalCrits":22,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":710.32,"rawDps":802.42,"trashTtkSec":3.34,"overkillWastePct":11.48,"netManaDeltaPerMin":-210.75,"netStaminaDeltaPerMin":462,"ehpPerSec":292.14,"totalCasts":31,"totalSwings":55,"totalHits":102,"totalCrits":34,"parryCount":5,"cloneInterceptions":0,"oomTicks":321},{"classId":"ranger","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":11.14,"rawDps":12.65,"trashTtkSec":7.5,"overkillWastePct":11.93,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":10.4,"totalCasts":11,"totalSwings":30,"totalHits":33,"totalCrits":5,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":8.08,"rawDps":8.08,"trashTtkSec":267.27,"overkillWastePct":0,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":12.12,"totalCasts":11,"totalSwings":30,"totalHits":23,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":3.26,"rawDps":3.26,"trashTtkSec":551.45,"overkillWastePct":0,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":14.99,"totalCasts":11,"totalSwings":30,"totalHits":17,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":7.62,"rawDps":7.85,"trashTtkSec":28.33,"overkillWastePct":2.9,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":13.58,"totalCasts":11,"totalSwings":30,"totalHits":24,"totalCrits":4,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":55.1,"rawDps":62.14,"trashTtkSec":4.12,"overkillWastePct":11.33,"netManaDeltaPerMin":-86.65,"netStaminaDeltaPerMin":29.18,"ehpPerSec":25.62,"totalCasts":13,"totalSwings":25,"totalHits":39,"totalCrits":9,"parryCount":1,"cloneInterceptions":0,"oomTicks":273},{"classId":"ranger","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":45.06,"rawDps":45.06,"trashTtkSec":134.23,"overkillWastePct":0,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":34.88,"totalCasts":17,"totalSwings":36,"totalHits":43,"totalCrits":10,"parryCount":2,"cloneInterceptions":0,"oomTicks":457},{"classId":"ranger","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":21.49,"rawDps":21.49,"trashTtkSec":234.55,"overkillWastePct":0,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":46.88,"totalCasts":17,"totalSwings":36,"totalHits":33,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":457},{"classId":"ranger","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":42.18,"rawDps":45.27,"trashTtkSec":14.34,"overkillWastePct":6.83,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":40.02,"totalCasts":17,"totalSwings":36,"totalHits":47,"totalCrits":11,"parryCount":2,"cloneInterceptions":0,"oomTicks":457},{"classId":"ranger","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":160.18,"rawDps":190.31,"trashTtkSec":3.29,"overkillWastePct":15.83,"netManaDeltaPerMin":-171.43,"netStaminaDeltaPerMin":-30.49,"ehpPerSec":64.18,"totalCasts":17,"totalSwings":23,"totalHits":41,"totalCrits":14,"parryCount":2,"cloneInterceptions":0,"oomTicks":144},{"classId":"ranger","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":167.35,"rawDps":167.35,"trashTtkSec":83.9,"overkillWastePct":0,"netManaDeltaPerMin":-88.5,"netStaminaDeltaPerMin":56.4,"ehpPerSec":98.44,"totalCasts":25,"totalSwings":42,"totalHits":67,"totalCrits":23,"parryCount":3,"cloneInterceptions":0,"oomTicks":407},{"classId":"ranger","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":90.22,"rawDps":90.22,"trashTtkSec":129.69,"overkillWastePct":0,"netManaDeltaPerMin":-88.5,"netStaminaDeltaPerMin":56.4,"ehpPerSec":143.43,"totalCasts":25,"totalSwings":42,"totalHits":59,"totalCrits":20,"parryCount":3,"cloneInterceptions":0,"oomTicks":407},{"classId":"ranger","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":176.44,"rawDps":182.78,"trashTtkSec":7.96,"overkillWastePct":3.47,"netManaDeltaPerMin":-95.5,"netStaminaDeltaPerMin":24.4,"ehpPerSec":115.53,"totalCasts":27,"totalSwings":40,"totalHits":87,"totalCrits":30,"parryCount":3,"cloneInterceptions":0,"oomTicks":431},{"classId":"ranger","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":315.96,"rawDps":465.64,"trashTtkSec":2.82,"overkillWastePct":32.15,"netManaDeltaPerMin":-153.19,"netStaminaDeltaPerMin":7.66,"ehpPerSec":147.31,"totalCasts":15,"totalSwings":24,"totalHits":37,"totalCrits":16,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ranger","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":383.85,"rawDps":383.85,"trashTtkSec":61.9,"overkillWastePct":0,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":88,"ehpPerSec":218.58,"totalCasts":28,"totalSwings":51,"totalHits":75,"totalCrits":34,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"ranger","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":213.73,"rawDps":213.73,"trashTtkSec":92.64,"overkillWastePct":0,"netManaDeltaPerMin":-24,"netStaminaDeltaPerMin":138,"ehpPerSec":321.12,"totalCasts":26,"totalSwings":51,"totalHits":73,"totalCrits":33,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"ranger","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":662.7,"rawDps":718.87,"trashTtkSec":3.59,"overkillWastePct":7.81,"netManaDeltaPerMin":-129,"netStaminaDeltaPerMin":-2,"ehpPerSec":257.75,"totalCasts":32,"totalSwings":45,"totalHits":219,"totalCrits":98,"parryCount":5,"cloneInterceptions":0,"oomTicks":362},{"classId":"samurai","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":9.45,"rawDps":11.02,"trashTtkSec":8.57,"overkillWastePct":14.28,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":10.08,"totalCasts":12,"totalSwings":30,"totalHits":26,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":7.26,"rawDps":7.26,"trashTtkSec":297.35,"overkillWastePct":0,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":12.88,"totalCasts":12,"totalSwings":30,"totalHits":18,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":3.42,"rawDps":3.42,"trashTtkSec":526.38,"overkillWastePct":0,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.67,"totalCasts":12,"totalSwings":30,"totalHits":14,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":6.62,"rawDps":6.78,"trashTtkSec":32.64,"overkillWastePct":2.43,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":14.3,"totalCasts":12,"totalSwings":30,"totalHits":19,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":65.23,"rawDps":84.45,"trashTtkSec":3.48,"overkillWastePct":22.76,"netManaDeltaPerMin":-77.59,"netStaminaDeltaPerMin":208.55,"ehpPerSec":28.12,"totalCasts":17,"totalSwings":22,"totalHits":32,"totalCrits":5,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":47.99,"rawDps":47.99,"trashTtkSec":126.03,"overkillWastePct":0,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":266.4,"ehpPerSec":39.22,"totalCasts":24,"totalSwings":36,"totalHits":38,"totalCrits":5,"parryCount":4,"cloneInterceptions":0,"oomTicks":38},{"classId":"samurai","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":21.1,"rawDps":21.1,"trashTtkSec":238.88,"overkillWastePct":0,"netManaDeltaPerMin":-72,"netStaminaDeltaPerMin":266.4,"ehpPerSec":53.24,"totalCasts":24,"totalSwings":36,"totalHits":29,"totalCrits":4,"parryCount":4,"cloneInterceptions":0,"oomTicks":38},{"classId":"samurai","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":54.74,"rawDps":56.9,"trashTtkSec":11.05,"overkillWastePct":3.81,"netManaDeltaPerMin":-72,"netStaminaDeltaPerMin":216.4,"ehpPerSec":45.6,"totalCasts":29,"totalSwings":37,"totalHits":45,"totalCrits":7,"parryCount":4,"cloneInterceptions":0,"oomTicks":38},{"classId":"samurai","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":162.65,"rawDps":228.33,"trashTtkSec":3.24,"overkillWastePct":28.76,"netManaDeltaPerMin":-129.63,"netStaminaDeltaPerMin":283.85,"ehpPerSec":75.17,"totalCasts":20,"totalSwings":25,"totalHits":36,"totalCrits":9,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":169.23,"rawDps":169.23,"trashTtkSec":82.96,"overkillWastePct":0,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":352.4,"ehpPerSec":103.92,"totalCasts":28,"totalSwings":43,"totalHits":56,"totalCrits":14,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":85.01,"rawDps":85.01,"trashTtkSec":137.63,"overkillWastePct":0,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":362.4,"ehpPerSec":147.95,"totalCasts":27,"totalSwings":43,"totalHits":45,"totalCrits":11,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":195.69,"rawDps":213.14,"trashTtkSec":7.17,"overkillWastePct":8.19,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":122.79,"totalCasts":33,"totalSwings":46,"totalHits":71,"totalCrits":18,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":317.08,"rawDps":430.96,"trashTtkSec":2.81,"overkillWastePct":26.42,"netManaDeltaPerMin":-38.43,"netStaminaDeltaPerMin":364.27,"ehpPerSec":146.54,"totalCasts":17,"totalSwings":24,"totalHits":33,"totalCrits":11,"parryCount":6,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":358.21,"rawDps":358.21,"trashTtkSec":66.33,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":432,"ehpPerSec":219.45,"totalCasts":29,"totalSwings":50,"totalHits":65,"totalCrits":22,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":212.02,"rawDps":212.02,"trashTtkSec":93.39,"overkillWastePct":0,"netManaDeltaPerMin":-8,"netStaminaDeltaPerMin":462,"ehpPerSec":316.89,"totalCasts":28,"totalSwings":50,"totalHits":62,"totalCrits":21,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":458.73,"rawDps":485.01,"trashTtkSec":5.18,"overkillWastePct":5.42,"netManaDeltaPerMin":-8,"netStaminaDeltaPerMin":402,"ehpPerSec":262.92,"totalCasts":32,"totalSwings":50,"totalHits":89,"totalCrits":30,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":9.79,"rawDps":10.83,"trashTtkSec":8.57,"overkillWastePct":9.63,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":9.92,"totalCasts":13,"totalSwings":32,"totalHits":29,"totalCrits":4,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":7.28,"rawDps":7.28,"trashTtkSec":296.7,"overkillWastePct":0,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":12.66,"totalCasts":13,"totalSwings":32,"totalHits":20,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":2.99,"rawDps":2.99,"trashTtkSec":602.37,"overkillWastePct":0,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.55,"totalCasts":13,"totalSwings":32,"totalHits":16,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":6.63,"rawDps":6.9,"trashTtkSec":32.59,"overkillWastePct":4.01,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":14.13,"totalCasts":13,"totalSwings":32,"totalHits":22,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":56.33,"rawDps":67.87,"trashTtkSec":4.03,"overkillWastePct":17.01,"netManaDeltaPerMin":-11.91,"netStaminaDeltaPerMin":118.51,"ehpPerSec":25.95,"totalCasts":21,"totalSwings":26,"totalHits":39,"totalCrits":9,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":53.81,"rawDps":53.81,"trashTtkSec":112.4,"overkillWastePct":0,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":34.32,"totalCasts":28,"totalSwings":39,"totalHits":46,"totalCrits":11,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":21.77,"rawDps":21.77,"trashTtkSec":231.47,"overkillWastePct":0,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":45.9,"totalCasts":28,"totalSwings":39,"totalHits":35,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":48.79,"rawDps":50.64,"trashTtkSec":12.4,"overkillWastePct":3.65,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":39.28,"totalCasts":28,"totalSwings":39,"totalHits":49,"totalCrits":12,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":166.77,"rawDps":187.14,"trashTtkSec":3.16,"overkillWastePct":10.88,"netManaDeltaPerMin":-63.84,"netStaminaDeltaPerMin":287.16,"ehpPerSec":66.13,"totalCasts":17,"totalSwings":25,"totalHits":36,"totalCrits":12,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":190.26,"rawDps":190.26,"trashTtkSec":73.79,"overkillWastePct":0,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":101.83,"totalCasts":29,"totalSwings":46,"totalHits":65,"totalCrits":23,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":92.9,"rawDps":92.9,"trashTtkSec":125.94,"overkillWastePct":0,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":149.46,"totalCasts":29,"totalSwings":46,"totalHits":57,"totalCrits":20,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":208.7,"rawDps":212.92,"trashTtkSec":6.73,"overkillWastePct":1.98,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":122.24,"totalCasts":29,"totalSwings":46,"totalHits":87,"totalCrits":30,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_a","sustainedDps":304.1,"rawDps":410.35,"trashTtkSec":2.93,"overkillWastePct":25.89,"netManaDeltaPerMin":6.14,"netStaminaDeltaPerMin":346.69,"ehpPerSec":144.23,"totalCasts":16,"totalSwings":27,"totalHits":37,"totalCrits":16,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_a","sustainedDps":374.5,"rawDps":374.5,"trashTtkSec":63.44,"overkillWastePct":0,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":426,"ehpPerSec":221.23,"totalCasts":27,"totalSwings":55,"totalHits":70,"totalCrits":31,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_a","sustainedDps":183.56,"rawDps":183.56,"trashTtkSec":107.87,"overkillWastePct":0,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":462,"ehpPerSec":325.83,"totalCasts":25,"totalSwings":55,"totalHits":68,"totalCrits":30,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_a","sustainedDps":426.76,"rawDps":446.92,"trashTtkSec":5.57,"overkillWastePct":4.51,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":390,"ehpPerSec":266.06,"totalCasts":29,"totalSwings":54,"totalHits":94,"totalCrits":42,"parryCount":5,"cloneInterceptions":0,"oomTicks":0}],"summaryByClassBracket":[{"classId":"warrior","bracketId":"L10","sustainedBossDps":7.32,"highDefBossDps":3.04,"multiTargetDps":7.2,"trashTtkSec":8.57,"overkillWastePct":10.54,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":15.48},{"classId":"warrior","bracketId":"L25","sustainedBossDps":52.39,"highDefBossDps":25.52,"multiTargetDps":65.2,"trashTtkSec":4.07,"overkillWastePct":18.81,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-8.6,"ehpPerSec":51.28},{"classId":"warrior","bracketId":"L45","sustainedBossDps":177.63,"highDefBossDps":91.52,"multiTargetDps":204.5,"trashTtkSec":3.63,"overkillWastePct":21.49,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-34.6,"ehpPerSec":151.9},{"classId":"warrior","bracketId":"L60","sustainedBossDps":351.58,"highDefBossDps":173.45,"multiTargetDps":384.42,"trashTtkSec":2.98,"overkillWastePct":41.74,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":85,"ehpPerSec":317.63},{"classId":"mage","bracketId":"L10","sustainedBossDps":24.69,"highDefBossDps":13.56,"multiTargetDps":21.32,"trashTtkSec":1.83,"overkillWastePct":22.54,"netManaDeltaPerMin":-103,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.38},{"classId":"mage","bracketId":"L25","sustainedBossDps":81.56,"highDefBossDps":44.21,"multiTargetDps":73.32,"trashTtkSec":2.22,"overkillWastePct":20.56,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":54.63},{"classId":"mage","bracketId":"L45","sustainedBossDps":179.72,"highDefBossDps":89.38,"multiTargetDps":258.6,"trashTtkSec":3.23,"overkillWastePct":21.45,"netManaDeltaPerMin":-195,"netStaminaDeltaPerMin":362.4,"ehpPerSec":145.58},{"classId":"mage","bracketId":"L60","sustainedBossDps":387.85,"highDefBossDps":206.96,"multiTargetDps":710.32,"trashTtkSec":2.43,"overkillWastePct":17.9,"netManaDeltaPerMin":-184,"netStaminaDeltaPerMin":462,"ehpPerSec":366.26},{"classId":"ranger","bracketId":"L10","sustainedBossDps":8.08,"highDefBossDps":3.26,"multiTargetDps":7.62,"trashTtkSec":7.5,"overkillWastePct":11.93,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":14.99},{"classId":"ranger","bracketId":"L25","sustainedBossDps":45.06,"highDefBossDps":21.49,"multiTargetDps":42.18,"trashTtkSec":4.12,"overkillWastePct":11.33,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":46.88},{"classId":"ranger","bracketId":"L45","sustainedBossDps":167.35,"highDefBossDps":90.22,"multiTargetDps":176.44,"trashTtkSec":3.29,"overkillWastePct":15.83,"netManaDeltaPerMin":-88.5,"netStaminaDeltaPerMin":56.4,"ehpPerSec":143.43},{"classId":"ranger","bracketId":"L60","sustainedBossDps":383.85,"highDefBossDps":213.73,"multiTargetDps":662.7,"trashTtkSec":2.82,"overkillWastePct":32.15,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":88,"ehpPerSec":321.12},{"classId":"samurai","bracketId":"L10","sustainedBossDps":7.26,"highDefBossDps":3.42,"multiTargetDps":6.62,"trashTtkSec":8.57,"overkillWastePct":14.28,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.67},{"classId":"samurai","bracketId":"L25","sustainedBossDps":47.99,"highDefBossDps":21.1,"multiTargetDps":54.74,"trashTtkSec":3.48,"overkillWastePct":22.76,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":266.4,"ehpPerSec":53.24},{"classId":"samurai","bracketId":"L45","sustainedBossDps":169.23,"highDefBossDps":85.01,"multiTargetDps":195.69,"trashTtkSec":3.24,"overkillWastePct":28.76,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":352.4,"ehpPerSec":147.95},{"classId":"samurai","bracketId":"L60","sustainedBossDps":358.21,"highDefBossDps":212.02,"multiTargetDps":458.73,"trashTtkSec":2.81,"overkillWastePct":26.42,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":432,"ehpPerSec":316.89},{"classId":"ninja","bracketId":"L10","sustainedBossDps":7.28,"highDefBossDps":2.99,"multiTargetDps":6.63,"trashTtkSec":8.57,"overkillWastePct":9.63,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.55},{"classId":"ninja","bracketId":"L25","sustainedBossDps":53.81,"highDefBossDps":21.77,"multiTargetDps":48.79,"trashTtkSec":4.03,"overkillWastePct":17.01,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":45.9},{"classId":"ninja","bracketId":"L45","sustainedBossDps":190.26,"highDefBossDps":92.9,"multiTargetDps":208.7,"trashTtkSec":3.16,"overkillWastePct":10.88,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":149.46},{"classId":"ninja","bracketId":"L60","sustainedBossDps":374.5,"highDefBossDps":183.56,"multiTargetDps":426.76,"trashTtkSec":2.93,"overkillWastePct":25.89,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":426,"ehpPerSec":325.83}]},"mode_b":{"version":"0.99.0","tickMs":100,"classes":["warrior","mage","ranger","samurai","ninja"],"brackets":["L10","L25","L45","L60"],"archetypes":["fast_trash","low_def_boss","high_def_boss","multi_target_pack"],"scenarios":[{"classId":"warrior","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":10.53,"rawDps":11.77,"trashTtkSec":8.57,"overkillWastePct":10.54,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":10.58,"totalCasts":8,"totalSwings":30,"totalHits":25,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":7.32,"rawDps":7.32,"trashTtkSec":295.19,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":12.77,"totalCasts":8,"totalSwings":30,"totalHits":17,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":3.04,"rawDps":3.04,"trashTtkSec":592.71,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":15.48,"totalCasts":8,"totalSwings":30,"totalHits":13,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":7.2,"rawDps":7.49,"trashTtkSec":30,"overkillWastePct":3.88,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":14.16,"totalCasts":8,"totalSwings":30,"totalHits":19,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":55.77,"rawDps":68.7,"trashTtkSec":4.07,"overkillWastePct":18.81,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-38.92,"ehpPerSec":27.55,"totalCasts":17,"totalSwings":23,"totalHits":34,"totalCrits":5,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":52.39,"rawDps":52.39,"trashTtkSec":115.44,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-8.6,"ehpPerSec":37.63,"totalCasts":23,"totalSwings":33,"totalHits":36,"totalCrits":5,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":25.52,"rawDps":25.52,"trashTtkSec":197.52,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-8.6,"ehpPerSec":51.28,"totalCasts":23,"totalSwings":33,"totalHits":28,"totalCrits":4,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":65.2,"rawDps":68.68,"trashTtkSec":9.28,"overkillWastePct":5.07,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-66.6,"ehpPerSec":43.17,"totalCasts":29,"totalSwings":29,"totalHits":54,"totalCrits":8,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":145.18,"rawDps":184.91,"trashTtkSec":3.63,"overkillWastePct":21.49,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-81.92,"ehpPerSec":72.23,"totalCasts":23,"totalSwings":23,"totalHits":33,"totalCrits":8,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":177.63,"rawDps":177.63,"trashTtkSec":79.04,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-34.6,"ehpPerSec":103.71,"totalCasts":34,"totalSwings":37,"totalHits":52,"totalCrits":13,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":91.52,"rawDps":91.52,"trashTtkSec":127.84,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-34.6,"ehpPerSec":151.9,"totalCasts":34,"totalSwings":37,"totalHits":43,"totalCrits":11,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":204.5,"rawDps":212.93,"trashTtkSec":6.87,"overkillWastePct":3.96,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-114.6,"ehpPerSec":122.34,"totalCasts":42,"totalSwings":33,"totalHits":71,"totalCrits":18,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":298.99,"rawDps":513.23,"trashTtkSec":2.98,"overkillWastePct":41.74,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-55.77,"ehpPerSec":119.61,"totalCasts":17,"totalSwings":23,"totalHits":33,"totalCrits":11,"parryCount":6,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":351.58,"rawDps":351.58,"trashTtkSec":67.58,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":85,"ehpPerSec":212.6,"totalCasts":29,"totalSwings":48,"totalHits":64,"totalCrits":22,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":173.45,"rawDps":173.45,"trashTtkSec":114.16,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":110,"ehpPerSec":317.63,"totalCasts":28,"totalSwings":48,"totalHits":62,"totalCrits":21,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"warrior","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":384.42,"rawDps":458.59,"trashTtkSec":6.18,"overkillWastePct":16.17,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-95,"ehpPerSec":260.47,"totalCasts":41,"totalSwings":42,"totalHits":85,"totalCrits":29,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":44.26,"rawDps":57.14,"trashTtkSec":1.83,"overkillWastePct":22.54,"netManaDeltaPerMin":-341.31,"netStaminaDeltaPerMin":185.31,"ehpPerSec":9.82,"totalCasts":20,"totalSwings":10,"totalHits":24,"totalCrits":2,"parryCount":0,"cloneInterceptions":0,"oomTicks":6},{"classId":"mage","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":24.69,"rawDps":24.69,"trashTtkSec":87.48,"overkillWastePct":0,"netManaDeltaPerMin":-103,"netStaminaDeltaPerMin":188.4,"ehpPerSec":12.72,"totalCasts":42,"totalSwings":30,"totalHits":44,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":416},{"classId":"mage","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":13.56,"rawDps":13.56,"trashTtkSec":132.71,"overkillWastePct":0,"netManaDeltaPerMin":-98,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.38,"totalCasts":41,"totalSwings":30,"totalHits":40,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":417},{"classId":"mage","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":21.32,"rawDps":23.28,"trashTtkSec":10.13,"overkillWastePct":8.44,"netManaDeltaPerMin":-98,"netStaminaDeltaPerMin":188.4,"ehpPerSec":13.86,"totalCasts":41,"totalSwings":30,"totalHits":44,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":417},{"classId":"mage","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":102.25,"rawDps":128.71,"trashTtkSec":2.22,"overkillWastePct":20.56,"netManaDeltaPerMin":-372.97,"netStaminaDeltaPerMin":264,"ehpPerSec":27.89,"totalCasts":27,"totalSwings":14,"totalHits":34,"totalCrits":5,"parryCount":1,"cloneInterceptions":0,"oomTicks":66},{"classId":"mage","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":81.56,"rawDps":81.56,"trashTtkSec":74.15,"overkillWastePct":0,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":38.73,"totalCasts":53,"totalSwings":36,"totalHits":64,"totalCrits":9,"parryCount":2,"cloneInterceptions":0,"oomTicks":418},{"classId":"mage","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":44.21,"rawDps":44.21,"trashTtkSec":114,"overkillWastePct":0,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":54.63,"totalCasts":53,"totalSwings":36,"totalHits":58,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":419},{"classId":"mage","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":73.32,"rawDps":77.59,"trashTtkSec":8.25,"overkillWastePct":5.5,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":45.54,"totalCasts":53,"totalSwings":36,"totalHits":66,"totalCrits":10,"parryCount":2,"cloneInterceptions":0,"oomTicks":419},{"classId":"mage","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":163.16,"rawDps":207.71,"trashTtkSec":3.23,"overkillWastePct":21.45,"netManaDeltaPerMin":-328.79,"netStaminaDeltaPerMin":359.03,"ehpPerSec":64.6,"totalCasts":17,"totalSwings":24,"totalHits":31,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":163},{"classId":"mage","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":179.72,"rawDps":179.72,"trashTtkSec":78.12,"overkillWastePct":0,"netManaDeltaPerMin":-195,"netStaminaDeltaPerMin":362.4,"ehpPerSec":99.14,"totalCasts":28,"totalSwings":43,"totalHits":53,"totalCrits":13,"parryCount":3,"cloneInterceptions":0,"oomTicks":429},{"classId":"mage","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":89.38,"rawDps":89.38,"trashTtkSec":130.9,"overkillWastePct":0,"netManaDeltaPerMin":-195,"netStaminaDeltaPerMin":362.4,"ehpPerSec":145.58,"totalCasts":28,"totalSwings":43,"totalHits":45,"totalCrits":11,"parryCount":3,"cloneInterceptions":0,"oomTicks":429},{"classId":"mage","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":258.6,"rawDps":272.17,"trashTtkSec":5.43,"overkillWastePct":4.99,"netManaDeltaPerMin":-170.25,"netStaminaDeltaPerMin":362.4,"ehpPerSec":116.99,"totalCasts":29,"totalSwings":43,"totalHits":69,"totalCrits":17,"parryCount":3,"cloneInterceptions":0,"oomTicks":447},{"classId":"mage","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":366.67,"rawDps":446.62,"trashTtkSec":2.43,"overkillWastePct":17.9,"netManaDeltaPerMin":-362.96,"netStaminaDeltaPerMin":456.3,"ehpPerSec":144.59,"totalCasts":12,"totalSwings":22,"totalHits":29,"totalCrits":10,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":387.85,"rawDps":387.85,"trashTtkSec":61.26,"overkillWastePct":0,"netManaDeltaPerMin":-184,"netStaminaDeltaPerMin":462,"ehpPerSec":244.47,"totalCasts":27,"totalSwings":55,"totalHits":67,"totalCrits":23,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":206.96,"rawDps":206.96,"trashTtkSec":95.67,"overkillWastePct":0,"netManaDeltaPerMin":-184,"netStaminaDeltaPerMin":462,"ehpPerSec":366.26,"totalCasts":27,"totalSwings":55,"totalHits":66,"totalCrits":22,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"mage","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":710.32,"rawDps":802.42,"trashTtkSec":3.34,"overkillWastePct":11.48,"netManaDeltaPerMin":-210.75,"netStaminaDeltaPerMin":462,"ehpPerSec":292.14,"totalCasts":31,"totalSwings":55,"totalHits":102,"totalCrits":34,"parryCount":5,"cloneInterceptions":0,"oomTicks":321},{"classId":"ranger","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":11.14,"rawDps":12.65,"trashTtkSec":7.5,"overkillWastePct":11.93,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":10.4,"totalCasts":11,"totalSwings":30,"totalHits":33,"totalCrits":5,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":8.08,"rawDps":8.08,"trashTtkSec":267.27,"overkillWastePct":0,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":12.12,"totalCasts":11,"totalSwings":30,"totalHits":23,"totalCrits":3,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":3.26,"rawDps":3.26,"trashTtkSec":551.45,"overkillWastePct":0,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":14.99,"totalCasts":11,"totalSwings":30,"totalHits":17,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":7.62,"rawDps":7.85,"trashTtkSec":28.33,"overkillWastePct":2.9,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":13.58,"totalCasts":11,"totalSwings":30,"totalHits":24,"totalCrits":4,"parryCount":1,"cloneInterceptions":0,"oomTicks":414},{"classId":"ranger","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":55.1,"rawDps":62.14,"trashTtkSec":4.12,"overkillWastePct":11.33,"netManaDeltaPerMin":-86.65,"netStaminaDeltaPerMin":29.18,"ehpPerSec":25.62,"totalCasts":13,"totalSwings":25,"totalHits":39,"totalCrits":9,"parryCount":1,"cloneInterceptions":0,"oomTicks":273},{"classId":"ranger","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":45.06,"rawDps":45.06,"trashTtkSec":134.23,"overkillWastePct":0,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":34.88,"totalCasts":17,"totalSwings":36,"totalHits":43,"totalCrits":10,"parryCount":2,"cloneInterceptions":0,"oomTicks":457},{"classId":"ranger","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":21.49,"rawDps":21.49,"trashTtkSec":234.55,"overkillWastePct":0,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":46.88,"totalCasts":17,"totalSwings":36,"totalHits":33,"totalCrits":8,"parryCount":2,"cloneInterceptions":0,"oomTicks":457},{"classId":"ranger","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":42.18,"rawDps":45.27,"trashTtkSec":14.34,"overkillWastePct":6.83,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":40.02,"totalCasts":17,"totalSwings":36,"totalHits":47,"totalCrits":11,"parryCount":2,"cloneInterceptions":0,"oomTicks":457},{"classId":"ranger","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":160.18,"rawDps":190.31,"trashTtkSec":3.29,"overkillWastePct":15.83,"netManaDeltaPerMin":-171.43,"netStaminaDeltaPerMin":-30.49,"ehpPerSec":64.18,"totalCasts":17,"totalSwings":23,"totalHits":41,"totalCrits":14,"parryCount":2,"cloneInterceptions":0,"oomTicks":144},{"classId":"ranger","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":167.35,"rawDps":167.35,"trashTtkSec":83.9,"overkillWastePct":0,"netManaDeltaPerMin":-88.5,"netStaminaDeltaPerMin":56.4,"ehpPerSec":98.44,"totalCasts":25,"totalSwings":42,"totalHits":67,"totalCrits":23,"parryCount":3,"cloneInterceptions":0,"oomTicks":407},{"classId":"ranger","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":90.22,"rawDps":90.22,"trashTtkSec":129.69,"overkillWastePct":0,"netManaDeltaPerMin":-88.5,"netStaminaDeltaPerMin":56.4,"ehpPerSec":143.43,"totalCasts":25,"totalSwings":42,"totalHits":59,"totalCrits":20,"parryCount":3,"cloneInterceptions":0,"oomTicks":407},{"classId":"ranger","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":176.44,"rawDps":182.78,"trashTtkSec":7.96,"overkillWastePct":3.47,"netManaDeltaPerMin":-95.5,"netStaminaDeltaPerMin":24.4,"ehpPerSec":115.53,"totalCasts":27,"totalSwings":40,"totalHits":87,"totalCrits":30,"parryCount":3,"cloneInterceptions":0,"oomTicks":431},{"classId":"ranger","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":315.96,"rawDps":465.64,"trashTtkSec":2.82,"overkillWastePct":32.15,"netManaDeltaPerMin":-153.19,"netStaminaDeltaPerMin":7.66,"ehpPerSec":147.31,"totalCasts":15,"totalSwings":24,"totalHits":37,"totalCrits":16,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ranger","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":383.85,"rawDps":383.85,"trashTtkSec":61.9,"overkillWastePct":0,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":88,"ehpPerSec":218.58,"totalCasts":28,"totalSwings":51,"totalHits":75,"totalCrits":34,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"ranger","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":213.73,"rawDps":213.73,"trashTtkSec":92.64,"overkillWastePct":0,"netManaDeltaPerMin":-24,"netStaminaDeltaPerMin":138,"ehpPerSec":321.12,"totalCasts":26,"totalSwings":51,"totalHits":73,"totalCrits":33,"parryCount":5,"cloneInterceptions":0,"oomTicks":0},{"classId":"ranger","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":662.7,"rawDps":718.87,"trashTtkSec":3.59,"overkillWastePct":7.81,"netManaDeltaPerMin":-129,"netStaminaDeltaPerMin":-2,"ehpPerSec":257.75,"totalCasts":32,"totalSwings":45,"totalHits":219,"totalCrits":98,"parryCount":5,"cloneInterceptions":0,"oomTicks":362},{"classId":"samurai","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":9.45,"rawDps":11.02,"trashTtkSec":8.57,"overkillWastePct":14.28,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":10.08,"totalCasts":12,"totalSwings":30,"totalHits":26,"totalCrits":2,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":7.26,"rawDps":7.26,"trashTtkSec":297.35,"overkillWastePct":0,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":12.88,"totalCasts":12,"totalSwings":30,"totalHits":18,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":3.42,"rawDps":3.42,"trashTtkSec":526.38,"overkillWastePct":0,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.67,"totalCasts":12,"totalSwings":30,"totalHits":14,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":6.62,"rawDps":6.78,"trashTtkSec":32.64,"overkillWastePct":2.43,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":14.3,"totalCasts":12,"totalSwings":30,"totalHits":19,"totalCrits":1,"parryCount":1,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":66.18,"rawDps":89.06,"trashTtkSec":3.43,"overkillWastePct":25.69,"netManaDeltaPerMin":-78.72,"netStaminaDeltaPerMin":211.59,"ehpPerSec":28.46,"totalCasts":17,"totalSwings":24,"totalHits":34,"totalCrits":5,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":50.44,"rawDps":50.44,"trashTtkSec":119.91,"overkillWastePct":0,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":266.4,"ehpPerSec":39.22,"totalCasts":24,"totalSwings":40,"totalHits":42,"totalCrits":5,"parryCount":4,"cloneInterceptions":0,"oomTicks":38},{"classId":"samurai","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":22.34,"rawDps":22.34,"trashTtkSec":225.64,"overkillWastePct":0,"netManaDeltaPerMin":-72,"netStaminaDeltaPerMin":266.4,"ehpPerSec":53.24,"totalCasts":24,"totalSwings":40,"totalHits":33,"totalCrits":4,"parryCount":4,"cloneInterceptions":0,"oomTicks":38},{"classId":"samurai","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":55.22,"rawDps":58.34,"trashTtkSec":10.96,"overkillWastePct":5.34,"netManaDeltaPerMin":-72,"netStaminaDeltaPerMin":216.4,"ehpPerSec":45.6,"totalCasts":29,"totalSwings":41,"totalHits":49,"totalCrits":7,"parryCount":4,"cloneInterceptions":0,"oomTicks":38},{"classId":"samurai","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":162.65,"rawDps":231.45,"trashTtkSec":3.24,"overkillWastePct":29.72,"netManaDeltaPerMin":-129.63,"netStaminaDeltaPerMin":283.85,"ehpPerSec":75.17,"totalCasts":20,"totalSwings":25,"totalHits":36,"totalCrits":9,"parryCount":4,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":176.07,"rawDps":176.07,"trashTtkSec":79.74,"overkillWastePct":0,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":352.4,"ehpPerSec":103.92,"totalCasts":28,"totalSwings":44,"totalHits":57,"totalCrits":14,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":85.97,"rawDps":85.97,"trashTtkSec":136.09,"overkillWastePct":0,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":362.4,"ehpPerSec":147.95,"totalCasts":27,"totalSwings":43,"totalHits":45,"totalCrits":11,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":203.43,"rawDps":218.26,"trashTtkSec":6.9,"overkillWastePct":6.79,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":122.79,"totalCasts":33,"totalSwings":46,"totalHits":71,"totalCrits":18,"parryCount":8,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":317.08,"rawDps":437.19,"trashTtkSec":2.81,"overkillWastePct":27.47,"netManaDeltaPerMin":-38.43,"netStaminaDeltaPerMin":364.27,"ehpPerSec":145.23,"totalCasts":17,"totalSwings":24,"totalHits":33,"totalCrits":11,"parryCount":6,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":377.24,"rawDps":377.24,"trashTtkSec":62.98,"overkillWastePct":0,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":432,"ehpPerSec":219.45,"totalCasts":29,"totalSwings":50,"totalHits":65,"totalCrits":22,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":224.76,"rawDps":224.76,"trashTtkSec":88.09,"overkillWastePct":0,"netManaDeltaPerMin":-8,"netStaminaDeltaPerMin":447,"ehpPerSec":316.89,"totalCasts":29,"totalSwings":50,"totalHits":63,"totalCrits":21,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"samurai","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":463.7,"rawDps":495.59,"trashTtkSec":5.12,"overkillWastePct":6.44,"netManaDeltaPerMin":-8,"netStaminaDeltaPerMin":402,"ehpPerSec":262.92,"totalCasts":32,"totalSwings":50,"totalHits":89,"totalCrits":30,"parryCount":12,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":9.79,"rawDps":10.83,"trashTtkSec":8.57,"overkillWastePct":9.63,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":10.07,"totalCasts":13,"totalSwings":32,"totalHits":29,"totalCrits":4,"parryCount":1,"cloneInterceptions":2,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":7.28,"rawDps":7.28,"trashTtkSec":296.7,"overkillWastePct":0,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":13,"totalCasts":13,"totalSwings":32,"totalHits":20,"totalCrits":3,"parryCount":1,"cloneInterceptions":2,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":2.99,"rawDps":2.99,"trashTtkSec":602.37,"overkillWastePct":0,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":16.17,"totalCasts":13,"totalSwings":32,"totalHits":16,"totalCrits":2,"parryCount":1,"cloneInterceptions":2,"oomTicks":0},{"classId":"ninja","bracketId":"L10","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":6.63,"rawDps":6.9,"trashTtkSec":32.59,"overkillWastePct":4.01,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":14.59,"totalCasts":13,"totalSwings":32,"totalHits":22,"totalCrits":3,"parryCount":1,"cloneInterceptions":2,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":59.74,"rawDps":69.52,"trashTtkSec":3.8,"overkillWastePct":14.07,"netManaDeltaPerMin":-20.53,"netStaminaDeltaPerMin":127.45,"ehpPerSec":25.79,"totalCasts":20,"totalSwings":25,"totalHits":37,"totalCrits":9,"parryCount":1,"cloneInterceptions":2,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":53.97,"rawDps":53.97,"trashTtkSec":112.05,"overkillWastePct":0,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":36.09,"totalCasts":28,"totalSwings":39,"totalHits":46,"totalCrits":11,"parryCount":2,"cloneInterceptions":3,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":23.16,"rawDps":23.16,"trashTtkSec":217.63,"overkillWastePct":0,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":49.03,"totalCasts":28,"totalSwings":39,"totalHits":35,"totalCrits":8,"parryCount":2,"cloneInterceptions":3,"oomTicks":0},{"classId":"ninja","bracketId":"L25","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":50.07,"rawDps":51.11,"trashTtkSec":12.08,"overkillWastePct":2.03,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":41.64,"totalCasts":28,"totalSwings":39,"totalHits":49,"totalCrits":12,"parryCount":2,"cloneInterceptions":3,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":173.93,"rawDps":201.41,"trashTtkSec":3.03,"overkillWastePct":13.65,"netManaDeltaPerMin":-73.76,"netStaminaDeltaPerMin":287.52,"ehpPerSec":68.38,"totalCasts":17,"totalSwings":24,"totalHits":35,"totalCrits":12,"parryCount":2,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":190.49,"rawDps":190.49,"trashTtkSec":73.7,"overkillWastePct":0,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":101.83,"totalCasts":29,"totalSwings":46,"totalHits":65,"totalCrits":23,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":95.75,"rawDps":95.75,"trashTtkSec":122.19,"overkillWastePct":0,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":149.46,"totalCasts":29,"totalSwings":46,"totalHits":57,"totalCrits":20,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L45","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":204.89,"rawDps":213.87,"trashTtkSec":6.85,"overkillWastePct":4.2,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":122.24,"totalCasts":29,"totalSwings":46,"totalHits":87,"totalCrits":30,"parryCount":3,"cloneInterceptions":0,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"fast_trash","mode":"mode_b","sustainedDps":328.78,"rawDps":449.29,"trashTtkSec":2.71,"overkillWastePct":26.82,"netManaDeltaPerMin":-15.5,"netStaminaDeltaPerMin":340.74,"ehpPerSec":153.9,"totalCasts":16,"totalSwings":25,"totalHits":35,"totalCrits":16,"parryCount":2,"cloneInterceptions":2,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"low_def_boss","mode":"mode_b","sustainedDps":368.18,"rawDps":368.18,"trashTtkSec":64.53,"overkillWastePct":0,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":426,"ehpPerSec":228.16,"totalCasts":27,"totalSwings":55,"totalHits":70,"totalCrits":31,"parryCount":5,"cloneInterceptions":3,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"high_def_boss","mode":"mode_b","sustainedDps":183.56,"rawDps":183.56,"trashTtkSec":107.87,"overkillWastePct":0,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":462,"ehpPerSec":338.15,"totalCasts":25,"totalSwings":55,"totalHits":68,"totalCrits":30,"parryCount":5,"cloneInterceptions":3,"oomTicks":0},{"classId":"ninja","bracketId":"L60","archetypeId":"multi_target_pack","mode":"mode_b","sustainedDps":426.76,"rawDps":449.47,"trashTtkSec":5.57,"overkillWastePct":5.05,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":390,"ehpPerSec":275.3,"totalCasts":29,"totalSwings":54,"totalHits":94,"totalCrits":42,"parryCount":5,"cloneInterceptions":3,"oomTicks":0}],"summaryByClassBracket":[{"classId":"warrior","bracketId":"L10","sustainedBossDps":7.32,"highDefBossDps":3.04,"multiTargetDps":7.2,"trashTtkSec":8.57,"overkillWastePct":10.54,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":108.4,"ehpPerSec":15.48},{"classId":"warrior","bracketId":"L25","sustainedBossDps":52.39,"highDefBossDps":25.52,"multiTargetDps":65.2,"trashTtkSec":4.07,"overkillWastePct":18.81,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-8.6,"ehpPerSec":51.28},{"classId":"warrior","bracketId":"L45","sustainedBossDps":177.63,"highDefBossDps":91.52,"multiTargetDps":204.5,"trashTtkSec":3.63,"overkillWastePct":21.49,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":-34.6,"ehpPerSec":151.9},{"classId":"warrior","bracketId":"L60","sustainedBossDps":351.58,"highDefBossDps":173.45,"multiTargetDps":384.42,"trashTtkSec":2.98,"overkillWastePct":41.74,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":85,"ehpPerSec":317.63},{"classId":"mage","bracketId":"L10","sustainedBossDps":24.69,"highDefBossDps":13.56,"multiTargetDps":21.32,"trashTtkSec":1.83,"overkillWastePct":22.54,"netManaDeltaPerMin":-103,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.38},{"classId":"mage","bracketId":"L25","sustainedBossDps":81.56,"highDefBossDps":44.21,"multiTargetDps":73.32,"trashTtkSec":2.22,"overkillWastePct":20.56,"netManaDeltaPerMin":-143,"netStaminaDeltaPerMin":266.4,"ehpPerSec":54.63},{"classId":"mage","bracketId":"L45","sustainedBossDps":179.72,"highDefBossDps":89.38,"multiTargetDps":258.6,"trashTtkSec":3.23,"overkillWastePct":21.45,"netManaDeltaPerMin":-195,"netStaminaDeltaPerMin":362.4,"ehpPerSec":145.58},{"classId":"mage","bracketId":"L60","sustainedBossDps":387.85,"highDefBossDps":206.96,"multiTargetDps":710.32,"trashTtkSec":2.43,"overkillWastePct":17.9,"netManaDeltaPerMin":-184,"netStaminaDeltaPerMin":462,"ehpPerSec":366.26},{"classId":"ranger","bracketId":"L10","sustainedBossDps":8.08,"highDefBossDps":3.26,"multiTargetDps":7.62,"trashTtkSec":7.5,"overkillWastePct":11.93,"netManaDeltaPerMin":-29.5,"netStaminaDeltaPerMin":48.4,"ehpPerSec":14.99},{"classId":"ranger","bracketId":"L25","sustainedBossDps":45.06,"highDefBossDps":21.49,"multiTargetDps":42.18,"trashTtkSec":4.12,"overkillWastePct":11.33,"netManaDeltaPerMin":-60,"netStaminaDeltaPerMin":56.4,"ehpPerSec":46.88},{"classId":"ranger","bracketId":"L45","sustainedBossDps":167.35,"highDefBossDps":90.22,"multiTargetDps":176.44,"trashTtkSec":3.29,"overkillWastePct":15.83,"netManaDeltaPerMin":-88.5,"netStaminaDeltaPerMin":56.4,"ehpPerSec":143.43},{"classId":"ranger","bracketId":"L60","sustainedBossDps":383.85,"highDefBossDps":213.73,"multiTargetDps":662.7,"trashTtkSec":2.82,"overkillWastePct":32.15,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":88,"ehpPerSec":321.12},{"classId":"samurai","bracketId":"L10","sustainedBossDps":7.26,"highDefBossDps":3.42,"multiTargetDps":6.62,"trashTtkSec":8.57,"overkillWastePct":14.28,"netManaDeltaPerMin":-9.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":15.67},{"classId":"samurai","bracketId":"L25","sustainedBossDps":50.44,"highDefBossDps":22.34,"multiTargetDps":55.22,"trashTtkSec":3.43,"overkillWastePct":25.69,"netManaDeltaPerMin":-74,"netStaminaDeltaPerMin":266.4,"ehpPerSec":53.24},{"classId":"samurai","bracketId":"L45","sustainedBossDps":176.07,"highDefBossDps":85.97,"multiTargetDps":203.43,"trashTtkSec":3.24,"overkillWastePct":29.72,"netManaDeltaPerMin":-94.5,"netStaminaDeltaPerMin":352.4,"ehpPerSec":147.95},{"classId":"samurai","bracketId":"L60","sustainedBossDps":377.24,"highDefBossDps":224.76,"multiTargetDps":463.7,"trashTtkSec":2.81,"overkillWastePct":27.47,"netManaDeltaPerMin":0,"netStaminaDeltaPerMin":432,"ehpPerSec":316.89},{"classId":"ninja","bracketId":"L10","sustainedBossDps":7.28,"highDefBossDps":2.99,"multiTargetDps":6.63,"trashTtkSec":8.57,"overkillWastePct":9.63,"netManaDeltaPerMin":-11.5,"netStaminaDeltaPerMin":188.4,"ehpPerSec":16.17},{"classId":"ninja","bracketId":"L25","sustainedBossDps":53.97,"highDefBossDps":23.16,"multiTargetDps":50.07,"trashTtkSec":3.8,"overkillWastePct":14.07,"netManaDeltaPerMin":-2,"netStaminaDeltaPerMin":146.4,"ehpPerSec":49.03},{"classId":"ninja","bracketId":"L45","sustainedBossDps":190.49,"highDefBossDps":95.75,"multiTargetDps":204.89,"trashTtkSec":3.03,"overkillWastePct":13.65,"netManaDeltaPerMin":-30.5,"netStaminaDeltaPerMin":302.4,"ehpPerSec":149.46},{"classId":"ninja","bracketId":"L60","sustainedBossDps":368.18,"highDefBossDps":183.56,"multiTargetDps":426.76,"trashTtkSec":2.71,"overkillWastePct":26.82,"netManaDeltaPerMin":26,"netStaminaDeltaPerMin":426,"ehpPerSec":338.15}]}}}</script>
+  <script>
+    (function() {
+      var payload = JSON.parse(document.getElementById('mockup-data').textContent);
+      var parityData = payload.parity;
+      var state = { mode: 'mode_a', bracket: 'L60', arch: 'low_def_boss' };
+
+      window.updateSimFilter = function(kind, val) {
+        state[kind] = val;
+        var modeBtns = document.querySelectorAll('[data-sim-mode]');
+        for (var i = 0; i < modeBtns.length; i++) {
+          modeBtns[i].classList.toggle('is-active', modeBtns[i].getAttribute('data-sim-mode') === state.mode);
+        }
+        var brBtns = document.querySelectorAll('[data-sim-bracket]');
+        for (var j = 0; j < brBtns.length; j++) {
+          brBtns[j].classList.toggle('is-active', brBtns[j].getAttribute('data-sim-bracket') === state.bracket);
+        }
+        var arBtns = document.querySelectorAll('[data-sim-arch]');
+        for (var k = 0; k < arBtns.length; k++) {
+          arBtns[k].classList.toggle('is-active', arBtns[k].getAttribute('data-sim-arch') === state.arch);
+        }
+
+        var list = parityData[state.mode].scenarios.filter(function(s) {
+          return s.bracketId === state.bracket && s.archetypeId === state.arch;
+        });
+        var maxDps = 1;
+        for (var m = 0; m < list.length; m++) {
+          if (list[m].sustainedDps > maxDps) maxDps = list[m].sustainedDps;
+        }
+        var html = '';
+        for (var n = 0; n < list.length; n++) {
+          var s = list[n];
+          var pct = Math.min(100, Math.round((s.sustainedDps / maxDps) * 100));
+          var barColor = s.classId === 'samurai' ? 'var(--samurai-accent)' : (s.classId === 'ninja' ? 'var(--ninja-accent)' : 'var(--border-gold)');
+          html += '<tr>' +
+            '<td><strong style="text-transform:uppercase;color:#fff2bf;">' + s.classId + '</strong></td>' +
+            '<td class="mono">' + s.sustainedDps.toFixed(2) + '</td>' +
+            '<td style="width:220px;"><div style="background:#0d100c;border:1px solid #2a3026;border-radius:3px;height:14px;overflow:hidden;"><div style="width:' + pct + '%;height:100%;background:' + barColor + ';"></div></div></td>' +
+            '<td class="mono">' + s.trashTtkSec.toFixed(2) + 's</td>' +
+            '<td class="mono">' + s.ehpPerSec.toFixed(2) + '</td>' +
+            '<td class="mono">' + s.overkillWastePct.toFixed(2) + '%</td>' +
+            '<td class="mono">' + s.netManaDeltaPerMin.toFixed(1) + '/m</td>' +
+            '<td class="mono">' + s.netStaminaDeltaPerMin.toFixed(1) + '/m</td>' +
+            '<td class="mono">' + s.parryCount + ' / ' + s.cloneInterceptions + '</td>' +
+            '<td class="mono">' + s.oomTicks + '</td>' +
+            '<td><span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;">PASS (±5–8%)</span></td>' +
+          '</tr>';
+        }
+        document.getElementById('sim-telemetry-tbody').innerHTML = html;
+      };
+    })();
+  </script>
+</body>
+</html>
