@@ -839,7 +839,7 @@ export function simulateScenario(
           state.counterStanceRemainingMs = 8000;
         }
         if (mode === 'mode_b' && skill.id.includes('mirror')) {
-          state.cloneStacks = 1;
+          state.cloneStacks = skill.id.endsWith('_r2') ? 2 : 1;
         }
       } else if (skill.effectType === 'debuff') {
         if (skill.statusEffect) {
@@ -1099,6 +1099,7 @@ export function simulateScenario(
 
       // Check Mirror Image clone interception (Mode B or clone_stacks buff)
       let interceptedByClone = false;
+      let effectiveEnemyHit = rawEnemyHit;
       if (state.cloneStacks > 0 && state.cloneIcdMs <= 0) {
         const cloneInterceptChance =
           mode === 'mode_b'
@@ -1114,10 +1115,12 @@ export function simulateScenario(
           state.cloneIcdMs = mode === 'mode_b' ? 10000 : 1500;
           cloneInterceptions++;
           if (mode === 'mode_b') {
-            totalIncomingDamageMitigated += rawEnemyHit * 0.35;
+            const absorbed = effectiveEnemyHit * 0.35;
+            totalIncomingDamageMitigated += absorbed;
+            effectiveEnemyHit -= absorbed;
           } else {
             interceptedByClone = true;
-            totalIncomingDamageMitigated += rawEnemyHit;
+            totalIncomingDamageMitigated += effectiveEnemyHit;
           }
         }
       }
@@ -1152,7 +1155,7 @@ export function simulateScenario(
 
         if (didParry) {
           parryCount++;
-          totalIncomingDamageMitigated += rawEnemyHit;
+          totalIncomingDamageMitigated += effectiveEnemyHit;
 
           // Mode B: CounterAttack reactive free weapon swing on parry
           if (
@@ -1217,9 +1220,9 @@ export function simulateScenario(
 
           const damageTaken = Math.max(
             1,
-            rawEnemyHit * (1 - effectiveArmorResist / 100) * stanceMult
+            effectiveEnemyHit * (1 - effectiveArmorResist / 100) * stanceMult
           );
-          const mitigatedAmount = Math.max(0, rawEnemyHit - damageTaken);
+          const mitigatedAmount = Math.max(0, effectiveEnemyHit - damageTaken);
           totalIncomingDamageMitigated += mitigatedAmount;
 
           state.hp = Math.max(1, state.hp - damageTaken);
