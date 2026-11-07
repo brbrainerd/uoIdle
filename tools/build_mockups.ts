@@ -1168,8 +1168,12 @@ function buildClassSkillTreeHtml(
         slot.conditions.length === 0
           ? 'Unconditional Primary Strike (ro(e) Queue)'
           : slot.conditions
-              .map((c) => `${c.target}.${c.attr} ${c.op} ${c.value}${c.percent ? '%' : ''}`)
-              .join(' OR ');
+              .map((c, idx) => {
+                const expr = `${c.target}.${c.attr} ${c.op} ${c.value}${c.percent ? '%' : ''}`;
+                if (idx === slot.conditions.length - 1) return expr;
+                return `${expr} ${(c.join ?? 'or').toUpperCase()} `;
+              })
+              .join('');
       return `
         <div class="hotbar-slot">
           <div class="slot-num">${slot.slotIndex + 1}</div>
