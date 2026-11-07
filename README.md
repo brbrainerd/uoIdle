@@ -61,9 +61,9 @@ Every v1 requirement (`KB-01..04`, `INDEX-01..04`, `SIM-01..03`, `CLASS-01..04`,
 
 | Req ID | Requirement Summary | Primary Artifacts & Documentation Links |
 |---|---|---|
-| **`KB-01`** | Private repository (`brbrainerd/uoIdle`) & credential/secret sanitizer | [`mechanics/tools/kb.py`](mechanics/tools/kb.py) (`scan_secrets`, `SECRET_PATTERNS`) |
+| **`KB-01`** | Private repository (`brbrainerd/uoIdle`) & credential/secret sanitizer | [`mechanics/tools/kb.py`](mechanics/tools/kb.py) (`check_credentials`, `CREDENTIAL_PATTERNS`) |
 | **`KB-02`** | Claim-verification linter (`kb.py build`, `kb.py check`, `--self-test`) & master KB index | [`mechanics/INDEX.md`](mechanics/INDEX.md), [`mechanics/tools/kb.py`](mechanics/tools/kb.py) |
-| **`KB-03`** | Formatted & AST-sliced live UO Idle `v0.99.0` bundle modules & runtime captures | [`tools/bundle_extract.mjs`](tools/bundle_extract.mjs), [`mechanics/_raw/manifest.json`](mechanics/_raw/manifest.json), `mechanics/_raw/slices/` |
+| **`KB-03`** | Formatted & AST-sliced live UO Idle `v0.99.0` bundle modules & runtime captures | [`tools/bundle_extract.mjs`](tools/bundle_extract.mjs), [`mechanics/_raw/manifest.json`](mechanics/_raw/manifest.json), `mechanics/_raw/bundle/` |
 | **`KB-04`** | Canonical ModernUO C# source snapshots (*Bushido*, *Ninjitsu*, *HonorContext*, *BaseWeapon*) | [`tools/fetch_modernuo.py`](tools/fetch_modernuo.py), `mechanics/_raw/modernuo/` |
 | **`INDEX-01`** | Core UO Idle combat & progression systems KB pages | [`mechanics/combat/tick-and-cooldowns.md`](mechanics/combat/tick-and-cooldowns.md), [`mechanics/combat/damage-and-defense.md`](mechanics/combat/damage-and-defense.md), [`mechanics/combat/resources.md`](mechanics/combat/resources.md), [`mechanics/combat/status-effects.md`](mechanics/combat/status-effects.md), [`mechanics/systems/progression-unlocks.md`](mechanics/systems/progression-unlocks.md), [`mechanics/systems/equipment-affixes.md`](mechanics/systems/equipment-affixes.md) |
 | **`INDEX-02`** | 3-Tier Client / Shared-Config / Server-Authoritative Engine Capability Matrix | [`mechanics/topics/engine-capability-matrix.md`](mechanics/topics/engine-capability-matrix.md) |
@@ -86,7 +86,7 @@ Every v1 requirement (`KB-01..04`, `INDEX-01..04`, `SIM-01..03`, `CLASS-01..04`,
 Run the complete verification suite via `npm run verify:all` or execute each gate individually (completes in `< 5 seconds`):
 
 ```bash
-# 1. Verify kb.py claim linter self-tests (10 unit & secret-scanner tests)
+# 1. Verify kb.py claim linter self-tests (28 mutation & 4 unit self-tests)
 python3 mechanics/tools/kb.py --self-test
 
 # 2. Verify all 31 KB pages in mechanics/INDEX.md and scan repository for leaked secrets
