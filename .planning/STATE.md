@@ -1,13 +1,13 @@
 ---
 gsd_state_version: "1.0"
-current_phase: 3
-current_phase_name: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas
-status: completed
-stopped_at: Completed 03-02-PLAN.md (Phase 3 complete)
-last_updated: "2026-11-07T05:17:00.000Z"
+current_phase: 4
+current_phase_name: ModernUO Reference KB & Baseline Combat Simulator
+status: planning
+stopped_at: Phase 3 complete, ready to plan Phase 4
+last_updated: "2026-11-07T05:22:59.755Z"
 last_activity: 2026-11-07
-last_activity_desc: Completed Plan 03-02 (Canonical JSON/Zod schemas, live class JSONs, and validate_skills.ts)
-state_head: 50ad97b
+last_activity_desc: Phase 3 complete, transitioned to Phase 4
+state_head: dc4b941da8841ead4b85b0b6eb70423abf398c99
 progress:
   total_phases: 6
   completed_phases: 3
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-11-06)
 
 ## Current Position
 
-Phase: 3 — Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas
-Plan: 03-02 complete (2 of 2 in Phase 3)
-Status: Phase 3 Complete — Ready for Phase 4
-Last activity: 2026-11-07 — Completed Plan 03-02 (`schemas/*.schema.json`, `src/schemas/skill.schema.ts`, `data/live-classes/*.json`, `tools/validate_skills.ts`)
+Phase: 4 — ModernUO Reference KB & Baseline Combat Simulator
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-11-06 — Phase 3 complete, transitioned to Phase 4
 
 Progress: [█████░░░░░] 50%
 
@@ -48,7 +48,7 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 1 | 3 | 16 min | 5.3 min |
 | 2 | 2 | 15 min | 7.5 min |
-| 3 | 2/2 | 17 min | 8.5 min |
+| 3 | 2 | - | - |
 
 **Recent Trend:**
 
@@ -98,5 +98,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-11-07T04:21:03.517Z
-Stopped at: Phase 2 complete, ready to plan Phase 3
+Stopped at: Phase 3 complete, ready to plan Phase 4
 Resume file: None
