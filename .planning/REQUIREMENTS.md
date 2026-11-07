@@ -84,29 +84,29 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| KB-01 | TBD | Pending |
-| KB-02 | TBD | Pending |
-| KB-03 | TBD | Pending |
-| KB-04 | TBD | Pending |
-| INDEX-01 | TBD | Pending |
-| INDEX-02 | TBD | Pending |
-| INDEX-03 | TBD | Pending |
-| INDEX-04 | TBD | Pending |
-| SIM-01 | TBD | Pending |
-| SIM-02 | TBD | Pending |
-| SIM-03 | TBD | Pending |
-| CLASS-01 | TBD | Pending |
-| CLASS-02 | TBD | Pending |
-| CLASS-03 | TBD | Pending |
-| CLASS-04 | TBD | Pending |
-| VISUAL-01 | TBD | Pending |
-| VISUAL-02 | TBD | Pending |
+| KB-01 | Phase 1 | Pending |
+| KB-02 | Phase 1 | Pending |
+| KB-03 | Phase 1 | Pending |
+| KB-04 | Phase 1 | Pending |
+| INDEX-01 | Phase 2 | Pending |
+| INDEX-02 | Phase 2 | Pending |
+| INDEX-03 | Phase 3 | Pending |
+| INDEX-04 | Phase 3 | Pending |
+| SIM-01 | Phase 4 | Pending |
+| SIM-02 | Phase 4 | Pending |
+| SIM-03 | Phase 5 | Pending |
+| CLASS-01 | Phase 5 | Pending |
+| CLASS-02 | Phase 5 | Pending |
+| CLASS-03 | Phase 5 | Pending |
+| CLASS-04 | Phase 5 | Pending |
+| VISUAL-01 | Phase 6 | Pending |
+| VISUAL-02 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 17 total
-- Mapped to phases: 0
-- Unmapped: 17 ⚠️
+- Mapped to phases: 17
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-11-06*
-*Last updated: 2026-11-06 after initial definition*
+*Last updated: 2026-11-06 after roadmap creation*
