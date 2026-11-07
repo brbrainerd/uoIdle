@@ -600,6 +600,9 @@ export function simulateScenario(
     const effective = Math.min(currentHp, clampedDmg);
     totalEffectiveDamage += effective;
     const nextHp = currentHp - effective;
+    if (mode === 'mode_b' && nextHp <= 0) {
+      state.perfectionStreakBonusPct = 0;
+    }
     if (nextHp <= 0 && archetypeId !== 'fast_trash') {
       wavesCompleted++;
       state.targetHpPools[targetIdx] = state.targetMaxHp;
@@ -753,7 +756,7 @@ export function simulateScenario(
     );
     const totalPerfectionBonus =
       mode === 'mode_b'
-        ? state.perfectionStreakBonusPct + buffPerfectionPct
+        ? Math.max(state.perfectionStreakBonusPct, buffPerfectionPct)
         : buffPerfectionPct;
 
     // 5. Evaluate 6-slot active hotbar priority queue ro(e) (at most 1 active skill fires per tick)
@@ -836,7 +839,7 @@ export function simulateScenario(
           state.counterStanceRemainingMs = 8000;
         }
         if (mode === 'mode_b' && skill.id.includes('mirror')) {
-          state.cloneStacks = Math.max(state.cloneStacks, 2);
+          state.cloneStacks = 1;
         }
       } else if (skill.effectType === 'debuff') {
         if (skill.statusEffect) {
@@ -934,8 +937,8 @@ export function simulateScenario(
 
             if (mode === 'mode_b' && classDef.id === 'samurai' && bracket.skillLevel >= 50) {
               state.perfectionStreakBonusPct = Math.min(
-                100,
-                state.perfectionStreakBonusPct + Math.floor(bracket.skillLevel / 10)
+                12,
+                state.perfectionStreakBonusPct + Math.max(2, Math.floor(bracket.skillLevel / 25))
               );
             }
 
@@ -950,7 +953,7 @@ export function simulateScenario(
           }
         }
 
-        if (skill.statusEffect) {
+        if (skill.statusEffect && !(mode === 'mode_b' && skill.id.includes('death'))) {
           if (skill.statusEffect.effectType === 'self_buff') {
             upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
           } else {
@@ -966,9 +969,13 @@ export function simulateScenario(
           }
         }
 
+        if (mode === 'mode_b' && skill.id.includes('counter')) {
+          state.counterStanceRemainingMs = 7000;
+        }
+
         if (mode === 'mode_b' && skill.id.includes('death')) {
           state.deathStrikeSwingsRemaining = 5;
-          state.deathStrikePendingDamage = out.rawDamagePerHit * 1.35;
+          state.deathStrikePendingDamage = out.rawDamagePerHit * 0.95;
         }
       }
 
@@ -1012,8 +1019,8 @@ export function simulateScenario(
 
           if (mode === 'mode_b' && classDef.id === 'samurai' && bracket.skillLevel >= 50) {
             state.perfectionStreakBonusPct = Math.min(
-              100,
-              state.perfectionStreakBonusPct + Math.floor(bracket.skillLevel / 10)
+              12,
+              state.perfectionStreakBonusPct + Math.max(2, Math.floor(bracket.skillLevel / 25))
             );
           }
 
@@ -1093,18 +1100,25 @@ export function simulateScenario(
       // Check Mirror Image clone interception (Mode B or clone_stacks buff)
       let interceptedByClone = false;
       if (state.cloneStacks > 0 && state.cloneIcdMs <= 0) {
-        const cloneInterceptChance = clamp(bracket.skillLevel / 150, 0.25, 0.75);
+        const cloneInterceptChance =
+          mode === 'mode_b'
+            ? clamp(bracket.skillLevel / 300, 0.1, 0.25)
+            : clamp(bracket.skillLevel / 150, 0.25, 0.75);
         const [didIntercept, nextProcAcc] = resolveDeterministicRoll(
           state.procAcc,
           cloneInterceptChance
         );
         state.procAcc = nextProcAcc;
         if (didIntercept) {
-          interceptedByClone = true;
           state.cloneStacks--;
-          state.cloneIcdMs = 1500;
+          state.cloneIcdMs = mode === 'mode_b' ? 10000 : 1500;
           cloneInterceptions++;
-          totalIncomingDamageMitigated += rawEnemyHit;
+          if (mode === 'mode_b') {
+            totalIncomingDamageMitigated += rawEnemyHit * 0.35;
+          } else {
+            interceptedByClone = true;
+            totalIncomingDamageMitigated += rawEnemyHit;
+          }
         }
       }
 
@@ -1146,15 +1160,19 @@ export function simulateScenario(
             state.counterStanceRemainingMs > 0 &&
             state.counterIcdMs <= 0
           ) {
-            state.counterIcdMs = 2000;
+            state.counterIcdMs = 6000;
             const counterTargetIdx = state.targetHpPools.findIndex((hp) => hp > 0);
             if (counterTargetIdx >= 0) {
-              const rawCounter = computeAutoAttackRawDamage(
-                bracket,
-                stats,
-                buffDamagePct,
-                totalPerfectionBonus
+              const hasCounterStanceBuff = state.selfBuffs.some(
+                (b) => b.id === 'samurai_counter_stance'
               );
+              const rawCounter =
+                computeAutoAttackRawDamage(
+                  bracket,
+                  stats,
+                  buffDamagePct,
+                  totalPerfectionBonus
+                ) * (hasCounterStanceBuff ? 0.55 : 1.0);
               const mitigatedCounter = applyTargetMitigation(
                 rawCounter,
                 archetype,
