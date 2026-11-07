@@ -1404,7 +1404,7 @@ function buildClassSkillTreeHtml(
                     <div class="mono" style="font-size:10px;color:var(--text-gold);" id="insp-qC">qC Estimator: ${escapeHtml(firstMode.qCEstimator)}</div>
                   </div>
                 </div>
-                <p id="insp-desc" style="margin:0 0 8px;font-size:12px;color:var(--text-primary);">${escapeHtml(firstMilestone.descEn)}</p>
+                <p id="insp-desc" data-en="${escapeHtml(firstMilestone.descEn)}" data-pt="${escapeHtml(firstMilestone.descPtBr)}" style="margin:0 0 8px;font-size:12px;color:var(--text-primary);">${escapeHtml(firstMilestone.descEn)}</p>
                 <div class="cost-badges" id="insp-badges" style="margin-bottom:8px;">
                   <span class="badge-cd">CD: ${firstAbility.cooldownMs}ms</span>
                   <span class="badge-cd">CustomCD: ${firstAbility.customCooldownMs}ms</span>
@@ -1454,6 +1454,7 @@ function buildClassSkillTreeHtml(
       var modeMap = payload.modeDescriptions;
       var currentLocale = 'en';
       var currentMode = 'mode_a';
+      var selectedAbilityId = cls.abilities[0].id;
 
       window.setLocale = function(lang) {
         currentLocale = lang;
@@ -1463,6 +1464,7 @@ function buildClassSkillTreeHtml(
         for (var i = 0; i < nodes.length; i++) {
           nodes[i].textContent = lang === 'pt' ? nodes[i].getAttribute('data-pt') : nodes[i].getAttribute('data-en');
         }
+        window.selectAbility(selectedAbilityId);
       };
 
       window.setExecMode = function(mode) {
@@ -1487,6 +1489,7 @@ function buildClassSkillTreeHtml(
           }
         }
         if (!ab) return;
+        selectedAbilityId = abilityId;
         var ms = null;
         for (var j = 0; j < cls.progression.length; j++) {
           if (cls.progression[j].id === abilityId) {
@@ -1505,9 +1508,15 @@ function buildClassSkillTreeHtml(
         document.getElementById('insp-id').textContent = ab.id;
         document.getElementById('insp-name').textContent = ab.name + ' / ' + ab.namePtBr;
         document.getElementById('insp-qC').textContent = 'qC Estimator: ' + mInfo.qCEstimator;
-        document.getElementById('insp-desc').textContent = ms
-          ? (currentLocale === 'pt' ? ms.descPtBr : ms.descEn)
+        var fallbackDescPt = ab.id === 'ninja_shuriken'
+          ? 'Dispara Shuriken com ponta envenenada e dardos de zarabatana Fukiya à distância com 75% de dano secundário.'
           : ab.scalingFormula.summary;
+        var descEn = ms ? ms.descEn : ab.scalingFormula.summary;
+        var descPt = ms ? ms.descPtBr : fallbackDescPt;
+        var inspDescEl = document.getElementById('insp-desc');
+        inspDescEl.setAttribute('data-en', descEn);
+        inspDescEl.setAttribute('data-pt', descPt);
+        inspDescEl.textContent = currentLocale === 'pt' ? descPt : descEn;
         document.getElementById('insp-formula').textContent = ab.scalingFormula.summary;
         if (ab.statusEffect) {
           var mods = ab.statusEffect.modifiers.map(function(m) { return m.stat + ': ' + m.value; }).join(', ');
