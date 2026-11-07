@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Core UO Idle Engine & Systems Knowledgebase** - Claim-verified KB pages for combat tick loops, hit/crit/mitigation math, resource regen, status opcodes, progression/equipment systems, and the Engine Capability Matrix. (completed 2026-11-07)
 - [x] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules. (completed 2026-11-07)
 - [x] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines. (completed 2026-11-06)
-- [ ] **Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code** - Numerically balanced Samurai and Ninja skill lines, Tokuno equipment affixes, Mode A/Mode B drop-in JSON/JS payloads, formal specs, and automated parity proof.
+- [x] **Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code** - Numerically balanced Samurai and Ninja skill lines, Tokuno equipment affixes, Mode A/Mode B drop-in JSON/JS payloads, formal specs, and automated parity proof. (completed 2026-11-07)
 - [ ] **Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging** - Custom dark-fantasy UO class portraits and skill icons rendered inside self-contained, pixel-accurate `uoidle.com/beta` HTML/CSS skill tree mockups.
 
 ## Phase Details
@@ -132,7 +132,7 @@ Plans:
   3. Developer receives `design/drop-in/items-bushido-ninjitsu.json` (and specification tables) defining class-themed Tokuno armaments (*Katana*, *No-Dachi*, *Wakizashi*, *Lajatang*, *Tekagi*, *Kama*, *Fukiya*, *Tessen*) and affixes balanced against live equipment progression.
   4. Running `npx tsx tools/sim_balance.ts` generates `design/BALANCE_REPORT.md` proving that Samurai and Ninja stay within $\pm 5\text{–}8\%$ of Warrior, Mage, and Ranger across Sustained Boss DPS, Trash TTK (including overkill), Net Resource Sustainability/min, and EHP/sec across all four level brackets with zero avoidance-immortality or mana-starvation loops.
 
-**Plans**: 3 plans
+**Plans**: 3/3 plans executed
 
 Plans:
 **Wave 1**
@@ -142,7 +142,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 05-03-PLAN.md — Tokuno weapon/equipment definitions (`design/drop-in/items-bushido-ninjitsu.json`), client/server bundle patch (`design/drop-in/classes-patch.js`), Mode B engine calibration, 5-class `--verify` parity gates, and `design/BALANCE_REPORT.md` (`CLASS-04`, `SIM-03`)
+- [x] 05-03-PLAN.md — Tokuno weapon/equipment definitions (`design/drop-in/items-bushido-ninjitsu.json`), client/server bundle patch (`design/drop-in/classes-patch.js`), Mode B engine calibration, 5-class `--verify` parity gates, and `design/BALANCE_REPORT.md` (`CLASS-04`, `SIM-03`)
 
 ### Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging
 
@@ -175,5 +175,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Core UO Idle Engine & Systems Knowledgebase | 2/2 | Complete    | 2026-11-07 |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 2/2 | Complete    | 2026-11-07 |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 2/2 | Complete    | 2026-11-06 |
-| 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |
+| 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 3/3 | Complete    | 2026-11-07 |
 | 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 0/2 | Not started | - |
