@@ -62,12 +62,12 @@ Plans:
   2. Developer can audit an explicit **Engine Capability Matrix** classifying every live UO Idle combat hook, trigger, and status effect opcode as Client-Evaluated, Shared-Config, or Server-Authoritative based on bundle and live WebSocket/network verification.
   3. `python3 mechanics/tools/kb.py check --root mechanics` passes with zero errors across all core engine and system KB pages and regenerates `mechanics/INDEX.md`.
 
-**Plans**: 2 plans
+**Plans**: 1/2 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Core combat resources (`resources.md` with `C1..C18` server changelog anchors), tick/cooldown/hotbar engine (`tick-and-cooldowns.md`), damage/heal/defense estimators (`damage-and-defense.md`), and status effects/ability dispatch catalog (`status-effects.md`) (`INDEX-01`)
+- [x] 02-01-PLAN.md — Core combat resources (`resources.md` with `C1..C18` server changelog anchors), tick/cooldown/hotbar engine (`tick-and-cooldowns.md`), damage/heal/defense estimators (`damage-and-defense.md`), and status effects/ability dispatch catalog (`status-effects.md`) (`INDEX-01`)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Repository Setup, `kb.py` Adaptation & Live Extraction Pipeline | 3/3 | Complete    | 2026-11-06 |
-| 2. Core UO Idle Engine & Systems Knowledgebase | 0/2 | Not started | - |
+| 2. Core UO Idle Engine & Systems Knowledgebase | 1/2 | In Progress|  |
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 0/2 | Not started | - |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 0/2 | Not started | - |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 0/3 | Not started | - |
