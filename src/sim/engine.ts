@@ -7,6 +7,7 @@ import {
   buildAffixLoadoutBudget,
   buildMaterialTierBudget,
   resolveClassStatsForBracket,
+  resolvePostureProfile,
 } from './archetypes.js';
 import {
   AFFIX_LOADOUT_IDS,
@@ -87,6 +88,79 @@ function isStrictMultiTargetOnlySkill(skill: SkillDefinition): boolean {
     id.includes('multishot') ||
     id.includes('bolt_volley')
   );
+}
+
+/**
+ * Resolves the exact HP % auto-trigger threshold for heal spells and potions
+ * from UO Idle's hotbar priority loop `ro(e)` (`_raw/bundle/abilities-loader-and-hotbar.js:627-695`,
+ * `[[tick-and-cooldowns]] C10-C12`, `[[simulator-fidelity-audit]] C6`).
+ */
+export function resolveHotbarHealTriggerPct(abilityId: string): number {
+  const id = abilityId.toLowerCase();
+  if (id === 'greater_heal_potion') return 18;
+  if (id === 'heal_potion') return 32;
+  if (id === 'lesser_heal_potion') return 50;
+  if (id.includes('greater_heal') || id.endsWith('_gh')) return 40;
+  if (id === 'mage_heal') return 50;
+  return 55;
+}
+
+/**
+ * Evaluates whether a hotbar skill is eligible to fire on the current tick per `ro(e)`
+ * (`_raw/bundle/abilities-loader-and-hotbar.js:627-695`, `[[tick-and-cooldowns]] C10-C13`).
+ */
+export function evaluateHotbarAutoTrigger(
+  skill: SkillDefinition,
+  hpPct: number,
+  primaryTargetHpPct: number,
+  aliveTargetCount: number,
+  selfBuffs: ActiveStatusInstance[],
+  targetDebuffs: ActiveStatusInstance[],
+  mode: SimImplementationMode,
+  deathStrikeSwingsRemaining: number
+): boolean {
+  if (skill.effectType === 'heal') {
+    const triggerPct = resolveHotbarHealTriggerPct(skill.id);
+    if (hpPct > triggerPct) {
+      return false;
+    }
+  }
+  const execThreshold = skill.scalingFormula.executeThresholdHpPct ?? 0;
+  if (execThreshold > 0 && primaryTargetHpPct > execThreshold) {
+    return false;
+  }
+  if (isStrictMultiTargetOnlySkill(skill) && aliveTargetCount < 2) {
+    return false;
+  }
+  if (
+    skill.effectType === 'self_buff' &&
+    skill.statusEffect &&
+    selfBuffs.some((b) => b.id === skill.statusEffect?.id)
+  ) {
+    return false;
+  }
+  if (
+    skill.effectType === 'debuff' &&
+    skill.statusEffect &&
+    targetDebuffs.some((d) => d.id === skill.statusEffect?.id)
+  ) {
+    return false;
+  }
+  if (
+    skill.effectType === 'dot' &&
+    skill.statusEffect &&
+    targetDebuffs.some((d) => d.id === skill.statusEffect?.id)
+  ) {
+    return false;
+  }
+  if (
+    mode === 'mode_b' &&
+    (skill.id.includes('death') || skill.id.includes('twin_shadow')) &&
+    deathStrikeSwingsRemaining > 0
+  ) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -172,7 +246,7 @@ export function buildHotbarLoadout(
 
 function sumModifierStat(
   instances: ActiveStatusInstance[],
-   passiveEffects: EffectDefinition[],
+  passiveEffects: EffectDefinition[],
   statName: string
 ): number {
   let total = 0;
@@ -205,73 +279,101 @@ export function resolveEffectiveCooldownMs(skill: SkillDefinition): number {
 }
 
 /**
- * Evaluates runtime mana and stamina cost, enforcing Warrior's 0-mana override (tI, [[resources]] C15).
+ * Evaluates runtime mana and stamina cost, enforcing:
+ * - Warrior's 0-mana override (`tI`, `[[resources]] C15`)
+ * - Lower Mana Cost (`LMC`) cap of 40% (`_raw/bundle/i18n-en-abilities.js:2616`, `[[equipment-affixes]] C10`).
  */
 export function resolveSkillResourceCost(
   classDef: ClassDefinition,
-  skill: SkillDefinition
+  skill: SkillDefinition,
+  bracket?: BracketBudget
 ): { manaCost: number; staminaCost: number } {
   if (classDef.resourceProfile.primaryResource === 'zero-mana-physical') {
     const convertedStam =
       skill.staminaCost > 0 ? skill.staminaCost : Math.max(0, skill.manaCost);
     return { manaCost: 0, staminaCost: convertedStam };
   }
+  const effectiveLmcPct = clamp(bracket?.lowerManaCostPct ?? 0, 0, 40);
+  const rawMana = Math.max(0, skill.manaCost);
+  const discountedMana =
+    rawMana > 0 ? Math.max(1, Math.round(rawMana * (1 - effectiveLmcPct / 100))) : 0;
   return {
-    manaCost: Math.max(0, skill.manaCost),
+    manaCost: discountedMana,
     staminaCost: Math.max(0, skill.staminaCost),
   };
 }
 
 /**
- * Weapon swing interval Sg ([[tick-and-cooldowns]], [[damage-and-defense]]).
+ * Weapon swing interval `Sg` (`[[tick-and-cooldowns]]`, `[[damage-and-defense]]`, `[[equipment-affixes]] C7`):
+ * - Gear Swing Speed Increase (`SSI`) is capped at 60% (`Math.min(60, bracket.swingSpeedIncreasePct)`).
+ * - Progression tree `Speed` (`bracket.treeSpeedPct`) and active haste buffs (`buffAttackSpeedPct`) stack above the 60% gear cap.
+ * - Minimum swing interval is hard-clamped at 1,000ms (`1.0s`).
  */
 export function computeSwingIntervalMs(
   bracket: BracketBudget,
   currentStamina: number,
-  buffAttackSpeedPct: number
+  buffAttackSpeedPct: number,
+  baseWeaponSpeedOverrideMs?: number
 ): number {
-  const effectiveSsi = bracket.swingSpeedIncreasePct + buffAttackSpeedPct;
+  const cappedGearSsi = clamp(bracket.swingSpeedIncreasePct, 0, 60);
+  const treeSpeed = Math.max(0, bracket.treeSpeedPct ?? 0);
+  const effectiveSsi = cappedGearSsi + treeSpeed + buffAttackSpeedPct;
   const speedDivisor = 1 + currentStamina / 200 + effectiveSsi / 100;
-  return Math.max(1000, Math.floor(bracket.baseWeaponSpeedMs / Math.max(0.25, speedDivisor)));
+  const baseSpeed = baseWeaponSpeedOverrideMs ?? bracket.baseWeaponSpeedMs;
+  return Math.max(1000, Math.floor(baseSpeed / Math.max(0.25, speedDivisor)));
 }
 
 /**
- * Hit chance vq/Gs ([[damage-and-defense]]).
+ * Hit chance `vq/Gs` (`[[damage-and-defense]] C4`, `[[equipment-affixes]] C8-C9`):
+ * - Attacker `HCI` gear cap is 45% (`Math.min(45, bracket.hitChanceIncreasePct)`), plus posture/skill accuracy bonus.
+ * - Defender `DCI` (`archetype.defenderDciPct`, capped at 45%) reduced by active target defense-chance shred (`Surprise Attack`).
  */
 export function computeHitChance(
   bracket: BracketBudget,
   stats: ResolvedClassStats,
   archetype: EnemyArchetype,
   isSpell: boolean,
-  accuracyBonusPct: number
+  accuracyBonusPct: number,
+  defenderDciDeltaPct = 0
 ): number {
   if (isSpell) {
     return 0.95;
   }
-  const postureHci = stats.posture === 'Precision' ? 10 : 0;
-  const effectiveHci = Math.min(45, bracket.hitChanceIncreasePct + postureHci) + accuracyBonusPct;
-  const effectiveDci = 0;
+  const postureProfile = resolvePostureProfile(stats.posture);
+  const effectiveHci =
+    clamp(bracket.hitChanceIncreasePct, 0, 45) +
+    postureProfile.bonusHciPct +
+    accuracyBonusPct;
+  const baseDefenderDci = clamp(archetype.defenderDciPct ?? 0, 0, 45);
+  const effectiveDci = Math.max(0, baseDefenderDci + defenderDciDeltaPct);
+  const effectiveAttackSkill = Math.min(100, bracket.skillLevel);
   const rawHit =
-    ((bracket.skillLevel + 20) * (100 + effectiveHci)) /
+    ((effectiveAttackSkill + 20) * (100 + effectiveHci)) /
     ((archetype.defenseSkill + 20) * 2 * (100 + effectiveDci));
   return clamp(rawHit, 0.05, 0.95);
 }
 
 /**
- * Critical hit chance yq ([[damage-and-defense]]).
+ * Critical hit chance `yq` (`[[damage-and-defense]] C7`):
+ * - `DEX / 500 + (critChancePct + postureCrit + buffCritPct) / 100`, hard-capped at 50%.
  */
 export function computeCritChance(
   bracket: BracketBudget,
   stats: ResolvedClassStats,
   buffCritPct: number
 ): number {
-  const postureCrit = stats.posture === 'Precision' ? 5 : 0;
-  const rawCrit = stats.dex / 500 + (bracket.critChancePct + postureCrit + buffCritPct) / 100;
+  const postureProfile = resolvePostureProfile(stats.posture);
+  const rawCrit =
+    stats.dex / 500 +
+    (bracket.critChancePct + postureProfile.bonusCritPct + buffCritPct) / 100;
   return clamp(rawCrit, 0, 0.5);
 }
 
 /**
- * Base physical auto-attack damage fj/Zo ([[damage-and-defense]]).
+ * Base physical auto-attack damage `fj/Zo` (`[[damage-and-defense]] C5`, `[[equipment-affixes]] C6`, `[[simulator-fidelity-audit]] C2-C3`):
+ * - Weapon skill bonus flattens above 100 (`Math.min(100, bracket.skillLevel)`).
+ * - Gear Damage Increase (`DI`) is capped at 100% (`Math.min(100, bracket.damageIncreasePct)`).
+ * - Hunting Bot posture outgoing damage multiplier (`agressivo` 1.2x, `equilibrado` 1.0x, `defensivo` 0.6x) scales output.
  */
 export function computeAutoAttackRawDamage(
   bracket: BracketBudget,
@@ -279,19 +381,73 @@ export function computeAutoAttackRawDamage(
   buffDamagePct: number,
   perfectionBonusPct: number
 ): number {
-  const postureDmg = stats.posture === 'Attack' ? 15 : stats.posture === 'Defensive' ? -10 : 0;
+  const postureProfile = resolvePostureProfile(stats.posture);
+  const effectiveWeaponSkill = Math.min(100, bracket.skillLevel);
+  const cappedGearDi = clamp(bracket.damageIncreasePct, 0, 100);
   const multiplier =
     1 +
-    bracket.skillLevel / 100 +
-    bracket.skillLevel / 200 +
+    effectiveWeaponSkill / 100 +
+    effectiveWeaponSkill / 200 +
     (stats.str * 0.3) / 100 +
-    (bracket.damageIncreasePct + postureDmg + buffDamagePct + perfectionBonusPct) / 100;
-  return bracket.weaponAvgDmg * multiplier * stats.levelFactor;
+    (cappedGearDi + buffDamagePct + perfectionBonusPct) / 100;
+  return (
+    bracket.weaponAvgDmg *
+    multiplier *
+    stats.levelFactor *
+    postureProfile.outgoingDamageMultiplier
+  );
 }
 
 /**
- * Evaluates active skill raw damage, hit count, AoE target count, and elemental vs physical channel
- * implementing Aq/Mq (spells) and Cq (physical/hybrid abilities) from [[damage-and-defense]].
+ * Complete 1H (`48,000`), 2H (`41,140`), and Shield (`400`) `CheckParry` + `DCI` avoidance formula
+ * (`_raw/modernuo/BaseWeapon.cs:1505-1570`, `[[modernuo-bushido]] C10-C12`, `[[simulator-fidelity-audit]] C4`):
+ * - Shield + Bushido penalty: `(parry - bushido) / 400` (clamped >= 0).
+ * - Shield without Bushido (pure Parry): `parry / 400 + (parry >= 100 ? 0.05 : 0)`.
+ * - Weapon parry without shield: `Math.max((parry * bushido) / divisor, parry / 800) + GM 5% bonus`,
+ *   where `divisor = isTwoHanded ? 41140 : 48000`.
+ * - Low-DEX penalty when `DEX < 80`: `chance * (20 + DEX) / 100`.
+ */
+export function computeParryAndAvoidanceChance(
+  classDef: ClassDefinition,
+  bracket: BracketBudget,
+  stats: ResolvedClassStats,
+  buffEvasionPct: number
+): number {
+  const hasParrySkill = classDef.starterSkills.some((s) => s.skillKey === 'parry');
+  const hasBushidoSkill = classDef.starterSkills.some((s) => s.skillKey === 'bushido');
+  const parry = hasParrySkill || hasBushidoSkill ? bracket.skillLevel : 0;
+  const bushido = hasBushidoSkill ? bracket.skillLevel : 0;
+
+  let baseParryChance = 0;
+  if (parry > 0 || bushido > 0) {
+    const gmBonus = parry >= 100 || bushido >= 100 ? 0.05 : 0;
+    if (stats.hasShield) {
+      if (bushido > 0) {
+        baseParryChance = Math.max(0, (parry - bushido) / 400) + gmBonus;
+      } else {
+        baseParryChance = parry / 400 + (parry >= 100 ? 0.05 : 0);
+      }
+    } else {
+      const divisor = stats.isTwoHanded ? 41140 : 48000;
+      const bushidoWeaponParry = (parry * bushido) / divisor + gmBonus;
+      const legacyWeaponParry = parry / 800 + (parry >= 100 ? 0.05 : 0);
+      baseParryChance = Math.max(bushidoWeaponParry, legacyWeaponParry);
+    }
+
+    if (stats.dex < 80) {
+      baseParryChance *= (20 + stats.dex) / 100;
+    }
+  }
+
+  const cappedDci = clamp(bracket.defenseChanceIncreasePct, 0, 45);
+  const dciAvoidance = cappedDci / (2 * (100 + cappedDci));
+  return clamp(baseParryChance + buffEvasionPct / 100 + dciAvoidance, 0, 0.65);
+}
+
+/**
+ * Evaluates active skill raw damage, hit count, AoE target count, secondary-target `splashRatio`,
+ * and elemental vs physical channel implementing `Aq/Mq` (spells) and `Cq` (physical/hybrid abilities)
+ * from `[[damage-and-defense]] C6`, `[[equipment-affixes]] C5`, and `[[simulator-fidelity-audit]] C3/C5`.
  */
 export function computeSkillBaseOutput(
   classDef: ClassDefinition,
@@ -306,15 +462,16 @@ export function computeSkillBaseOutput(
   rawDamagePerHit: number;
   hits: number;
   targetsHit: number;
+  splashRatio: number;
   isElemental: boolean;
   armorIgnorePct: number;
 } {
   const id = skill.id.toLowerCase();
   const rank = bracket.abilityRank;
-  const tactics = bracket.skillLevel;
-  const magery = bracket.skillLevel;
-  const evalInt = bracket.skillLevel;
-  const postureDmg = stats.posture === 'Attack' ? 15 : stats.posture === 'Defensive' ? -10 : 0;
+  const tactics = Math.min(100, bracket.skillLevel);
+  const magery = Math.min(100, bracket.skillLevel);
+  const evalInt = Math.min(100, bracket.skillLevel);
+  const postureProfile = resolvePostureProfile(stats.posture);
 
   let isElemental =
     skill.kind === 'Spell' ||
@@ -359,6 +516,10 @@ export function computeSkillBaseOutput(
     }
   }
 
+  const configuredSplash = skill.scalingFormula.splashRatio ?? 0;
+  const splashRatio =
+    configuredSplash > 0 && configuredSplash <= 1 ? configuredSplash : 1.0;
+
   const autoRaw = computeAutoAttackRawDamage(
     bracket,
     stats,
@@ -369,7 +530,7 @@ export function computeSkillBaseOutput(
   let rawDamagePerHit = autoRaw;
 
   if (isElemental) {
-    // Aq(id, magery, evalInt) * Mq(id) scaled by INT, SDI, and server x80 caster levelFactor
+    // Aq(id, magery, evalInt) * Mq(id) scaled by INT (+1% per 10 INT), capped SDI (<= 50%), and server x80 caster levelFactor
     const s = magery * 0.5 + evalInt * 0.3;
     const schoolMult = skill.scalingFormula.schoolMultiplier ?? 1.75;
     const minMult = skill.scalingFormula.minMultiplier ?? 0.12;
@@ -404,30 +565,41 @@ export function computeSkillBaseOutput(
     }
 
     const avgSpellBase = ((baseMin + baseMax) / 2) * schoolMult;
+    const cappedGearSdi = clamp(bracket.spellDamageIncreasePct, 0, 50);
+    const intBonusSdiPct = Math.floor(stats.int / 10);
     const casterBonus =
       1 +
       evalInt / 100 +
       stats.int / 100 +
-      (bracket.spellDamageIncreasePct + postureDmg + buffDamagePct) / 100;
-    rawDamagePerHit = avgSpellBase * casterBonus * stats.levelFactor;
+      (cappedGearSdi + intBonusSdiPct + buffDamagePct) / 100;
+    rawDamagePerHit =
+      avgSpellBase *
+      casterBonus *
+      stats.levelFactor *
+      postureProfile.outgoingDamageMultiplier;
   } else {
     // Physical / Bushido / Ninjitsu ability scaling (Cq + weapon multiplier)
     const minMult = skill.scalingFormula.minMultiplier ?? 1.0;
     const maxMult = skill.scalingFormula.maxMultiplier ?? minMult;
     const avgMult = (minMult + maxMult) / 2;
+    const postureMult = postureProfile.outgoingDamageMultiplier;
 
     if (id.includes('execution') || id.includes('deadeye') || id.includes('kensei_judgment')) {
       const cqBase = Math.floor(tactics * 0.6) + 20 * rank;
-      rawDamagePerHit = autoRaw * 1.15 + cqBase * stats.levelFactor;
+      rawDamagePerHit =
+        autoRaw * 1.15 + cqBase * stats.levelFactor * postureMult;
     } else if (id.includes('shield_bash') || id.includes('earthshaker')) {
       const cqBase = 13 + 5 * rank + Math.floor(tactics * 0.15);
-      rawDamagePerHit = autoRaw * 0.85 + cqBase * stats.levelFactor;
+      rawDamagePerHit =
+        autoRaw * 0.85 + cqBase * stats.levelFactor * postureMult;
     } else if (id.includes('heavy_strike') || id.includes('crushing')) {
       const cqBase = 14 + Math.floor(tactics * 0.25);
-      rawDamagePerHit = autoRaw * 1.25 + cqBase * stats.levelFactor;
+      rawDamagePerHit =
+        autoRaw * 1.25 + cqBase * stats.levelFactor * postureMult;
     } else if (id.includes('multishot') || id.includes('bolt_volley')) {
       const perHitCq = 10 + 5 * rank;
-      rawDamagePerHit = autoRaw * 0.55 + perHitCq * stats.levelFactor;
+      rawDamagePerHit =
+        autoRaw * 0.55 + perHitCq * stats.levelFactor * postureMult;
     } else if (id.includes('double_strike')) {
       rawDamagePerHit = autoRaw * (avgMult * 0.6);
     } else {
@@ -446,6 +618,7 @@ export function computeSkillBaseOutput(
     rawDamagePerHit,
     hits,
     targetsHit,
+    splashRatio,
     isElemental,
     armorIgnorePct,
   };
@@ -507,29 +680,62 @@ function upsertStatusInstance(
   }
 }
 
-export interface DetailedScenarioOutput {
-  telemetry: SimTelemetry;
-  breakdown: DamageChannelBreakdown;
+type DamageChannel = 'auto' | 'special' | 'execute' | 'dot' | 'proc';
+
+interface UnifiedKernelContext {
+  classDef: ClassDefinition;
+  bracket: BracketBudget;
+  archetype: EnemyArchetype;
+  stats: ResolvedClassStats;
+  mode: SimImplementationMode;
+  hotbar: SkillDefinition[];
+  passiveEffects: EffectDefinition[];
+  enemyScale: number;
+  manaRegenPerSec: number;
+  staminaRegenPerSec: number;
+  hpRegenPerSec: number;
+  hasBandageInHotbar: boolean;
+  hasManaPotionInHotbar: boolean;
+  timelineHorizonMs: number;
+  state: CombatState;
+  enemyAttackTimerMs: number;
+  totalEffectiveDamage: number;
+  totalRawDamage: number;
+  autoAttackEffectiveDmg: number;
+  specialMoveEffectiveDmg: number;
+  executeEffectiveDmg: number;
+  dotEffectiveDmg: number;
+  procCounterEffectiveDmg: number;
+  totalCasts: number;
+  totalSwings: number;
+  totalHits: number;
+  totalCrits: number;
+  parryCount: number;
+  cloneInterceptions: number;
+  oomTicks: number;
+  totalManaSpent: number;
+  totalManaRegenerated: number;
+  totalStaminaSpent: number;
+  totalStaminaRegenerated: number;
+  totalHpHealedOrRegenerated: number;
+  totalIncomingDamageMitigated: number;
   timelineEvents: RotationTimelineEvent[];
+  onTargetKilled?: (targetIdx: number) => void;
 }
 
-/**
- * Runs a deterministic 100ms-tick combat simulation for a single (classDef, bracketId, archetypeId, mode) scenario,
- * optionally overriding the gear/stat BracketBudget and collecting per-channel damage breakdown + rotation timeline.
- */
-export function simulateScenarioDetailed(
+function createUnifiedKernelContext(
   classDef: ClassDefinition,
-  bracketId: BracketId,
-  archetypeId: EnemyArchetypeId,
-  mode: SimImplementationMode = 'mode_a',
-  budgetOverride?: BracketBudget,
-  timelineHorizonMs = 0
-): DetailedScenarioOutput {
-  const bracket = budgetOverride ?? BRACKET_BUDGETS[bracketId];
-  const archetype = ENEMY_ARCHETYPES[archetypeId];
+  bracket: BracketBudget,
+  archetype: EnemyArchetype,
+  mode: SimImplementationMode,
+  initialTargets: number[],
+  singleTargetMaxHp: number,
+  enemyScale: number,
+  timelineHorizonMs = 0,
+  onTargetKilled?: (targetIdx: number) => void
+): UnifiedKernelContext {
   const stats = resolveClassStatsForBracket(classDef, bracket);
   const { passives, hotbar } = buildHotbarLoadout(classDef, bracket);
-
   const passiveEffects: EffectDefinition[] = [];
   for (const p of passives) {
     if (p.statusEffect) {
@@ -537,14 +743,23 @@ export function simulateScenarioDetailed(
     }
   }
 
-  const enemyScale = BRACKET_ENEMY_SCALE[bracketId];
-  const singleTargetMaxHp = Math.max(
-    25,
-    Math.round(BASE_ENEMY_HP * enemyScale * archetype.hpMultiplier)
-  );
+  const hasMeditation =
+    classDef.resourceProfile.meditationCap > 0 &&
+    classDef.starterSkills.some((s) => s.skillKey === 'meditation');
+  const meditationSkill = hasMeditation ? Math.min(100, bracket.skillLevel) : 0;
+  const focusSkill = Math.min(100, bracket.skillLevel);
 
-  const spawnTargetWave = (): number[] =>
-    Array.from({ length: archetype.targetCount }, () => singleTargetMaxHp);
+  const manaRegenPerSec =
+    classDef.resourceProfile.primaryResource === 'zero-mana-physical'
+      ? 0
+      : 1.0 + (meditationSkill / 100) * 2.5 + focusSkill / 200 + bracket.manaRegenAffix;
+  const staminaRegenPerSec = 1.8 + (focusSkill / 100) * 2.4 + bracket.staminaRegenAffix;
+  const hpRegenPerSec = 0.8 + bracket.hpRegenAffix;
+
+  const hasBandageInHotbar = classDef.seededHotbar.some((s) => s.abilityId === 'bandage');
+  const hasManaPotionInHotbar =
+    classDef.resourceProfile.primaryResource !== 'zero-mana-physical' &&
+    classDef.seededHotbar.some((s) => s.abilityId.includes('mana_potion'));
 
   const state: CombatState = {
     tick: 0,
@@ -561,7 +776,7 @@ export function simulateScenarioDetailed(
     skillCooldownsMs: new Map<string, number>(),
     selfBuffs: [],
     targetDebuffs: [],
-    targetHpPools: spawnTargetWave(),
+    targetHpPools: [...initialTargets],
     targetMaxHp: singleTargetMaxHp,
     perfectionStreakBonusPct: 0,
     cloneStacks: 0,
@@ -576,405 +791,369 @@ export function simulateScenarioDetailed(
     procAcc: 0.4,
   };
 
-  const maxTicks = Math.max(100, Math.floor(archetype.fightHorizonMs / TICK_MS));
-
-  let totalEffectiveDamage = 0;
-  let totalRawDamage = 0;
-  let autoAttackEffectiveDmg = 0;
-  let specialMoveEffectiveDmg = 0;
-  let executeEffectiveDmg = 0;
-  let dotEffectiveDmg = 0;
-  let procCounterEffectiveDmg = 0;
-
-  let totalCasts = 0;
-  let totalSwings = 0;
-  let totalHits = 0;
-  let totalCrits = 0;
-  let parryCount = 0;
-  let cloneInterceptions = 0;
-  let oomTicks = 0;
-  let wavesCompleted = 0;
-  let totalManaSpent = 0;
-  let totalManaRegenerated = 0;
-  let totalStaminaSpent = 0;
-  let totalStaminaRegenerated = 0;
-  let totalHpHealedOrRegenerated = 0;
-  let totalIncomingDamageMitigated = 0;
-  const timelineEvents: RotationTimelineEvent[] = [];
-
-  // Passive regeneration rates per second ([[resources]] Eq)
-  const hasMeditation =
-    classDef.resourceProfile.meditationCap > 0 &&
-    classDef.starterSkills.some((s) => s.skillKey === 'meditation');
-  const meditationSkill = hasMeditation ? bracket.skillLevel : 0;
-  const focusSkill = bracket.skillLevel;
-
-  const manaRegenPerSec =
-    classDef.resourceProfile.primaryResource === 'zero-mana-physical'
-      ? 0
-      : 1.0 + (meditationSkill / 100) * 2.5 + focusSkill / 200 + bracket.manaRegenAffix;
-  const staminaRegenPerSec = 1.8 + (focusSkill / 100) * 2.4 + bracket.staminaRegenAffix;
-  const hpRegenPerSec = 0.8 + bracket.hpRegenAffix;
-
-  const hasBandageInHotbar = classDef.seededHotbar.some((s) => s.abilityId === 'bandage');
-  const hasManaPotionInHotbar =
-    classDef.resourceProfile.primaryResource !== 'zero-mana-physical' &&
-    classDef.seededHotbar.some((s) => s.abilityId.includes('mana_potion'));
-
-  let enemyAttackTimerMs = archetype.enemyAttackIntervalMs;
-
-  type DamageChannel = 'auto' | 'special' | 'execute' | 'dot' | 'proc';
-
-  const dealDamageToTarget = (
-    targetIdx: number,
-    mitigatedDmg: number,
-    channel: DamageChannel = 'special'
-  ): number => {
-    const currentHp = state.targetHpPools[targetIdx] ?? 0;
-    if (currentHp <= 0) {
-      return 0;
-    }
-    const clampedDmg = Math.max(1, mitigatedDmg);
-    totalRawDamage += clampedDmg;
-    const effective = Math.min(currentHp, clampedDmg);
-    totalEffectiveDamage += effective;
-    if (channel === 'auto') {
-      autoAttackEffectiveDmg += effective;
-    } else if (channel === 'execute') {
-      executeEffectiveDmg += effective;
-    } else if (channel === 'dot') {
-      dotEffectiveDmg += effective;
-    } else if (channel === 'proc') {
-      procCounterEffectiveDmg += effective;
-    } else {
-      specialMoveEffectiveDmg += effective;
-    }
-
-    const nextHp = currentHp - effective;
-    if (mode === 'mode_b' && nextHp <= 0) {
-      state.perfectionStreakBonusPct = 0;
-    }
-    if (nextHp <= 0 && archetypeId !== 'fast_trash') {
-      wavesCompleted++;
-      state.targetHpPools[targetIdx] = state.targetMaxHp;
-    } else {
-      state.targetHpPools[targetIdx] = nextHp;
-    }
-    return effective;
+  return {
+    classDef,
+    bracket,
+    archetype,
+    stats,
+    mode,
+    hotbar,
+    passiveEffects,
+    enemyScale,
+    manaRegenPerSec,
+    staminaRegenPerSec,
+    hpRegenPerSec,
+    hasBandageInHotbar,
+    hasManaPotionInHotbar,
+    timelineHorizonMs,
+    state,
+    enemyAttackTimerMs: archetype.enemyAttackIntervalMs,
+    totalEffectiveDamage: 0,
+    totalRawDamage: 0,
+    autoAttackEffectiveDmg: 0,
+    specialMoveEffectiveDmg: 0,
+    executeEffectiveDmg: 0,
+    dotEffectiveDmg: 0,
+    procCounterEffectiveDmg: 0,
+    totalCasts: 0,
+    totalSwings: 0,
+    totalHits: 0,
+    totalCrits: 0,
+    parryCount: 0,
+    cloneInterceptions: 0,
+    oomTicks: 0,
+    totalManaSpent: 0,
+    totalManaRegenerated: 0,
+    totalStaminaSpent: 0,
+    totalStaminaRegenerated: 0,
+    totalHpHealedOrRegenerated: 0,
+    totalIncomingDamageMitigated: 0,
+    timelineEvents: [],
+    onTargetKilled,
   };
+}
 
-  for (let tick = 1; tick <= maxTicks; tick++) {
-    state.tick = tick;
-    state.elapsedMs = tick * TICK_MS;
+function dealKernelDamageToTarget(
+  ctx: UnifiedKernelContext,
+  targetIdx: number,
+  mitigatedDmg: number,
+  channel: DamageChannel = 'special'
+): number {
+  const { state, mode } = ctx;
+  const currentHp = state.targetHpPools[targetIdx] ?? 0;
+  if (currentHp <= 0) {
+    return 0;
+  }
+  const clampedDmg = Math.max(1, mitigatedDmg);
+  ctx.totalRawDamage += clampedDmg;
+  const effective = Math.min(currentHp, clampedDmg);
+  ctx.totalEffectiveDamage += effective;
 
-    // 1. Advance cooldown timers
-    state.swingCooldownMs = Math.max(0, state.swingCooldownMs - TICK_MS);
-    state.potionCooldownMs = Math.max(0, state.potionCooldownMs - TICK_MS);
-    state.bandageCooldownMs = Math.max(0, state.bandageCooldownMs - TICK_MS);
-    state.cloneIcdMs = Math.max(0, state.cloneIcdMs - TICK_MS);
-    state.counterStanceRemainingMs = Math.max(0, state.counterStanceRemainingMs - TICK_MS);
-    state.counterIcdMs = Math.max(0, state.counterIcdMs - TICK_MS);
+  if (channel === 'auto') {
+    ctx.autoAttackEffectiveDmg += effective;
+  } else if (channel === 'execute') {
+    ctx.executeEffectiveDmg += effective;
+  } else if (channel === 'dot') {
+    ctx.dotEffectiveDmg += effective;
+  } else if (channel === 'proc') {
+    ctx.procCounterEffectiveDmg += effective;
+  } else {
+    ctx.specialMoveEffectiveDmg += effective;
+  }
 
-    state.skillCooldownsMs.forEach((rem, key) => {
-      if (rem <= TICK_MS) {
-        state.skillCooldownsMs.delete(key);
-      } else {
-        state.skillCooldownsMs.set(key, rem - TICK_MS);
-      }
-    });
+  const nextHp = currentHp - effective;
+  if (mode === 'mode_b' && nextHp <= 0) {
+    state.perfectionStreakBonusPct = 0;
+  }
+  state.targetHpPools[targetIdx] = nextHp;
+  if (nextHp <= 0 && ctx.onTargetKilled) {
+    ctx.onTargetKilled(targetIdx);
+  }
+  return effective;
+}
 
-    // 2. Tick active self buffs and target debuffs/DoTs
-    const targetDefenseDeltaPct = sumModifierStat(state.targetDebuffs, [], 'defense_pct');
+/**
+ * Advances cooldowns, buffs, passive regeneration, and consumable sustain slots by 100ms (`TICK_MS`).
+ * Used on every tick (both active combat ticks and inter-wave travel ticks).
+ */
+function stepKernelTimersAndSustain(ctx: UnifiedKernelContext, tick: number): void {
+  const { state, bracket } = ctx;
+  state.tick = tick;
+  state.elapsedMs = tick * TICK_MS;
 
-    for (let i = state.selfBuffs.length - 1; i >= 0; i--) {
-      const buff = state.selfBuffs[i];
-      buff.remainingMs -= TICK_MS;
-      if (buff.effect.effectType === 'heal' && buff.effect.tickIntervalMs > 0) {
-        buff.nextTickCountdownMs -= TICK_MS;
-        if (buff.nextTickCountdownMs <= 0) {
-          buff.nextTickCountdownMs += buff.effect.tickIntervalMs;
-          const hotHeal = Math.max(2, Math.floor((15 + (bracket.skillLevel * bracket.skillLevel) / 576) / 4));
-          state.hp = Math.min(state.maxHP, state.hp + hotHeal);
-          totalHpHealedOrRegenerated += hotHeal;
-        }
-      }
-      if (buff.remainingMs <= 0) {
-        state.selfBuffs.splice(i, 1);
+  // 1. Advance cooldown timers
+  state.swingCooldownMs = Math.max(0, state.swingCooldownMs - TICK_MS);
+  state.potionCooldownMs = Math.max(0, state.potionCooldownMs - TICK_MS);
+  state.bandageCooldownMs = Math.max(0, state.bandageCooldownMs - TICK_MS);
+  state.cloneIcdMs = Math.max(0, state.cloneIcdMs - TICK_MS);
+  state.counterStanceRemainingMs = Math.max(0, state.counterStanceRemainingMs - TICK_MS);
+  state.counterIcdMs = Math.max(0, state.counterIcdMs - TICK_MS);
+
+  state.skillCooldownsMs.forEach((rem, key) => {
+    if (rem <= TICK_MS) {
+      state.skillCooldownsMs.delete(key);
+    } else {
+      state.skillCooldownsMs.set(key, rem - TICK_MS);
+    }
+  });
+
+  // 2. Tick active self buffs & HoTs (e.g. Confidence Inner Calm regeneration)
+  for (let i = state.selfBuffs.length - 1; i >= 0; i--) {
+    const buff = state.selfBuffs[i];
+    buff.remainingMs -= TICK_MS;
+    if (buff.effect.effectType === 'heal' && buff.effect.tickIntervalMs > 0) {
+      buff.nextTickCountdownMs -= TICK_MS;
+      if (buff.nextTickCountdownMs <= 0) {
+        buff.nextTickCountdownMs += buff.effect.tickIntervalMs;
+        const skillCap = Math.min(100, bracket.skillLevel);
+        const hotHeal = Math.max(2, Math.floor((15 + (skillCap * skillCap) / 576) / 4));
+        state.hp = Math.min(state.maxHP, state.hp + hotHeal);
+        ctx.totalHpHealedOrRegenerated += hotHeal;
       }
     }
+    if (buff.remainingMs <= 0) {
+      state.selfBuffs.splice(i, 1);
+    }
+  }
 
-    for (let i = state.targetDebuffs.length - 1; i >= 0; i--) {
-      const debuff = state.targetDebuffs[i];
-      debuff.remainingMs -= TICK_MS;
-      if (debuff.dotDamagePerTick > 0) {
-        debuff.nextTickCountdownMs -= TICK_MS;
-        if (debuff.nextTickCountdownMs <= 0) {
-          debuff.nextTickCountdownMs +=
-            debuff.effect.tickIntervalMs > 0 ? debuff.effect.tickIntervalMs : 1000;
-          const dotMitigated = applyTargetMitigation(
-            debuff.dotDamagePerTick,
-            archetype,
-            debuff.isElemental,
-            0,
-            targetDefenseDeltaPct
-          );
-          const primaryIdx = state.targetHpPools.findIndex((hp) => hp > 0);
-          if (primaryIdx >= 0) {
-            const eff = dealDamageToTarget(primaryIdx, dotMitigated, 'dot');
-            if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && eff > 0) {
-              timelineEvents.push({
-                timeMs: state.elapsedMs,
-                kind: 'dot',
-                label: debuff.effect.name,
-                damage: round2(eff),
-                isCrit: false,
-              });
-            }
+  // 3. Every 1,000ms: apply passive resource regeneration (Eq)
+  if (state.elapsedMs % 1000 === 0) {
+    state.hp = Math.min(state.maxHP, state.hp + ctx.hpRegenPerSec);
+    ctx.totalHpHealedOrRegenerated += ctx.hpRegenPerSec;
+
+    state.stamina = Math.min(state.maxStamina, state.stamina + ctx.staminaRegenPerSec);
+    ctx.totalStaminaRegenerated += ctx.staminaRegenPerSec;
+
+    if (state.maxMana > 0) {
+      state.mana = Math.min(state.maxMana, state.mana + ctx.manaRegenPerSec);
+      ctx.totalManaRegenerated += ctx.manaRegenPerSec;
+    }
+  }
+
+  // 4. Consumable sustain slots (`ro(e)` potion & bandage triggers + `EnhancePotions` cap 50%)
+  const hpPct = (state.hp / state.maxHP) * 100;
+  const manaPct = state.maxMana > 0 ? (state.mana / state.maxMana) * 100 : 100;
+  const enhancePotionsMult = 1 + clamp(bracket.enhancePotionsPct ?? 0, 0, 50) / 100;
+
+  if (hpPct <= 50 && state.potionCooldownMs <= 0) {
+    const basePotionFraction = hpPct <= 18 ? 0.35 : hpPct <= 32 ? 0.25 : 0.15;
+    const potionHeal = state.maxHP * basePotionFraction * enhancePotionsMult;
+    state.hp = Math.min(state.maxHP, state.hp + potionHeal);
+    ctx.totalHpHealedOrRegenerated += potionHeal;
+    state.potionCooldownMs = 10000;
+  } else if (
+    ctx.hasManaPotionInHotbar &&
+    state.maxMana > 0 &&
+    manaPct <= 40 &&
+    state.potionCooldownMs <= 0
+  ) {
+    const manaRestore = state.maxMana * 0.25 * enhancePotionsMult;
+    state.mana = Math.min(state.maxMana, state.mana + manaRestore);
+    ctx.totalManaRegenerated += manaRestore;
+    state.potionCooldownMs = 10000;
+  }
+
+  if (ctx.hasBandageInHotbar && hpPct <= 80 && state.bandageCooldownMs <= 0) {
+    const skillCap = Math.min(100, bracket.skillLevel);
+    const minBandage = skillCap / 8 + skillCap / 5 + 4;
+    const maxBandage = skillCap / 6 + skillCap / 2.5 + 4;
+    const avgBandage = (minBandage + maxBandage) / 2;
+    state.hp = Math.min(state.maxHP, state.hp + avgBandage);
+    ctx.totalHpHealedOrRegenerated += avgBandage;
+    state.bandageCooldownMs = 8000;
+  }
+}
+
+/**
+ * Resolves DoT ticks, active hotbar priority queue `ro(e)`, passive auto-attacks (`Sg`),
+ * and incoming enemy attacks (Clone interception, 1H/2H/Shield `CheckParry`, armor resist, posture incoming mult, and `ReflectPhysical`).
+ */
+function stepKernelCombatActions(ctx: UnifiedKernelContext): void {
+  const {
+    classDef,
+    bracket,
+    archetype,
+    stats,
+    mode,
+    hotbar,
+    passiveEffects,
+    state,
+    timelineHorizonMs,
+    timelineEvents,
+  } = ctx;
+
+  const targetDefenseDeltaPct = sumModifierStat(state.targetDebuffs, [], 'defense_pct');
+  const targetDciDeltaPct = sumModifierStat(state.targetDebuffs, [], 'defense_chance_pct');
+
+  // 1. Tick target debuffs and DoTs
+  for (let i = state.targetDebuffs.length - 1; i >= 0; i--) {
+    const debuff = state.targetDebuffs[i];
+    debuff.remainingMs -= TICK_MS;
+    if (debuff.dotDamagePerTick > 0) {
+      debuff.nextTickCountdownMs -= TICK_MS;
+      if (debuff.nextTickCountdownMs <= 0) {
+        debuff.nextTickCountdownMs +=
+          debuff.effect.tickIntervalMs > 0 ? debuff.effect.tickIntervalMs : 1000;
+        const dotMitigated = applyTargetMitigation(
+          debuff.dotDamagePerTick,
+          archetype,
+          debuff.isElemental,
+          0,
+          targetDefenseDeltaPct
+        );
+        const primaryIdx = state.targetHpPools.findIndex((hp) => hp > 0);
+        if (primaryIdx >= 0) {
+          const eff = dealKernelDamageToTarget(ctx, primaryIdx, dotMitigated, 'dot');
+          if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && eff > 0) {
+            timelineEvents.push({
+              timeMs: state.elapsedMs,
+              kind: 'dot',
+              label: debuff.effect.name,
+              damage: round2(eff),
+              isCrit: false,
+            });
           }
         }
       }
-      if (debuff.remainingMs <= 0) {
-        state.targetDebuffs.splice(i, 1);
-      }
+    }
+    if (debuff.remainingMs <= 0) {
+      state.targetDebuffs.splice(i, 1);
+    }
+  }
+
+  const aliveIndices = state.targetHpPools
+    .map((hp, idx) => (hp > 0 ? idx : -1))
+    .filter((idx) => idx >= 0);
+
+  if (aliveIndices.length === 0) {
+    return;
+  }
+
+  const hpPct = (state.hp / state.maxHP) * 100;
+  const primaryTargetIdx = aliveIndices[0];
+  const primaryTargetHpPct =
+    (state.targetHpPools[primaryTargetIdx] / state.targetMaxHp) * 100;
+
+  const buffDamagePct = sumModifierStat(
+    state.selfBuffs,
+    passiveEffects,
+    'damage_dealt_pct'
+  );
+  const buffAttackSpeedPct = sumModifierStat(
+    state.selfBuffs,
+    passiveEffects,
+    'attack_speed_pct'
+  );
+  const buffCritPct = sumModifierStat(state.selfBuffs, passiveEffects, 'crit_chance_pct');
+  const buffPerfectionPct = sumModifierStat(
+    state.selfBuffs,
+    passiveEffects,
+    'perfection_streak_pct'
+  );
+  const totalPerfectionBonus =
+    mode === 'mode_b'
+      ? Math.max(state.perfectionStreakBonusPct, buffPerfectionPct)
+      : buffPerfectionPct;
+
+  // 2. Evaluate 6-slot active hotbar priority queue ro(e) (at most 1 active skill fires per tick)
+  let castSkillThisTick = false;
+  let anySkillOffCooldownButOom = false;
+
+  for (const skill of hotbar) {
+    if ((state.skillCooldownsMs.get(skill.id) ?? 0) > 0) {
+      continue;
     }
 
-    // 3. Every 1,000ms: apply passive resource regeneration (Eq)
-    if (state.elapsedMs % 1000 === 0) {
-      state.hp = Math.min(state.maxHP, state.hp + hpRegenPerSec);
-      totalHpHealedOrRegenerated += hpRegenPerSec;
-
-      state.stamina = Math.min(state.maxStamina, state.stamina + staminaRegenPerSec);
-      totalStaminaRegenerated += staminaRegenPerSec;
-
-      if (state.maxMana > 0) {
-        state.mana = Math.min(state.maxMana, state.mana + manaRegenPerSec);
-        totalManaRegenerated += manaRegenPerSec;
-      }
-    }
-
-    // 4. Consumable sustain slots (Heal Potion, Mana Potion, Bandage per [[tick-and-cooldowns]] C6, [[resources]] C10)
-    const hpPct = (state.hp / state.maxHP) * 100;
-    if (hpPct <= 65 && state.potionCooldownMs <= 0) {
-      const potionHeal = state.maxHP * 0.25;
-      state.hp = Math.min(state.maxHP, state.hp + potionHeal);
-      totalHpHealedOrRegenerated += potionHeal;
-      state.potionCooldownMs = 10000;
-    } else if (
-      hasManaPotionInHotbar &&
-      state.maxMana > 0 &&
-      (state.mana / state.maxMana) * 100 <= 35 &&
-      state.potionCooldownMs <= 0
+    if (
+      !evaluateHotbarAutoTrigger(
+        skill,
+        hpPct,
+        primaryTargetHpPct,
+        aliveIndices.length,
+        state.selfBuffs,
+        state.targetDebuffs,
+        mode,
+        state.deathStrikeSwingsRemaining
+      )
     ) {
-      const manaRestore = state.maxMana * 0.25;
-      state.mana = Math.min(state.maxMana, state.mana + manaRestore);
-      totalManaRegenerated += manaRestore;
-      state.potionCooldownMs = 10000;
+      continue;
     }
 
-    if (hasBandageInHotbar && hpPct <= 80 && state.bandageCooldownMs <= 0) {
-      const minBandage = bracket.skillLevel / 8 + bracket.skillLevel / 5 + 4;
-      const maxBandage = bracket.skillLevel / 6 + bracket.skillLevel / 2.5 + 4;
-      const avgBandage = (minBandage + maxBandage) / 2;
-      state.hp = Math.min(state.maxHP, state.hp + avgBandage);
-      totalHpHealedOrRegenerated += avgBandage;
-      state.bandageCooldownMs = 8000;
+    const { manaCost, staminaCost } = resolveSkillResourceCost(classDef, skill, bracket);
+    if (state.mana < manaCost || state.stamina < staminaCost) {
+      anySkillOffCooldownButOom = true;
+      continue;
     }
 
-    // Refresh living targets if needed before player offensive actions
-    let aliveIndices = state.targetHpPools
-      .map((hp, idx) => (hp > 0 ? idx : -1))
-      .filter((idx) => idx >= 0);
+    // Deduct resources and set cooldown
+    state.mana -= manaCost;
+    ctx.totalManaSpent += manaCost;
+    state.stamina -= staminaCost;
+    ctx.totalStaminaSpent += staminaCost;
+    state.skillCooldownsMs.set(skill.id, resolveEffectiveCooldownMs(skill));
+    ctx.totalCasts++;
+    castSkillThisTick = true;
 
-    if (aliveIndices.length === 0) {
-      wavesCompleted++;
-      if (archetypeId === 'fast_trash' && wavesCompleted >= archetype.waveCount) {
-        break;
+    // Resolve skill effect
+    if (skill.effectType === 'heal') {
+      const healFraction = skill.id.includes('greater') ? 0.35 : 0.15;
+      const healAmount = state.maxHP * healFraction;
+      state.hp = Math.min(state.maxHP, state.hp + healAmount);
+      ctx.totalHpHealedOrRegenerated += healAmount;
+      if (skill.statusEffect) {
+        upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, true);
       }
-      state.targetHpPools = spawnTargetWave();
-      state.targetDebuffs = [];
-      aliveIndices = state.targetHpPools.map((_, idx) => idx);
-    }
-
-    const primaryTargetIdx = aliveIndices[0];
-    const primaryTargetHpPct =
-      (state.targetHpPools[primaryTargetIdx] / state.targetMaxHp) * 100;
-
-    const buffDamagePct = sumModifierStat(
-      state.selfBuffs,
-      passiveEffects,
-      'damage_dealt_pct'
-    );
-    const buffAttackSpeedPct = sumModifierStat(
-      state.selfBuffs,
-      passiveEffects,
-      'attack_speed_pct'
-    );
-    const buffCritPct = sumModifierStat(state.selfBuffs, passiveEffects, 'crit_chance_pct');
-    const buffPerfectionPct = sumModifierStat(
-      state.selfBuffs,
-      passiveEffects,
-      'perfection_streak_pct'
-    );
-    const totalPerfectionBonus =
-      mode === 'mode_b'
-        ? Math.max(state.perfectionStreakBonusPct, buffPerfectionPct)
-        : buffPerfectionPct;
-
-    // 5. Evaluate 6-slot active hotbar priority queue ro(e) (at most 1 active skill fires per tick)
-    let castSkillThisTick = false;
-    let anySkillOffCooldownButOom = false;
-
-    for (const skill of hotbar) {
-      if ((state.skillCooldownsMs.get(skill.id) ?? 0) > 0) {
-        continue;
+      if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+        timelineEvents.push({
+          timeMs: state.elapsedMs,
+          kind: 'cast',
+          label: skill.name,
+          damage: 0,
+          isCrit: false,
+        });
       }
-
-      // Check trigger condition predicates (ro(e))
-      if (skill.effectType === 'heal' && hpPct > 65) {
-        continue;
-      }
-      const execThreshold = skill.scalingFormula.executeThresholdHpPct ?? 0;
-      if (execThreshold > 0 && primaryTargetHpPct > execThreshold) {
-        continue;
-      }
-      if (isStrictMultiTargetOnlySkill(skill) && aliveIndices.length < 2) {
-        continue;
-      }
-      if (
-        skill.effectType === 'self_buff' &&
-        skill.statusEffect &&
-        state.selfBuffs.some((b) => b.id === skill.statusEffect?.id)
-      ) {
-        continue;
-      }
-      if (
-        skill.effectType === 'debuff' &&
-        skill.statusEffect &&
-        state.targetDebuffs.some((d) => d.id === skill.statusEffect?.id)
-      ) {
-        continue;
-      }
-      if (
-        skill.effectType === 'dot' &&
-        skill.statusEffect &&
-        state.targetDebuffs.some((d) => d.id === skill.statusEffect?.id)
-      ) {
-        continue;
+    } else if (skill.effectType === 'self_buff') {
+      if (skill.statusEffect) {
+        upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
+        for (const mod of skill.statusEffect.modifiers) {
+          if (mod.stat === 'clone_stacks') {
+            state.cloneStacks = Math.min(3, Math.max(1, Math.round(mod.value)));
+          }
+        }
       }
       if (
         mode === 'mode_b' &&
-        (skill.id.includes('death') || skill.id.includes('twin_shadow')) &&
-        state.deathStrikeSwingsRemaining > 0
+        (skill.id.includes('mirror') || skill.id.includes('fukiya_barrage'))
       ) {
-        continue;
+        state.cloneStacks =
+          skill.id.endsWith('_r2') || skill.id.includes('fukiya_barrage') ? 2 : 1;
       }
-
-      const { manaCost, staminaCost } = resolveSkillResourceCost(classDef, skill);
-      if (state.mana < manaCost || state.stamina < staminaCost) {
-        anySkillOffCooldownButOom = true;
-        continue;
-      }
-
-      // Deduct resources and set cooldown
-      state.mana -= manaCost;
-      totalManaSpent += manaCost;
-      state.stamina -= staminaCost;
-      totalStaminaSpent += staminaCost;
-      state.skillCooldownsMs.set(skill.id, resolveEffectiveCooldownMs(skill));
-      totalCasts++;
-      castSkillThisTick = true;
-
-      // Resolve skill effect
-      if (skill.effectType === 'heal') {
-        // Server authoritative 15% / 35% MaxHP rule for Magery heals ([[resources]] C11)
-        const healFraction = skill.id.includes('greater') ? 0.35 : 0.15;
-        const healAmount = state.maxHP * healFraction;
-        state.hp = Math.min(state.maxHP, state.hp + healAmount);
-        totalHpHealedOrRegenerated += healAmount;
-        if (skill.statusEffect) {
-          upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, true);
-        }
-        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
-          timelineEvents.push({
-            timeMs: state.elapsedMs,
-            kind: 'cast',
-            label: skill.name,
-            damage: 0,
-            isCrit: false,
-          });
-        }
-      } else if (skill.effectType === 'self_buff') {
-        if (skill.statusEffect) {
-          upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
-          for (const mod of skill.statusEffect.modifiers) {
-            if (mod.stat === 'clone_stacks') {
-              state.cloneStacks = Math.min(3, Math.max(1, Math.round(mod.value)));
-            }
+      // Mode B idle synergy: Smoke Bomb (Vanish & Volley) accelerates Shuriken readiness
+      if (mode === 'mode_b' && skill.id === 'ninja_smoke_bomb') {
+        const shurikenRem = state.skillCooldownsMs.get('ninja_shuriken') ?? 0;
+        if (shurikenRem > 0) {
+          if (shurikenRem <= 2500) {
+            state.skillCooldownsMs.delete('ninja_shuriken');
+          } else {
+            state.skillCooldownsMs.set('ninja_shuriken', shurikenRem - 2500);
           }
         }
-        if (
-          mode === 'mode_b' &&
-          (skill.id.includes('mirror') || skill.id.includes('fukiya_barrage'))
-        ) {
-          state.cloneStacks =
-            skill.id.endsWith('_r2') || skill.id.includes('fukiya_barrage') ? 2 : 1;
-        }
-        // Mode B idle synergy: Smoke Bomb (Vanish & Volley) accelerates Shuriken readiness
-        if (mode === 'mode_b' && skill.id === 'ninja_smoke_bomb') {
-          const shurikenRem = state.skillCooldownsMs.get('ninja_shuriken') ?? 0;
-          if (shurikenRem > 0) {
-            if (shurikenRem <= 2500) {
-              state.skillCooldownsMs.delete('ninja_shuriken');
-            } else {
-              state.skillCooldownsMs.set('ninja_shuriken', shurikenRem - 2500);
-            }
-          }
-        }
-        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
-          timelineEvents.push({
-            timeMs: state.elapsedMs,
-            kind: 'cast',
-            label: skill.name,
-            damage: 0,
-            isCrit: false,
-          });
-        }
-      } else if (skill.effectType === 'debuff') {
-        if (skill.statusEffect) {
-          upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, 0, false);
-        }
-        let castDmg = 0;
-        // WeaponAbility debuffs (e.g. warrior_disarm) also land a weapon strike
-        if (skill.kind === 'WeaponAbility' || skill.kind === 'SpecialMove') {
-          const out = computeSkillBaseOutput(
-            classDef,
-            skill,
-            bracket,
-            stats,
-            primaryTargetHpPct,
-            aliveIndices.length,
-            buffDamagePct,
-            totalPerfectionBonus
-          );
-          const mitigated = applyTargetMitigation(
-            out.rawDamagePerHit,
-            archetype,
-            out.isElemental,
-            out.armorIgnorePct,
-            targetDefenseDeltaPct
-          );
-          castDmg = dealDamageToTarget(primaryTargetIdx, mitigated, 'special');
-        }
-        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
-          timelineEvents.push({
-            timeMs: state.elapsedMs,
-            kind: 'cast',
-            label: skill.name,
-            damage: round2(castDmg),
-            isCrit: false,
-          });
-        }
-      } else if (skill.effectType === 'dot') {
+      }
+      if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+        timelineEvents.push({
+          timeMs: state.elapsedMs,
+          kind: 'cast',
+          label: skill.name,
+          damage: 0,
+          isCrit: false,
+        });
+      }
+    } else if (skill.effectType === 'debuff') {
+      if (skill.statusEffect) {
+        upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, 0, false);
+      }
+      let castDmg = 0;
+      if (skill.kind === 'WeaponAbility' || skill.kind === 'SpecialMove') {
         const out = computeSkillBaseOutput(
           classDef,
           skill,
@@ -985,183 +1164,108 @@ export function simulateScenarioDetailed(
           buffDamagePct,
           totalPerfectionBonus
         );
-        const tickCount = Math.max(1, skill.statusEffect?.tickCount ?? 5);
-        const dotPerTick = (out.rawDamagePerHit * 0.45) / Math.min(6, tickCount);
-        if (skill.statusEffect) {
-          upsertStatusInstance(
-            state.targetDebuffs,
-            skill.id,
-            skill.statusEffect,
-            dotPerTick,
-            out.isElemental
-          );
-        }
-        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
-          timelineEvents.push({
-            timeMs: state.elapsedMs,
-            kind: 'cast',
-            label: skill.name,
-            damage: 0,
-            isCrit: false,
-          });
-        }
-      } else {
-        // direct_damage
-        const out = computeSkillBaseOutput(
-          classDef,
-          skill,
-          bracket,
-          stats,
-          primaryTargetHpPct,
-          aliveIndices.length,
-          buffDamagePct,
-          totalPerfectionBonus
-        );
-        const accuracyBonus =
-          skill.id.includes('lightning') || skill.id.includes('frenzied_whirlwind') ? 50 : 10;
-        const hitProb = computeHitChance(
-          bracket,
-          stats,
+        const mitigated = applyTargetMitigation(
+          out.rawDamagePerHit,
           archetype,
           out.isElemental,
-          accuracyBonus
+          out.armorIgnorePct,
+          targetDefenseDeltaPct
         );
-        const critProb = computeCritChance(bracket, stats, buffCritPct);
-        const isExecSkill = (skill.scalingFormula.executeThresholdHpPct ?? 0) > 0;
-        let castTotalDmg = 0;
-        let castAnyCrit = false;
+        castDmg = dealKernelDamageToTarget(ctx, primaryTargetIdx, mitigated, 'special');
+      }
+      if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+        timelineEvents.push({
+          timeMs: state.elapsedMs,
+          kind: 'cast',
+          label: skill.name,
+          damage: round2(castDmg),
+          isCrit: false,
+        });
+      }
+    } else if (skill.effectType === 'dot') {
+      const out = computeSkillBaseOutput(
+        classDef,
+        skill,
+        bracket,
+        stats,
+        primaryTargetHpPct,
+        aliveIndices.length,
+        buffDamagePct,
+        totalPerfectionBonus
+      );
+      const tickCount = Math.max(1, skill.statusEffect?.tickCount ?? 5);
+      const dotPerTick = (out.rawDamagePerHit * 0.45) / Math.min(6, tickCount);
+      if (skill.statusEffect) {
+        upsertStatusInstance(
+          state.targetDebuffs,
+          skill.id,
+          skill.statusEffect,
+          dotPerTick,
+          out.isElemental
+        );
+      }
+      if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+        timelineEvents.push({
+          timeMs: state.elapsedMs,
+          kind: 'cast',
+          label: skill.name,
+          damage: 0,
+          isCrit: false,
+        });
+      }
+    } else {
+      // direct_damage (including primary 100% + secondary splashRatio scaling)
+      const out = computeSkillBaseOutput(
+        classDef,
+        skill,
+        bracket,
+        stats,
+        primaryTargetHpPct,
+        aliveIndices.length,
+        buffDamagePct,
+        totalPerfectionBonus
+      );
+      const accuracyBonus =
+        skill.id.includes('lightning') || skill.id.includes('frenzied_whirlwind') ? 50 : 10;
+      const hitProb = computeHitChance(
+        bracket,
+        stats,
+        archetype,
+        out.isElemental,
+        accuracyBonus,
+        targetDciDeltaPct
+      );
+      const critProb = computeCritChance(bracket, stats, buffCritPct);
+      const isExecSkill = (skill.scalingFormula.executeThresholdHpPct ?? 0) > 0;
+      let castTotalDmg = 0;
+      let castAnyCrit = false;
 
-        const targetIndicesToHit = aliveIndices.slice(0, out.targetsHit);
-        for (const tIdx of targetIndicesToHit) {
-          for (let h = 0; h < out.hits; h++) {
-            const [didHit, nextHitAcc] = resolveDeterministicRoll(state.hitAcc, hitProb);
-            state.hitAcc = nextHitAcc;
-            if (!didHit) {
-              if (mode === 'mode_b' && classDef.id === 'samurai') {
-                state.perfectionStreakBonusPct = Math.max(
-                  0,
-                  state.perfectionStreakBonusPct - 25
-                );
-              }
-              continue;
-            }
-            totalHits++;
-            const [didCrit, nextCritAcc] = resolveDeterministicRoll(
-              state.critAcc,
-              critProb
-            );
-            state.critAcc = nextCritAcc;
-            const critMult = didCrit ? 1.5 : 1.0;
-            if (didCrit) {
-              totalCrits++;
-              castAnyCrit = true;
-            }
-
-            if (mode === 'mode_b' && classDef.id === 'samurai' && bracket.skillLevel >= 50) {
-              state.perfectionStreakBonusPct = Math.min(
-                12,
-                state.perfectionStreakBonusPct + Math.max(2, Math.floor(bracket.skillLevel / 25))
+      const targetIndicesToHit = aliveIndices.slice(0, out.targetsHit);
+      for (let targetOffset = 0; targetOffset < targetIndicesToHit.length; targetOffset++) {
+        const tIdx = targetIndicesToHit[targetOffset];
+        const targetSplashScale = targetOffset === 0 ? 1.0 : out.splashRatio;
+        for (let h = 0; h < out.hits; h++) {
+          const [didHit, nextHitAcc] = resolveDeterministicRoll(state.hitAcc, hitProb);
+          state.hitAcc = nextHitAcc;
+          if (!didHit) {
+            if (mode === 'mode_b' && classDef.id === 'samurai') {
+              state.perfectionStreakBonusPct = Math.max(
+                0,
+                state.perfectionStreakBonusPct - 25
               );
             }
-
-            const mitigated = applyTargetMitigation(
-              out.rawDamagePerHit * critMult,
-              archetype,
-              out.isElemental,
-              out.armorIgnorePct,
-              targetDefenseDeltaPct
-            );
-            castTotalDmg += dealDamageToTarget(
-              tIdx,
-              mitigated,
-              isExecSkill ? 'execute' : 'special'
-            );
+            continue;
           }
-        }
-
-        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
-          timelineEvents.push({
-            timeMs: state.elapsedMs,
-            kind: 'cast',
-            label: skill.name,
-            damage: round2(castTotalDmg),
-            isCrit: castAnyCrit,
-          });
-        }
-
-        if (
-          skill.statusEffect &&
-          !(
-            mode === 'mode_b' &&
-            (skill.id.includes('death') || skill.id.includes('twin_shadow'))
-          )
-        ) {
-          if (skill.statusEffect.effectType === 'self_buff') {
-            upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
-          } else {
-            const dotPerTick =
-              skill.statusEffect.effectType === 'dot' ? out.rawDamagePerHit * 0.25 : 0;
-            upsertStatusInstance(
-              state.targetDebuffs,
-              skill.id,
-              skill.statusEffect,
-              dotPerTick,
-              out.isElemental
-            );
-          }
-        }
-
-        if (mode === 'mode_b' && skill.id.includes('counter')) {
-          state.counterStanceRemainingMs = 7000;
-        }
-
-        if (
-          mode === 'mode_b' &&
-          (skill.id.includes('death') || skill.id.includes('twin_shadow'))
-        ) {
-          // Canonical ModernUO DeathStrike.AddStep(defender) requires 5 steps within 5.0s;
-          // compressed to 3 subsequent auto-attack swings here to account for interwoven SpecialMoves.
-          state.deathStrikeSwingsRemaining = 3;
-          state.deathStrikePendingDamage = out.rawDamagePerHit * 0.45;
-        }
-      }
-
-      break;
-    }
-
-    if (!castSkillThisTick && anySkillOffCooldownButOom) {
-      oomTicks++;
-    }
-
-    // 6. Passive Weapon Auto-Attack Loop (Sg)
-    if (state.swingCooldownMs <= 0) {
-      const currentAlive = state.targetHpPools
-        .map((hp, idx) => (hp > 0 ? idx : -1))
-        .filter((idx) => idx >= 0);
-
-      if (currentAlive.length > 0) {
-        const swingTargetIdx = currentAlive[0];
-        state.swingCooldownMs = computeSwingIntervalMs(
-          bracket,
-          state.stamina,
-          buffAttackSpeedPct
-        );
-        totalSwings++;
-
-        const hitProb = computeHitChance(bracket, stats, archetype, false, 0);
-        const [didHit, nextHitAcc] = resolveDeterministicRoll(state.hitAcc, hitProb);
-        state.hitAcc = nextHitAcc;
-
-        if (didHit) {
-          totalHits++;
-          const critProb = computeCritChance(bracket, stats, buffCritPct);
+          ctx.totalHits++;
           const [didCrit, nextCritAcc] = resolveDeterministicRoll(
             state.critAcc,
             critProb
           );
           state.critAcc = nextCritAcc;
+          const critMult = didCrit ? 1.5 : 1.0;
           if (didCrit) {
-            totalCrits++;
+            ctx.totalCrits++;
+            castAnyCrit = true;
           }
 
           if (mode === 'mode_b' && classDef.id === 'samurai' && bracket.skillLevel >= 50) {
@@ -1171,322 +1275,508 @@ export function simulateScenarioDetailed(
             );
           }
 
-          const rawSwing =
-            computeAutoAttackRawDamage(
-              bracket,
-              stats,
-              buffDamagePct,
-              totalPerfectionBonus
-            ) * (didCrit ? 1.5 : 1.0);
-          const mitigatedSwing = applyTargetMitigation(
-            rawSwing,
+          const mitigated = applyTargetMitigation(
+            out.rawDamagePerHit * targetSplashScale * critMult,
             archetype,
-            false,
-            0,
+            out.isElemental,
+            out.armorIgnorePct,
             targetDefenseDeltaPct
           );
-          const effSwing = dealDamageToTarget(swingTargetIdx, mitigatedSwing, 'auto');
-          if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effSwing > 0) {
+          castTotalDmg += dealKernelDamageToTarget(
+            ctx,
+            tIdx,
+            mitigated,
+            isExecSkill ? 'execute' : 'special'
+          );
+        }
+      }
+
+      if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs) {
+        timelineEvents.push({
+          timeMs: state.elapsedMs,
+          kind: 'cast',
+          label: skill.name,
+          damage: round2(castTotalDmg),
+          isCrit: castAnyCrit,
+        });
+      }
+
+      if (
+        skill.statusEffect &&
+        !(
+          mode === 'mode_b' &&
+          (skill.id.includes('death') || skill.id.includes('twin_shadow'))
+        )
+      ) {
+        if (skill.statusEffect.effectType === 'self_buff') {
+          upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
+        } else {
+          const dotPerTick =
+            skill.statusEffect.effectType === 'dot' ? out.rawDamagePerHit * 0.25 : 0;
+          upsertStatusInstance(
+            state.targetDebuffs,
+            skill.id,
+            skill.statusEffect,
+            dotPerTick,
+            out.isElemental
+          );
+        }
+      }
+
+      if (mode === 'mode_b' && skill.id.includes('counter')) {
+        state.counterStanceRemainingMs = 7000;
+      }
+
+      if (
+        mode === 'mode_b' &&
+        (skill.id.includes('death') || skill.id.includes('twin_shadow'))
+      ) {
+        state.deathStrikeSwingsRemaining = 3;
+        state.deathStrikePendingDamage = out.rawDamagePerHit * 0.45;
+      }
+    }
+
+    break;
+  }
+
+  if (!castSkillThisTick && anySkillOffCooldownButOom) {
+    ctx.oomTicks++;
+  }
+
+  // 3. Passive Weapon Auto-Attack Loop (Sg)
+  if (state.swingCooldownMs <= 0) {
+    const currentAlive = state.targetHpPools
+      .map((hp, idx) => (hp > 0 ? idx : -1))
+      .filter((idx) => idx >= 0);
+
+    if (currentAlive.length > 0) {
+      const swingTargetIdx = currentAlive[0];
+      state.swingCooldownMs = computeSwingIntervalMs(
+        bracket,
+        state.stamina,
+        buffAttackSpeedPct,
+        stats.baseWeaponSpeedMs
+      );
+      ctx.totalSwings++;
+
+      const hitProb = computeHitChance(
+        bracket,
+        stats,
+        archetype,
+        false,
+        0,
+        targetDciDeltaPct
+      );
+      const [didHit, nextHitAcc] = resolveDeterministicRoll(state.hitAcc, hitProb);
+      state.hitAcc = nextHitAcc;
+
+      if (didHit) {
+        ctx.totalHits++;
+        const critProb = computeCritChance(bracket, stats, buffCritPct);
+        const [didCrit, nextCritAcc] = resolveDeterministicRoll(
+          state.critAcc,
+          critProb
+        );
+        state.critAcc = nextCritAcc;
+        if (didCrit) {
+          ctx.totalCrits++;
+        }
+
+        if (mode === 'mode_b' && classDef.id === 'samurai' && bracket.skillLevel >= 50) {
+          state.perfectionStreakBonusPct = Math.min(
+            12,
+            state.perfectionStreakBonusPct + Math.max(2, Math.floor(bracket.skillLevel / 25))
+          );
+        }
+
+        const rawSwing =
+          computeAutoAttackRawDamage(
+            bracket,
+            stats,
+            buffDamagePct,
+            totalPerfectionBonus
+          ) * (didCrit ? 1.5 : 1.0);
+        const mitigatedSwing = applyTargetMitigation(
+          rawSwing,
+          archetype,
+          false,
+          0,
+          targetDefenseDeltaPct
+        );
+        const effSwing = dealKernelDamageToTarget(ctx, swingTargetIdx, mitigatedSwing, 'auto');
+        if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effSwing > 0) {
+          timelineEvents.push({
+            timeMs: state.elapsedMs,
+            kind: 'swing',
+            label: 'Auto-Attack',
+            damage: round2(effSwing),
+            isCrit: didCrit,
+          });
+        }
+
+        // Mode B: Animal Form (Kitsune & Wolf Aspect) 3rd-swing Spirit Claw slash
+        if (
+          mode === 'mode_b' &&
+          classDef.id === 'ninja' &&
+          ctx.totalHits % 3 === 0 &&
+          state.selfBuffs.some((b) => b.id === 'ninja_animal_aspect')
+        ) {
+          const spiritRaw =
+            computeAutoAttackRawDamage(bracket, stats, buffDamagePct, 0) * 0.12;
+          const spiritMitigated = applyTargetMitigation(
+            spiritRaw,
+            archetype,
+            false,
+            25,
+            targetDefenseDeltaPct
+          );
+          const effSpirit = dealKernelDamageToTarget(ctx, swingTargetIdx, spiritMitigated, 'proc');
+          if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effSpirit > 0) {
             timelineEvents.push({
               timeMs: state.elapsedMs,
-              kind: 'swing',
-              label: 'Auto-Attack',
-              damage: round2(effSwing),
-              isCrit: didCrit,
+              kind: 'proc',
+              label: 'Kitsune & Wolf Spirit Claw',
+              damage: round2(effSpirit),
+              isCrit: false,
             });
           }
+        }
 
-          // Mode B: Animal Form (Kitsune & Wolf Aspect) 3rd-swing Spirit Claw slash
-          if (
-            mode === 'mode_b' &&
-            classDef.id === 'ninja' &&
-            totalHits % 3 === 0 &&
-            state.selfBuffs.some((b) => b.id === 'ninja_animal_aspect')
-          ) {
-            const spiritRaw =
-              computeAutoAttackRawDamage(bracket, stats, buffDamagePct, 0) * 0.12;
-            const spiritMitigated = applyTargetMitigation(
-              spiritRaw,
+        // Mode B: DeathStrike delayed detonation counter
+        if (mode === 'mode_b' && state.deathStrikeSwingsRemaining > 0) {
+          state.deathStrikeSwingsRemaining--;
+          if (state.deathStrikeSwingsRemaining === 0 && state.deathStrikePendingDamage > 0) {
+            const detDmg = applyTargetMitigation(
+              state.deathStrikePendingDamage,
               archetype,
               false,
-              25,
+              50,
               targetDefenseDeltaPct
             );
-            const effSpirit = dealDamageToTarget(swingTargetIdx, spiritMitigated, 'proc');
-            if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effSpirit > 0) {
+            const effDet = dealKernelDamageToTarget(ctx, swingTargetIdx, detDmg, 'execute');
+            if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effDet > 0) {
               timelineEvents.push({
                 timeMs: state.elapsedMs,
-                kind: 'proc',
-                label: 'Kitsune & Wolf Spirit Claw',
-                damage: round2(effSpirit),
+                kind: 'detonate',
+                label: 'Death Strike 5th-Step Detonation',
+                damage: round2(effDet),
                 isCrit: false,
               });
             }
-          }
-
-          // Mode B: 5-swing DeathStrike delayed detonation counter
-          if (mode === 'mode_b' && state.deathStrikeSwingsRemaining > 0) {
-            state.deathStrikeSwingsRemaining--;
-            if (state.deathStrikeSwingsRemaining === 0 && state.deathStrikePendingDamage > 0) {
-              const detDmg = applyTargetMitigation(
-                state.deathStrikePendingDamage,
-                archetype,
-                false,
-                50,
-                targetDefenseDeltaPct
-              );
-              const effDet = dealDamageToTarget(swingTargetIdx, detDmg, 'execute');
-              if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effDet > 0) {
-                timelineEvents.push({
-                  timeMs: state.elapsedMs,
-                  kind: 'detonate',
-                  label: 'Death Strike 5th-Step Detonation',
-                  damage: round2(effDet),
-                  isCrit: false,
-                });
-              }
-              state.deathStrikePendingDamage = 0;
-            }
-          }
-        } else if (mode === 'mode_b' && classDef.id === 'samurai') {
-          state.perfectionStreakBonusPct = Math.max(
-            0,
-            state.perfectionStreakBonusPct - 25
-          );
-        }
-      }
-    }
-
-    // Check if wave was killed by offensive actions on this tick
-    const remainingAfterOffense = state.targetHpPools.filter((hp) => hp > 0).length;
-    if (remainingAfterOffense === 0) {
-      wavesCompleted++;
-      if (archetypeId === 'fast_trash' && wavesCompleted >= archetype.waveCount) {
-        break;
-      }
-      state.targetHpPools = spawnTargetWave();
-      state.targetDebuffs = [];
-    }
-
-    // 7. Enemy incoming attack resolution & EHP/sustain accounting
-    enemyAttackTimerMs -= TICK_MS;
-    if (enemyAttackTimerMs <= 0) {
-      enemyAttackTimerMs += archetype.enemyAttackIntervalMs;
-
-      const enemyStunnedOrParalyzed = state.targetDebuffs.some((d) =>
-        d.effect.modifiers.some(
-          (m) => m.stat === 'stun' || m.stat === 'paralyze' || m.stat === 'disarm'
-        )
-      );
-
-      const livingEnemyCount = Math.max(
-        1,
-        state.targetHpPools.filter((hp) => hp > 0).length
-      );
-      const rawEnemyHit =
-        archetype.enemyPreMitigationDpsPerTarget *
-        enemyScale *
-        (archetype.enemyAttackIntervalMs / 1000) *
-        livingEnemyCount *
-        (enemyStunnedOrParalyzed ? 0.65 : 1.0);
-
-      // Check Mirror Image clone interception (Mode B or clone_stacks buff)
-      let interceptedByClone = false;
-      let effectiveEnemyHit = rawEnemyHit;
-      if (state.cloneStacks > 0 && state.cloneIcdMs <= 0) {
-        const cloneInterceptChance =
-          mode === 'mode_b'
-            ? clamp(bracket.skillLevel / 300, 0.1, 0.25)
-            : clamp(bracket.skillLevel / 150, 0.25, 0.75);
-        const [didIntercept, nextProcAcc] = resolveDeterministicRoll(
-          state.procAcc,
-          cloneInterceptChance
-        );
-        state.procAcc = nextProcAcc;
-        if (didIntercept) {
-          state.cloneStacks--;
-          state.cloneIcdMs = mode === 'mode_b' ? 10000 : 1500;
-          cloneInterceptions++;
-          if (mode === 'mode_b') {
-            const absorbed = effectiveEnemyHit * 0.35;
-            totalIncomingDamageMitigated += absorbed;
-            effectiveEnemyHit -= absorbed;
-          } else {
-            interceptedByClone = true;
-            totalIncomingDamageMitigated += effectiveEnemyHit;
+            state.deathStrikePendingDamage = 0;
           }
         }
-      }
-
-      if (!interceptedByClone) {
-        // Check Parry / Evasion
-        const hasParry = classDef.starterSkills.some(
-          (s) => s.skillKey === 'parry' || s.skillKey === 'bushido'
-        );
-        const buffEvasionPct = sumModifierStat(
-          state.selfBuffs,
-          passiveEffects,
-          'evasion_pct'
-        );
-        const baseParryChance = hasParry
-          ? (bracket.skillLevel * bracket.skillLevel) / 48000 +
-            (bracket.skillLevel >= 100 ? 0.05 : 0)
-          : 0;
-        const avoidChance = clamp(
-          baseParryChance +
-            buffEvasionPct / 100 +
-            Math.min(45, bracket.defenseChanceIncreasePct) / 200,
+      } else if (mode === 'mode_b' && classDef.id === 'samurai') {
+        state.perfectionStreakBonusPct = Math.max(
           0,
-          0.65
+          state.perfectionStreakBonusPct - 25
         );
-
-        const [didParry, nextParryAcc] = resolveDeterministicRoll(
-          state.parryAcc,
-          avoidChance
-        );
-        state.parryAcc = nextParryAcc;
-
-        if (didParry) {
-          parryCount++;
-          totalIncomingDamageMitigated += effectiveEnemyHit;
-
-          // Mode B: Confidence (Inner Calm) on-parry vitality & stamina restoration
-          if (
-            mode === 'mode_b' &&
-            state.selfBuffs.some((b) => b.id === 'samurai_confidence_calm')
-          ) {
-            state.hp = Math.min(state.maxHP, state.hp + 2);
-            totalHpHealedOrRegenerated += 2;
-            state.stamina = Math.min(state.maxStamina, state.stamina + 2);
-            totalStaminaRegenerated += 2;
-          }
-
-          // Mode B: CounterAttack or Evasion Iaido Riposte reactive swing on parry
-          const hasEvasionStance = state.selfBuffs.some(
-            (b) => b.id === 'samurai_evasion_stance'
-          );
-          if (
-            mode === 'mode_b' &&
-            (state.counterStanceRemainingMs > 0 || hasEvasionStance) &&
-            state.counterIcdMs <= 0
-          ) {
-            state.counterIcdMs = 6000;
-            const counterTargetIdx = state.targetHpPools.findIndex((hp) => hp > 0);
-            if (counterTargetIdx >= 0) {
-              const hasCounterStanceBuff = state.selfBuffs.some(
-                (b) => b.id === 'samurai_counter_stance'
-              );
-              const counterMult =
-                state.counterStanceRemainingMs > 0
-                  ? hasCounterStanceBuff
-                    ? 0.35
-                    : 0.75
-                  : 0.12;
-              const rawCounter =
-                computeAutoAttackRawDamage(
-                  bracket,
-                  stats,
-                  buffDamagePct,
-                  totalPerfectionBonus
-                ) * counterMult;
-              const mitigatedCounter = applyTargetMitigation(
-                rawCounter,
-                archetype,
-                false,
-                0,
-                targetDefenseDeltaPct
-              );
-              totalSwings++;
-              totalHits++;
-              const effCounter = dealDamageToTarget(
-                counterTargetIdx,
-                mitigatedCounter,
-                'proc'
-              );
-              if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effCounter > 0) {
-                timelineEvents.push({
-                  timeMs: state.elapsedMs,
-                  kind: 'proc',
-                  label:
-                    state.counterStanceRemainingMs > 0
-                      ? 'Counter Attack Riposte'
-                      : 'Iaido Flash Riposte',
-                  damage: round2(effCounter),
-                  isCrit: false,
-                });
-              }
-            }
-          }
-        } else {
-          // Mitigate incoming damage by armor physical/elemental resistance + defensive stances
-          const buffDefensePct = sumModifierStat(
-            state.selfBuffs,
-            passiveEffects,
-            'defense_pct'
-          );
-          const buffDamageTakenPct = sumModifierStat(
-            state.selfBuffs,
-            passiveEffects,
-            'damage_taken_pct'
-          );
-          const enemyDamagePenaltyPct = sumModifierStat(
-            state.targetDebuffs,
-            [],
-            'damage_dealt_pct'
-          );
-
-          const effectiveArmorResist = clamp(
-            (bracket.armorPhysResistPct * 0.7 + bracket.armorElemResistPct * 0.3) +
-              buffDefensePct,
-            0,
-            75
-          );
-          const stanceMult = clamp(
-            (1 + buffDamageTakenPct / 100) * (1 + enemyDamagePenaltyPct / 100),
-            0.35,
-            1.4
-          );
-
-          const damageTaken = Math.max(
-            1,
-            effectiveEnemyHit * (1 - effectiveArmorResist / 100) * stanceMult
-          );
-          const mitigatedAmount = Math.max(0, effectiveEnemyHit - damageTaken);
-          totalIncomingDamageMitigated += mitigatedAmount;
-
-          state.hp = Math.max(1, state.hp - damageTaken);
-        }
       }
     }
   }
 
+  // 4. Enemy incoming attack resolution & EHP/sustain accounting
+  ctx.enemyAttackTimerMs -= TICK_MS;
+  if (ctx.enemyAttackTimerMs <= 0) {
+    ctx.enemyAttackTimerMs += archetype.enemyAttackIntervalMs;
+
+    const enemyStunnedOrParalyzed = state.targetDebuffs.some((d) =>
+      d.effect.modifiers.some(
+        (m) => m.stat === 'stun' || m.stat === 'paralyze' || m.stat === 'disarm'
+      )
+    );
+
+    const livingEnemyCount = Math.max(
+      1,
+      state.targetHpPools.filter((hp) => hp > 0).length
+    );
+    const rawEnemyHit =
+      archetype.enemyPreMitigationDpsPerTarget *
+      ctx.enemyScale *
+      (archetype.enemyAttackIntervalMs / 1000) *
+      livingEnemyCount *
+      (enemyStunnedOrParalyzed ? 0.65 : 1.0);
+
+    // Check Mirror Image clone interception (Mode B or clone_stacks buff)
+    let interceptedByClone = false;
+    let effectiveEnemyHit = rawEnemyHit;
+    if (state.cloneStacks > 0 && state.cloneIcdMs <= 0) {
+      const cloneInterceptChance =
+        mode === 'mode_b'
+          ? clamp(bracket.skillLevel / 300, 0.1, 0.25)
+          : clamp(bracket.skillLevel / 150, 0.25, 0.75);
+      const [didIntercept, nextProcAcc] = resolveDeterministicRoll(
+        state.procAcc,
+        cloneInterceptChance
+      );
+      state.procAcc = nextProcAcc;
+      if (didIntercept) {
+        state.cloneStacks--;
+        state.cloneIcdMs = mode === 'mode_b' ? 10000 : 1500;
+        ctx.cloneInterceptions++;
+        if (mode === 'mode_b') {
+          const absorbed = effectiveEnemyHit * 0.35;
+          ctx.totalIncomingDamageMitigated += absorbed;
+          effectiveEnemyHit -= absorbed;
+        } else {
+          interceptedByClone = true;
+          ctx.totalIncomingDamageMitigated += effectiveEnemyHit;
+        }
+      }
+    }
+
+    if (!interceptedByClone) {
+      const buffEvasionPct = sumModifierStat(
+        state.selfBuffs,
+        passiveEffects,
+        'evasion_pct'
+      );
+      const avoidChance = computeParryAndAvoidanceChance(
+        classDef,
+        bracket,
+        stats,
+        buffEvasionPct
+      );
+
+      const [didParry, nextParryAcc] = resolveDeterministicRoll(
+        state.parryAcc,
+        avoidChance
+      );
+      state.parryAcc = nextParryAcc;
+
+      if (didParry) {
+        ctx.parryCount++;
+        ctx.totalIncomingDamageMitigated += effectiveEnemyHit;
+
+        // Mode B: Confidence (Inner Calm) on-parry vitality & stamina restoration
+        if (
+          mode === 'mode_b' &&
+          state.selfBuffs.some((b) => b.id === 'samurai_confidence_calm')
+        ) {
+          state.hp = Math.min(state.maxHP, state.hp + 2);
+          ctx.totalHpHealedOrRegenerated += 2;
+          state.stamina = Math.min(state.maxStamina, state.stamina + 2);
+          ctx.totalStaminaRegenerated += 2;
+        }
+
+        // Mode B: CounterAttack or Evasion Iaido Riposte reactive swing on parry
+        const hasEvasionStance = state.selfBuffs.some(
+          (b) => b.id === 'samurai_evasion_stance'
+        );
+        if (
+          mode === 'mode_b' &&
+          (state.counterStanceRemainingMs > 0 || hasEvasionStance) &&
+          state.counterIcdMs <= 0
+        ) {
+          state.counterIcdMs = 6000;
+          const counterTargetIdx = state.targetHpPools.findIndex((hp) => hp > 0);
+          if (counterTargetIdx >= 0) {
+            const hasCounterStanceBuff = state.selfBuffs.some(
+              (b) => b.id === 'samurai_counter_stance'
+            );
+            const counterMult =
+              state.counterStanceRemainingMs > 0
+                ? hasCounterStanceBuff
+                  ? 0.35
+                  : 0.75
+                : 0.12;
+            const rawCounter =
+              computeAutoAttackRawDamage(
+                bracket,
+                stats,
+                buffDamagePct,
+                totalPerfectionBonus
+              ) * counterMult;
+            const mitigatedCounter = applyTargetMitigation(
+              rawCounter,
+              archetype,
+              false,
+              0,
+              targetDefenseDeltaPct
+            );
+            ctx.totalSwings++;
+            ctx.totalHits++;
+            const effCounter = dealKernelDamageToTarget(
+              ctx,
+              counterTargetIdx,
+              mitigatedCounter,
+              'proc'
+            );
+            if (timelineHorizonMs > 0 && state.elapsedMs <= timelineHorizonMs && effCounter > 0) {
+              timelineEvents.push({
+                timeMs: state.elapsedMs,
+                kind: 'proc',
+                label:
+                  state.counterStanceRemainingMs > 0
+                    ? 'Counter Attack Riposte'
+                    : 'Iaido Flash Riposte',
+                damage: round2(effCounter),
+                isCrit: false,
+              });
+            }
+          }
+        }
+      } else {
+        // Mitigate incoming damage by armor physical/elemental resistance + defensive stances + Hunting Bot posture incoming mult
+        const buffDefensePct = sumModifierStat(
+          state.selfBuffs,
+          passiveEffects,
+          'defense_pct'
+        );
+        const buffDamageTakenPct = sumModifierStat(
+          state.selfBuffs,
+          passiveEffects,
+          'damage_taken_pct'
+        );
+        const enemyDamagePenaltyPct = sumModifierStat(
+          state.targetDebuffs,
+          [],
+          'damage_dealt_pct'
+        );
+        const postureProfile = resolvePostureProfile(stats.posture);
+
+        const effectiveArmorResist = clamp(
+          bracket.armorPhysResistPct * 0.7 +
+            bracket.armorElemResistPct * 0.3 +
+            buffDefensePct,
+          0,
+          75
+        );
+        const stanceMult = clamp(
+          (1 + buffDamageTakenPct / 100) *
+            (1 + enemyDamagePenaltyPct / 100) *
+            postureProfile.incomingDamageMultiplier,
+          0.35,
+          1.6
+        );
+
+        const damageTaken = Math.max(
+          1,
+          effectiveEnemyHit * (1 - effectiveArmorResist / 100) * stanceMult
+        );
+        const mitigatedAmount = Math.max(0, effectiveEnemyHit - damageTaken);
+        ctx.totalIncomingDamageMitigated += mitigatedAmount;
+
+        state.hp = Math.max(1, state.hp - damageTaken);
+
+        // ReflectPhysical item affix reflects a percentage of physical damage taken back onto the primary target
+        const reflectPct = clamp(bracket.reflectPhysicalPct ?? 0, 0, 50);
+        if (reflectPct > 0) {
+          const reflectTargetIdx = state.targetHpPools.findIndex((hp) => hp > 0);
+          if (reflectTargetIdx >= 0) {
+            const reflectedDmg = Math.max(1, damageTaken * (reflectPct / 100));
+            dealKernelDamageToTarget(ctx, reflectTargetIdx, reflectedDmg, 'proc');
+          }
+        }
+      }
+    }
+  }
+}
+
+export interface DetailedScenarioOutput {
+  telemetry: SimTelemetry;
+  breakdown: DamageChannelBreakdown;
+  timelineEvents: RotationTimelineEvent[];
+}
+
+/**
+ * Runs a deterministic 100ms-tick combat simulation for a single (classDef, bracketId, archetypeId, mode) scenario,
+ * powered by the unified single-wave & multi-wave tick kernel (`SIM-08`).
+ */
+export function simulateScenarioDetailed(
+  classDef: ClassDefinition,
+  bracketId: BracketId,
+  archetypeId: EnemyArchetypeId,
+  mode: SimImplementationMode = 'mode_a',
+  budgetOverride?: BracketBudget,
+  timelineHorizonMs = 0
+): DetailedScenarioOutput {
+  const bracket = budgetOverride ?? BRACKET_BUDGETS[bracketId];
+  const archetype = ENEMY_ARCHETYPES[archetypeId];
+  const enemyScale = BRACKET_ENEMY_SCALE[bracketId];
+  const singleTargetMaxHp = Math.max(
+    25,
+    Math.round(BASE_ENEMY_HP * enemyScale * archetype.hpMultiplier)
+  );
+
+  const spawnTargetWave = (): number[] =>
+    Array.from({ length: archetype.targetCount }, () => singleTargetMaxHp);
+
+  let wavesCompleted = 0;
+
+  const ctx = createUnifiedKernelContext(
+    classDef,
+    bracket,
+    archetype,
+    mode,
+    spawnTargetWave(),
+    singleTargetMaxHp,
+    enemyScale,
+    timelineHorizonMs,
+    (targetIdx) => {
+      if (archetypeId !== 'fast_trash') {
+        wavesCompleted++;
+        ctx.state.targetHpPools[targetIdx] = ctx.state.targetMaxHp;
+      }
+    }
+  );
+
+  const maxTicks = Math.max(100, Math.floor(archetype.fightHorizonMs / TICK_MS));
+
+  for (let tick = 1; tick <= maxTicks; tick++) {
+    stepKernelTimersAndSustain(ctx, tick);
+
+    if (ctx.state.targetHpPools.every((hp) => hp <= 0)) {
+      wavesCompleted++;
+      if (archetypeId === 'fast_trash' && wavesCompleted >= archetype.waveCount) {
+        break;
+      }
+      ctx.state.targetHpPools = spawnTargetWave();
+      ctx.state.targetDebuffs = [];
+    }
+
+    stepKernelCombatActions(ctx);
+
+    if (ctx.state.targetHpPools.every((hp) => hp <= 0)) {
+      wavesCompleted++;
+      if (archetypeId === 'fast_trash' && wavesCompleted >= archetype.waveCount) {
+        break;
+      }
+      ctx.state.targetHpPools = spawnTargetWave();
+      ctx.state.targetDebuffs = [];
+    }
+  }
+
+  const { state, stats } = ctx;
   const elapsedSec = Math.max(0.1, state.elapsedMs / 1000);
-  const sustainedDps = round2(totalEffectiveDamage / elapsedSec);
-  const rawDps = round2(totalRawDamage / elapsedSec);
+  const sustainedDps = round2(ctx.totalEffectiveDamage / elapsedSec);
+  const rawDps = round2(ctx.totalRawDamage / elapsedSec);
 
   const effectiveWavesKilled =
     archetypeId === 'fast_trash'
-      ? Math.max(1, wavesCompleted || totalEffectiveDamage / singleTargetMaxHp)
-      : Math.max(0.01, totalEffectiveDamage / singleTargetMaxHp);
+      ? Math.max(1, wavesCompleted || ctx.totalEffectiveDamage / singleTargetMaxHp)
+      : Math.max(0.01, ctx.totalEffectiveDamage / singleTargetMaxHp);
   const trashTtkSec = round2(elapsedSec / effectiveWavesKilled);
 
   const overkillWastePct =
-    totalRawDamage > 0
+    ctx.totalRawDamage > 0
       ? round2(
-          Math.max(0, ((totalRawDamage - totalEffectiveDamage) / totalRawDamage) * 100)
+          Math.max(
+            0,
+            ((ctx.totalRawDamage - ctx.totalEffectiveDamage) / ctx.totalRawDamage) * 100
+          )
         )
       : 0;
 
   const netManaDeltaPerMin =
     classDef.resourceProfile.primaryResource === 'zero-mana-physical'
       ? 0
-      : round2(((totalManaRegenerated - totalManaSpent) / elapsedSec) * 60);
+      : round2(((ctx.totalManaRegenerated - ctx.totalManaSpent) / elapsedSec) * 60);
 
   const netStaminaDeltaPerMin = round2(
-    ((totalStaminaRegenerated - totalStaminaSpent) / elapsedSec) * 60
+    ((ctx.totalStaminaRegenerated - ctx.totalStaminaSpent) / elapsedSec) * 60
   );
 
-  // Effective HP per second combines EHP pool resilience, active/passive healing amplified by mitigation, and mitigated/parried incoming DPS
   const avgResistFraction = clamp(
     (bracket.armorPhysResistPct * 0.65 +
       bracket.armorElemResistPct * 0.35 +
@@ -1498,7 +1788,8 @@ export function simulateScenarioDetailed(
   const ehpMultiplier = 1 / (1 - avgResistFraction);
   const ehpPerSec = round2(
     (stats.maxHP * ehpMultiplier) / 60 +
-      (totalHpHealedOrRegenerated * ehpMultiplier + totalIncomingDamageMitigated) /
+      (ctx.totalHpHealedOrRegenerated * ehpMultiplier +
+        ctx.totalIncomingDamageMitigated) /
         elapsedSec
   );
 
@@ -1514,14 +1805,16 @@ export function simulateScenarioDetailed(
     netManaDeltaPerMin,
     netStaminaDeltaPerMin,
     ehpPerSec,
-    totalCasts,
-    totalSwings,
-    totalHits,
-    totalCrits,
-    parryCount,
-    cloneInterceptions,
+    totalCasts: ctx.totalCasts,
+    totalSwings: ctx.totalSwings,
+    totalHits: ctx.totalHits,
+    totalCrits: ctx.totalCrits,
+    parryCount: ctx.parryCount,
+    cloneInterceptions: ctx.cloneInterceptions,
     oomTicks:
-      classDef.resourceProfile.primaryResource === 'zero-mana-physical' ? 0 : oomTicks,
+      classDef.resourceProfile.primaryResource === 'zero-mana-physical'
+        ? 0
+        : ctx.oomTicks,
   };
 
   const breakdown: DamageChannelBreakdown = {
@@ -1529,15 +1822,15 @@ export function simulateScenarioDetailed(
     bracketId,
     archetypeId,
     mode,
-    autoAttackDps: round2(autoAttackEffectiveDmg / elapsedSec),
-    specialMoveDps: round2(specialMoveEffectiveDmg / elapsedSec),
-    executeDps: round2(executeEffectiveDmg / elapsedSec),
-    dotDps: round2(dotEffectiveDmg / elapsedSec),
-    procCounterDps: round2(procCounterEffectiveDmg / elapsedSec),
+    autoAttackDps: round2(ctx.autoAttackEffectiveDmg / elapsedSec),
+    specialMoveDps: round2(ctx.specialMoveEffectiveDmg / elapsedSec),
+    executeDps: round2(ctx.executeEffectiveDmg / elapsedSec),
+    dotDps: round2(ctx.dotEffectiveDmg / elapsedSec),
+    procCounterDps: round2(ctx.procCounterEffectiveDmg / elapsedSec),
     totalDps: sustainedDps,
   };
 
-  return { telemetry, breakdown, timelineEvents };
+  return { telemetry, breakdown, timelineEvents: ctx.timelineEvents };
 }
 
 /**
@@ -1604,7 +1897,7 @@ export function runClassBaselineSuite(
 
 /**
  * Simulates a 10-wave consecutive dungeon pull at L60 with a 1,500ms inter-wave travel/spawn gap,
- * tracking cooldown recovery, resource pools, Perfection streak retention, and Mirror Image clone persistence across waves.
+ * using the unified combat tick kernel (`SIM-08`) so single-wave and multi-wave simulations share 100% of their math.
  */
 export function simulateMultiWavePull(
   classDef: ClassDefinition,
@@ -1623,17 +1916,10 @@ export function simulateMultiWavePull(
     physResistPct: 30,
     elemResistPct: 25,
     defenseSkill: 45,
+    defenderDciPct: 10,
     enemyPreMitigationDpsPerTarget: 2.2,
     enemyAttackIntervalMs: 2000,
   };
-  const stats = resolveClassStatsForBracket(classDef, bracket);
-  const { passives, hotbar } = buildHotbarLoadout(classDef, bracket);
-  const passiveEffects: EffectDefinition[] = [];
-  for (const p of passives) {
-    if (p.statusEffect) {
-      passiveEffects.push(p.statusEffect);
-    }
-  }
 
   const enemyScale = BRACKET_ENEMY_SCALE[bracketId];
   const singleTargetMaxHp = Math.max(
@@ -1642,325 +1928,74 @@ export function simulateMultiWavePull(
   );
   const spawnWave = (): number[] => [singleTargetMaxHp, singleTargetMaxHp];
 
-  const state: CombatState = {
-    tick: 0,
-    elapsedMs: 0,
-    hp: stats.maxHP,
-    maxHP: stats.maxHP,
-    stamina: stats.maxStamina,
-    maxStamina: stats.maxStamina,
-    mana: stats.maxMana,
-    maxMana: stats.maxMana,
-    swingCooldownMs: 0,
-    potionCooldownMs: 0,
-    bandageCooldownMs: 0,
-    skillCooldownsMs: new Map<string, number>(),
-    selfBuffs: [],
-    targetDebuffs: [],
-    targetHpPools: spawnWave(),
-    targetMaxHp: singleTargetMaxHp,
-    perfectionStreakBonusPct: 0,
-    cloneStacks: 0,
-    cloneIcdMs: 0,
-    counterStanceRemainingMs: 0,
-    counterIcdMs: 0,
-    deathStrikeSwingsRemaining: 0,
-    deathStrikePendingDamage: 0,
-    hitAcc: 0.5,
-    critAcc: 0.25,
-    parryAcc: 0.35,
-    procAcc: 0.4,
-  };
-
-  const hasMeditation =
-    classDef.resourceProfile.meditationCap > 0 &&
-    classDef.starterSkills.some((s) => s.skillKey === 'meditation');
-  const meditationSkill = hasMeditation ? bracket.skillLevel : 0;
-  const focusSkill = bracket.skillLevel;
-  const manaRegenPerSec =
-    classDef.resourceProfile.primaryResource === 'zero-mana-physical'
-      ? 0
-      : 1.0 + (meditationSkill / 100) * 2.5 + focusSkill / 200 + bracket.manaRegenAffix;
-  const staminaRegenPerSec = 1.8 + (focusSkill / 100) * 2.4 + bracket.staminaRegenAffix;
-  const hpRegenPerSec = 0.8 + bracket.hpRegenAffix;
-  const hasBandageInHotbar = classDef.seededHotbar.some((s) => s.abilityId === 'bandage');
-  const hasManaPotionInHotbar =
-    classDef.resourceProfile.primaryResource !== 'zero-mana-physical' &&
-    classDef.seededHotbar.some((s) => s.abilityId.includes('mana_potion'));
+  const ctx = createUnifiedKernelContext(
+    classDef,
+    bracket,
+    archetype,
+    'mode_b',
+    spawnWave(),
+    singleTargetMaxHp,
+    enemyScale
+  );
 
   let currentWaveIdx = 1;
   let waveStartElapsedMs = 0;
-  let waveEffectiveDamage = 0;
-  let waveParries = 0;
+  let waveStartEffectiveDamage = 0;
+  let waveStartParries = 0;
   let interWaveRemainingMs = 0;
-  let enemyAttackTimerMs = archetype.enemyAttackIntervalMs;
-  let totalParries = 0;
-  let totalCloneInterceptions = 0;
   let minHpPct = 100;
   let minManaPct = 100;
   const waves: WavePullTelemetryPoint[] = [];
 
-  const dealWaveDmg = (tIdx: number, dmg: number): void => {
-    const cur = state.targetHpPools[tIdx] ?? 0;
-    if (cur <= 0) {
-      return;
-    }
-    const eff = Math.min(cur, Math.max(1, dmg));
-    waveEffectiveDamage += eff;
-    state.targetHpPools[tIdx] = cur - eff;
-  };
-
   const maxTicks = 1800; // up to 180s
   for (let tick = 1; tick <= maxTicks; tick++) {
-    state.tick = tick;
-    state.elapsedMs = tick * TICK_MS;
+    stepKernelTimersAndSustain(ctx, tick);
 
-    state.swingCooldownMs = Math.max(0, state.swingCooldownMs - TICK_MS);
-    state.potionCooldownMs = Math.max(0, state.potionCooldownMs - TICK_MS);
-    state.bandageCooldownMs = Math.max(0, state.bandageCooldownMs - TICK_MS);
-    state.cloneIcdMs = Math.max(0, state.cloneIcdMs - TICK_MS);
-    state.counterStanceRemainingMs = Math.max(0, state.counterStanceRemainingMs - TICK_MS);
-    state.counterIcdMs = Math.max(0, state.counterIcdMs - TICK_MS);
-    state.skillCooldownsMs.forEach((rem, key) => {
-      if (rem <= TICK_MS) {
-        state.skillCooldownsMs.delete(key);
-      } else {
-        state.skillCooldownsMs.set(key, rem - TICK_MS);
-      }
-    });
-
-    for (let i = state.selfBuffs.length - 1; i >= 0; i--) {
-      const buff = state.selfBuffs[i];
-      buff.remainingMs -= TICK_MS;
-      if (buff.remainingMs <= 0) {
-        state.selfBuffs.splice(i, 1);
-      }
-    }
-
-    if (state.elapsedMs % 1000 === 0) {
-      state.hp = Math.min(state.maxHP, state.hp + hpRegenPerSec);
-      state.stamina = Math.min(state.maxStamina, state.stamina + staminaRegenPerSec);
-      if (state.maxMana > 0) {
-        state.mana = Math.min(state.maxMana, state.mana + manaRegenPerSec);
-      }
-    }
-
-    const hpPct = (state.hp / state.maxHP) * 100;
-    const manaPct = state.maxMana > 0 ? (state.mana / state.maxMana) * 100 : 100;
+    const hpPct = (ctx.state.hp / ctx.state.maxHP) * 100;
+    const manaPct =
+      ctx.state.maxMana > 0 ? (ctx.state.mana / ctx.state.maxMana) * 100 : 100;
     minHpPct = Math.min(minHpPct, hpPct);
     minManaPct = Math.min(minManaPct, manaPct);
-
-    if (hpPct <= 65 && state.potionCooldownMs <= 0) {
-      state.hp = Math.min(state.maxHP, state.hp + state.maxHP * 0.25);
-      state.potionCooldownMs = 10000;
-    } else if (hasManaPotionInHotbar && state.maxMana > 0 && manaPct <= 35 && state.potionCooldownMs <= 0) {
-      state.mana = Math.min(state.maxMana, state.mana + state.maxMana * 0.25);
-      state.potionCooldownMs = 10000;
-    }
-    if (hasBandageInHotbar && hpPct <= 80 && state.bandageCooldownMs <= 0) {
-      const avgBandage =
-        (bracket.skillLevel / 8 + bracket.skillLevel / 5 + 4 + bracket.skillLevel / 6 + bracket.skillLevel / 2.5 + 4) / 2;
-      state.hp = Math.min(state.maxHP, state.hp + avgBandage);
-      state.bandageCooldownMs = 8000;
-    }
 
     // Handle inter-wave travel/spawn transition
     if (interWaveRemainingMs > 0) {
       interWaveRemainingMs -= TICK_MS;
       if (interWaveRemainingMs <= 0) {
-        state.targetHpPools = spawnWave();
-        state.targetDebuffs = [];
-        waveStartElapsedMs = state.elapsedMs;
-        waveEffectiveDamage = 0;
-        waveParries = 0;
+        ctx.state.targetHpPools = spawnWave();
+        ctx.state.targetDebuffs = [];
+        waveStartElapsedMs = ctx.state.elapsedMs;
+        waveStartEffectiveDamage = ctx.totalEffectiveDamage;
+        waveStartParries = ctx.parryCount;
       }
       continue;
     }
 
-    const targetDefenseDeltaPct = sumModifierStat(state.targetDebuffs, [], 'defense_pct');
-    for (let i = state.targetDebuffs.length - 1; i >= 0; i--) {
-      const debuff = state.targetDebuffs[i];
-      debuff.remainingMs -= TICK_MS;
-      if (debuff.dotDamagePerTick > 0) {
-        debuff.nextTickCountdownMs -= TICK_MS;
-        if (debuff.nextTickCountdownMs <= 0) {
-          debuff.nextTickCountdownMs += debuff.effect.tickIntervalMs > 0 ? debuff.effect.tickIntervalMs : 1000;
-          const dotMitigated = applyTargetMitigation(
-            debuff.dotDamagePerTick,
-            archetype,
-            debuff.isElemental,
-            0,
-            targetDefenseDeltaPct
-          );
-          const pIdx = state.targetHpPools.findIndex((hp) => hp > 0);
-          if (pIdx >= 0) {
-            dealWaveDmg(pIdx, dotMitigated);
-          }
-        }
-      }
-      if (debuff.remainingMs <= 0) {
-        state.targetDebuffs.splice(i, 1);
-      }
-    }
-
-    const aliveIndices = state.targetHpPools
-      .map((hp, idx) => (hp > 0 ? idx : -1))
-      .filter((idx) => idx >= 0);
-
-    if (aliveIndices.length > 0) {
-      const primaryIdx = aliveIndices[0];
-      const primaryHpPct = (state.targetHpPools[primaryIdx] / state.targetMaxHp) * 100;
-      const buffDamagePct = sumModifierStat(state.selfBuffs, passiveEffects, 'damage_dealt_pct');
-      const buffAttackSpeedPct = sumModifierStat(state.selfBuffs, passiveEffects, 'attack_speed_pct');
-      const buffCritPct = sumModifierStat(state.selfBuffs, passiveEffects, 'crit_chance_pct');
-      const buffPerfectionPct = sumModifierStat(state.selfBuffs, passiveEffects, 'perfection_streak_pct');
-      const totalPerfectionBonus = Math.max(state.perfectionStreakBonusPct, buffPerfectionPct);
-
-      // Cast 1 hotbar skill
-      for (const skill of hotbar) {
-        if ((state.skillCooldownsMs.get(skill.id) ?? 0) > 0) continue;
-        if (skill.effectType === 'heal' && hpPct > 65) continue;
-        const execThresh = skill.scalingFormula.executeThresholdHpPct ?? 0;
-        if (execThresh > 0 && primaryHpPct > execThresh) continue;
-        if (isStrictMultiTargetOnlySkill(skill) && aliveIndices.length < 2) continue;
-        if (skill.effectType === 'self_buff' && skill.statusEffect && state.selfBuffs.some((b) => b.id === skill.statusEffect?.id)) continue;
-        if (skill.effectType === 'debuff' && skill.statusEffect && state.targetDebuffs.some((d) => d.id === skill.statusEffect?.id)) continue;
-        if (skill.effectType === 'dot' && skill.statusEffect && state.targetDebuffs.some((d) => d.id === skill.statusEffect?.id)) continue;
-
-        const { manaCost, staminaCost } = resolveSkillResourceCost(classDef, skill);
-        if (state.mana < manaCost || state.stamina < staminaCost) continue;
-
-        state.mana -= manaCost;
-        state.stamina -= staminaCost;
-        state.skillCooldownsMs.set(skill.id, resolveEffectiveCooldownMs(skill));
-
-        if (skill.effectType === 'heal') {
-          state.hp = Math.min(state.maxHP, state.hp + state.maxHP * (skill.id.includes('greater') ? 0.35 : 0.15));
-          if (skill.statusEffect) upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, true);
-        } else if (skill.effectType === 'self_buff') {
-          if (skill.statusEffect) upsertStatusInstance(state.selfBuffs, skill.id, skill.statusEffect, 0, false);
-          if (skill.id.includes('mirror') || skill.id.includes('fukiya_barrage')) {
-            state.cloneStacks = skill.id.endsWith('_r2') || skill.id.includes('fukiya_barrage') ? 2 : 1;
-          }
-          if (skill.id === 'ninja_smoke_bomb') {
-            const rem = state.skillCooldownsMs.get('ninja_shuriken') ?? 0;
-            if (rem > 0) {
-              if (rem <= 2500) state.skillCooldownsMs.delete('ninja_shuriken');
-              else state.skillCooldownsMs.set('ninja_shuriken', rem - 2500);
-            }
-          }
-        } else if (skill.effectType === 'debuff') {
-          if (skill.statusEffect) upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, 0, false);
-          if (skill.kind === 'WeaponAbility' || skill.kind === 'SpecialMove') {
-            const out = computeSkillBaseOutput(classDef, skill, bracket, stats, primaryHpPct, aliveIndices.length, buffDamagePct, totalPerfectionBonus);
-            dealWaveDmg(primaryIdx, applyTargetMitigation(out.rawDamagePerHit, archetype, out.isElemental, out.armorIgnorePct, targetDefenseDeltaPct));
-          }
-        } else if (skill.effectType === 'dot') {
-          const out = computeSkillBaseOutput(classDef, skill, bracket, stats, primaryHpPct, aliveIndices.length, buffDamagePct, totalPerfectionBonus);
-          const tickCount = Math.max(1, skill.statusEffect?.tickCount ?? 5);
-          if (skill.statusEffect) {
-            upsertStatusInstance(state.targetDebuffs, skill.id, skill.statusEffect, (out.rawDamagePerHit * 0.45) / Math.min(6, tickCount), out.isElemental);
-          }
-        } else {
-          const out = computeSkillBaseOutput(classDef, skill, bracket, stats, primaryHpPct, aliveIndices.length, buffDamagePct, totalPerfectionBonus);
-          const hitProb = computeHitChance(bracket, stats, archetype, out.isElemental, 15);
-          const critProb = computeCritChance(bracket, stats, buffCritPct);
-          for (const tIdx of aliveIndices.slice(0, out.targetsHit)) {
-            for (let h = 0; h < out.hits; h++) {
-              const [didHit, nextHit] = resolveDeterministicRoll(state.hitAcc, hitProb);
-              state.hitAcc = nextHit;
-              if (!didHit) continue;
-              const [didCrit, nextCrit] = resolveDeterministicRoll(state.critAcc, critProb);
-              state.critAcc = nextCrit;
-              if (classDef.id === 'samurai') {
-                state.perfectionStreakBonusPct = Math.min(12, state.perfectionStreakBonusPct + 4);
-              }
-              dealWaveDmg(
-                tIdx,
-                applyTargetMitigation(out.rawDamagePerHit * (didCrit ? 1.5 : 1.0), archetype, out.isElemental, out.armorIgnorePct, targetDefenseDeltaPct)
-              );
-            }
-          }
-          if (skill.id.includes('counter')) state.counterStanceRemainingMs = 7000;
-          if (skill.id.includes('death') || skill.id.includes('twin_shadow')) {
-            state.deathStrikeSwingsRemaining = 5;
-            state.deathStrikePendingDamage = out.rawDamagePerHit * 0.95;
-          }
-        }
-        break;
-      }
-
-      // Auto-attack
-      if (state.swingCooldownMs <= 0) {
-        const curAlive = state.targetHpPools.map((hp, idx) => (hp > 0 ? idx : -1)).filter((idx) => idx >= 0);
-        if (curAlive.length > 0) {
-          state.swingCooldownMs = computeSwingIntervalMs(bracket, state.stamina, buffAttackSpeedPct);
-          const [didHit, nextHit] = resolveDeterministicRoll(state.hitAcc, computeHitChance(bracket, stats, archetype, false, 0));
-          state.hitAcc = nextHit;
-          if (didHit) {
-            const [didCrit, nextCrit] = resolveDeterministicRoll(state.critAcc, computeCritChance(bracket, stats, buffCritPct));
-            state.critAcc = nextCrit;
-            if (classDef.id === 'samurai') {
-              state.perfectionStreakBonusPct = Math.min(12, state.perfectionStreakBonusPct + 4);
-            }
-            const rawSwing = computeAutoAttackRawDamage(bracket, stats, buffDamagePct, totalPerfectionBonus) * (didCrit ? 1.5 : 1.0);
-            dealWaveDmg(curAlive[0], applyTargetMitigation(rawSwing, archetype, false, 0, targetDefenseDeltaPct));
-            if (state.deathStrikeSwingsRemaining > 0) {
-              state.deathStrikeSwingsRemaining--;
-              if (state.deathStrikeSwingsRemaining === 0 && state.deathStrikePendingDamage > 0) {
-                dealWaveDmg(curAlive[0], applyTargetMitigation(state.deathStrikePendingDamage, archetype, false, 50, targetDefenseDeltaPct));
-                state.deathStrikePendingDamage = 0;
-              }
-            }
-          }
-        }
-      }
-
-      // Incoming enemy hit
-      enemyAttackTimerMs -= TICK_MS;
-      if (enemyAttackTimerMs <= 0) {
-        enemyAttackTimerMs += archetype.enemyAttackIntervalMs;
-        const livingCount = Math.max(1, state.targetHpPools.filter((hp) => hp > 0).length);
-        let incoming = archetype.enemyPreMitigationDpsPerTarget * enemyScale * (archetype.enemyAttackIntervalMs / 1000) * livingCount;
-        if (state.cloneStacks > 0 && state.cloneIcdMs <= 0) {
-          const [didInt, nextP] = resolveDeterministicRoll(state.procAcc, 0.25);
-          state.procAcc = nextP;
-          if (didInt) {
-            state.cloneStacks--;
-            state.cloneIcdMs = 10000;
-            totalCloneInterceptions++;
-            incoming *= 0.65;
-          }
-        }
-        const hasParry = classDef.starterSkills.some((s) => s.skillKey === 'parry' || s.skillKey === 'bushido');
-        const buffEv = sumModifierStat(state.selfBuffs, passiveEffects, 'evasion_pct');
-        const avoidChance = clamp((hasParry ? 0.25 : 0) + buffEv / 100 + bracket.defenseChanceIncreasePct / 200, 0, 0.65);
-        const [didParry, nextPa] = resolveDeterministicRoll(state.parryAcc, avoidChance);
-        state.parryAcc = nextPa;
-        if (didParry) {
-          waveParries++;
-          totalParries++;
-        } else {
-          const resist = clamp(bracket.armorPhysResistPct * 0.7 + bracket.armorElemResistPct * 0.3, 0, 75);
-          state.hp = Math.max(1, state.hp - incoming * (1 - resist / 100));
-        }
-      }
-    }
+    stepKernelCombatActions(ctx);
 
     // Check if wave cleared
-    if (state.targetHpPools.every((hp) => hp <= 0)) {
-      const waveSec = Math.max(0.5, (state.elapsedMs - waveStartElapsedMs) / 1000);
-      const effectiveWaveWindowSec = waveSec + (currentWaveIdx > 1 ? interWaveDelayMs / 1000 : 0);
+    if (ctx.state.targetHpPools.every((hp) => hp <= 0)) {
+      const waveSec = Math.max(0.5, (ctx.state.elapsedMs - waveStartElapsedMs) / 1000);
+      const effectiveWaveWindowSec =
+        waveSec + (currentWaveIdx > 1 ? interWaveDelayMs / 1000 : 0);
+      const waveDamage = ctx.totalEffectiveDamage - waveStartEffectiveDamage;
+      const waveParries = ctx.parryCount - waveStartParries;
+
       waves.push({
         waveIndex: currentWaveIdx,
         waveClearTimeSec: round2(waveSec),
-        cumulativeTimeSec: round2(state.elapsedMs / 1000),
-        waveDps: round2(waveEffectiveDamage / effectiveWaveWindowSec),
-        endingHpPct: round2((state.hp / state.maxHP) * 100),
-        endingManaPct: state.maxMana > 0 ? round2((state.mana / state.maxMana) * 100) : 100,
-        endingStaminaPct: round2((state.stamina / state.maxStamina) * 100),
+        cumulativeTimeSec: round2(ctx.state.elapsedMs / 1000),
+        waveDps: round2(waveDamage / effectiveWaveWindowSec),
+        endingHpPct: round2((ctx.state.hp / ctx.state.maxHP) * 100),
+        endingManaPct:
+          ctx.state.maxMana > 0
+            ? round2((ctx.state.mana / ctx.state.maxMana) * 100)
+            : 100,
+        endingStaminaPct: round2((ctx.state.stamina / ctx.state.maxStamina) * 100),
         parriesInWave: waveParries,
-        clonesOrStreakEnd: classDef.id === 'samurai' ? state.perfectionStreakBonusPct : state.cloneStacks,
+        clonesOrStreakEnd:
+          classDef.id === 'samurai'
+            ? ctx.state.perfectionStreakBonusPct
+            : ctx.state.cloneStacks,
       });
 
       if (currentWaveIdx >= waveCount) {
@@ -1971,7 +2006,10 @@ export function simulateMultiWavePull(
     }
   }
 
-  const totalSec = waves.length > 0 ? waves[waves.length - 1].cumulativeTimeSec : round2(state.elapsedMs / 1000);
+  const totalSec =
+    waves.length > 0
+      ? waves[waves.length - 1].cumulativeTimeSec
+      : round2(ctx.state.elapsedMs / 1000);
   const avgDps =
     waves.length > 0
       ? round2(waves.reduce((acc, w) => acc + w.waveDps, 0) / waves.length)
@@ -1983,14 +2021,14 @@ export function simulateMultiWavePull(
     averageWaveDps: avgDps,
     minHpPct: round2(minHpPct),
     minManaPct: round2(minManaPct),
-    totalParries,
-    totalCloneInterceptions,
+    totalParries: ctx.parryCount,
+    totalCloneInterceptions: ctx.cloneInterceptions,
     waves,
   };
 }
 
 /**
- * Generates the comprehensive v1.1 Gear, Affix, Damage-Breakdown, Rotation Timeline & Multi-Wave artifact (`SIM-04`).
+ * Generates the comprehensive Gear, Affix, Damage-Breakdown, Rotation Timeline & Multi-Wave artifact (`SIM-04` / `SIM-08`).
  */
 export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArtifact {
   const damageBreakdowns: DamageChannelBreakdown[] = [];
@@ -2077,4 +2115,3 @@ export function runGearAndWaveSuite(classes: ClassDefinition[]): GearAndWavesArt
     rotationTimelines,
   };
 }
-

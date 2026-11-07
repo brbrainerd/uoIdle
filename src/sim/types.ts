@@ -23,7 +23,22 @@ export const ARCHETYPE_IDS: readonly EnemyArchetypeId[] = [
   'multi_target_pack',
 ] as const;
 
-export type PostureId = 'Attack' | 'Defensive' | 'Precision';
+export type CanonicalPostureId = 'agressivo' | 'equilibrado' | 'defensivo';
+
+export type PostureId =
+  | CanonicalPostureId
+  | 'Attack'
+  | 'Defensive'
+  | 'Precision';
+
+export interface PostureProfile {
+  id: CanonicalPostureId;
+  label: string;
+  outgoingDamageMultiplier: number;
+  incomingDamageMultiplier: number;
+  bonusHciPct: number;
+  bonusCritPct: number;
+}
 
 export type SimImplementationMode = 'mode_a' | 'mode_b';
 
@@ -51,6 +66,18 @@ export interface BracketBudget {
   hpRegenAffix: number;
   staminaRegenAffix: number;
   manaRegenAffix: number;
+  /** Progression tree Speed bonus that stacks past the 60% gear SSI cap (`i18n-en-abilities.js:2616`). */
+  treeSpeedPct?: number;
+  /** Lower Mana Cost item + tree bonus, hard-capped at 40% (`i18n-en-abilities.js:2616`). */
+  lowerManaCostPct?: number;
+  /** Faster Casting bonus, hard-capped at +2 (`i18n-en-abilities.js:2616`). */
+  castSpeedBonus?: number;
+  /** Faster Cast Recovery bonus, hard-capped at +6 (`i18n-en-abilities.js:2616`). */
+  castRecoveryBonus?: number;
+  /** Enhance Potions item affix, hard-capped at 50% (`i18n-en-abilities.js:2616`). */
+  enhancePotionsPct?: number;
+  /** Reflect Physical Damage item affix (`i18n-en-abilities.js:2616`). */
+  reflectPhysicalPct?: number;
 }
 
 export interface EnemyArchetype {
@@ -65,6 +92,8 @@ export interface EnemyArchetype {
   defenseSkill: number;
   enemyPreMitigationDpsPerTarget: number;
   enemyAttackIntervalMs: number;
+  /** Optional defender DCI % (`DefendChance` cap 45%). */
+  defenderDciPct?: number;
 }
 
 export interface ResolvedClassStats {
@@ -76,6 +105,9 @@ export interface ResolvedClassStats {
   maxStamina: number;
   maxMana: number;
   levelFactor: number;
+  hasShield?: boolean;
+  isTwoHanded?: boolean;
+  baseWeaponSpeedMs?: number;
 }
 
 export interface ActiveStatusInstance {
@@ -287,4 +319,3 @@ export interface GearAndWavesArtifact {
   multiWaveRuns: ClassMultiWaveRun[];
   rotationTimelines: ClassRotationTimeline[];
 }
-

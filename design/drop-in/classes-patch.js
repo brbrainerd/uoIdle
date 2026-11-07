@@ -265,7 +265,7 @@ export const ABILITIES_CATALOG_PATCH = {
       unlock: 5,
       legacyUnlock: 1,
       mana: 10,
-      blurb: 'Thunderbolt draw cut (+50 Accuracy, 1.10x-1.20x) with Bushido^2/72,000 IgnoreArmor critical roll.',
+      blurb: 'Thunderbolt draw cut (+50 Accuracy, 1.15x-1.25x) with Bushido^2/72,000 IgnoreArmor critical roll.',
       tab: 'ability',
       ref: 404,
       map: 'UO',
@@ -280,7 +280,7 @@ export const ABILITIES_CATALOG_PATCH = {
       unlock: 10,
       legacyUnlock: 10,
       mana: 8,
-      blurb: 'Pledges Bushido Honor to build consecutive-hit Perfection damage stacks and restore vitals on kill.',
+      blurb: 'Pledges Bushido Honor to build consecutive-hit Perfection damage stacks (+14% Mode A / +15% Mode B) and restore vitals on kill.',
       tab: 'ability',
       map: 'Idle',
       gumpIcon: 21536,
@@ -614,7 +614,7 @@ export const ABILITIES_CATALOG_PATCH = {
       legacyUnlock: 200,
       mana: 0,
       stamina: 18,
-      blurb: 'Grandmaster Kage Bunshin capstone: 1.95x twin-clone execute below 35% HP with 4-tick / 5-swing detonation.',
+      blurb: 'Grandmaster Kage Bunshin capstone: 1.85x twin-clone execute below 35% HP with 4-tick / 5-swing detonation.',
       tab: 'ability',
       ref: 501,
       map: 'UO',
@@ -725,11 +725,11 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_lightning: {
         name: 'Lightning Strike',
-        desc: 'Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.10x-1.20x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.',
+        desc: 'Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.15x-1.25x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.',
       },
       samurai_perfection: {
         name: 'Honor & Perfection',
-        desc: 'Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+10% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.',
+        desc: 'Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+14% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.',
       },
       samurai_honorable: {
         name: 'Honorable Execution',
@@ -741,7 +741,7 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_counter: {
         name: 'Counter Attack',
-        desc: "Read the rhythm of the enemy's steel and turn their aggression into their undoing. Strikes for 1.50x-1.60x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.",
+        desc: "Read the rhythm of the enemy's steel and turn their aggression into their undoing. Strikes for 1.55x-1.65x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.",
       },
       samurai_double_strike: {
         name: 'Double Strike',
@@ -817,7 +817,7 @@ export const I18N_LOCALE_PATCH = {
       },
       ninja_twin_shadow: {
         name: 'Kage Bunshin: Twin Shadow Execution',
-        desc: "Forbidden Grandmaster Kage Bunshin assassination art: two living shadow clones converge from opposite blind spots to sever the target's lifeline. Deals 1.25x-1.35x damage (1.95x execute below 35% HP) and plants a 4-tick / 5-swing Twin Shadow Mark.",
+        desc: "Forbidden Grandmaster Kage Bunshin assassination art: two living shadow clones converge from opposite blind spots to sever the target's lifeline. Deals 1.15x-1.25x damage (1.85x execute below 35% HP) and plants a 4-tick / 5-swing Twin Shadow Mark.",
       },
     },
   },
@@ -839,11 +839,11 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_lightning: {
         name: 'Golpe Relâmpago',
-        desc: 'Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda. Desfere um corte de precisão (+50 de Acerto, 1.10x-1.20x) com chance crítica Bushido^2/72.000 de ignorar armadura e 3s de desequilíbrio.',
+        desc: 'Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda. Desfere um corte de precisão (+50 de Acerto, 1.15x-1.25x) com chance crítica Bushido^2/72.000 de ignorar armadura e 3s de desequilíbrio.',
       },
       samurai_perfection: {
         name: 'Honra e Perfeição',
-        desc: 'Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial crescente. Acumula bônus de dano em acertos consecutivos (+10% Modo A / até +15% Modo B) e restaura Vida, Mana e Estamina ao abater.',
+        desc: 'Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial crescente. Acumula bônus de dano em acertos consecutivos (+14% Modo A / até +15% Modo B) e restaura Vida, Mana e Estamina ao abater.',
       },
       samurai_honorable: {
         name: 'Execução Honrosa',
@@ -855,7 +855,7 @@ export const I18N_LOCALE_PATCH = {
       },
       samurai_counter: {
         name: 'Contra-Ataque',
-        desc: 'Leia o ritmo do aço inimigo e transforme a agressão deles em ruína. Golpeia com 1.50x-1.60x de dano Bushido, concede +18% de dano na Postura de Contra-Ataque por 7s e desfere uma retaliação imediata gratuita ao aparar.',
+        desc: 'Leia o ritmo do aço inimigo e transforme a agressão deles em ruína. Golpeia com 1.55x-1.65x de dano Bushido, concede +18% de dano na Postura de Contra-Ataque por 7s e desfere uma retaliação imediata gratuita ao aparar.',
       },
       samurai_double_strike: {
         name: 'Golpe Duplo',
@@ -931,7 +931,7 @@ export const I18N_LOCALE_PATCH = {
       },
       ninja_twin_shadow: {
         name: 'Kage Bunshin: Execução das Sombras Gêmeas',
-        desc: 'Arte proibida de Grão-Mestre Kage Bunshin: dois clones de sombra vivos convergem de ângulos opostos para ceifar a vida do alvo. Causa 1.25x-1.35x de dano (execução de 1.95x abaixo de 35% de Vida) e planta a Marca das Sombras Gêmeas.',
+        desc: 'Arte proibida de Grão-Mestre Kage Bunshin: dois clones de sombra vivos convergem de ângulos opostos para ceifar a vida do alvo. Causa 1.15x-1.25x de dano (execução de 1.85x abaixo de 35% de Vida) e planta a Marca das Sombras Gêmeas.',
       },
     },
   },

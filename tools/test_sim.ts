@@ -6,19 +6,25 @@ import {
   BRACKET_BUDGETS,
   ENEMY_ARCHETYPES,
   MATERIAL_TIER_SPECS,
+  POSTURE_PROFILES,
   buildAffixLoadoutBudget,
   buildMaterialTierBudget,
   resolveClassStatsForBracket,
+  resolvePostureProfile,
 } from '../src/sim/archetypes.js';
 import {
   applyTargetMitigation,
   buildHotbarLoadout,
+  computeAutoAttackRawDamage,
   computeCritChance,
   computeHitChance,
+  computeParryAndAvoidanceChance,
   computeSkillBaseOutput,
   computeSwingIntervalMs,
+  evaluateHotbarAutoTrigger,
   resolveDeterministicRoll,
   resolveEffectiveCooldownMs,
+  resolveHotbarHealTriggerPct,
   resolveSkillResourceCost,
   runGearAndWaveSuite,
   simulateMultiWavePull,
@@ -76,42 +82,238 @@ test('resolveEffectiveCooldownMs enforces 2,000ms floor on Custom skills', () =>
   assert.equal(resolveEffectiveCooldownMs(mutatedShort), 2000);
 });
 
-// 3. Zero-mana physical conversion on Warrior vs hybrid Mana+Stamina on Samurai/Ninja
-test('resolveSkillResourceCost enforces Warrior 0-mana invariant and preserves Samurai/Ninja hybrid costs', () => {
+// 3. Zero-mana physical conversion on Warrior vs hybrid Mana+Stamina & 40% LMC cap on Samurai/Ninja/Mage
+test('resolveSkillResourceCost enforces Warrior 0-mana invariant and 40% LMC hard cap', () => {
   const warriorSkill = warrior.abilities.find((s) => s.kind !== 'Passive')!;
-  const wCost = resolveSkillResourceCost(warrior, warriorSkill);
+  const wCost = resolveSkillResourceCost(warrior, warriorSkill, BRACKET_BUDGETS.L60);
   assert.equal(wCost.manaCost, 0, 'Warrior active skills must cost 0 mana at runtime');
   assert.ok(wCost.staminaCost > 0, 'Warrior active skills must convert cost to stamina');
 
   const confidence = samurai.abilities.find((s) => s.id === 'samurai_confidence')!;
-  const sCost = resolveSkillResourceCost(samurai, confidence);
-  assert.ok(sCost.manaCost > 0, 'Samurai Confidence uses Mana');
+  const sCostBase = resolveSkillResourceCost(samurai, confidence);
+  assert.equal(sCostBase.manaCost, 8, 'Samurai Confidence base mana cost is 8');
 
-  const animalForm = ninja.abilities.find((s) => s.id === 'ninja_animal_form')!;
-  const nCost = resolveSkillResourceCost(ninja, animalForm);
-  assert.ok(nCost.manaCost > 0, 'Ninja Animal Form uses Mana');
+  const meteor = mage.abilities.find((s) => s.id === 'mage_meteor_swarm' || s.manaCost >= 20)!;
+  const zeroLmc = resolveSkillResourceCost(mage, meteor, {
+    ...BRACKET_BUDGETS.L60,
+    lowerManaCostPct: 0,
+  });
+  const cap40Lmc = resolveSkillResourceCost(mage, meteor, {
+    ...BRACKET_BUDGETS.L60,
+    lowerManaCostPct: 40,
+  });
+  const overCap80Lmc = resolveSkillResourceCost(mage, meteor, {
+    ...BRACKET_BUDGETS.L60,
+    lowerManaCostPct: 80,
+  });
+  assert.ok(cap40Lmc.manaCost < zeroLmc.manaCost, '40% LMC must reduce mana cost');
+  assert.equal(
+    overCap80Lmc.manaCost,
+    cap40Lmc.manaCost,
+    'LMC above 40% must clamp to 40% (i18n-en-abilities.js:2616)'
+  );
 });
 
-// 4. Weapon swing speed 1,000ms hard floor
-test('computeSwingIntervalMs enforces 1,000ms hard minimum swing interval', () => {
+// 4. Weapon swing speed 60% gear SSI cap vs treeSpeedPct stacking and 1,000ms hard floor
+test('computeSwingIntervalMs enforces 60% gear SSI cap while allowing treeSpeedPct to stack down to 1,000ms', () => {
   const l60 = BRACKET_BUDGETS.L60;
-  const normalSwing = computeSwingIntervalMs(l60, 50, 0);
-  assert.ok(normalSwing > 1000 && normalSwing <= 2500);
+  const ssi60NoTree = computeSwingIntervalMs(
+    { ...l60, swingSpeedIncreasePct: 60, treeSpeedPct: 0 },
+    20,
+    0
+  );
+  const ssi95NoTree = computeSwingIntervalMs(
+    { ...l60, swingSpeedIncreasePct: 95, treeSpeedPct: 0 },
+    20,
+    0
+  );
+  assert.equal(
+    ssi95NoTree,
+    ssi60NoTree,
+    'Gear SSI above 60% must be clamped at 60% when treeSpeedPct is 0'
+  );
+
+  const ssi60WithTree = computeSwingIntervalMs(
+    { ...l60, swingSpeedIncreasePct: 60, treeSpeedPct: 25 },
+    20,
+    0
+  );
+  assert.ok(
+    ssi60WithTree < ssi60NoTree,
+    'Progression tree Speed must stack past the 60% gear SSI cap'
+  );
+
   const hyperSwing = computeSwingIntervalMs(l60, 500, 300);
   assert.equal(hyperSwing, 1000, 'Swing interval must never drop below 1,000ms');
 });
 
-// 5. Hit chance & crit chance caps
-test('computeHitChance and computeCritChance respect 5%..95% and 50% caps', () => {
+// 5. Hit chance, defender DCI + Surprise Attack shred, and crit chance caps
+test('computeHitChance and computeCritChance respect 5%..95%, defender DCI shred, and 50% caps', () => {
   const l60 = BRACKET_BUDGETS.L60;
   const stats = resolveClassStatsForBracket(samurai, l60);
   const boss = ENEMY_ARCHETYPES.high_def_boss;
   assert.equal(computeHitChance(l60, stats, boss, true, 0), 0.95, 'Spells have 95% hit cap');
   assert.equal(computeHitChance(l60, stats, boss, false, 500), 0.95, 'Physical hit capped at 95%');
   assert.equal(computeCritChance(l60, stats, 200), 0.5, 'Crit chance capped at 50%');
+
+  const hitVsDci = computeHitChance(l60, stats, boss, false, 0, 0);
+  const hitAfterSurpriseShred = computeHitChance(l60, stats, boss, false, 0, -15);
+  assert.ok(
+    hitAfterSurpriseShred > hitVsDci,
+    'Surprise Attack defender DCI shred (-15%) must increase attacker hit chance'
+  );
 });
 
-// 6. Target resistance mitigation, 70% cap, Armor Ignore, and Armor Break / Surprise Attack shred
+// 6. Hard affix caps on DI (100%), Weapon Skill >100 flattening, and SDI (50% + INT/10)
+test('computeAutoAttackRawDamage and computeSkillBaseOutput enforce DI<=100%, Skill<=100 flattening, and SDI<=50% + INT/10', () => {
+  const l60 = BRACKET_BUDGETS.L60;
+  const warStats = resolveClassStatsForBracket(warrior, l60);
+
+  const di100 = computeAutoAttackRawDamage(
+    { ...l60, damageIncreasePct: 100, skillLevel: 100 },
+    warStats,
+    0,
+    0
+  );
+  const di160Skill120 = computeAutoAttackRawDamage(
+    { ...l60, damageIncreasePct: 160, skillLevel: 120 },
+    warStats,
+    0,
+    0
+  );
+  assert.equal(
+    di160Skill120,
+    di100,
+    'Gear DI > 100% and weapon skill > 100 must flatten at 100% and 100 respectively'
+  );
+
+  const mageStatsLowInt = { ...resolveClassStatsForBracket(mage, l60), int: 80 };
+  const mageStatsHighInt = { ...mageStatsLowInt, int: 120 };
+  const ebolt = mage.abilities.find((s) => s.id.includes('energy_bolt') || s.kind === 'Spell')!;
+
+  const sdi50 = computeSkillBaseOutput(
+    mage,
+    ebolt,
+    { ...l60, spellDamageIncreasePct: 50 },
+    mageStatsLowInt,
+    100,
+    1,
+    0,
+    0
+  );
+  const sdi90 = computeSkillBaseOutput(
+    mage,
+    ebolt,
+    { ...l60, spellDamageIncreasePct: 90 },
+    mageStatsLowInt,
+    100,
+    1,
+    0,
+    0
+  );
+  assert.equal(
+    sdi90.rawDamagePerHit,
+    sdi50.rawDamagePerHit,
+    'Gear SDI above 50% must clamp to 50% (i18n-en-abilities.js:2616)'
+  );
+
+  const highIntOut = computeSkillBaseOutput(
+    mage,
+    ebolt,
+    { ...l60, spellDamageIncreasePct: 50 },
+    mageStatsHighInt,
+    100,
+    1,
+    0,
+    0
+  );
+  assert.ok(
+    highIntOut.rawDamagePerHit > sdi50.rawDamagePerHit,
+    'Higher INT must increase spell damage via both INT/100 and +1% SDI per 10 INT'
+  );
+});
+
+// 7. Canonical Hunting Bot postures (`agressivo`, `equilibrado`, `defensivo`)
+test('resolvePostureProfile applies canonical +20%/+40%, 1.0x/1.0x, and -40%/-20% Hunting Bot posture multipliers', () => {
+  assert.equal(POSTURE_PROFILES.agressivo.outgoingDamageMultiplier, 1.2);
+  assert.equal(POSTURE_PROFILES.agressivo.incomingDamageMultiplier, 1.4);
+  assert.equal(POSTURE_PROFILES.equilibrado.outgoingDamageMultiplier, 1.0);
+  assert.equal(POSTURE_PROFILES.equilibrado.incomingDamageMultiplier, 1.0);
+  assert.equal(POSTURE_PROFILES.defensivo.outgoingDamageMultiplier, 0.6);
+  assert.equal(POSTURE_PROFILES.defensivo.incomingDamageMultiplier, 0.8);
+
+  const l60 = BRACKET_BUDGETS.L60;
+  const balStats = resolveClassStatsForBracket(samurai, l60, 'equilibrado');
+  const aggStats = resolveClassStatsForBracket(samurai, l60, 'agressivo');
+  const defStats = resolveClassStatsForBracket(samurai, l60, 'defensivo');
+
+  const balDmg = computeAutoAttackRawDamage(l60, balStats, 0, 0);
+  const aggDmg = computeAutoAttackRawDamage(l60, aggStats, 0, 0);
+  const defDmg = computeAutoAttackRawDamage(l60, defStats, 0, 0);
+
+  assert.ok(Math.abs(aggDmg / balDmg - 1.2) < 1e-6, 'Aggressive posture must deal +20% damage');
+  assert.ok(Math.abs(defDmg / balDmg - 0.6) < 1e-6, 'Defensive posture must deal -40% damage');
+  assert.equal(resolvePostureProfile('Precision').bonusHciPct, 10);
+});
+
+// 8. Complete 1H (48,000), 2H (41,140), and Shield (400) CheckParry math + low-DEX penalty
+test('computeParryAndAvoidanceChance models 1H (48,000), 2H (41,140), Shield (400), and Bushido shield penalty', () => {
+  const l60 = { ...BRACKET_BUDGETS.L60, defenseChanceIncreasePct: 0 };
+  const sam1H = { ...resolveClassStatsForBracket(samurai, l60), hasShield: false, isTwoHanded: false, dex: 95 };
+  const sam2H = { ...sam1H, isTwoHanded: true };
+  const samShield = { ...sam1H, hasShield: true };
+  const samLowDex = { ...sam1H, dex: 50 };
+
+  const p1H = computeParryAndAvoidanceChance(samurai, l60, sam1H, 0);
+  const p2H = computeParryAndAvoidanceChance(samurai, l60, sam2H, 0);
+  const pShieldBushido = computeParryAndAvoidanceChance(samurai, l60, samShield, 0);
+  const pLowDex = computeParryAndAvoidanceChance(samurai, l60, samLowDex, 0);
+
+  // At 100 Parry & 100 Bushido: 1H = 10000/48000 + 0.05 = 0.25833; 2H = 10000/41140 + 0.05 = 0.29307
+  assert.ok(Math.abs(p1H - (10000 / 48000 + 0.05)) < 1e-5, '1H Bushido parry must use 48,000 divisor');
+  assert.ok(Math.abs(p2H - (10000 / 41140 + 0.05)) < 1e-5, '2H Bushido parry must use 41,140 divisor');
+  assert.ok(p2H > p1H, '2H No-Dachi/Lajatang parry chance must exceed 1H Katana parry chance');
+  assert.ok(
+    pShieldBushido < p1H,
+    'Equipping a shield with Bushido must invert parry scaling ((parry - bushido) / 400)'
+  );
+  assert.ok(pLowDex < p1H, 'DEX < 80 must apply ModernUO low-DEX parry penalty');
+
+  const warShield = { ...resolveClassStatsForBracket(warrior, l60), hasShield: true, isTwoHanded: false, dex: 95 };
+  const pWarShield = computeParryAndAvoidanceChance(warrior, l60, warShield, 0);
+  assert.ok(Math.abs(pWarShield - (100 / 400 + 0.05)) < 1e-5, 'Pure Parry with shield must use 400 divisor (30% at GM)');
+});
+
+// 9. Hotbar ro(e) auto-trigger HP thresholds and secondary-target splashRatio
+test('resolveHotbarHealTriggerPct and computeSkillBaseOutput enforce ro(e) heal thresholds and splashRatio', () => {
+  assert.equal(resolveHotbarHealTriggerPct('lesser_heal_potion'), 50);
+  assert.equal(resolveHotbarHealTriggerPct('heal_potion'), 32);
+  assert.equal(resolveHotbarHealTriggerPct('greater_heal_potion'), 18);
+  assert.equal(resolveHotbarHealTriggerPct('mage_heal'), 50);
+  assert.equal(resolveHotbarHealTriggerPct('mage_greater_heal'), 40);
+  assert.equal(resolveHotbarHealTriggerPct('samurai_confidence'), 55);
+
+  const confidence = samurai.abilities.find((s) => s.id === 'samurai_confidence')!;
+  assert.equal(
+    evaluateHotbarAutoTrigger(confidence, 60, 100, 1, [], [], 'mode_b', 0),
+    false,
+    'Confidence must not auto-trigger at 60% HP (> 55% threshold)'
+  );
+  assert.equal(
+    evaluateHotbarAutoTrigger(confidence, 50, 100, 1, [], [], 'mode_b', 0),
+    true,
+    'Confidence must auto-trigger at 50% HP (<= 55% threshold)'
+  );
+
+  const l60 = BRACKET_BUDGETS.L60;
+  const samStats = resolveClassStatsForBracket(samurai, l60);
+  const whirlwind = samurai.abilities.find((s) => s.id === 'samurai_frenzied_whirlwind')!;
+  const wwOut = computeSkillBaseOutput(samurai, whirlwind, l60, samStats, 100, 3, 0, 0);
+  assert.equal(wwOut.targetsHit, 3);
+  assert.equal(wwOut.splashRatio, 0.5, 'Frenzied Whirlwind must carry 0.5 secondary splashRatio');
+});
+
+// 10. Target resistance mitigation, 70% cap, Armor Ignore, and Armor Break / Surprise Attack shred
 test('applyTargetMitigation enforces 70% resist cap, armor ignore penetration, and defense shred', () => {
   const highDef = { ...ENEMY_ARCHETYPES.high_def_boss, physResistPct: 90 };
   const mitigatedCap = applyTargetMitigation(100, highDef, false, 0, 0);
@@ -128,7 +330,7 @@ test('applyTargetMitigation enforces 70% resist cap, armor ignore penetration, a
   assert.ok(shredded > noIgnore, '-20% defense debuff must increase post-mitigation damage');
 });
 
-// 7. Execute threshold activation for Honorable Execution & Kensei's Judgment
+// 11. Execute threshold activation for Honorable Execution & Kensei's Judgment
 test('computeSkillBaseOutput applies executeMultiplier only at or below executeThresholdHpPct', () => {
   const l60 = BRACKET_BUDGETS.L60;
   const stats = resolveClassStatsForBracket(samurai, l60);
@@ -142,10 +344,11 @@ test('computeSkillBaseOutput applies executeMultiplier only at or below executeT
   );
 });
 
-// 8. Mode B Samurai synergies: Perfection streak, Counter/Iaido proc channel, and parry sustain
+// 12. Mode B Samurai synergies: Perfection streak, Counter/Iaido proc channel, and parry sustain
 test('Samurai Mode B activates Perfection streak, Parry Riposte proc channel, and Inner Calm sustain', () => {
-  const outA = simulateScenarioDetailed(samurai, 'L60', 'high_def_boss', 'mode_a');
-  const outB = simulateScenarioDetailed(samurai, 'L60', 'high_def_boss', 'mode_b');
+  const noReflectBudget = { ...BRACKET_BUDGETS.L60, reflectPhysicalPct: 0 };
+  const outA = simulateScenarioDetailed(samurai, 'L60', 'high_def_boss', 'mode_a', noReflectBudget);
+  const outB = simulateScenarioDetailed(samurai, 'L60', 'high_def_boss', 'mode_b', noReflectBudget);
 
   assert.ok(outB.telemetry.parryCount > 0, 'Samurai must register parries against high_def_boss');
   assert.ok(
@@ -155,7 +358,7 @@ test('Samurai Mode B activates Perfection streak, Parry Riposte proc channel, an
   assert.equal(
     outA.breakdown.procCounterDps,
     0,
-    'Samurai Mode A must not trigger Mode B reactive parry ripostes'
+    'Samurai Mode A (with 0% ReflectPhysical) must not trigger Mode B reactive parry ripostes'
   );
   assert.ok(
     outB.telemetry.ehpPerSec >= outA.telemetry.ehpPerSec,
@@ -163,7 +366,7 @@ test('Samurai Mode B activates Perfection streak, Parry Riposte proc channel, an
   );
 });
 
-// 9. Mode B Ninja synergies: Clone interception, 5th-step Death Strike detonation, and Kitsune/Wolf Spirit Claw
+// 13. Mode B Ninja synergies: Clone interception, 5th-step Death Strike detonation, and Kitsune/Wolf Spirit Claw
 test('Ninja Mode B activates Mirror Image clone interceptions, Death Strike detonation, and Spirit Claw procs', () => {
   const l25B = simulateScenarioDetailed(ninja, 'L25', 'low_def_boss', 'mode_b', undefined, 20000);
   assert.ok(
@@ -192,8 +395,12 @@ test('Ninja Mode B activates Mirror Image clone interceptions, Death Strike deto
   );
 });
 
-// 10. Material tier progression & Tokuno affix loadout curves
-test('Material tiers (Iron..Valorite) and Tokuno affix loadouts scale monotonically across all 5 classes', () => {
+// 14. Material tier (+8% weapon / +12% armor per step) progression & Tokuno affix loadout curves
+test('Material tiers (Iron..Valorite +8% weapon / +12% armor) and Tokuno affix loadouts scale monotonically', () => {
+  assert.equal(MATERIAL_TIER_SPECS[0].weaponStepMultiplier, 1.0);
+  assert.equal(MATERIAL_TIER_SPECS[8].weaponStepMultiplier, 1.64);
+  assert.equal(MATERIAL_TIER_SPECS[8].armorStepMultiplier, 1.96);
+
   const allClasses = [warrior, mage, ranger, samurai, ninja];
   const suite = runGearAndWaveSuite(allClasses);
 
@@ -224,8 +431,8 @@ test('Material tiers (Iron..Valorite) and Tokuno affix loadouts scale monotonica
   }
 });
 
-// 11. Multi-wave dungeon pull endurance & hotbar priority invariants
-test('All 5 classes survive 10 consecutive dungeon waves and build valid 6-slot hotbars', () => {
+// 15. Multi-wave dungeon pull endurance & unified kernel invariants
+test('All 5 classes survive 10 consecutive dungeon waves on the unified combat tick kernel', () => {
   const allClasses = [warrior, mage, ranger, samurai, ninja];
   for (const cls of allClasses) {
     const loadout = buildHotbarLoadout(cls, BRACKET_BUDGETS.L60);

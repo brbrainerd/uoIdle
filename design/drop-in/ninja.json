@@ -230,8 +230,8 @@
       "nameEn": "Kage Bunshin: Twin Shadow Execution",
       "namePtBr": "Kage Bunshin: Execução das Sombras Gêmeas",
       "type": "feature",
-      "descEn": "Forbidden Grandmaster Kage Bunshin assassination art: two living shadow clones converge from opposite blind spots to sever the target's lifeline. Deals 1.25x-1.35x damage (1.95x execute below 35% HP) and plants a 4-tick / 5-swing Twin Shadow Mark.",
-      "descPtBr": "Arte proibida de Grão-Mestre Kage Bunshin: dois clones de sombra vivos convergem de ângulos opostos para ceifar a vida do alvo. Causa 1.25x-1.35x de dano (execução de 1.95x abaixo de 35% de Vida) e planta a Marca das Sombras Gêmeas.",
+      "descEn": "Forbidden Grandmaster Kage Bunshin assassination art: two living shadow clones converge from opposite blind spots to sever the target's lifeline. Deals 1.15x-1.25x damage (1.85x execute below 35% HP) and plants a 4-tick / 5-swing Twin Shadow Mark.",
+      "descPtBr": "Arte proibida de Grão-Mestre Kage Bunshin: dois clones de sombra vivos convergem de ângulos opostos para ceifar a vida do alvo. Causa 1.15x-1.25x de dano (execução de 1.85x abaixo de 35% de Vida) e planta a Marca das Sombras Gêmeas.",
       "inCatalog": true,
       "catalogId": "ninja_twin_shadow"
     }
@@ -731,7 +731,7 @@
       "category": "ninja",
       "kind": "SpecialMove",
       "tab": "ability",
-      "cooldownMs": 11000,
+      "cooldownMs": 12000,
       "customCooldownMs": 0,
       "manaCost": 0,
       "staminaCost": 18,
@@ -756,12 +756,12 @@
       "gumpIcon": 21281,
       "iconKey": "idle_ninja_twin_shadow",
       "scalingFormula": {
-        "summary": "Grandmaster Kage Bunshin Finisher (ref 501 Capstone): 1.25x-1.35x twin-clone strike (1.95x execute below 35% HP) with 4-tick mark / 5-swing detonation",
+        "summary": "Grandmaster Kage Bunshin Finisher (ref 501 Capstone): 1.15x-1.25x twin-clone strike (1.85x execute below 35% HP) with 4-tick mark / 5-swing detonation",
         "stat": "ninjitsu",
-        "minMultiplier": 1.25,
-        "maxMultiplier": 1.35,
+        "minMultiplier": 1.15,
+        "maxMultiplier": 1.25,
         "executeThresholdHpPct": 35,
-        "executeMultiplier": 1.95
+        "executeMultiplier": 1.85
       },
       "unlockLevel": 200,
       "progressionTreeLevel": 60,

@@ -119,8 +119,8 @@
       "nameEn": "Lightning Strike",
       "namePtBr": "Golpe Relâmpago",
       "type": "skill",
-      "descEn": "Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.10x-1.20x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.",
-      "descPtBr": "Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda. Desfere um corte de precisão (+50 de Acerto, 1.10x-1.20x) com chance crítica Bushido^2/72.000 de ignorar armadura e 3s de desequilíbrio.",
+      "descEn": "Draw your blade at the speed of a thunderbolt, striking before the foe can raise their guard. Delivers a +50 Accuracy precision slash (1.15x-1.25x) with a Bushido^2/72,000 critical IgnoreArmor roll and 3s nerve stagger.",
+      "descPtBr": "Desembainhe sua espada na velocidade de um trovão antes que o inimigo erga a guarda. Desfere um corte de precisão (+50 de Acerto, 1.15x-1.25x) com chance crítica Bushido^2/72.000 de ignorar armadura e 3s de desequilíbrio.",
       "inCatalog": true,
       "catalogId": "samurai_lightning"
     },
@@ -130,8 +130,8 @@
       "nameEn": "Honor & Perfection",
       "namePtBr": "Honra e Perfeição",
       "type": "mechanic",
-      "descEn": "Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+10% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.",
-      "descPtBr": "Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial crescente. Acumula bônus de dano em acertos consecutivos (+10% Modo A / até +15% Modo B) e restaura Vida, Mana e Estamina ao abater.",
+      "descEn": "Pledge solemn Bushido Honor to your quarry, turning every unanswered blow into rising martial Perfection. Automatically builds consecutive-hit damage stacks (+14% Mode A window / up to +15% Mode B streak) and restores HP, Mana, and Stamina on kill.",
+      "descPtBr": "Jure Honra solene de Bushido ao adversário, convertendo cada golpe certeiro em Perfeição marcial crescente. Acumula bônus de dano em acertos consecutivos (+14% Modo A / até +15% Modo B) e restaura Vida, Mana e Estamina ao abater.",
       "inCatalog": true,
       "catalogId": "samurai_perfection"
     },
@@ -163,8 +163,8 @@
       "nameEn": "Counter Attack",
       "namePtBr": "Contra-Ataque",
       "type": "spell",
-      "descEn": "Read the rhythm of the enemy's steel and turn their aggression into their undoing. Strikes for 1.50x-1.60x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.",
-      "descPtBr": "Leia o ritmo do aço inimigo e transforme a agressão deles em ruína. Golpeia com 1.50x-1.60x de dano Bushido, concede +18% de dano na Postura de Contra-Ataque por 7s e desfere uma retaliação imediata gratuita ao aparar.",
+      "descEn": "Read the rhythm of the enemy's steel and turn their aggression into their undoing. Strikes for 1.55x-1.65x Bushido damage, grants +18% Counter Stance damage for 7s, and unleashes an instant free retaliation swing whenever you parry.",
+      "descPtBr": "Leia o ritmo do aço inimigo e transforme a agressão deles em ruína. Golpeia com 1.55x-1.65x de dano Bushido, concede +18% de dano na Postura de Contra-Ataque por 7s e desfere uma retaliação imediata gratuita ao aparar.",
       "inCatalog": true,
       "catalogId": "samurai_counter"
     },
@@ -305,8 +305,8 @@
       "scalingFormula": {
         "summary": "UO LightningStrike (ref 404, sole full-scaling version): +50 Accuracy precision strike with Bushido^2/72000 IgnoreArmor critical roll",
         "stat": "bushido",
-        "minMultiplier": 1.1,
-        "maxMultiplier": 1.2
+        "minMultiplier": 1.15,
+        "maxMultiplier": 1.25
       },
       "unlockLevel": 1,
       "progressionTreeLevel": 5,
@@ -335,7 +335,7 @@
         "tickIntervalMs": 0,
         "tickCount": 0,
         "modifiers": [
-          { "stat": "perfection_streak_pct", "value": 10 }
+          { "stat": "perfection_streak_pct", "value": 14 }
         ],
         "stackingRule": "refresh",
         "authorityTier": "design-proposal"
@@ -347,7 +347,7 @@
       "gumpIcon": 21536,
       "iconKey": "idle_samurai_perfection",
       "scalingFormula": {
-        "summary": "ModernUO HonorContext Perfection ramp: grants +10% Perfection streak bonus in Mode A or per-hit streak scaling (+8 HP/Stam/Mana on kill) in Mode B",
+        "summary": "ModernUO HonorContext Perfection ramp: grants +14% Perfection streak bonus in Mode A or per-hit streak scaling (+8 HP/Stam/Mana on kill) in Mode B",
         "stat": "bushido"
       },
       "unlockLevel": 10,
@@ -479,10 +479,10 @@
       "gumpIcon": 21539,
       "iconKey": "gump_21539",
       "scalingFormula": {
-        "summary": "UO CounterAttack (ref 403): reactive Bushido counter-strike (1.50x-1.60x), +18% Counter Stance damage, and instant on-parry retaliation swing",
+        "summary": "UO CounterAttack (ref 403): reactive Bushido counter-strike (1.55x-1.65x), +18% Counter Stance damage, and instant on-parry retaliation swing",
         "stat": "bushido",
-        "minMultiplier": 1.5,
-        "maxMultiplier": 1.6
+        "minMultiplier": 1.55,
+        "maxMultiplier": 1.65
       },
       "unlockLevel": 5,
       "progressionTreeLevel": 25,

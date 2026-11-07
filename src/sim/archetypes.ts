@@ -2,53 +2,127 @@ import type {
   AffixLoadoutId,
   BracketBudget,
   BracketId,
+  CanonicalPostureId,
   ClassDefinition,
   EnemyArchetype,
   EnemyArchetypeId,
   MaterialTierId,
   PostureId,
+  PostureProfile,
   ResolvedClassStats,
 } from './types.js';
 
 export interface MaterialTierSpec {
   tierId: MaterialTierId;
+  stepIndex: number;
   levelReq: number;
   statBonusBudget: number;
   hue: number;
+  /** Canonical +8% weapon damage per material step (`[[resources]] C2`). */
+  weaponStepMultiplier: number;
+  /** Canonical +12% armor resistance/durability per material step (`[[resources]] C2`). */
+  armorStepMultiplier: number;
 }
 
 export const MATERIAL_TIER_SPECS: readonly MaterialTierSpec[] = [
-  { tierId: 'Iron', levelReq: 1, statBonusBudget: 0, hue: 0 },
-  { tierId: 'DullCopper', levelReq: 8, statBonusBudget: 6, hue: 2419 },
-  { tierId: 'ShadowIron', levelReq: 15, statBonusBudget: 12, hue: 2406 },
-  { tierId: 'Copper', levelReq: 22, statBonusBudget: 18, hue: 2413 },
-  { tierId: 'Bronze', levelReq: 30, statBonusBudget: 24, hue: 2418 },
-  { tierId: 'Gold', levelReq: 38, statBonusBudget: 32, hue: 2213 },
-  { tierId: 'Agapite', levelReq: 45, statBonusBudget: 42, hue: 2425 },
-  { tierId: 'Verite', levelReq: 52, statBonusBudget: 54, hue: 2207 },
-  { tierId: 'Valorite', levelReq: 60, statBonusBudget: 68, hue: 2219 },
+  { tierId: 'Iron', stepIndex: 0, levelReq: 1, statBonusBudget: 0, hue: 0, weaponStepMultiplier: 1.0, armorStepMultiplier: 1.0 },
+  { tierId: 'DullCopper', stepIndex: 1, levelReq: 8, statBonusBudget: 6, hue: 2419, weaponStepMultiplier: 1.08, armorStepMultiplier: 1.12 },
+  { tierId: 'ShadowIron', stepIndex: 2, levelReq: 15, statBonusBudget: 12, hue: 2406, weaponStepMultiplier: 1.16, armorStepMultiplier: 1.24 },
+  { tierId: 'Copper', stepIndex: 3, levelReq: 22, statBonusBudget: 18, hue: 2413, weaponStepMultiplier: 1.24, armorStepMultiplier: 1.36 },
+  { tierId: 'Bronze', stepIndex: 4, levelReq: 30, statBonusBudget: 24, hue: 2418, weaponStepMultiplier: 1.32, armorStepMultiplier: 1.48 },
+  { tierId: 'Gold', stepIndex: 5, levelReq: 38, statBonusBudget: 32, hue: 2213, weaponStepMultiplier: 1.40, armorStepMultiplier: 1.60 },
+  { tierId: 'Agapite', stepIndex: 6, levelReq: 45, statBonusBudget: 42, hue: 2425, weaponStepMultiplier: 1.48, armorStepMultiplier: 1.72 },
+  { tierId: 'Verite', stepIndex: 7, levelReq: 52, statBonusBudget: 54, hue: 2207, weaponStepMultiplier: 1.56, armorStepMultiplier: 1.84 },
+  { tierId: 'Valorite', stepIndex: 8, levelReq: 60, statBonusBudget: 68, hue: 2219, weaponStepMultiplier: 1.64, armorStepMultiplier: 1.96 },
 ] as const;
 
+/**
+ * Canonical Hunting Bot combat postures (`[huntpostura` in `_raw/bundle/i18n-en-abilities.js:1574-1579`,
+ * `[[hunting-bot-and-dungeons]] C4`, `[[simulator-fidelity-audit]] C2`).
+ */
+export const POSTURE_PROFILES: Record<CanonicalPostureId, PostureProfile> = {
+  agressivo: {
+    id: 'agressivo',
+    label: 'Aggressive (+20% Dmg Dealt / +40% Dmg Taken)',
+    outgoingDamageMultiplier: 1.2,
+    incomingDamageMultiplier: 1.4,
+    bonusHciPct: 0,
+    bonusCritPct: 0,
+  },
+  equilibrado: {
+    id: 'equilibrado',
+    label: 'Balanced (1.0x Dmg Dealt / 1.0x Dmg Taken)',
+    outgoingDamageMultiplier: 1.0,
+    incomingDamageMultiplier: 1.0,
+    bonusHciPct: 0,
+    bonusCritPct: 0,
+  },
+  defensivo: {
+    id: 'defensivo',
+    label: 'Defensive (-40% Dmg Dealt / -20% Dmg Taken)',
+    outgoingDamageMultiplier: 0.6,
+    incomingDamageMultiplier: 0.8,
+    bonusHciPct: 0,
+    bonusCritPct: 0,
+  },
+};
+
+export function resolvePostureProfile(posture: PostureId): PostureProfile {
+  switch (posture) {
+    case 'agressivo':
+    case 'Attack':
+      return POSTURE_PROFILES.agressivo;
+    case 'defensivo':
+    case 'Defensive':
+      return POSTURE_PROFILES.defensivo;
+    case 'Precision':
+      return {
+        ...POSTURE_PROFILES.equilibrado,
+        bonusHciPct: 10,
+        bonusCritPct: 5,
+      };
+    case 'equilibrado':
+    default:
+      return POSTURE_PROFILES.equilibrado;
+  }
+}
+
+/**
+ * Builds an L60 material-tier budget applying the server's +8% weapon damage per step
+ * and +12% armor resistance/durability per step (`[[resources]] C2`, `changelog-server-dev.md:58`).
+ */
 export function buildMaterialTierBudget(tier: MaterialTierSpec): BracketBudget {
   const baseL60 = BRACKET_BUDGETS.L60;
-  const ratio = tier.statBonusBudget / 68;
+  const step = tier.stepIndex ?? Math.round((tier.statBonusBudget / 68) * 8);
+  const weaponStepMult = tier.weaponStepMultiplier ?? Number((1 + 0.08 * step).toFixed(2));
+  const armorStepMult = tier.armorStepMultiplier ?? Number((1 + 0.12 * step).toFixed(2));
+  const ratio = step / 8;
+
+  const ironBaseWeaponDmg = 28.0;
+  const ironBasePhysResist = 31.5;
+  const ironBaseElemResist = 28.0;
+
   return {
     ...baseL60,
-    weaponAvgDmg: Math.round((14 + 32 * ratio) * 100) / 100,
-    armorPhysResistPct: Math.round((18 + 44 * ratio) * 100) / 100,
-    armorElemResistPct: Math.round((12 + 43 * ratio) * 100) / 100,
-    damageIncreasePct: Math.round((10 + 55 * ratio) * 100) / 100,
-    spellDamageIncreasePct: Math.round((10 + 55 * ratio) * 100) / 100,
-    swingSpeedIncreasePct: Math.round((5 + 25 * ratio) * 100) / 100,
-    critChancePct: Math.round((2 + 13 * ratio) * 100) / 100,
-    hitChanceIncreasePct: Math.round((5 + 27 * ratio) * 100) / 100,
-    defenseChanceIncreasePct: Math.round((5 + 27 * ratio) * 100) / 100,
-    bonusHP: Math.round(10 + 90 * ratio),
-    bonusStamina: Math.round(10 + 60 * ratio),
-    bonusMana: Math.round(10 + 60 * ratio),
-    hpRegenAffix: Math.round((0.5 + 3.0 * ratio) * 100) / 100,
-    staminaRegenAffix: Math.round((0.5 + 3.0 * ratio) * 100) / 100,
-    manaRegenAffix: Math.round((0.5 + 3.0 * ratio) * 100) / 100,
+    weaponAvgDmg: Math.min(46, Math.round(ironBaseWeaponDmg * weaponStepMult * 100) / 100),
+    armorPhysResistPct: Math.min(68, Math.round(ironBasePhysResist * armorStepMult * 100) / 100),
+    armorElemResistPct: Math.min(62, Math.round(ironBaseElemResist * armorStepMult * 100) / 100),
+    damageIncreasePct: Math.round((15 + 50 * ratio) * 100) / 100,
+    spellDamageIncreasePct: Math.min(50, Math.round((12 + 38 * ratio) * 100) / 100),
+    swingSpeedIncreasePct: Math.round((6 + 24 * ratio) * 100) / 100,
+    treeSpeedPct: Math.round(8 * ratio * 100) / 100,
+    lowerManaCostPct: Math.round((4 + 16 * ratio) * 100) / 100,
+    enhancePotionsPct: Math.round(15 * ratio * 100) / 100,
+    reflectPhysicalPct: Math.round(8 * ratio * 100) / 100,
+    critChancePct: Math.round((3 + 12 * ratio) * 100) / 100,
+    hitChanceIncreasePct: Math.round((6 + 26 * ratio) * 100) / 100,
+    defenseChanceIncreasePct: Math.round((6 + 26 * ratio) * 100) / 100,
+    bonusHP: Math.round(15 + 85 * ratio),
+    bonusStamina: Math.round(12 + 58 * ratio),
+    bonusMana: Math.round(12 + 58 * ratio),
+    hpRegenAffix: Math.round((0.6 + 2.9 * ratio) * 100) / 100,
+    staminaRegenAffix: Math.round((0.6 + 2.9 * ratio) * 100) / 100,
+    manaRegenAffix: Math.round((0.6 + 2.9 * ratio) * 100) / 100,
   };
 }
 
@@ -63,10 +137,14 @@ export function buildAffixLoadoutBudget(loadoutId: AffixLoadoutId): {
         name: 'Un-Affixed Base Gear',
         budget: {
           ...base,
-          weaponAvgDmg: 34,
-          damageIncreasePct: 15,
-          spellDamageIncreasePct: 15,
+          weaponAvgDmg: 32,
+          damageIncreasePct: 12,
+          spellDamageIncreasePct: 10,
           swingSpeedIncreasePct: 5,
+          treeSpeedPct: 0,
+          lowerManaCostPct: 0,
+          enhancePotionsPct: 0,
+          reflectPhysicalPct: 0,
           critChancePct: 4,
           hitChanceIncreasePct: 10,
           defenseChanceIncreasePct: 10,
@@ -85,8 +163,12 @@ export function buildAffixLoadoutBudget(loadoutId: AffixLoadoutId): {
           ...base,
           weaponAvgDmg: 42,
           damageIncreasePct: 45,
-          spellDamageIncreasePct: 45,
-          swingSpeedIncreasePct: 38,
+          spellDamageIncreasePct: 38,
+          swingSpeedIncreasePct: 45,
+          treeSpeedPct: 10,
+          lowerManaCostPct: 18,
+          enhancePotionsPct: 15,
+          reflectPhysicalPct: 5,
           critChancePct: 20,
           hitChanceIncreasePct: 34,
           defenseChanceIncreasePct: 22,
@@ -98,9 +180,13 @@ export function buildAffixLoadoutBudget(loadoutId: AffixLoadoutId): {
         budget: {
           ...base,
           weaponAvgDmg: 48,
-          damageIncreasePct: 80,
-          spellDamageIncreasePct: 80,
+          damageIncreasePct: 85,
+          spellDamageIncreasePct: 50,
           swingSpeedIncreasePct: 22,
+          treeSpeedPct: 6,
+          lowerManaCostPct: 20,
+          enhancePotionsPct: 15,
+          reflectPhysicalPct: 8,
           critChancePct: 14,
           hitChanceIncreasePct: 30,
           defenseChanceIncreasePct: 22,
@@ -113,8 +199,12 @@ export function buildAffixLoadoutBudget(loadoutId: AffixLoadoutId): {
           ...base,
           weaponAvgDmg: 42,
           damageIncreasePct: 50,
-          spellDamageIncreasePct: 50,
+          spellDamageIncreasePct: 42,
           swingSpeedIncreasePct: 24,
+          treeSpeedPct: 6,
+          lowerManaCostPct: 22,
+          enhancePotionsPct: 25,
+          reflectPhysicalPct: 18,
           critChancePct: 12,
           hitChanceIncreasePct: 28,
           defenseChanceIncreasePct: 45,
@@ -132,12 +222,18 @@ export function buildAffixLoadoutBudget(loadoutId: AffixLoadoutId): {
         budget: {
           ...base,
           weaponAvgDmg: 50,
-          damageIncreasePct: 85,
-          spellDamageIncreasePct: 85,
-          swingSpeedIncreasePct: 38,
+          damageIncreasePct: 100,
+          spellDamageIncreasePct: 50,
+          swingSpeedIncreasePct: 60,
+          treeSpeedPct: 15,
+          lowerManaCostPct: 40,
+          castSpeedBonus: 2,
+          castRecoveryBonus: 6,
+          enhancePotionsPct: 35,
+          reflectPhysicalPct: 15,
           critChancePct: 20,
-          hitChanceIncreasePct: 40,
-          defenseChanceIncreasePct: 40,
+          hitChanceIncreasePct: 45,
+          defenseChanceIncreasePct: 45,
           armorPhysResistPct: 68,
           armorElemResistPct: 62,
           bonusHP: 130,
@@ -176,6 +272,10 @@ export const BRACKET_BUDGETS: Record<BracketId, BracketBudget> = {
     damageIncreasePct: 10,
     spellDamageIncreasePct: 10,
     swingSpeedIncreasePct: 5,
+    treeSpeedPct: 0,
+    lowerManaCostPct: 4,
+    enhancePotionsPct: 0,
+    reflectPhysicalPct: 0,
     critChancePct: 2,
     hitChanceIncreasePct: 5,
     defenseChanceIncreasePct: 5,
@@ -201,6 +301,10 @@ export const BRACKET_BUDGETS: Record<BracketId, BracketBudget> = {
     damageIncreasePct: 25,
     spellDamageIncreasePct: 25,
     swingSpeedIncreasePct: 12,
+    treeSpeedPct: 2,
+    lowerManaCostPct: 8,
+    enhancePotionsPct: 5,
+    reflectPhysicalPct: 2,
     critChancePct: 5,
     hitChanceIncreasePct: 12,
     defenseChanceIncreasePct: 12,
@@ -224,8 +328,12 @@ export const BRACKET_BUDGETS: Record<BracketId, BracketBudget> = {
     armorPhysResistPct: 48,
     armorElemResistPct: 40,
     damageIncreasePct: 45,
-    spellDamageIncreasePct: 45,
+    spellDamageIncreasePct: 42,
     swingSpeedIncreasePct: 20,
+    treeSpeedPct: 5,
+    lowerManaCostPct: 12,
+    enhancePotionsPct: 10,
+    reflectPhysicalPct: 5,
     critChancePct: 10,
     hitChanceIncreasePct: 22,
     defenseChanceIncreasePct: 22,
@@ -249,8 +357,12 @@ export const BRACKET_BUDGETS: Record<BracketId, BracketBudget> = {
     armorPhysResistPct: 62,
     armorElemResistPct: 55,
     damageIncreasePct: 65,
-    spellDamageIncreasePct: 65,
+    spellDamageIncreasePct: 50,
     swingSpeedIncreasePct: 30,
+    treeSpeedPct: 8,
+    lowerManaCostPct: 16,
+    enhancePotionsPct: 15,
+    reflectPhysicalPct: 8,
     critChancePct: 15,
     hitChanceIncreasePct: 32,
     defenseChanceIncreasePct: 32,
@@ -274,6 +386,7 @@ export const ENEMY_ARCHETYPES: Record<EnemyArchetypeId, EnemyArchetype> = {
     physResistPct: 10,
     elemResistPct: 10,
     defenseSkill: 25,
+    defenderDciPct: 0,
     enemyPreMitigationDpsPerTarget: 8,
     enemyAttackIntervalMs: 2000,
   },
@@ -287,6 +400,7 @@ export const ENEMY_ARCHETYPES: Record<EnemyArchetypeId, EnemyArchetype> = {
     physResistPct: 15,
     elemResistPct: 15,
     defenseSkill: 45,
+    defenderDciPct: 5,
     enemyPreMitigationDpsPerTarget: 18,
     enemyAttackIntervalMs: 2000,
   },
@@ -300,6 +414,7 @@ export const ENEMY_ARCHETYPES: Record<EnemyArchetypeId, EnemyArchetype> = {
     physResistPct: 55,
     elemResistPct: 50,
     defenseSkill: 65,
+    defenderDciPct: 15,
     enemyPreMitigationDpsPerTarget: 32,
     enemyAttackIntervalMs: 2000,
   },
@@ -313,19 +428,32 @@ export const ENEMY_ARCHETYPES: Record<EnemyArchetypeId, EnemyArchetype> = {
     physResistPct: 25,
     elemResistPct: 20,
     defenseSkill: 40,
+    defenderDciPct: 5,
     enemyPreMitigationDpsPerTarget: 8,
     enemyAttackIntervalMs: 2000,
   },
 };
 
+export const CLASS_WEAPON_PROFILES: Record<
+  string,
+  { baseWeaponSpeedMs: number; hasShield: boolean; isTwoHanded: boolean }
+> = {
+  warrior: { baseWeaponSpeedMs: 2500, hasShield: true, isTwoHanded: false },
+  mage: { baseWeaponSpeedMs: 2500, hasShield: false, isTwoHanded: true },
+  ranger: { baseWeaponSpeedMs: 2500, hasShield: false, isTwoHanded: true },
+  samurai: { baseWeaponSpeedMs: 2500, hasShield: false, isTwoHanded: false },
+  ninja: { baseWeaponSpeedMs: 2500, hasShield: false, isTwoHanded: false },
+};
+
 export function resolveClassStatsForBracket(
   classDef: ClassDefinition,
-  bracket: BracketBudget
+  bracket: BracketBudget,
+  postureOverride?: PostureId
 ): ResolvedClassStats {
   let str = bracket.primaryStat;
   let dex = bracket.secondaryStat;
   let int = bracket.tertiaryStat;
-  let posture: PostureId = 'Attack';
+  let posture: PostureId = postureOverride ?? 'equilibrado';
 
   if (
     classDef.role === 'magic' ||
@@ -339,7 +467,6 @@ export function resolveClassStatsForBracket(
     int = bracket.primaryStat;
     dex = bracket.secondaryStat;
     str = bracket.tertiaryStat;
-    posture = 'Attack';
   } else if (
     classDef.role === 'ranged' ||
     classDef.id === 'ranger' ||
@@ -351,12 +478,13 @@ export function resolveClassStatsForBracket(
     dex = bracket.primaryStat;
     str = bracket.secondaryStat;
     int = bracket.tertiaryStat;
-    posture = 'Precision';
+    if (!postureOverride) {
+      posture = 'Precision';
+    }
   } else {
     str = bracket.primaryStat;
     dex = bracket.secondaryStat;
     int = bracket.tertiaryStat;
-    posture = 'Attack';
   }
 
   const maxHP = 50 + Math.floor(str / 2) + bracket.bonusHP + bracket.level * 2;
@@ -370,6 +498,12 @@ export function resolveClassStatsForBracket(
   const isCaster = classDef.role === 'magic' || classDef.id === 'mage';
   const levelFactor = 1 + (bracket.level * (isCaster ? 0.8 : 0.6)) / 60;
 
+  const weaponProfile = CLASS_WEAPON_PROFILES[classDef.id] ?? {
+    baseWeaponSpeedMs: bracket.baseWeaponSpeedMs,
+    hasShield: classDef.starterSkills.some((s) => s.skillKey === 'parry'),
+    isTwoHanded: false,
+  };
+
   return {
     str,
     dex,
@@ -379,5 +513,8 @@ export function resolveClassStatsForBracket(
     maxStamina,
     maxMana,
     levelFactor,
+    hasShield: weaponProfile.hasShield,
+    isTwoHanded: weaponProfile.isTwoHanded,
+    baseWeaponSpeedMs: weaponProfile.baseWeaponSpeedMs,
   };
 }

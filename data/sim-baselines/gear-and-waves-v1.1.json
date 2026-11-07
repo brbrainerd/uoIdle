@@ -14,584 +14,584 @@
       "bracketId": "L10",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 6.32,
-      "specialMoveDps": 4.21,
+      "autoAttackDps": 6.42,
+      "specialMoveDps": 4.05,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 10.53
+      "totalDps": 10.47
     },
     {
       "classId": "warrior",
       "bracketId": "L10",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 5,
-      "specialMoveDps": 2.32,
+      "autoAttackDps": 4.11,
+      "specialMoveDps": 2.55,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 7.32
+      "totalDps": 6.67
     },
     {
       "classId": "warrior",
       "bracketId": "L10",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 1.99,
-      "specialMoveDps": 1.05,
+      "autoAttackDps": 2,
+      "specialMoveDps": 0,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 3.04
+      "totalDps": 2
     },
     {
       "classId": "warrior",
       "bracketId": "L10",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 4.28,
-      "specialMoveDps": 2.92,
+      "autoAttackDps": 3.48,
+      "specialMoveDps": 2.98,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 6.47
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L25",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 31,
+      "specialMoveDps": 24.91,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.42,
+      "totalDps": 56.33
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L25",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 23.42,
+      "specialMoveDps": 25.08,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.55,
+      "totalDps": 49.04
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L25",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 11.71,
+      "specialMoveDps": 7.99,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.96,
+      "totalDps": 20.66
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L25",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 21.36,
+      "specialMoveDps": 34.77,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.73,
+      "totalDps": 56.86
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L45",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 87.48,
+      "specialMoveDps": 72.44,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.75,
+      "totalDps": 160.67
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L45",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 92.09,
+      "specialMoveDps": 81.14,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 1.51,
+      "totalDps": 174.74
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L45",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 43.5,
+      "specialMoveDps": 33.51,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 2.68,
+      "totalDps": 79.69
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L45",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 68.04,
+      "specialMoveDps": 130.33,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 2.02,
+      "totalDps": 200.4
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L60",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 176.67,
+      "specialMoveDps": 110.85,
+      "executeDps": 19.81,
+      "dotDps": 0,
+      "procCounterDps": 0.97,
+      "totalDps": 308.3
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L60",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 203.98,
+      "specialMoveDps": 117.84,
+      "executeDps": 20.84,
+      "dotDps": 0,
+      "procCounterDps": 2.48,
+      "totalDps": 345.15
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L60",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 91.45,
+      "specialMoveDps": 59.12,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 4.42,
+      "totalDps": 154.99
+    },
+    {
+      "classId": "warrior",
+      "bracketId": "L60",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 151.4,
+      "specialMoveDps": 189.71,
+      "executeDps": 39.15,
+      "dotDps": 0,
+      "procCounterDps": 3.31,
+      "totalDps": 383.58
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L10",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 6.74,
+      "specialMoveDps": 39.02,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 45.76
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L10",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 3.73,
+      "specialMoveDps": 20.33,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 24.06
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L10",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 1.46,
+      "specialMoveDps": 11.52,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 12.98
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L10",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 3.87,
+      "specialMoveDps": 17.08,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 20.95
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L25",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 39.71,
+      "specialMoveDps": 80.55,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.48,
+      "totalDps": 120.74
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L25",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 24.2,
+      "specialMoveDps": 57.89,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.62,
+      "totalDps": 82.71
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L25",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 7.88,
+      "specialMoveDps": 37.31,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 1.09,
+      "totalDps": 46.29
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L25",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 19.82,
+      "specialMoveDps": 54.32,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0.82,
+      "totalDps": 74.96
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L45",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 104.94,
+      "specialMoveDps": 62.86,
+      "executeDps": 0,
+      "dotDps": 0.92,
+      "procCounterDps": 1.28,
+      "totalDps": 170
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L45",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 101.39,
+      "specialMoveDps": 80.48,
+      "executeDps": 0,
+      "dotDps": 7.63,
+      "procCounterDps": 2.86,
+      "totalDps": 192.37
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L45",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 37.34,
+      "specialMoveDps": 43.4,
+      "executeDps": 0,
+      "dotDps": 4.49,
+      "procCounterDps": 5.09,
+      "totalDps": 90.32
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L45",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 92.39,
+      "specialMoveDps": 122.84,
+      "executeDps": 0,
+      "dotDps": 7.23,
+      "procCounterDps": 3.82,
+      "totalDps": 226.28
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L60",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 219.82,
+      "specialMoveDps": 76.87,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 1.3,
+      "totalDps": 297.99
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L60",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 236.32,
+      "specialMoveDps": 134.62,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 3.58,
+      "totalDps": 374.52
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L60",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 108.57,
+      "specialMoveDps": 76.33,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 6.36,
+      "totalDps": 191.26
+    },
+    {
+      "classId": "mage",
+      "bracketId": "L60",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 213.44,
+      "specialMoveDps": 495.02,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 4.77,
+      "totalDps": 713.23
+    },
+    {
+      "classId": "ranger",
+      "bracketId": "L10",
+      "archetypeId": "fast_trash",
+      "mode": "mode_b",
+      "autoAttackDps": 6.64,
+      "specialMoveDps": 5.51,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 12.15
+    },
+    {
+      "classId": "ranger",
+      "bracketId": "L10",
+      "archetypeId": "low_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 4.49,
+      "specialMoveDps": 3.44,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 7.93
+    },
+    {
+      "classId": "ranger",
+      "bracketId": "L10",
+      "archetypeId": "high_def_boss",
+      "mode": "mode_b",
+      "autoAttackDps": 1.7,
+      "specialMoveDps": 1.4,
+      "executeDps": 0,
+      "dotDps": 0,
+      "procCounterDps": 0,
+      "totalDps": 3.09
+    },
+    {
+      "classId": "ranger",
+      "bracketId": "L10",
+      "archetypeId": "multi_target_pack",
+      "mode": "mode_b",
+      "autoAttackDps": 4.11,
+      "specialMoveDps": 3.09,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
       "totalDps": 7.2
     },
     {
-      "classId": "warrior",
+      "classId": "ranger",
       "bracketId": "L25",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 33.11,
-      "specialMoveDps": 22.67,
+      "autoAttackDps": 31.16,
+      "specialMoveDps": 23.77,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 55.77
+      "procCounterDps": 0.44,
+      "totalDps": 55.37
     },
     {
-      "classId": "warrior",
+      "classId": "ranger",
       "bracketId": "L25",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 25.48,
-      "specialMoveDps": 26.91,
+      "autoAttackDps": 22.85,
+      "specialMoveDps": 23.86,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 52.39
+      "procCounterDps": 0.62,
+      "totalDps": 47.33
     },
     {
-      "classId": "warrior",
+      "classId": "ranger",
       "bracketId": "L25",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 10.96,
-      "specialMoveDps": 14.56,
+      "autoAttackDps": 9.72,
+      "specialMoveDps": 9.9,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 25.52
+      "procCounterDps": 1.08,
+      "totalDps": 20.7
     },
     {
-      "classId": "warrior",
+      "classId": "ranger",
       "bracketId": "L25",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 22.82,
-      "specialMoveDps": 42.38,
+      "autoAttackDps": 22.11,
+      "specialMoveDps": 21.61,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 65.2
+      "procCounterDps": 0.81,
+      "totalDps": 44.54
     },
     {
-      "classId": "warrior",
+      "classId": "ranger",
       "bracketId": "L45",
       "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 83.96,
-      "specialMoveDps": 61.22,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 145.18
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L45",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 96.85,
-      "specialMoveDps": 80.78,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 177.63
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L45",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 52.37,
-      "specialMoveDps": 39.15,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 91.52
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L45",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 77.07,
-      "specialMoveDps": 127.42,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 204.5
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L60",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 171.96,
-      "specialMoveDps": 110.38,
-      "executeDps": 16.65,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 298.99
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L60",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 208.83,
-      "specialMoveDps": 121.37,
-      "executeDps": 21.38,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 351.58
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L60",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 102.44,
-      "specialMoveDps": 71,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 173.45
-    },
-    {
-      "classId": "warrior",
-      "bracketId": "L60",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 152.19,
-      "specialMoveDps": 202.69,
-      "executeDps": 29.54,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 384.42
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L10",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 7.38,
-      "specialMoveDps": 36.88,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 44.26
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L10",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 5.13,
-      "specialMoveDps": 19.57,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 24.69
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L10",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 2.43,
-      "specialMoveDps": 11.13,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 13.56
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L10",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 4.41,
-      "specialMoveDps": 16.9,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 21.32
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L25",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 38.84,
-      "specialMoveDps": 63.41,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 102.25
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L25",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 26.82,
-      "specialMoveDps": 54.74,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 81.56
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L25",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 10.78,
-      "specialMoveDps": 33.43,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 44.21
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L25",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 26.22,
-      "specialMoveDps": 47.1,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 73.32
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L45",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 103.5,
-      "specialMoveDps": 58.52,
-      "executeDps": 0,
-      "dotDps": 1.14,
-      "procCounterDps": 0,
-      "totalDps": 163.16
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L45",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 107.87,
-      "specialMoveDps": 64.91,
-      "executeDps": 0,
-      "dotDps": 6.95,
-      "procCounterDps": 0,
-      "totalDps": 179.72
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L45",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 46.05,
-      "specialMoveDps": 39.25,
-      "executeDps": 0,
-      "dotDps": 4.09,
-      "procCounterDps": 0,
-      "totalDps": 89.38
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L45",
-      "archetypeId": "multi_target_pack",
       "mode": "mode_b",
       "autoAttackDps": 87.88,
-      "specialMoveDps": 163.36,
-      "executeDps": 0,
-      "dotDps": 7.36,
-      "procCounterDps": 0,
-      "totalDps": 258.6
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L60",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 256.84,
-      "specialMoveDps": 109.82,
+      "specialMoveDps": 79.91,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 366.67
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L60",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 246.96,
-      "specialMoveDps": 140.88,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 387.85
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L60",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 129.66,
-      "specialMoveDps": 77.29,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 206.96
-    },
-    {
-      "classId": "mage",
-      "bracketId": "L60",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 211.91,
-      "specialMoveDps": 498.41,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 710.32
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L10",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 6.68,
-      "specialMoveDps": 4.46,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 11.14
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L10",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 5.93,
-      "specialMoveDps": 2.15,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 8.08
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L10",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 1.95,
-      "specialMoveDps": 1.31,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 3.26
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L10",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 4.44,
-      "specialMoveDps": 3.18,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 7.62
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L25",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 31.83,
-      "specialMoveDps": 23.26,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 55.1
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L25",
-      "archetypeId": "low_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 27.33,
-      "specialMoveDps": 17.73,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 45.06
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L25",
-      "archetypeId": "high_def_boss",
-      "mode": "mode_b",
-      "autoAttackDps": 10.67,
-      "specialMoveDps": 10.81,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 21.49
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L25",
-      "archetypeId": "multi_target_pack",
-      "mode": "mode_b",
-      "autoAttackDps": 24.88,
-      "specialMoveDps": 17.29,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 42.18
-    },
-    {
-      "classId": "ranger",
-      "bracketId": "L45",
-      "archetypeId": "fast_trash",
-      "mode": "mode_b",
-      "autoAttackDps": 90.3,
-      "specialMoveDps": 69.89,
-      "executeDps": 0,
-      "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 160.18
+      "procCounterDps": 1.12,
+      "totalDps": 168.91
     },
     {
       "classId": "ranger",
       "bracketId": "L45",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 101.99,
-      "specialMoveDps": 65.36,
+      "autoAttackDps": 99.93,
+      "specialMoveDps": 79.9,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 167.35
+      "procCounterDps": 2.72,
+      "totalDps": 182.54
     },
     {
       "classId": "ranger",
       "bracketId": "L45",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 40.36,
-      "specialMoveDps": 49.86,
+      "autoAttackDps": 38.72,
+      "specialMoveDps": 47.73,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 90.22
+      "procCounterDps": 4.83,
+      "totalDps": 91.28
     },
     {
       "classId": "ranger",
       "bracketId": "L45",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 77.7,
-      "specialMoveDps": 98.74,
+      "autoAttackDps": 79.74,
+      "specialMoveDps": 100.61,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 176.44
+      "procCounterDps": 3.62,
+      "totalDps": 183.97
     },
     {
       "classId": "ranger",
       "bracketId": "L60",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 184.86,
-      "specialMoveDps": 110.04,
-      "executeDps": 21.06,
+      "autoAttackDps": 214.99,
+      "specialMoveDps": 87.96,
+      "executeDps": 22.34,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 315.96
+      "procCounterDps": 2.28,
+      "totalDps": 327.57
     },
     {
       "classId": "ranger",
       "bracketId": "L60",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 211.31,
-      "specialMoveDps": 121.25,
-      "executeDps": 51.29,
+      "autoAttackDps": 223.85,
+      "specialMoveDps": 112.82,
+      "executeDps": 61.2,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 383.85
+      "procCounterDps": 5.72,
+      "totalDps": 403.59
     },
     {
       "classId": "ranger",
       "bracketId": "L60",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 112.82,
-      "specialMoveDps": 100.92,
-      "executeDps": 0,
+      "autoAttackDps": 109.03,
+      "specialMoveDps": 96.49,
+      "executeDps": 10.86,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 213.73
+      "procCounterDps": 10.16,
+      "totalDps": 226.54
     },
     {
       "classId": "ranger",
       "bracketId": "L60",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 152.48,
-      "specialMoveDps": 497.7,
-      "executeDps": 12.51,
+      "autoAttackDps": 152.68,
+      "specialMoveDps": 552.5,
+      "executeDps": 18.88,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 662.7
+      "procCounterDps": 7.62,
+      "totalDps": 731.67
     },
     {
       "classId": "samurai",
       "bracketId": "L10",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 6.23,
-      "specialMoveDps": 3.22,
+      "autoAttackDps": 6.3,
+      "specialMoveDps": 3.15,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
@@ -602,180 +602,180 @@
       "bracketId": "L10",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 4.62,
-      "specialMoveDps": 2.64,
+      "autoAttackDps": 5.32,
+      "specialMoveDps": 0.89,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 7.26
+      "totalDps": 6.21
     },
     {
       "classId": "samurai",
       "bracketId": "L10",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 1.66,
-      "specialMoveDps": 1.76,
+      "autoAttackDps": 1.73,
+      "specialMoveDps": 0.86,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 3.42
+      "totalDps": 2.59
     },
     {
       "classId": "samurai",
       "bracketId": "L10",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 4.56,
-      "specialMoveDps": 2.06,
+      "autoAttackDps": 3.24,
+      "specialMoveDps": 2.76,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 6.62
+      "totalDps": 6
     },
     {
       "classId": "samurai",
       "bracketId": "L25",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 42.16,
-      "specialMoveDps": 16.82,
-      "executeDps": 5.83,
+      "autoAttackDps": 40.48,
+      "specialMoveDps": 21.87,
+      "executeDps": 4.23,
       "dotDps": 0,
-      "procCounterDps": 1.37,
-      "totalDps": 66.18
+      "procCounterDps": 1.79,
+      "totalDps": 68.37
     },
     {
       "classId": "samurai",
       "bracketId": "L25",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 28.8,
-      "specialMoveDps": 19.3,
+      "autoAttackDps": 27.11,
+      "specialMoveDps": 18.43,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 1.49,
-      "totalDps": 49.58
+      "procCounterDps": 1.66,
+      "totalDps": 47.2
     },
     {
       "classId": "samurai",
       "bracketId": "L25",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 10.13,
-      "specialMoveDps": 10.98,
+      "autoAttackDps": 9.17,
+      "specialMoveDps": 9.19,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0.78,
-      "totalDps": 21.89
+      "procCounterDps": 1.59,
+      "totalDps": 19.95
     },
     {
       "classId": "samurai",
       "bracketId": "L25",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 25.57,
-      "specialMoveDps": 18.97,
-      "executeDps": 8.9,
+      "autoAttackDps": 27.98,
+      "specialMoveDps": 12.32,
+      "executeDps": 9.47,
       "dotDps": 0,
-      "procCounterDps": 1.31,
-      "totalDps": 54.74
+      "procCounterDps": 1.63,
+      "totalDps": 51.4
     },
     {
       "classId": "samurai",
       "bracketId": "L45",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 100.38,
-      "specialMoveDps": 53.45,
-      "executeDps": 10.86,
+      "autoAttackDps": 92.99,
+      "specialMoveDps": 57.62,
+      "executeDps": 10.58,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 164.69
+      "procCounterDps": 1.46,
+      "totalDps": 162.65
     },
     {
       "classId": "samurai",
       "bracketId": "L45",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 120.51,
-      "specialMoveDps": 56.31,
-      "executeDps": 5.96,
+      "autoAttackDps": 103.91,
+      "specialMoveDps": 54.42,
+      "executeDps": 9.75,
       "dotDps": 0,
-      "procCounterDps": 0.28,
-      "totalDps": 183.06
+      "procCounterDps": 2.12,
+      "totalDps": 170.2
     },
     {
       "classId": "samurai",
       "bracketId": "L45",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 47.19,
-      "specialMoveDps": 37.74,
+      "autoAttackDps": 43.81,
+      "specialMoveDps": 27.42,
       "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0.14,
-      "totalDps": 85.08
+      "procCounterDps": 3.43,
+      "totalDps": 74.66
     },
     {
       "classId": "samurai",
       "bracketId": "L45",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 100.9,
-      "specialMoveDps": 74.82,
-      "executeDps": 33.19,
+      "autoAttackDps": 101.48,
+      "specialMoveDps": 70.01,
+      "executeDps": 21,
       "dotDps": 0,
-      "procCounterDps": 0.24,
-      "totalDps": 209.15
+      "procCounterDps": 2.7,
+      "totalDps": 195.19
     },
     {
       "classId": "samurai",
       "bracketId": "L60",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 225.49,
-      "specialMoveDps": 86.93,
-      "executeDps": 21.52,
+      "autoAttackDps": 226.02,
+      "specialMoveDps": 82.11,
+      "executeDps": 6.24,
       "dotDps": 0,
-      "procCounterDps": 2.28,
-      "totalDps": 336.23
+      "procCounterDps": 2.7,
+      "totalDps": 317.08
     },
     {
       "classId": "samurai",
       "bracketId": "L60",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 241.58,
-      "specialMoveDps": 110.89,
-      "executeDps": 37.95,
+      "autoAttackDps": 243.01,
+      "specialMoveDps": 106.85,
+      "executeDps": 13.83,
       "dotDps": 0,
-      "procCounterDps": 1.51,
-      "totalDps": 391.92
+      "procCounterDps": 3.52,
+      "totalDps": 367.22
     },
     {
       "classId": "samurai",
       "bracketId": "L60",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 133.86,
-      "specialMoveDps": 84.04,
-      "executeDps": 10.51,
+      "autoAttackDps": 109.04,
+      "specialMoveDps": 78.91,
+      "executeDps": 0,
       "dotDps": 0,
-      "procCounterDps": 0.85,
-      "totalDps": 229.26
+      "procCounterDps": 5.64,
+      "totalDps": 193.6
     },
     {
       "classId": "samurai",
       "bracketId": "L60",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 202.9,
-      "specialMoveDps": 218.71,
-      "executeDps": 43.02,
+      "autoAttackDps": 220.58,
+      "specialMoveDps": 179.82,
+      "executeDps": 51.96,
       "dotDps": 0,
-      "procCounterDps": 1.37,
-      "totalDps": 465.99
+      "procCounterDps": 4.48,
+      "totalDps": 456.84
     },
     {
       "classId": "ninja",
@@ -794,180 +794,180 @@
       "bracketId": "L10",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 4.97,
-      "specialMoveDps": 2.31,
+      "autoAttackDps": 5.29,
+      "specialMoveDps": 1.54,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 7.28
+      "totalDps": 6.83
     },
     {
       "classId": "ninja",
       "bracketId": "L10",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 2.38,
+      "autoAttackDps": 2.04,
       "specialMoveDps": 0.61,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 2.99
+      "totalDps": 2.65
     },
     {
       "classId": "ninja",
       "bracketId": "L10",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 5.1,
-      "specialMoveDps": 1.53,
+      "autoAttackDps": 5.38,
+      "specialMoveDps": 1.02,
       "executeDps": 0,
       "dotDps": 0,
       "procCounterDps": 0,
-      "totalDps": 6.63
+      "totalDps": 6.4
     },
     {
       "classId": "ninja",
       "bracketId": "L25",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 34.3,
-      "specialMoveDps": 19.72,
-      "executeDps": 2.78,
+      "autoAttackDps": 33.65,
+      "specialMoveDps": 20.96,
+      "executeDps": 2.01,
       "dotDps": 0,
-      "procCounterDps": 0.53,
-      "totalDps": 57.32
+      "procCounterDps": 0.99,
+      "totalDps": 57.61
     },
     {
       "classId": "ninja",
       "bracketId": "L25",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 29.57,
-      "specialMoveDps": 19.31,
+      "autoAttackDps": 28.23,
+      "specialMoveDps": 17.65,
       "executeDps": 2.41,
       "dotDps": 0,
-      "procCounterDps": 0.45,
-      "totalDps": 51.74
+      "procCounterDps": 1.12,
+      "totalDps": 49.41
     },
     {
       "classId": "ninja",
       "bracketId": "L25",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 14.94,
-      "specialMoveDps": 4.22,
+      "autoAttackDps": 10.67,
+      "specialMoveDps": 6.17,
       "executeDps": 1.89,
       "dotDps": 0,
-      "procCounterDps": 0.45,
-      "totalDps": 21.5
+      "procCounterDps": 1.17,
+      "totalDps": 19.9
     },
     {
       "classId": "ninja",
       "bracketId": "L25",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 25.95,
-      "specialMoveDps": 18.89,
+      "autoAttackDps": 23.98,
+      "specialMoveDps": 18.23,
       "executeDps": 2.28,
       "dotDps": 0,
-      "procCounterDps": 0.41,
-      "totalDps": 47.53
+      "procCounterDps": 1.02,
+      "totalDps": 45.51
     },
     {
       "classId": "ninja",
       "bracketId": "L45",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 92.44,
-      "specialMoveDps": 65.88,
-      "executeDps": 6.49,
-      "dotDps": 1.97,
-      "procCounterDps": 0,
-      "totalDps": 166.77
+      "autoAttackDps": 98.24,
+      "specialMoveDps": 62.04,
+      "executeDps": 4.36,
+      "dotDps": 1.98,
+      "procCounterDps": 1.22,
+      "totalDps": 167.83
     },
     {
       "classId": "ninja",
       "bracketId": "L45",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 109.89,
-      "specialMoveDps": 60.79,
+      "autoAttackDps": 111.11,
+      "specialMoveDps": 59.59,
       "executeDps": 5.73,
       "dotDps": 7.62,
-      "procCounterDps": 0,
-      "totalDps": 184.03
+      "procCounterDps": 2.79,
+      "totalDps": 186.84
     },
     {
       "classId": "ninja",
       "bracketId": "L45",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 49.75,
-      "specialMoveDps": 32.79,
-      "executeDps": 4.54,
+      "autoAttackDps": 44.65,
+      "specialMoveDps": 26.75,
+      "executeDps": 4.64,
       "dotDps": 4.16,
-      "procCounterDps": 0,
-      "totalDps": 91.24
+      "procCounterDps": 4.96,
+      "totalDps": 85.15
     },
     {
       "classId": "ninja",
       "bracketId": "L45",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 87.31,
-      "specialMoveDps": 100,
+      "autoAttackDps": 84.24,
+      "specialMoveDps": 92.09,
       "executeDps": 5.44,
       "dotDps": 6.75,
-      "procCounterDps": 0,
-      "totalDps": 199.5
+      "procCounterDps": 3.72,
+      "totalDps": 192.24
     },
     {
       "classId": "ninja",
       "bracketId": "L60",
       "archetypeId": "fast_trash",
       "mode": "mode_b",
-      "autoAttackDps": 230.11,
-      "specialMoveDps": 96.74,
-      "executeDps": 29.55,
+      "autoAttackDps": 226.51,
+      "specialMoveDps": 105.08,
+      "executeDps": 17.25,
       "dotDps": 0,
-      "procCounterDps": 0,
-      "totalDps": 356.4
+      "procCounterDps": 1.95,
+      "totalDps": 350.79
     },
     {
       "classId": "ninja",
       "bracketId": "L60",
       "archetypeId": "low_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 234.46,
+      "autoAttackDps": 238.67,
       "specialMoveDps": 87.13,
-      "executeDps": 32.37,
+      "executeDps": 19.8,
       "dotDps": 13.42,
-      "procCounterDps": 0,
-      "totalDps": 367.38
+      "procCounterDps": 5.19,
+      "totalDps": 364.22
     },
     {
       "classId": "ninja",
       "bracketId": "L60",
       "archetypeId": "high_def_boss",
       "mode": "mode_b",
-      "autoAttackDps": 129.62,
-      "specialMoveDps": 46.61,
+      "autoAttackDps": 124.22,
+      "specialMoveDps": 42.8,
       "executeDps": 0,
       "dotDps": 7.33,
-      "procCounterDps": 0,
-      "totalDps": 183.56
+      "procCounterDps": 9.22,
+      "totalDps": 183.57
     },
     {
       "classId": "ninja",
       "bracketId": "L60",
       "archetypeId": "multi_target_pack",
       "mode": "mode_b",
-      "autoAttackDps": 180.07,
-      "specialMoveDps": 165.01,
-      "executeDps": 47.96,
+      "autoAttackDps": 195.18,
+      "specialMoveDps": 145.65,
+      "executeDps": 48.94,
       "dotDps": 11.9,
-      "procCounterDps": 0,
-      "totalDps": 404.93
+      "procCounterDps": 6.92,
+      "totalDps": 408.59
     }
   ],
   "materialTierCurves": [
@@ -977,10 +977,10 @@
       "levelReq": 1,
       "statBonusBudget": 0,
       "hue": 0,
-      "lowDefBossDps": 77.1,
-      "highDefBossDps": 33.19,
-      "multiTargetDps": 91.62,
-      "ehpPerSec": 170.91
+      "lowDefBossDps": 129.46,
+      "highDefBossDps": 54.34,
+      "multiTargetDps": 153.53,
+      "ehpPerSec": 214.43
     },
     {
       "classId": "warrior",
@@ -988,10 +988,10 @@
       "levelReq": 8,
       "statBonusBudget": 6,
       "hue": 2419,
-      "lowDefBossDps": 92.96,
-      "highDefBossDps": 41.36,
-      "multiTargetDps": 99.46,
-      "ehpPerSec": 181.96
+      "lowDefBossDps": 151.87,
+      "highDefBossDps": 61.93,
+      "multiTargetDps": 166.45,
+      "ehpPerSec": 215.79
     },
     {
       "classId": "warrior",
@@ -999,10 +999,10 @@
       "levelReq": 15,
       "statBonusBudget": 12,
       "hue": 2406,
-      "lowDefBossDps": 108.25,
-      "highDefBossDps": 46.37,
-      "multiTargetDps": 123.25,
-      "ehpPerSec": 186.3
+      "lowDefBossDps": 173.92,
+      "highDefBossDps": 72.15,
+      "multiTargetDps": 192.27,
+      "ehpPerSec": 231.52
     },
     {
       "classId": "warrior",
@@ -1010,10 +1010,10 @@
       "levelReq": 22,
       "statBonusBudget": 18,
       "hue": 2413,
-      "lowDefBossDps": 126.71,
-      "highDefBossDps": 60.28,
-      "multiTargetDps": 151.77,
-      "ehpPerSec": 206.07
+      "lowDefBossDps": 196.58,
+      "highDefBossDps": 82.27,
+      "multiTargetDps": 233.49,
+      "ehpPerSec": 242.43
     },
     {
       "classId": "warrior",
@@ -1021,10 +1021,10 @@
       "levelReq": 30,
       "statBonusBudget": 24,
       "hue": 2418,
-      "lowDefBossDps": 148.97,
-      "highDefBossDps": 70.63,
-      "multiTargetDps": 162.58,
-      "ehpPerSec": 216.42
+      "lowDefBossDps": 217.67,
+      "highDefBossDps": 95.34,
+      "multiTargetDps": 242.26,
+      "ehpPerSec": 253.34
     },
     {
       "classId": "warrior",
@@ -1032,10 +1032,10 @@
       "levelReq": 38,
       "statBonusBudget": 32,
       "hue": 2213,
-      "lowDefBossDps": 175.08,
-      "highDefBossDps": 84.05,
-      "multiTargetDps": 203.63,
-      "ehpPerSec": 225.3
+      "lowDefBossDps": 243.82,
+      "highDefBossDps": 111.66,
+      "multiTargetDps": 276.94,
+      "ehpPerSec": 274.58
     },
     {
       "classId": "warrior",
@@ -1043,10 +1043,10 @@
       "levelReq": 45,
       "statBonusBudget": 42,
       "hue": 2425,
-      "lowDefBossDps": 215.29,
-      "highDefBossDps": 105.43,
-      "multiTargetDps": 265.63,
-      "ehpPerSec": 248.27
+      "lowDefBossDps": 288.4,
+      "highDefBossDps": 121.06,
+      "multiTargetDps": 333.66,
+      "ehpPerSec": 289.79
     },
     {
       "classId": "warrior",
@@ -1054,10 +1054,10 @@
       "levelReq": 52,
       "statBonusBudget": 54,
       "hue": 2207,
-      "lowDefBossDps": 290.88,
-      "highDefBossDps": 132.99,
-      "multiTargetDps": 329.14,
-      "ehpPerSec": 278.32
+      "lowDefBossDps": 328.48,
+      "highDefBossDps": 136.05,
+      "multiTargetDps": 364.37,
+      "ehpPerSec": 307.94
     },
     {
       "classId": "warrior",
@@ -1065,10 +1065,10 @@
       "levelReq": 60,
       "statBonusBudget": 68,
       "hue": 2219,
-      "lowDefBossDps": 351.58,
-      "highDefBossDps": 173.45,
-      "multiTargetDps": 384.42,
-      "ehpPerSec": 317.63
+      "lowDefBossDps": 352.08,
+      "highDefBossDps": 154.77,
+      "multiTargetDps": 383.47,
+      "ehpPerSec": 330.9
     },
     {
       "classId": "mage",
@@ -1076,10 +1076,10 @@
       "levelReq": 1,
       "statBonusBudget": 0,
       "hue": 0,
-      "lowDefBossDps": 127.89,
-      "highDefBossDps": 65.48,
-      "multiTargetDps": 307.17,
-      "ehpPerSec": 136.53
+      "lowDefBossDps": 170.35,
+      "highDefBossDps": 85.13,
+      "multiTargetDps": 342.07,
+      "ehpPerSec": 192.95
     },
     {
       "classId": "mage",
@@ -1087,10 +1087,10 @@
       "levelReq": 8,
       "statBonusBudget": 6,
       "hue": 2419,
-      "lowDefBossDps": 133.73,
-      "highDefBossDps": 72.66,
-      "multiTargetDps": 345.26,
-      "ehpPerSec": 151.83
+      "lowDefBossDps": 192.07,
+      "highDefBossDps": 94.21,
+      "multiTargetDps": 428.17,
+      "ehpPerSec": 209.65
     },
     {
       "classId": "mage",
@@ -1098,10 +1098,10 @@
       "levelReq": 15,
       "statBonusBudget": 12,
       "hue": 2406,
-      "lowDefBossDps": 152,
-      "highDefBossDps": 87.96,
-      "multiTargetDps": 405.75,
-      "ehpPerSec": 167.43
+      "lowDefBossDps": 212.99,
+      "highDefBossDps": 102.68,
+      "multiTargetDps": 428.65,
+      "ehpPerSec": 232.53
     },
     {
       "classId": "mage",
@@ -1109,10 +1109,10 @@
       "levelReq": 22,
       "statBonusBudget": 18,
       "hue": 2413,
-      "lowDefBossDps": 168.49,
-      "highDefBossDps": 91.5,
-      "multiTargetDps": 404.79,
-      "ehpPerSec": 190.11
+      "lowDefBossDps": 246.25,
+      "highDefBossDps": 123.64,
+      "multiTargetDps": 482.09,
+      "ehpPerSec": 250.52
     },
     {
       "classId": "mage",
@@ -1120,10 +1120,10 @@
       "levelReq": 30,
       "statBonusBudget": 24,
       "hue": 2418,
-      "lowDefBossDps": 190.26,
-      "highDefBossDps": 103.73,
-      "multiTargetDps": 442.51,
-      "ehpPerSec": 206.06
+      "lowDefBossDps": 282.78,
+      "highDefBossDps": 145.24,
+      "multiTargetDps": 492.76,
+      "ehpPerSec": 269.78
     },
     {
       "classId": "mage",
@@ -1131,10 +1131,10 @@
       "levelReq": 38,
       "statBonusBudget": 32,
       "hue": 2213,
-      "lowDefBossDps": 225.19,
-      "highDefBossDps": 126.06,
-      "multiTargetDps": 504.86,
-      "ehpPerSec": 233.75
+      "lowDefBossDps": 298.77,
+      "highDefBossDps": 152.13,
+      "multiTargetDps": 583.97,
+      "ehpPerSec": 294.82
     },
     {
       "classId": "mage",
@@ -1142,10 +1142,10 @@
       "levelReq": 45,
       "statBonusBudget": 42,
       "hue": 2425,
-      "lowDefBossDps": 265.39,
-      "highDefBossDps": 138.97,
-      "multiTargetDps": 543.54,
-      "ehpPerSec": 262.65
+      "lowDefBossDps": 336,
+      "highDefBossDps": 167.9,
+      "multiTargetDps": 637.64,
+      "ehpPerSec": 317.74
     },
     {
       "classId": "mage",
@@ -1153,10 +1153,10 @@
       "levelReq": 52,
       "statBonusBudget": 54,
       "hue": 2207,
-      "lowDefBossDps": 318.43,
-      "highDefBossDps": 173.03,
-      "multiTargetDps": 616.63,
-      "ehpPerSec": 305.66
+      "lowDefBossDps": 352.3,
+      "highDefBossDps": 183.36,
+      "multiTargetDps": 701.97,
+      "ehpPerSec": 340.52
     },
     {
       "classId": "mage",
@@ -1164,10 +1164,10 @@
       "levelReq": 60,
       "statBonusBudget": 68,
       "hue": 2219,
-      "lowDefBossDps": 387.85,
-      "highDefBossDps": 206.96,
-      "multiTargetDps": 710.32,
-      "ehpPerSec": 366.26
+      "lowDefBossDps": 374.14,
+      "highDefBossDps": 191.12,
+      "multiTargetDps": 701.73,
+      "ehpPerSec": 369.24
     },
     {
       "classId": "ranger",
@@ -1175,10 +1175,10 @@
       "levelReq": 1,
       "statBonusBudget": 0,
       "hue": 0,
-      "lowDefBossDps": 56.14,
-      "highDefBossDps": 28.65,
-      "multiTargetDps": 93.11,
-      "ehpPerSec": 87.85
+      "lowDefBossDps": 116.31,
+      "highDefBossDps": 58.51,
+      "multiTargetDps": 153.21,
+      "ehpPerSec": 144.85
     },
     {
       "classId": "ranger",
@@ -1186,10 +1186,10 @@
       "levelReq": 8,
       "statBonusBudget": 6,
       "hue": 2419,
-      "lowDefBossDps": 72.63,
-      "highDefBossDps": 39.67,
-      "multiTargetDps": 126.45,
-      "ehpPerSec": 103.03
+      "lowDefBossDps": 146.05,
+      "highDefBossDps": 78.26,
+      "multiTargetDps": 222.83,
+      "ehpPerSec": 161.36
     },
     {
       "classId": "ranger",
@@ -1197,10 +1197,10 @@
       "levelReq": 15,
       "statBonusBudget": 12,
       "hue": 2406,
-      "lowDefBossDps": 90.91,
-      "highDefBossDps": 52.78,
-      "multiTargetDps": 143.37,
-      "ehpPerSec": 118.51
+      "lowDefBossDps": 175.57,
+      "highDefBossDps": 96.06,
+      "multiTargetDps": 255.46,
+      "ehpPerSec": 185.82
     },
     {
       "classId": "ranger",
@@ -1208,10 +1208,10 @@
       "levelReq": 22,
       "statBonusBudget": 18,
       "hue": 2413,
-      "lowDefBossDps": 114.18,
-      "highDefBossDps": 69.23,
-      "multiTargetDps": 165.64,
-      "ehpPerSec": 142.81
+      "lowDefBossDps": 203.74,
+      "highDefBossDps": 118.16,
+      "multiTargetDps": 297.73,
+      "ehpPerSec": 203.55
     },
     {
       "classId": "ranger",
@@ -1219,10 +1219,10 @@
       "levelReq": 30,
       "statBonusBudget": 24,
       "hue": 2418,
-      "lowDefBossDps": 133.68,
-      "highDefBossDps": 81.5,
-      "multiTargetDps": 207.96,
-      "ehpPerSec": 158.58
+      "lowDefBossDps": 228.9,
+      "highDefBossDps": 135.3,
+      "multiTargetDps": 501.32,
+      "ehpPerSec": 222.49
     },
     {
       "classId": "ranger",
@@ -1230,10 +1230,10 @@
       "levelReq": 38,
       "statBonusBudget": 32,
       "hue": 2213,
-      "lowDefBossDps": 171.21,
-      "highDefBossDps": 106.77,
-      "multiTargetDps": 245.5,
-      "ehpPerSec": 187.8
+      "lowDefBossDps": 255.61,
+      "highDefBossDps": 149,
+      "multiTargetDps": 469.68,
+      "ehpPerSec": 248.96
     },
     {
       "classId": "ranger",
@@ -1241,10 +1241,10 @@
       "levelReq": 45,
       "statBonusBudget": 42,
       "hue": 2425,
-      "lowDefBossDps": 209.6,
-      "highDefBossDps": 134.7,
-      "multiTargetDps": 320.4,
-      "ehpPerSec": 216.23
+      "lowDefBossDps": 311.41,
+      "highDefBossDps": 173.47,
+      "multiTargetDps": 636.23,
+      "ehpPerSec": 271.41
     },
     {
       "classId": "ranger",
@@ -1252,10 +1252,10 @@
       "levelReq": 52,
       "statBonusBudget": 54,
       "hue": 2207,
-      "lowDefBossDps": 290.73,
-      "highDefBossDps": 169.66,
-      "multiTargetDps": 481.99,
-      "ehpPerSec": 260.31
+      "lowDefBossDps": 332.95,
+      "highDefBossDps": 195.95,
+      "multiTargetDps": 682.64,
+      "ehpPerSec": 295.2
     },
     {
       "classId": "ranger",
@@ -1263,10 +1263,10 @@
       "levelReq": 60,
       "statBonusBudget": 68,
       "hue": 2219,
-      "lowDefBossDps": 383.85,
-      "highDefBossDps": 213.73,
-      "multiTargetDps": 662.7,
-      "ehpPerSec": 321.12
+      "lowDefBossDps": 400,
+      "highDefBossDps": 226.23,
+      "multiTargetDps": 698.71,
+      "ehpPerSec": 325.54
     },
     {
       "classId": "samurai",
@@ -1274,10 +1274,10 @@
       "levelReq": 1,
       "statBonusBudget": 0,
       "hue": 0,
-      "lowDefBossDps": 60.1,
-      "highDefBossDps": 29.3,
-      "multiTargetDps": 82.34,
-      "ehpPerSec": 148.66
+      "lowDefBossDps": 121.51,
+      "highDefBossDps": 57.31,
+      "multiTargetDps": 165.25,
+      "ehpPerSec": 176.3
     },
     {
       "classId": "samurai",
@@ -1285,10 +1285,10 @@
       "levelReq": 8,
       "statBonusBudget": 6,
       "hue": 2419,
-      "lowDefBossDps": 77.82,
-      "highDefBossDps": 40.92,
-      "multiTargetDps": 117.08,
-      "ehpPerSec": 157.13
+      "lowDefBossDps": 150.65,
+      "highDefBossDps": 75.95,
+      "multiTargetDps": 219.52,
+      "ehpPerSec": 190.71
     },
     {
       "classId": "samurai",
@@ -1296,10 +1296,10 @@
       "levelReq": 15,
       "statBonusBudget": 12,
       "hue": 2406,
-      "lowDefBossDps": 95.96,
-      "highDefBossDps": 52.03,
-      "multiTargetDps": 162.29,
-      "ehpPerSec": 168.65
+      "lowDefBossDps": 178.11,
+      "highDefBossDps": 94.39,
+      "multiTargetDps": 265.99,
+      "ehpPerSec": 205.8
     },
     {
       "classId": "samurai",
@@ -1307,10 +1307,10 @@
       "levelReq": 22,
       "statBonusBudget": 18,
       "hue": 2413,
-      "lowDefBossDps": 118.18,
-      "highDefBossDps": 65.61,
-      "multiTargetDps": 188.27,
-      "ehpPerSec": 179.55
+      "lowDefBossDps": 206.11,
+      "highDefBossDps": 108.77,
+      "multiTargetDps": 277.97,
+      "ehpPerSec": 219.65
     },
     {
       "classId": "samurai",
@@ -1318,10 +1318,10 @@
       "levelReq": 30,
       "statBonusBudget": 24,
       "hue": 2418,
-      "lowDefBossDps": 142.37,
-      "highDefBossDps": 82.5,
-      "multiTargetDps": 233.48,
-      "ehpPerSec": 189.49
+      "lowDefBossDps": 224.67,
+      "highDefBossDps": 120.76,
+      "multiTargetDps": 303.97,
+      "ehpPerSec": 233.99
     },
     {
       "classId": "samurai",
@@ -1329,10 +1329,10 @@
       "levelReq": 38,
       "statBonusBudget": 32,
       "hue": 2213,
-      "lowDefBossDps": 180.03,
-      "highDefBossDps": 105.06,
-      "multiTargetDps": 294.85,
-      "ehpPerSec": 206.71
+      "lowDefBossDps": 280.17,
+      "highDefBossDps": 140.35,
+      "multiTargetDps": 331.89,
+      "ehpPerSec": 251.55
     },
     {
       "classId": "samurai",
@@ -1340,10 +1340,10 @@
       "levelReq": 45,
       "statBonusBudget": 42,
       "hue": 2425,
-      "lowDefBossDps": 215.98,
-      "highDefBossDps": 127.92,
-      "multiTargetDps": 318.67,
-      "ehpPerSec": 228.23
+      "lowDefBossDps": 297.71,
+      "highDefBossDps": 154.81,
+      "multiTargetDps": 372.48,
+      "ehpPerSec": 266.94
     },
     {
       "classId": "samurai",
@@ -1351,10 +1351,10 @@
       "levelReq": 52,
       "statBonusBudget": 54,
       "hue": 2207,
-      "lowDefBossDps": 298.51,
-      "highDefBossDps": 169.28,
-      "multiTargetDps": 403.35,
-      "ehpPerSec": 265.91
+      "lowDefBossDps": 351.1,
+      "highDefBossDps": 176.98,
+      "multiTargetDps": 398.69,
+      "ehpPerSec": 290.55
     },
     {
       "classId": "samurai",
@@ -1362,10 +1362,10 @@
       "levelReq": 60,
       "statBonusBudget": 68,
       "hue": 2219,
-      "lowDefBossDps": 391.92,
-      "highDefBossDps": 229.26,
-      "multiTargetDps": 465.99,
-      "ehpPerSec": 318.91
+      "lowDefBossDps": 366.61,
+      "highDefBossDps": 193.25,
+      "multiTargetDps": 456.74,
+      "ehpPerSec": 322.81
     },
     {
       "classId": "ninja",
@@ -1373,10 +1373,10 @@
       "levelReq": 1,
       "statBonusBudget": 0,
       "hue": 0,
-      "lowDefBossDps": 61.93,
-      "highDefBossDps": 30.02,
-      "multiTargetDps": 76.84,
-      "ehpPerSec": 103.39
+      "lowDefBossDps": 124.88,
+      "highDefBossDps": 53.44,
+      "multiTargetDps": 152.43,
+      "ehpPerSec": 163.05
     },
     {
       "classId": "ninja",
@@ -1384,10 +1384,10 @@
       "levelReq": 8,
       "statBonusBudget": 6,
       "hue": 2419,
-      "lowDefBossDps": 78.94,
-      "highDefBossDps": 39.29,
-      "multiTargetDps": 100.03,
-      "ehpPerSec": 117.85
+      "lowDefBossDps": 157.74,
+      "highDefBossDps": 71.34,
+      "multiTargetDps": 198.49,
+      "ehpPerSec": 178.33
     },
     {
       "classId": "ninja",
@@ -1395,10 +1395,10 @@
       "levelReq": 15,
       "statBonusBudget": 12,
       "hue": 2406,
-      "lowDefBossDps": 100.02,
-      "highDefBossDps": 49.88,
-      "multiTargetDps": 125.94,
-      "ehpPerSec": 138.11
+      "lowDefBossDps": 175.14,
+      "highDefBossDps": 81.75,
+      "multiTargetDps": 221.41,
+      "ehpPerSec": 202.58
     },
     {
       "classId": "ninja",
@@ -1406,10 +1406,10 @@
       "levelReq": 22,
       "statBonusBudget": 18,
       "hue": 2413,
-      "lowDefBossDps": 118.6,
-      "highDefBossDps": 60.67,
-      "multiTargetDps": 156.17,
-      "ehpPerSec": 158.74
+      "lowDefBossDps": 206.44,
+      "highDefBossDps": 97.96,
+      "multiTargetDps": 258.02,
+      "ehpPerSec": 220.01
     },
     {
       "classId": "ninja",
@@ -1417,10 +1417,10 @@
       "levelReq": 30,
       "statBonusBudget": 24,
       "hue": 2418,
-      "lowDefBossDps": 136.4,
-      "highDefBossDps": 70.73,
-      "multiTargetDps": 175.12,
-      "ehpPerSec": 178.6
+      "lowDefBossDps": 225.82,
+      "highDefBossDps": 111.42,
+      "multiTargetDps": 276.3,
+      "ehpPerSec": 237.93
     },
     {
       "classId": "ninja",
@@ -1428,10 +1428,10 @@
       "levelReq": 38,
       "statBonusBudget": 32,
       "hue": 2213,
-      "lowDefBossDps": 171.46,
-      "highDefBossDps": 89.98,
-      "multiTargetDps": 224.22,
-      "ehpPerSec": 202.49
+      "lowDefBossDps": 257.22,
+      "highDefBossDps": 126.9,
+      "multiTargetDps": 312.45,
+      "ehpPerSec": 260.88
     },
     {
       "classId": "ninja",
@@ -1439,10 +1439,10 @@
       "levelReq": 45,
       "statBonusBudget": 42,
       "hue": 2425,
-      "lowDefBossDps": 205,
-      "highDefBossDps": 109.88,
-      "multiTargetDps": 275.96,
-      "ehpPerSec": 232.86
+      "lowDefBossDps": 288.6,
+      "highDefBossDps": 142.33,
+      "multiTargetDps": 331.32,
+      "ehpPerSec": 283.39
     },
     {
       "classId": "ninja",
@@ -1450,10 +1450,10 @@
       "levelReq": 52,
       "statBonusBudget": 54,
       "hue": 2207,
-      "lowDefBossDps": 268.82,
-      "highDefBossDps": 142.89,
-      "multiTargetDps": 327.44,
-      "ehpPerSec": 273.53
+      "lowDefBossDps": 329.82,
+      "highDefBossDps": 165.38,
+      "multiTargetDps": 377.29,
+      "ehpPerSec": 308.08
     },
     {
       "classId": "ninja",
@@ -1461,10 +1461,10 @@
       "levelReq": 60,
       "statBonusBudget": 68,
       "hue": 2219,
-      "lowDefBossDps": 367.38,
-      "highDefBossDps": 183.56,
-      "multiTargetDps": 404.93,
-      "ehpPerSec": 330.44
+      "lowDefBossDps": 363.62,
+      "highDefBossDps": 183.32,
+      "multiTargetDps": 408.44,
+      "ehpPerSec": 335.16
     }
   ],
   "affixLoadoutCurves": [
@@ -1472,10 +1472,10 @@
       "classId": "warrior",
       "loadoutId": "clean_base",
       "loadoutName": "Un-Affixed Base Gear",
-      "lowDefBossDps": 185.86,
-      "highDefBossDps": 82.5,
-      "multiTargetDps": 217.83,
-      "ehpPerSec": 227.19,
+      "lowDefBossDps": 167.09,
+      "highDefBossDps": 67.11,
+      "multiTargetDps": 198,
+      "ehpPerSec": 236.44,
       "netManaDeltaPerMin": 0,
       "netStaminaDeltaPerMin": -40
     },
@@ -1483,10 +1483,10 @@
       "classId": "warrior",
       "loadoutId": "speed_crit",
       "loadoutName": "Swift Tempo & Keen Edge (+SSI/+Crit)",
-      "lowDefBossDps": 327.45,
-      "highDefBossDps": 157.84,
-      "multiTargetDps": 366.21,
-      "ehpPerSec": 302.83,
+      "lowDefBossDps": 326.75,
+      "highDefBossDps": 146.07,
+      "multiTargetDps": 365.57,
+      "ehpPerSec": 322.01,
       "netManaDeltaPerMin": 0,
       "netStaminaDeltaPerMin": 85
     },
@@ -1494,10 +1494,10 @@
       "classId": "warrior",
       "loadoutId": "power_lethality",
       "loadoutName": "Heavy Execution & Spell Power (+DI/+SDI)",
-      "lowDefBossDps": 392.23,
-      "highDefBossDps": 175.67,
-      "multiTargetDps": 431.68,
-      "ehpPerSec": 302.83,
+      "lowDefBossDps": 389.7,
+      "highDefBossDps": 164.49,
+      "multiTargetDps": 406.71,
+      "ehpPerSec": 322.01,
       "netManaDeltaPerMin": 0,
       "netStaminaDeltaPerMin": 60
     },
@@ -1505,10 +1505,10 @@
       "classId": "warrior",
       "loadoutId": "bastion_parry",
       "loadoutName": "Tokuno Bastion & Parry (+DCI/+Resist/+Regen)",
-      "lowDefBossDps": 299.18,
-      "highDefBossDps": 144.08,
-      "multiTargetDps": 351.68,
-      "ehpPerSec": 388.64,
+      "lowDefBossDps": 299.55,
+      "highDefBossDps": 128.93,
+      "multiTargetDps": 352.7,
+      "ehpPerSec": 401.54,
       "netManaDeltaPerMin": 0,
       "netStaminaDeltaPerMin": 175
     },
@@ -1516,10 +1516,10 @@
       "classId": "warrior",
       "loadoutId": "valorite_bis",
       "loadoutName": "Grandmaster Valorite BiS (Full Affix Cap)",
-      "lowDefBossDps": 444.41,
-      "highDefBossDps": 213.44,
-      "multiTargetDps": 477.37,
-      "ehpPerSec": 379.87,
+      "lowDefBossDps": 490.15,
+      "highDefBossDps": 242.63,
+      "multiTargetDps": 531,
+      "ehpPerSec": 410.61,
       "netManaDeltaPerMin": 0,
       "netStaminaDeltaPerMin": 138
     },
@@ -1527,10 +1527,10 @@
       "classId": "mage",
       "loadoutId": "clean_base",
       "loadoutName": "Un-Affixed Base Gear",
-      "lowDefBossDps": 227.83,
-      "highDefBossDps": 116.7,
-      "multiTargetDps": 469.32,
-      "ehpPerSec": 242.05,
+      "lowDefBossDps": 209.7,
+      "highDefBossDps": 100.87,
+      "multiTargetDps": 404.55,
+      "ehpPerSec": 246.54,
       "netManaDeltaPerMin": -226,
       "netStaminaDeltaPerMin": 312
     },
@@ -1538,54 +1538,54 @@
       "classId": "mage",
       "loadoutId": "speed_crit",
       "loadoutName": "Swift Tempo & Keen Edge (+SSI/+Crit)",
-      "lowDefBossDps": 352.5,
-      "highDefBossDps": 192.56,
-      "multiTargetDps": 691.8,
-      "ehpPerSec": 349.26,
-      "netManaDeltaPerMin": -184,
+      "lowDefBossDps": 347.41,
+      "highDefBossDps": 188,
+      "multiTargetDps": 727.07,
+      "ehpPerSec": 360.08,
+      "netManaDeltaPerMin": -67,
       "netStaminaDeltaPerMin": 462
     },
     {
       "classId": "mage",
       "loadoutId": "power_lethality",
       "loadoutName": "Heavy Execution & Spell Power (+DI/+SDI)",
-      "lowDefBossDps": 407.11,
-      "highDefBossDps": 221.5,
-      "multiTargetDps": 749.21,
-      "ehpPerSec": 349.26,
-      "netManaDeltaPerMin": -184,
+      "lowDefBossDps": 391.66,
+      "highDefBossDps": 198.8,
+      "multiTargetDps": 758.98,
+      "ehpPerSec": 360.08,
+      "netManaDeltaPerMin": -50,
       "netStaminaDeltaPerMin": 462
     },
     {
       "classId": "mage",
       "loadoutId": "bastion_parry",
       "loadoutName": "Tokuno Bastion & Parry (+DCI/+Resist/+Regen)",
-      "lowDefBossDps": 347.53,
-      "highDefBossDps": 185.49,
-      "multiTargetDps": 755.4,
-      "ehpPerSec": 431.03,
-      "netManaDeltaPerMin": -94,
+      "lowDefBossDps": 341.58,
+      "highDefBossDps": 175.68,
+      "multiTargetDps": 725.69,
+      "ehpPerSec": 450.32,
+      "netManaDeltaPerMin": 49,
       "netStaminaDeltaPerMin": 552
     },
     {
       "classId": "mage",
       "loadoutId": "valorite_bis",
       "loadoutName": "Grandmaster Valorite BiS (Full Affix Cap)",
-      "lowDefBossDps": 453.32,
-      "highDefBossDps": 247.94,
-      "multiTargetDps": 906.51,
-      "ehpPerSec": 419.6,
-      "netManaDeltaPerMin": -106,
+      "lowDefBossDps": 460.24,
+      "highDefBossDps": 249.24,
+      "multiTargetDps": 907.24,
+      "ehpPerSec": 441.83,
+      "netManaDeltaPerMin": 149,
       "netStaminaDeltaPerMin": 540
     },
     {
       "classId": "ranger",
       "loadoutId": "clean_base",
       "loadoutName": "Un-Affixed Base Gear",
-      "lowDefBossDps": 178.09,
-      "highDefBossDps": 106.04,
-      "multiTargetDps": 267.21,
-      "ehpPerSec": 193.23,
+      "lowDefBossDps": 165.9,
+      "highDefBossDps": 88.19,
+      "multiTargetDps": 255.7,
+      "ehpPerSec": 198.04,
       "netManaDeltaPerMin": -136,
       "netStaminaDeltaPerMin": 26
     },
@@ -1593,109 +1593,109 @@
       "classId": "ranger",
       "loadoutId": "speed_crit",
       "loadoutName": "Swift Tempo & Keen Edge (+SSI/+Crit)",
-      "lowDefBossDps": 325.64,
-      "highDefBossDps": 190.76,
-      "multiTargetDps": 618.28,
-      "ehpPerSec": 300.75,
-      "netManaDeltaPerMin": -49,
+      "lowDefBossDps": 344.89,
+      "highDefBossDps": 197.66,
+      "multiTargetDps": 663.52,
+      "ehpPerSec": 316.02,
+      "netManaDeltaPerMin": 13,
       "netStaminaDeltaPerMin": 113
     },
     {
       "classId": "ranger",
       "loadoutId": "power_lethality",
       "loadoutName": "Heavy Execution & Spell Power (+DI/+SDI)",
-      "lowDefBossDps": 405.75,
-      "highDefBossDps": 240.76,
-      "multiTargetDps": 710.66,
-      "ehpPerSec": 300.75,
-      "netManaDeltaPerMin": -74,
+      "lowDefBossDps": 414.22,
+      "highDefBossDps": 233.85,
+      "multiTargetDps": 754.6,
+      "ehpPerSec": 316.02,
+      "netManaDeltaPerMin": -6,
       "netStaminaDeltaPerMin": 88
     },
     {
       "classId": "ranger",
       "loadoutId": "bastion_parry",
       "loadoutName": "Tokuno Bastion & Parry (+DCI/+Resist/+Regen)",
-      "lowDefBossDps": 284.59,
-      "highDefBossDps": 175.41,
-      "multiTargetDps": 633.34,
-      "ehpPerSec": 406.3,
-      "netManaDeltaPerMin": 41,
+      "lowDefBossDps": 318.41,
+      "highDefBossDps": 180.72,
+      "multiTargetDps": 741.38,
+      "ehpPerSec": 425.3,
+      "netManaDeltaPerMin": 124,
       "netStaminaDeltaPerMin": 203
     },
     {
       "classId": "ranger",
       "loadoutId": "valorite_bis",
       "loadoutName": "Grandmaster Valorite BiS (Full Affix Cap)",
-      "lowDefBossDps": 452.34,
-      "highDefBossDps": 269.79,
-      "multiTargetDps": 867.73,
-      "ehpPerSec": 389.5,
-      "netManaDeltaPerMin": 4,
+      "lowDefBossDps": 497.55,
+      "highDefBossDps": 330,
+      "multiTargetDps": 1023.66,
+      "ehpPerSec": 420.23,
+      "netManaDeltaPerMin": 160,
       "netStaminaDeltaPerMin": 166
     },
     {
       "classId": "samurai",
       "loadoutId": "clean_base",
       "loadoutName": "Un-Affixed Base Gear",
-      "lowDefBossDps": 191.08,
-      "highDefBossDps": 105.93,
-      "multiTargetDps": 304.58,
-      "ehpPerSec": 211.22,
-      "netManaDeltaPerMin": -146,
+      "lowDefBossDps": 174.13,
+      "highDefBossDps": 87.94,
+      "multiTargetDps": 260.43,
+      "ehpPerSec": 214.19,
+      "netManaDeltaPerMin": -150,
       "netStaminaDeltaPerMin": 318
     },
     {
       "classId": "samurai",
       "loadoutId": "speed_crit",
       "loadoutName": "Swift Tempo & Keen Edge (+SSI/+Crit)",
-      "lowDefBossDps": 348.43,
-      "highDefBossDps": 195.57,
-      "multiTargetDps": 450.45,
-      "ehpPerSec": 295.37,
-      "netManaDeltaPerMin": 0,
+      "lowDefBossDps": 351.54,
+      "highDefBossDps": 183.75,
+      "multiTargetDps": 398.98,
+      "ehpPerSec": 309.92,
+      "netManaDeltaPerMin": 56,
       "netStaminaDeltaPerMin": 440
     },
     {
       "classId": "samurai",
       "loadoutId": "power_lethality",
       "loadoutName": "Heavy Execution & Spell Power (+DI/+SDI)",
-      "lowDefBossDps": 403.5,
-      "highDefBossDps": 232.77,
-      "multiTargetDps": 508.55,
-      "ehpPerSec": 295.37,
-      "netManaDeltaPerMin": 0,
+      "lowDefBossDps": 405.93,
+      "highDefBossDps": 212.5,
+      "multiTargetDps": 470.13,
+      "ehpPerSec": 309.92,
+      "netManaDeltaPerMin": 59,
       "netStaminaDeltaPerMin": 440
     },
     {
       "classId": "samurai",
       "loadoutId": "bastion_parry",
       "loadoutName": "Tokuno Bastion & Parry (+DCI/+Resist/+Regen)",
-      "lowDefBossDps": 311.63,
-      "highDefBossDps": 179.17,
-      "multiTargetDps": 419.21,
-      "ehpPerSec": 395.35,
-      "netManaDeltaPerMin": 90,
-      "netStaminaDeltaPerMin": 549
+      "lowDefBossDps": 312.77,
+      "highDefBossDps": 169.04,
+      "multiTargetDps": 380.37,
+      "ehpPerSec": 416.41,
+      "netManaDeltaPerMin": 157,
+      "netStaminaDeltaPerMin": 545
     },
     {
       "classId": "samurai",
       "loadoutId": "valorite_bis",
       "loadoutName": "Grandmaster Valorite BiS (Full Affix Cap)",
-      "lowDefBossDps": 479.07,
-      "highDefBossDps": 304.26,
-      "multiTargetDps": 590.37,
-      "ehpPerSec": 382.94,
-      "netManaDeltaPerMin": 78,
-      "netStaminaDeltaPerMin": 520
+      "lowDefBossDps": 514.6,
+      "highDefBossDps": 315,
+      "multiTargetDps": 560.82,
+      "ehpPerSec": 410.4,
+      "netManaDeltaPerMin": 201,
+      "netStaminaDeltaPerMin": 518
     },
     {
       "classId": "ninja",
       "loadoutId": "clean_base",
       "loadoutName": "Un-Affixed Base Gear",
-      "lowDefBossDps": 183.46,
-      "highDefBossDps": 90.82,
-      "multiTargetDps": 249.66,
-      "ehpPerSec": 209.94,
+      "lowDefBossDps": 170.93,
+      "highDefBossDps": 75.66,
+      "multiTargetDps": 214.52,
+      "ehpPerSec": 214.75,
       "netManaDeltaPerMin": -124,
       "netStaminaDeltaPerMin": 312
     },
@@ -1703,164 +1703,164 @@
       "classId": "ninja",
       "loadoutId": "speed_crit",
       "loadoutName": "Swift Tempo & Keen Edge (+SSI/+Crit)",
-      "lowDefBossDps": 307.17,
-      "highDefBossDps": 161.21,
-      "multiTargetDps": 364.51,
-      "ehpPerSec": 312.49,
-      "netManaDeltaPerMin": 26,
+      "lowDefBossDps": 329.57,
+      "highDefBossDps": 168.93,
+      "multiTargetDps": 376.43,
+      "ehpPerSec": 323.42,
+      "netManaDeltaPerMin": 74,
       "netStaminaDeltaPerMin": 444
     },
     {
       "classId": "ninja",
       "loadoutId": "power_lethality",
       "loadoutName": "Heavy Execution & Spell Power (+DI/+SDI)",
-      "lowDefBossDps": 373.59,
-      "highDefBossDps": 188.91,
-      "multiTargetDps": 442.4,
-      "ehpPerSec": 312.49,
-      "netManaDeltaPerMin": 26,
+      "lowDefBossDps": 388.15,
+      "highDefBossDps": 186.51,
+      "multiTargetDps": 444.56,
+      "ehpPerSec": 323.42,
+      "netManaDeltaPerMin": 80,
       "netStaminaDeltaPerMin": 426
     },
     {
       "classId": "ninja",
       "loadoutId": "bastion_parry",
       "loadoutName": "Tokuno Bastion & Parry (+DCI/+Resist/+Regen)",
-      "lowDefBossDps": 287.36,
-      "highDefBossDps": 150.75,
-      "multiTargetDps": 345,
-      "ehpPerSec": 412.88,
-      "netManaDeltaPerMin": 116,
+      "lowDefBossDps": 310.91,
+      "highDefBossDps": 161.48,
+      "multiTargetDps": 348.55,
+      "ehpPerSec": 432.62,
+      "netManaDeltaPerMin": 180,
       "netStaminaDeltaPerMin": 534
     },
     {
       "classId": "ninja",
       "loadoutId": "valorite_bis",
       "loadoutName": "Grandmaster Valorite BiS (Full Affix Cap)",
-      "lowDefBossDps": 428.22,
-      "highDefBossDps": 221.04,
-      "multiTargetDps": 510.64,
-      "ehpPerSec": 397.35,
-      "netManaDeltaPerMin": 104,
+      "lowDefBossDps": 472.59,
+      "highDefBossDps": 263.6,
+      "multiTargetDps": 519.76,
+      "ehpPerSec": 424.18,
+      "netManaDeltaPerMin": 216,
       "netStaminaDeltaPerMin": 504
     }
   ],
   "multiWaveRuns": [
     {
       "classId": "warrior",
-      "totalClearTimeSec": 116.6,
-      "averageWaveDps": 292.83,
-      "minHpPct": 70.98,
+      "totalClearTimeSec": 114.6,
+      "averageWaveDps": 298.87,
+      "minHpPct": 84.97,
       "minManaPct": 100,
       "totalParries": 21,
       "totalCloneInterceptions": 0,
       "waves": [
         {
           "waveIndex": 1,
-          "waveClearTimeSec": 9.9,
-          "cumulativeTimeSec": 9.9,
-          "waveDps": 340,
-          "endingHpPct": 91.53,
+          "waveClearTimeSec": 9.3,
+          "cumulativeTimeSec": 9.3,
+          "waveDps": 361.94,
+          "endingHpPct": 100,
           "endingManaPct": 100,
           "endingStaminaPct": 74.73,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 0
-        },
-        {
-          "waveIndex": 2,
-          "waveClearTimeSec": 8.3,
-          "cumulativeTimeSec": 19.7,
-          "waveDps": 343.47,
-          "endingHpPct": 86.94,
-          "endingManaPct": 100,
-          "endingStaminaPct": 60.18,
-          "parriesInWave": 3,
-          "clonesOrStreakEnd": 0
-        },
-        {
-          "waveIndex": 3,
-          "waveClearTimeSec": 11.3,
-          "cumulativeTimeSec": 32.5,
-          "waveDps": 262.97,
-          "endingHpPct": 89.18,
-          "endingManaPct": 100,
-          "endingStaminaPct": 58.42,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         },
         {
-          "waveIndex": 4,
-          "waveClearTimeSec": 10.5,
-          "cumulativeTimeSec": 44.5,
-          "waveDps": 280.5,
-          "endingHpPct": 84.28,
+          "waveIndex": 2,
+          "waveClearTimeSec": 8,
+          "cumulativeTimeSec": 18.8,
+          "waveDps": 354.32,
+          "endingHpPct": 90.07,
           "endingManaPct": 100,
-          "endingStaminaPct": 53.21,
+          "endingStaminaPct": 55.52,
+          "parriesInWave": 1,
+          "clonesOrStreakEnd": 0
+        },
+        {
+          "waveIndex": 3,
+          "waveClearTimeSec": 11.2,
+          "cumulativeTimeSec": 31.5,
+          "waveDps": 265.04,
+          "endingHpPct": 91.18,
+          "endingManaPct": 100,
+          "endingStaminaPct": 59.82,
+          "parriesInWave": 3,
+          "clonesOrStreakEnd": 0
+        },
+        {
+          "waveIndex": 4,
+          "waveClearTimeSec": 10,
+          "cumulativeTimeSec": 43,
+          "waveDps": 292.7,
+          "endingHpPct": 91.52,
+          "endingManaPct": 100,
+          "endingStaminaPct": 48.55,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 5,
-          "waveClearTimeSec": 9,
-          "cumulativeTimeSec": 55,
-          "waveDps": 320.57,
-          "endingHpPct": 95.63,
+          "waveClearTimeSec": 13.2,
+          "cumulativeTimeSec": 57.7,
+          "waveDps": 228.98,
+          "endingHpPct": 90.66,
           "endingManaPct": 100,
-          "endingStaminaPct": 43.33,
+          "endingStaminaPct": 46.61,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 6,
-          "waveClearTimeSec": 12.6,
-          "cumulativeTimeSec": 69.1,
-          "waveDps": 238.72,
-          "endingHpPct": 93.32,
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 68.1,
+          "waveDps": 323.65,
+          "endingHpPct": 90.32,
           "endingManaPct": 100,
-          "endingStaminaPct": 53.52,
+          "endingStaminaPct": 48.85,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 7,
-          "waveClearTimeSec": 10.9,
-          "cumulativeTimeSec": 81.5,
-          "waveDps": 271.45,
-          "endingHpPct": 85.48,
+          "waveClearTimeSec": 9,
+          "cumulativeTimeSec": 78.6,
+          "waveDps": 320.57,
+          "endingHpPct": 94.53,
           "endingManaPct": 100,
-          "endingStaminaPct": 34.97,
-          "parriesInWave": 3,
-          "clonesOrStreakEnd": 0
-        },
-        {
-          "waveIndex": 8,
-          "waveClearTimeSec": 11.4,
-          "cumulativeTimeSec": 94.4,
-          "waveDps": 260.93,
-          "endingHpPct": 93.56,
-          "endingManaPct": 100,
-          "endingStaminaPct": 34.42,
+          "endingStaminaPct": 34.3,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         },
         {
-          "waveIndex": 9,
-          "waveClearTimeSec": 8.8,
-          "cumulativeTimeSec": 104.7,
-          "waveDps": 326.8,
-          "endingHpPct": 91.92,
+          "waveIndex": 8,
+          "waveClearTimeSec": 10.5,
+          "cumulativeTimeSec": 90.6,
+          "waveDps": 280.5,
+          "endingHpPct": 92.83,
           "endingManaPct": 100,
-          "endingStaminaPct": 25.94,
+          "endingStaminaPct": 23.03,
+          "parriesInWave": 3,
+          "clonesOrStreakEnd": 0
+        },
+        {
+          "waveIndex": 9,
+          "waveClearTimeSec": 10.5,
+          "cumulativeTimeSec": 102.6,
+          "waveDps": 280.5,
+          "endingHpPct": 97.16,
+          "endingManaPct": 100,
+          "endingStaminaPct": 22.67,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 10,
-          "waveClearTimeSec": 10.4,
-          "cumulativeTimeSec": 116.6,
-          "waveDps": 282.86,
-          "endingHpPct": 84.08,
+          "waveClearTimeSec": 10.5,
+          "cumulativeTimeSec": 114.6,
+          "waveDps": 280.5,
+          "endingHpPct": 88.86,
           "endingManaPct": 100,
-          "endingStaminaPct": 20.73,
+          "endingStaminaPct": 11.39,
           "parriesInWave": 2,
           "clonesOrStreakEnd": 0
         }
@@ -1868,11 +1868,11 @@
     },
     {
       "classId": "mage",
-      "totalClearTimeSec": 63.7,
-      "averageWaveDps": 1306,
-      "minHpPct": 59.67,
-      "minManaPct": 0.71,
-      "totalParries": 4,
+      "totalClearTimeSec": 65.6,
+      "averageWaveDps": 1234.31,
+      "minHpPct": 49.93,
+      "minManaPct": 40.59,
+      "totalParries": 3,
       "totalCloneInterceptions": 0,
       "waves": [
         {
@@ -1881,7 +1881,7 @@
           "cumulativeTimeSec": 0.3,
           "waveDps": 6732,
           "endingHpPct": 100,
-          "endingManaPct": 51.02,
+          "endingManaPct": 58.37,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
@@ -1891,8 +1891,8 @@
           "waveClearTimeSec": 6.5,
           "cumulativeTimeSec": 8.3,
           "waveDps": 420.75,
-          "endingHpPct": 74.82,
-          "endingManaPct": 37.14,
+          "endingHpPct": 86.92,
+          "endingManaPct": 50.2,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
@@ -1902,8 +1902,8 @@
           "waveClearTimeSec": 6.5,
           "cumulativeTimeSec": 16.3,
           "waveDps": 420.75,
-          "endingHpPct": 66.88,
-          "endingManaPct": 48.27,
+          "endingHpPct": 82.19,
+          "endingManaPct": 42.04,
           "endingStaminaPct": 100,
           "parriesInWave": 1,
           "clonesOrStreakEnd": 0
@@ -1913,87 +1913,87 @@
           "waveClearTimeSec": 0.5,
           "cumulativeTimeSec": 18,
           "waveDps": 1683,
-          "endingHpPct": 69.74,
-          "endingManaPct": 26.63,
+          "endingHpPct": 85.05,
+          "endingManaPct": 53.24,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 5,
-          "waveClearTimeSec": 7.8,
-          "cumulativeTimeSec": 27.3,
-          "waveDps": 361.94,
-          "endingHpPct": 74.82,
-          "endingManaPct": 13.78,
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 28.4,
+          "waveDps": 323.65,
+          "endingHpPct": 66.99,
+          "endingManaPct": 51.2,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 6,
-          "waveClearTimeSec": 3.1,
+          "waveClearTimeSec": 2,
           "cumulativeTimeSec": 31.9,
-          "waveDps": 731.74,
-          "endingHpPct": 67.61,
-          "endingManaPct": 24.08,
+          "waveDps": 961.71,
+          "endingHpPct": 63.19,
+          "endingManaPct": 37.53,
           "endingStaminaPct": 100,
-          "parriesInWave": 1,
+          "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 7,
-          "waveClearTimeSec": 6.7,
-          "cumulativeTimeSec": 40.1,
-          "waveDps": 410.49,
-          "endingHpPct": 88.17,
-          "endingManaPct": 11.22,
+          "waveClearTimeSec": 8.1,
+          "cumulativeTimeSec": 41.5,
+          "waveDps": 350.63,
+          "endingHpPct": 61.33,
+          "endingManaPct": 50.36,
           "endingStaminaPct": 100,
-          "parriesInWave": 0,
+          "parriesInWave": 1,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 8,
-          "waveClearTimeSec": 8.9,
-          "cumulativeTimeSec": 50.5,
-          "waveDps": 323.65,
-          "endingHpPct": 70.15,
-          "endingManaPct": 22.76,
-          "endingStaminaPct": 100,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 0
-        },
-        {
-          "waveIndex": 9,
-          "waveClearTimeSec": 0.5,
-          "cumulativeTimeSec": 52.2,
-          "waveDps": 1683,
-          "endingHpPct": 73.02,
-          "endingManaPct": 1.94,
+          "waveClearTimeSec": 2.9,
+          "cumulativeTimeSec": 45.9,
+          "waveDps": 765,
+          "endingHpPct": 58.96,
+          "endingManaPct": 38.93,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
-          "waveIndex": 10,
-          "waveClearTimeSec": 10,
-          "cumulativeTimeSec": 63.7,
-          "waveDps": 292.7,
-          "endingHpPct": 79.97,
-          "endingManaPct": 28.78,
+          "waveIndex": 9,
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 56.3,
+          "waveDps": 323.65,
+          "endingHpPct": 65.43,
+          "endingManaPct": 67.07,
           "endingStaminaPct": 100,
           "parriesInWave": 1,
+          "clonesOrStreakEnd": 0
+        },
+        {
+          "waveIndex": 10,
+          "waveClearTimeSec": 7.8,
+          "cumulativeTimeSec": 65.6,
+          "waveDps": 361.94,
+          "endingHpPct": 62.14,
+          "endingManaPct": 61.96,
+          "endingStaminaPct": 100,
+          "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         }
       ]
     },
     {
       "classId": "ranger",
-      "totalClearTimeSec": 71.9,
-      "averageWaveDps": 1253.08,
-      "minHpPct": 70.67,
-      "minManaPct": 0,
-      "totalParries": 4,
+      "totalClearTimeSec": 70.7,
+      "averageWaveDps": 1263.26,
+      "minHpPct": 72.65,
+      "minManaPct": 41.43,
+      "totalParries": 3,
       "totalCloneInterceptions": 0,
       "waves": [
         {
@@ -2002,7 +2002,7 @@
           "cumulativeTimeSec": 0.4,
           "waveDps": 6732,
           "endingHpPct": 100,
-          "endingManaPct": 49.29,
+          "endingManaPct": 57.86,
           "endingStaminaPct": 63.59,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
@@ -2013,7 +2013,7 @@
           "cumulativeTimeSec": 14.1,
           "waveDps": 245.69,
           "endingHpPct": 96.59,
-          "endingManaPct": 37.86,
+          "endingManaPct": 56.43,
           "endingStaminaPct": 74.77,
           "parriesInWave": 1,
           "clonesOrStreakEnd": 0
@@ -2024,7 +2024,7 @@
           "cumulativeTimeSec": 17,
           "waveDps": 1160.69,
           "endingHpPct": 93.88,
-          "endingManaPct": 32.86,
+          "endingManaPct": 62.32,
           "endingStaminaPct": 57.38,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
@@ -2034,10 +2034,10 @@
           "waveClearTimeSec": 11.4,
           "cumulativeTimeSec": 29.9,
           "waveDps": 260.93,
-          "endingHpPct": 88.75,
-          "endingManaPct": 38.57,
+          "endingHpPct": 82.62,
+          "endingManaPct": 53.04,
           "endingStaminaPct": 60.15,
-          "parriesInWave": 1,
+          "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
@@ -2045,8 +2045,8 @@
           "waveClearTimeSec": 0.6,
           "cumulativeTimeSec": 32,
           "waveDps": 1602.86,
-          "endingHpPct": 86.69,
-          "endingManaPct": 7.86,
+          "endingHpPct": 80.57,
+          "endingManaPct": 58.21,
           "endingStaminaPct": 42.26,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
@@ -2057,52 +2057,52 @@
           "cumulativeTimeSec": 41.7,
           "waveDps": 347.01,
           "endingHpPct": 77.49,
-          "endingManaPct": 17.86,
+          "endingManaPct": 51.07,
           "endingStaminaPct": 43.95,
           "parriesInWave": 1,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 7,
-          "waveClearTimeSec": 7.8,
-          "cumulativeTimeSec": 51,
-          "waveDps": 361.94,
-          "endingHpPct": 75.77,
-          "endingManaPct": 23.57,
-          "endingStaminaPct": 43.95,
+          "waveClearTimeSec": 6.1,
+          "cumulativeTimeSec": 49.3,
+          "waveDps": 442.89,
+          "endingHpPct": 85.3,
+          "endingManaPct": 69.82,
+          "endingStaminaPct": 42.21,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 8,
-          "waveClearTimeSec": 6.5,
-          "cumulativeTimeSec": 59,
-          "waveDps": 420.75,
-          "endingHpPct": 89.7,
-          "endingManaPct": 30,
-          "endingStaminaPct": 41.69,
+          "waveClearTimeSec": 6.2,
+          "cumulativeTimeSec": 57,
+          "waveDps": 437.14,
+          "endingHpPct": 83.91,
+          "endingManaPct": 59.11,
+          "endingStaminaPct": 39.95,
           "parriesInWave": 1,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 9,
-          "waveClearTimeSec": 1.7,
-          "cumulativeTimeSec": 62.2,
-          "waveDps": 1051.87,
-          "endingHpPct": 87.65,
-          "endingManaPct": 0,
-          "endingStaminaPct": 24.31,
+          "waveClearTimeSec": 1.6,
+          "cumulativeTimeSec": 60.1,
+          "waveDps": 1085.81,
+          "endingHpPct": 81.86,
+          "endingManaPct": 57.86,
+          "endingStaminaPct": 16.41,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 10,
-          "waveClearTimeSec": 8.2,
-          "cumulativeTimeSec": 71.9,
-          "waveDps": 347.01,
-          "endingHpPct": 78.45,
-          "endingManaPct": 1.43,
-          "endingStaminaPct": 19.85,
+          "waveClearTimeSec": 9.1,
+          "cumulativeTimeSec": 70.7,
+          "waveDps": 317.55,
+          "endingHpPct": 74.01,
+          "endingManaPct": 47.14,
+          "endingStaminaPct": 15.9,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 0
         }
@@ -2110,228 +2110,228 @@
     },
     {
       "classId": "samurai",
-      "totalClearTimeSec": 99.9,
-      "averageWaveDps": 348.13,
-      "minHpPct": 69.65,
-      "minManaPct": 70.32,
+      "totalClearTimeSec": 101.6,
+      "averageWaveDps": 335.24,
+      "minHpPct": 80.88,
+      "minManaPct": 75.48,
       "totalParries": 17,
       "totalCloneInterceptions": 0,
       "waves": [
         {
           "waveIndex": 1,
-          "waveClearTimeSec": 7.3,
-          "cumulativeTimeSec": 7.3,
-          "waveDps": 461.1,
-          "endingHpPct": 94.78,
-          "endingManaPct": 92.9,
+          "waveClearTimeSec": 8,
+          "cumulativeTimeSec": 8,
+          "waveDps": 420.75,
+          "endingHpPct": 92.94,
+          "endingManaPct": 100,
           "endingStaminaPct": 100,
           "parriesInWave": 1,
-          "clonesOrStreakEnd": 12
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 2,
-          "waveClearTimeSec": 7.4,
-          "cumulativeTimeSec": 16.2,
-          "waveDps": 378.2,
-          "endingHpPct": 88.9,
-          "endingManaPct": 97.42,
+          "waveClearTimeSec": 8,
+          "cumulativeTimeSec": 17.5,
+          "waveDps": 354.32,
+          "endingHpPct": 94.96,
+          "endingManaPct": 100,
           "endingStaminaPct": 100,
           "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 3,
-          "waveClearTimeSec": 9.8,
-          "cumulativeTimeSec": 27.5,
-          "waveDps": 297.88,
-          "endingHpPct": 88.55,
-          "endingManaPct": 92.26,
-          "endingStaminaPct": 100,
-          "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "waveClearTimeSec": 8.3,
+          "cumulativeTimeSec": 27.3,
+          "waveDps": 343.47,
+          "endingHpPct": 89.82,
+          "endingManaPct": 88.39,
+          "endingStaminaPct": 90.91,
+          "parriesInWave": 1,
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 4,
-          "waveClearTimeSec": 5.4,
-          "cumulativeTimeSec": 34.4,
-          "waveDps": 487.83,
-          "endingHpPct": 85.93,
-          "endingManaPct": 89.03,
+          "waveClearTimeSec": 9.5,
+          "cumulativeTimeSec": 38.3,
+          "waveDps": 306,
+          "endingHpPct": 92.67,
+          "endingManaPct": 98.06,
           "endingStaminaPct": 90.91,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 12
+          "parriesInWave": 2,
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 5,
-          "waveClearTimeSec": 9.5,
-          "cumulativeTimeSec": 45.4,
-          "waveDps": 306,
-          "endingHpPct": 94.37,
-          "endingManaPct": 86.45,
-          "endingStaminaPct": 90.91,
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 48.7,
+          "waveDps": 323.65,
+          "endingHpPct": 86.71,
+          "endingManaPct": 100,
+          "endingStaminaPct": 100,
           "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 6,
-          "waveClearTimeSec": 10.3,
-          "cumulativeTimeSec": 57.2,
-          "waveDps": 285.25,
-          "endingHpPct": 89.47,
-          "endingManaPct": 90.97,
-          "endingStaminaPct": 90.91,
-          "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 59.1,
+          "waveDps": 323.65,
+          "endingHpPct": 83.71,
+          "endingManaPct": 94.84,
+          "endingStaminaPct": 100,
+          "parriesInWave": 1,
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 7,
-          "waveClearTimeSec": 9.5,
-          "cumulativeTimeSec": 68.2,
-          "waveDps": 306,
-          "endingHpPct": 89.12,
-          "endingManaPct": 91.61,
-          "endingStaminaPct": 90.91,
+          "waveClearTimeSec": 10.3,
+          "cumulativeTimeSec": 70.9,
+          "waveDps": 285.25,
+          "endingHpPct": 91.42,
+          "endingManaPct": 90.32,
+          "endingStaminaPct": 100,
           "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 8,
-          "waveClearTimeSec": 9.5,
-          "cumulativeTimeSec": 79.2,
-          "waveDps": 306,
-          "endingHpPct": 88.77,
+          "waveClearTimeSec": 10.1,
+          "cumulativeTimeSec": 82.5,
+          "waveDps": 290.17,
+          "endingHpPct": 85.63,
           "endingManaPct": 100,
-          "endingStaminaPct": 90.91,
-          "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "endingStaminaPct": 100,
+          "parriesInWave": 3,
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 9,
-          "waveClearTimeSec": 9.5,
-          "cumulativeTimeSec": 90.2,
-          "waveDps": 306,
-          "endingHpPct": 94.27,
+          "waveClearTimeSec": 7.9,
+          "cumulativeTimeSec": 91.9,
+          "waveDps": 358.09,
+          "endingHpPct": 85.88,
           "endingManaPct": 100,
-          "endingStaminaPct": 90.91,
-          "parriesInWave": 2,
-          "clonesOrStreakEnd": 12
+          "endingStaminaPct": 100,
+          "parriesInWave": 1,
+          "clonesOrStreakEnd": 0
         },
         {
           "waveIndex": 10,
           "waveClearTimeSec": 8.2,
-          "cumulativeTimeSec": 99.9,
+          "cumulativeTimeSec": 101.6,
           "waveDps": 347.01,
-          "endingHpPct": 82.54,
-          "endingManaPct": 76.77,
+          "endingHpPct": 94.47,
+          "endingManaPct": 85.16,
           "endingStaminaPct": 100,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 12
+          "parriesInWave": 2,
+          "clonesOrStreakEnd": 0
         }
       ]
     },
     {
       "classId": "ninja",
-      "totalClearTimeSec": 105.5,
-      "averageWaveDps": 327.25,
-      "minHpPct": 69.41,
-      "minManaPct": 63.87,
-      "totalParries": 7,
+      "totalClearTimeSec": 104.3,
+      "averageWaveDps": 332.67,
+      "minHpPct": 71.39,
+      "minManaPct": 69.68,
+      "totalParries": 5,
       "totalCloneInterceptions": 6,
       "waves": [
         {
           "waveIndex": 1,
-          "waveClearTimeSec": 6.9,
-          "cumulativeTimeSec": 6.9,
-          "waveDps": 487.83,
-          "endingHpPct": 89.2,
-          "endingManaPct": 83.23,
+          "waveClearTimeSec": 6.5,
+          "cumulativeTimeSec": 6.5,
+          "waveDps": 517.85,
+          "endingHpPct": 90.82,
+          "endingManaPct": 89.03,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 1
         },
         {
           "waveIndex": 2,
-          "waveClearTimeSec": 8,
-          "cumulativeTimeSec": 16.4,
-          "waveDps": 354.32,
-          "endingHpPct": 93.6,
-          "endingManaPct": 88.39,
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 16.9,
+          "waveDps": 323.65,
+          "endingHpPct": 89.1,
+          "endingManaPct": 93.55,
           "endingStaminaPct": 100,
           "parriesInWave": 1,
           "clonesOrStreakEnd": 1
         },
         {
           "waveIndex": 3,
-          "waveClearTimeSec": 10.2,
-          "cumulativeTimeSec": 28.1,
-          "waveDps": 287.69,
-          "endingHpPct": 88.47,
-          "endingManaPct": 98.71,
-          "endingStaminaPct": 100,
-          "parriesInWave": 1,
+          "waveClearTimeSec": 10.1,
+          "cumulativeTimeSec": 28.5,
+          "waveDps": 290.17,
+          "endingHpPct": 77.94,
+          "endingManaPct": 100,
+          "endingStaminaPct": 90.77,
+          "parriesInWave": 0,
           "clonesOrStreakEnd": 1
         },
         {
           "waveIndex": 4,
-          "waveClearTimeSec": 9.1,
-          "cumulativeTimeSec": 38.7,
-          "waveDps": 317.55,
-          "endingHpPct": 80.63,
-          "endingManaPct": 89.68,
+          "waveClearTimeSec": 10,
+          "cumulativeTimeSec": 40,
+          "waveDps": 292.7,
+          "endingHpPct": 95.48,
+          "endingManaPct": 100,
           "endingStaminaPct": 100,
           "parriesInWave": 1,
           "clonesOrStreakEnd": 2
         },
         {
           "waveIndex": 5,
+          "waveClearTimeSec": 8.9,
+          "cumulativeTimeSec": 50.4,
+          "waveDps": 323.65,
+          "endingHpPct": 93.15,
+          "endingManaPct": 94.84,
+          "endingStaminaPct": 100,
+          "parriesInWave": 1,
+          "clonesOrStreakEnd": 1
+        },
+        {
+          "waveIndex": 6,
+          "waveClearTimeSec": 9,
+          "cumulativeTimeSec": 60.9,
+          "waveDps": 320.57,
+          "endingHpPct": 87.75,
+          "endingManaPct": 94.84,
+          "endingStaminaPct": 100,
+          "parriesInWave": 0,
+          "clonesOrStreakEnd": 2
+        },
+        {
+          "waveIndex": 7,
           "waveClearTimeSec": 10.1,
-          "cumulativeTimeSec": 50.3,
+          "cumulativeTimeSec": 72.5,
           "waveDps": 290.17,
-          "endingHpPct": 88.98,
-          "endingManaPct": 84.52,
+          "endingHpPct": 80.78,
+          "endingManaPct": 100,
+          "endingStaminaPct": 90.77,
+          "parriesInWave": 1,
+          "clonesOrStreakEnd": 1
+        },
+        {
+          "waveIndex": 8,
+          "waveClearTimeSec": 10,
+          "cumulativeTimeSec": 84,
+          "waveDps": 292.7,
+          "endingHpPct": 90.46,
+          "endingManaPct": 100,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 1
         },
         {
-          "waveIndex": 6,
-          "waveClearTimeSec": 9.1,
-          "cumulativeTimeSec": 60.9,
-          "waveDps": 317.55,
-          "endingHpPct": 93.38,
-          "endingManaPct": 85.81,
-          "endingStaminaPct": 100,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 2
-        },
-        {
-          "waveIndex": 7,
-          "waveClearTimeSec": 10.2,
-          "cumulativeTimeSec": 72.6,
-          "waveDps": 287.69,
-          "endingHpPct": 92.54,
-          "endingManaPct": 83.23,
-          "endingStaminaPct": 100,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 2
-        },
-        {
-          "waveIndex": 8,
-          "waveClearTimeSec": 10.2,
-          "cumulativeTimeSec": 84.3,
-          "waveDps": 287.69,
-          "endingHpPct": 83.43,
-          "endingManaPct": 97.42,
-          "endingStaminaPct": 100,
-          "parriesInWave": 1,
-          "clonesOrStreakEnd": 1
-        },
-        {
           "waveIndex": 9,
-          "waveClearTimeSec": 10.2,
-          "cumulativeTimeSec": 96,
-          "waveDps": 287.69,
-          "endingHpPct": 87.5,
+          "waveClearTimeSec": 10,
+          "cumulativeTimeSec": 95.5,
+          "waveDps": 292.7,
+          "endingHpPct": 85.19,
           "endingManaPct": 100,
           "endingStaminaPct": 100,
           "parriesInWave": 1,
@@ -2339,11 +2339,11 @@
         },
         {
           "waveIndex": 10,
-          "waveClearTimeSec": 8,
-          "cumulativeTimeSec": 105.5,
-          "waveDps": 354.32,
-          "endingHpPct": 88.71,
-          "endingManaPct": 98.71,
+          "waveClearTimeSec": 7.3,
+          "cumulativeTimeSec": 104.3,
+          "waveDps": 382.5,
+          "endingHpPct": 81.5,
+          "endingManaPct": 100,
           "endingStaminaPct": 100,
           "parriesInWave": 0,
           "clonesOrStreakEnd": 1
@@ -2361,14 +2361,14 @@
           "timeMs": 100,
           "kind": "cast",
           "label": "Dirty Trick",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
           "timeMs": 100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
@@ -2382,63 +2382,63 @@
           "timeMs": 300,
           "kind": "cast",
           "label": "Heavy Strike",
-          "damage": 340.43,
+          "damage": 328.7,
           "isCrit": false
         },
         {
           "timeMs": 400,
           "kind": "cast",
           "label": "Shield Bash",
-          "damage": 380.85,
+          "damage": 368.89,
           "isCrit": true
         },
         {
-          "timeMs": 1400,
+          "timeMs": 1300,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
-          "timeMs": 2800,
+          "timeMs": 2600,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
-          "timeMs": 4100,
+          "timeMs": 3900,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 344.86,
+          "damage": 330.79,
           "isCrit": true
         },
         {
-          "timeMs": 5400,
+          "timeMs": 5200,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
           "timeMs": 6300,
           "kind": "cast",
           "label": "Heavy Strike",
-          "damage": 340.43,
+          "damage": 328.7,
           "isCrit": false
         },
         {
-          "timeMs": 6700,
+          "timeMs": 6400,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 344.86,
+          "damage": 330.79,
           "isCrit": true
         },
         {
-          "timeMs": 8000,
+          "timeMs": 7600,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
@@ -2449,80 +2449,80 @@
           "isCrit": false
         },
         {
-          "timeMs": 9200,
+          "timeMs": 8800,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
+        },
+        {
+          "timeMs": 10000,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 330.79,
+          "isCrit": true
         },
         {
           "timeMs": 10100,
           "kind": "cast",
           "label": "Dirty Trick",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
-          "timeMs": 10400,
+          "timeMs": 11200,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 344.86,
-          "isCrit": true
-        },
-        {
-          "timeMs": 11700,
-          "kind": "swing",
-          "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
           "timeMs": 12300,
           "kind": "cast",
           "label": "Heavy Strike",
-          "damage": 510.64,
+          "damage": 493.04,
           "isCrit": true
         },
         {
-          "timeMs": 12900,
+          "timeMs": 12400,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
-          "timeMs": 14200,
+          "timeMs": 13600,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
-          "timeMs": 15400,
+          "timeMs": 14800,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 344.86,
+          "damage": 330.79,
           "isCrit": true
+        },
+        {
+          "timeMs": 16000,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 220.52,
+          "isCrit": false
         },
         {
           "timeMs": 16400,
           "kind": "cast",
           "label": "Shield Bash",
-          "damage": 253.9,
+          "damage": 245.93,
           "isCrit": false
         },
         {
-          "timeMs": 16600,
+          "timeMs": 17200,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
-          "isCrit": false
-        },
-        {
-          "timeMs": 17900,
-          "kind": "swing",
-          "label": "Auto-Attack",
-          "damage": 344.86,
+          "damage": 330.79,
           "isCrit": true
         },
         {
@@ -2536,15 +2536,22 @@
           "timeMs": 18300,
           "kind": "cast",
           "label": "Heavy Strike",
-          "damage": 340.43,
+          "damage": 328.7,
           "isCrit": false
         },
         {
-          "timeMs": 19100,
+          "timeMs": 18400,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
+        },
+        {
+          "timeMs": 19700,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 330.79,
+          "isCrit": true
         }
       ]
     },
@@ -2564,77 +2571,77 @@
           "timeMs": 100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
           "timeMs": 200,
           "kind": "cast",
           "label": "Flame Strike",
-          "damage": 444.17,
+          "damage": 424.42,
           "isCrit": false
         },
         {
           "timeMs": 300,
           "kind": "cast",
           "label": "Explosion",
-          "damage": 728.71,
+          "damage": 696.32,
           "isCrit": true
         },
         {
           "timeMs": 1300,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
           "timeMs": 2400,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
           "timeMs": 3500,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 367.38,
+          "damage": 351.55,
           "isCrit": true
-        },
-        {
-          "timeMs": 4100,
-          "kind": "cast",
-          "label": "Heal",
-          "damage": 0,
-          "isCrit": false
         },
         {
           "timeMs": 4600,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
           "timeMs": 5700,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
+          "isCrit": false
+        },
+        {
+          "timeMs": 6100,
+          "kind": "cast",
+          "label": "Heal",
+          "damage": 0,
           "isCrit": false
         },
         {
           "timeMs": 6800,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 367.38,
+          "damage": 351.55,
           "isCrit": true
         },
         {
           "timeMs": 7900,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
@@ -2648,112 +2655,112 @@
           "timeMs": 8300,
           "kind": "cast",
           "label": "Explosion",
-          "damage": 485.81,
+          "damage": 464.21,
           "isCrit": false
         },
         {
           "timeMs": 9000,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 367.38,
+          "damage": 351.55,
           "isCrit": true
-        },
-        {
-          "timeMs": 10100,
-          "kind": "cast",
-          "label": "Heal",
-          "damage": 0,
-          "isCrit": false
         },
         {
           "timeMs": 10100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
           "timeMs": 11200,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 367.38,
+          "damage": 351.55,
           "isCrit": true
         },
         {
-          "timeMs": 12300,
-          "kind": "swing",
-          "label": "Auto-Attack",
-          "damage": 244.92,
-          "isCrit": false
-        },
-        {
-          "timeMs": 13400,
-          "kind": "swing",
-          "label": "Auto-Attack",
-          "damage": 244.92,
-          "isCrit": false
-        },
-        {
-          "timeMs": 14500,
-          "kind": "swing",
-          "label": "Auto-Attack",
-          "damage": 367.38,
-          "isCrit": true
-        },
-        {
-          "timeMs": 15600,
-          "kind": "swing",
-          "label": "Auto-Attack",
-          "damage": 244.92,
-          "isCrit": false
-        },
-        {
-          "timeMs": 16100,
+          "timeMs": 12100,
           "kind": "cast",
           "label": "Heal",
           "damage": 0,
           "isCrit": false
         },
         {
+          "timeMs": 12300,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 234.37,
+          "isCrit": false
+        },
+        {
+          "timeMs": 13400,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 234.37,
+          "isCrit": false
+        },
+        {
+          "timeMs": 14500,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 351.55,
+          "isCrit": true
+        },
+        {
+          "timeMs": 15600,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 234.37,
+          "isCrit": false
+        },
+        {
           "timeMs": 16200,
           "kind": "cast",
           "label": "Flame Strike",
-          "damage": 444.17,
+          "damage": 424.42,
           "isCrit": false
         },
         {
           "timeMs": 16300,
           "kind": "cast",
           "label": "Explosion",
-          "damage": 728.71,
+          "damage": 696.32,
           "isCrit": true
         },
         {
           "timeMs": 16700,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         },
         {
           "timeMs": 17800,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
+          "isCrit": false
+        },
+        {
+          "timeMs": 18100,
+          "kind": "cast",
+          "label": "Heal",
+          "damage": 0,
           "isCrit": false
         },
         {
           "timeMs": 18900,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 367.38,
+          "damage": 351.55,
           "isCrit": true
         },
         {
           "timeMs": 20000,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 244.92,
+          "damage": 234.37,
           "isCrit": false
         }
       ]
@@ -2792,35 +2799,35 @@
           "isCrit": true
         },
         {
-          "timeMs": 1300,
+          "timeMs": 1200,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
         },
         {
-          "timeMs": 2500,
+          "timeMs": 2400,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
         },
         {
-          "timeMs": 3700,
+          "timeMs": 3600,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
           "isCrit": true
         },
         {
-          "timeMs": 4900,
+          "timeMs": 4700,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
         },
         {
-          "timeMs": 6100,
+          "timeMs": 5800,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
@@ -2841,21 +2848,21 @@
           "isCrit": false
         },
         {
-          "timeMs": 7200,
+          "timeMs": 6900,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
           "isCrit": true
         },
         {
-          "timeMs": 8400,
+          "timeMs": 8100,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
         },
         {
-          "timeMs": 9600,
+          "timeMs": 9200,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
@@ -2869,14 +2876,14 @@
           "isCrit": false
         },
         {
-          "timeMs": 10800,
+          "timeMs": 10300,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
           "isCrit": true
         },
         {
-          "timeMs": 12000,
+          "timeMs": 11400,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
@@ -2897,46 +2904,53 @@
           "isCrit": true
         },
         {
-          "timeMs": 13100,
+          "timeMs": 12500,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
         },
         {
-          "timeMs": 14300,
+          "timeMs": 13700,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
           "isCrit": true
         },
         {
-          "timeMs": 15500,
+          "timeMs": 14800,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
         },
         {
-          "timeMs": 16700,
+          "timeMs": 15900,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 322.34,
           "isCrit": true
         },
         {
-          "timeMs": 17800,
+          "timeMs": 17000,
           "kind": "swing",
           "label": "Auto-Attack",
           "damage": 214.89,
           "isCrit": false
+        },
+        {
+          "timeMs": 18100,
+          "kind": "swing",
+          "label": "Auto-Attack",
+          "damage": 322.34,
+          "isCrit": true
         },
         {
           "timeMs": 18200,
           "kind": "cast",
           "label": "Moving Shot",
-          "damage": 322.34,
-          "isCrit": true
+          "damage": 214.89,
+          "isCrit": false
         },
         {
           "timeMs": 18300,
@@ -2946,11 +2960,11 @@
           "isCrit": false
         },
         {
-          "timeMs": 18900,
+          "timeMs": 19200,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 214.89,
-          "isCrit": false
+          "damage": 322.34,
+          "isCrit": true
         }
       ]
     },
@@ -2963,14 +2977,14 @@
           "timeMs": 100,
           "kind": "cast",
           "label": "Armor Ignore",
-          "damage": 270.48,
+          "damage": 259.44,
           "isCrit": false
         },
         {
           "timeMs": 100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
@@ -2984,77 +2998,70 @@
           "timeMs": 300,
           "kind": "cast",
           "label": "Frenzied Whirlwind",
-          "damage": 328.11,
+          "damage": 314.86,
           "isCrit": false
         },
         {
           "timeMs": 400,
           "kind": "cast",
           "label": "Momentum Strike",
-          "damage": 435.28,
+          "damage": 417.89,
           "isCrit": true
         },
         {
           "timeMs": 1300,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 2500,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 3700,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 418.97,
+          "damage": 402.41,
           "isCrit": true
         },
         {
           "timeMs": 4000,
           "kind": "proc",
           "label": "Iaido Flash Riposte",
-          "damage": 33.52,
+          "damage": 32.19,
           "isCrit": false
         },
         {
           "timeMs": 4900,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
-          "isCrit": false
-        },
-        {
-          "timeMs": 6100,
-          "kind": "cast",
-          "label": "Confidence",
-          "damage": 0,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 6100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 7300,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 356.12,
+          "damage": 342.05,
           "isCrit": true
         },
         {
           "timeMs": 8300,
           "kind": "cast",
           "label": "Frenzied Whirlwind",
-          "damage": 297.47,
+          "damage": 285.71,
           "isCrit": false
         },
         {
@@ -3068,91 +3075,98 @@
           "timeMs": 8500,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 229.91,
+          "damage": 220.52,
           "isCrit": false
         },
         {
           "timeMs": 9700,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 348.62,
+          "damage": 334.54,
           "isCrit": true
         },
         {
           "timeMs": 10900,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 234.91,
+          "damage": 225.53,
+          "isCrit": false
+        },
+        {
+          "timeMs": 12100,
+          "kind": "cast",
+          "label": "Confidence",
+          "damage": 0,
           "isCrit": false
         },
         {
           "timeMs": 12100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 356.12,
+          "damage": 342.05,
           "isCrit": true
         },
         {
           "timeMs": 13300,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 237.42,
+          "damage": 228.03,
           "isCrit": false
         },
         {
           "timeMs": 14100,
           "kind": "cast",
           "label": "Armor Ignore",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 14500,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 15700,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 418.97,
+          "damage": 402.41,
           "isCrit": true
         },
         {
           "timeMs": 16300,
           "kind": "cast",
           "label": "Frenzied Whirlwind",
-          "damage": 335.17,
+          "damage": 321.93,
           "isCrit": false
         },
         {
           "timeMs": 16400,
           "kind": "cast",
           "label": "Momentum Strike",
-          "damage": 293.28,
+          "damage": 281.69,
           "isCrit": false
         },
         {
           "timeMs": 16900,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 418.97,
+          "damage": 402.41,
           "isCrit": true
         },
         {
           "timeMs": 18100,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         },
         {
           "timeMs": 19300,
           "kind": "swing",
           "label": "Auto-Attack",
-          "damage": 279.31,
+          "damage": 268.27,
           "isCrit": false
         }
       ]
