@@ -2,11 +2,62 @@
   "contract": "1.0.0",
   "flavor": "core",
   "milestone": "v1.1",
-  "phases": [],
+  "phases": [
+    {
+      "number": "1",
+      "name": "Repository, KB Engine & Raw Extraction",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Core Combat, Progression & Engine Matrix",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Live Classes & Structural Parity Contract",
+      "status": "complete"
+    },
+    {
+      "number": "4",
+      "name": "ModernUO Reference & Combat Simulator",
+      "status": "complete"
+    },
+    {
+      "number": "5",
+      "name": "Samurai & Ninja Design, Balance & Code",
+      "status": "complete"
+    },
+    {
+      "number": "6",
+      "name": "Iconography, Beta UI Mockups & Handoff",
+      "status": "complete"
+    },
+    {
+      "number": "7",
+      "name": "Idle Ability Overhaul, Lore Blurbs & Sim Tests",
+      "status": "complete"
+    },
+    {
+      "number": "8",
+      "name": "Authentic UO Gump/Item Art & AI Icons",
+      "status": "complete"
+    },
+    {
+      "number": "9",
+      "name": "Interactive Paperdoll & Sim Telemetry UI",
+      "status": "complete"
+    },
+    {
+      "number": "10",
+      "name": "Developer Portal & Live GitHub Pages",
+      "status": "complete"
+    }
+  ],
   "next": {
-    "command": "/gsd-discuss-phase",
-    "label": "Discuss the first phase",
-    "reason": "Project initialized — plan your first phase"
+    "command": "/gsd-progress",
+    "label": "Show progress",
+    "reason": "Unsure of state — showing progress"
   },
-  "updated_at": "2026-11-07T13:02:35.955Z"
+  "updated_at": "2026-11-07T15:50:27.926Z"
 }

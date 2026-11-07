@@ -1,5 +1,18 @@
 # Milestones
 
+## v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal (Shipped: 2026-11-07)
+
+**Phases completed:** 4 phases (Phases 7–10), 4 plans, 10/10 requirements (`IDLE-01..02`, `SIM-04..05`, `ART-01..02`, `UI-01..03`, `HOST-01`)
+
+**Key accomplishments:**
+
+- **Idle-Tuned Ability Overhaul & Bilingual Lore (`Phase 7`)**: Upgraded *Confidence* (`Inner Calm` parry empowerment), *Evasion* (`Iaido Flash Riposte`), *Animal Form* (`Kitsune & Wolf Aspect` 3rd-swing spirit proc), and *Smoke Bomb* (`Vanish & Volley` automated combo) with evocative bilingual (`en` + `pt-BR`) Tokuno lore blurbs and expanded the simulator (`src/sim/engine.ts`, `tools/sim_balance.ts`, `tools/test_sim.ts`) across 9 material tiers (`Iron..Valorite`), 10-wave dungeon endurance runs, and 11 unit test suites (`11/11` passing).
+- **Zero-Polygon Authentic UO Gump/Item Art & Oil-Painted Icons (`Phase 8`)**: Eliminated 100% of procedural `ImageDraw.polygon` icons (`zeroPolygons: true`), extracting authentic UO ability gumps from `ability-icons.png`, 34 UO item sprites from `art.png`, and 29 paperdoll layer gumps from `paperdoll/` alongside oil-painted Tokuno raster art (`bushido-sheet.jpg`, `ninjitsu-sheet.jpg`, `samurai-thematic-sheet.png`, `ninja-thematic-sheet.png`, `tokuno-fixes-sheet.png`).
+- **Interactive Paperdoll, v2.1 Component Architecture & Simulator Visual Telemetry (`Phase 9`)**: Built interactive Tokuno paperdolls (`paperdoll-samurai.png` & `paperdoll-ninja.png`) with 6 armor slots, 4 weapons, 9-tier `Iron..Valorite` scaling selector, and live mouseover gear stat tooltips (`#paperdoll-gear-tooltip`), plus `tools/ui_components.ts` (`<uo-quick-dock>`, `<uo-combat-ticker>`, `<uo-power-meter>`, `<exec-kpi-strip>`), multi-bracket SVG DPS/EHP progression curves, 5-channel damage source breakdown bars, and responsive multi-resolution layout (`1600px`..`500px`).
+- **Lead Developer Review Portal, Live GitHub Pages Deployment & Code Review Hardening (`Phase 10`)**: Created `index.html` and `mockups/index.html` as the Executive Lead Developer Onboarding & Review Portal, deployed live to `https://brbrainerd.github.io/uoIdle/` via `_site`-staged `.github/workflows/deploy-pages.yml`, and resolved all 7/7 Phase 10 code review findings (`10-REVIEW-FIX.md`).
+
+---
+
 ## v1.0 UO Idle Samurai & Ninja Class Skill Lines & Mechanics Knowledgebase (Shipped: 2026-11-07)
 
 **Phases completed:** 6 phases, 14 plans, 28 tasks
@@ -21,17 +34,3 @@
 - Custom dark-fantasy Ultima Online Samurai (`robeHue: 1884`) and Ninja (`robeHue: 1175`) class portraits ($256\times 256$ and $64\times 64$) and 135 multi-resolution ($64\times 64$ and $48\times 48$) skill/milestone icons framed in beveled antique-gold gump borders, verified via `manifest.json` SHA-256 and pixel-variance checks
 - Data-driven `uoidle.com/beta` standalone HTML/CSS mockups (`samurai-skill-tree.html`, `ninja-skill-tree.html`, `class-comparison.html`), $3200\times 2800$ Retina Chrome verification screenshots, root `README.md` executive handoff index, and a 6-command Milestone v1.0 verification gate (`exit 0`)
 
----
-
-## v1.1 Authentic UO Gump/Item Art, Interactive Paperdoll & Sim Telemetry UI, Idle-Tuned Ability Overhaul & Live Developer Portal (Shipped: 2026-11-07)
-
-**Phases completed:** 4 phases (Phases 7–10), 4 plans
-
-**Key accomplishments:**
-
-- **Idle-Tuned Ability Overhaul & Bilingual Lore (`Phase 7`)**: Upgraded *Confidence* (`Inner Calm` parry empowerment), *Evasion* (`Iaido Flash Riposte`), *Animal Form* (`Kitsune & Wolf Aspect` 3rd-swing spirit proc), and *Smoke Bomb* (`Vanish & Volley` automated combo) with evocative bilingual (`en` + `pt-BR`) Tokuno lore blurbs and expanded the simulator (`src/sim/engine.ts`, `tools/sim_balance.ts`, `tools/test_sim.ts`) across 9 material tiers (`Iron..Valorite`), 10-wave dungeon endurance runs, and 11 unit test suites (`11/11` passing).
-- **Zero-Polygon Authentic UO Gump/Item Art & Oil-Painted Icons (`Phase 8`)**: Eliminated 100% of procedural `ImageDraw.polygon` icons (`zeroPolygons: true`), extracting authentic UO ability gumps from `ability-icons.png`, 34 UO item sprites from `art.png`, and 29 paperdoll layer gumps from `paperdoll/` alongside oil-painted Tokuno raster art (`bushido-sheet.jpg` & `ninjitsu-sheet.jpg`).
-- **Interactive Paperdoll with Gear Mouseovers & Simulator Visual Telemetry (`Phase 9`)**: Built interactive Tokuno paperdolls (`paperdoll-samurai.png` & `paperdoll-ninja.png`) with 6 armor slots, 4 weapons, 9-tier `Iron..Valorite` scaling selector, and live mouseover gear stat tooltips (`#paperdoll-gear-tooltip`), plus multi-bracket SVG DPS/EHP progression curves, 5-channel damage source breakdown bars, and `100ms` tick rotation log strips in `class-comparison.html`.
-- **Lead Developer Review Portal & Live GitHub Pages Deployment (`Phase 10`)**: Created `index.html` and `mockups/index.html` as the Executive Lead Developer Onboarding & Review Portal and deployed live to `https://brbrainerd.github.io/uoIdle/` via `.github/workflows/deploy-pages.yml`.
-
----

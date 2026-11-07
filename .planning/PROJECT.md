@@ -40,19 +40,20 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 - ✓ **CLASS-04**: Class-themed Tokuno weapon, consumable, material-tier, and affix definitions (`design/drop-in/items-bushido-ninjitsu.json`) — v1.0
 - ✓ **VISUAL-01**: Custom-generated dark-fantasy UO Samurai & Ninja portraits and multi-resolution skill/milestone icons (`tools/generate_icons.py`, `mockups/assets/icons/`) — v1.0
 - ✓ **VISUAL-02**: Self-contained, pixel-accurate `uoidle.com/beta` HTML/CSS skill tree and 5-class parity workbenches (`tools/build_mockups.ts`, `mockups/*.html`, `mockups/screenshots/*.png`) and master developer handoff (`README.md`) — v1.0
+- ✓ **IDLE-01**: Idle-tuned mechanical refinements for *Confidence* (`samurai_confidence` Inner Calm parry-empowerment), *Evasion* (`samurai_evasion` Spell-Parry Iaido riposte), *Animal Form* (`ninja_animal_form` Kitsune & Wolf 3rd-swing spirit proc), and *Smoke Bomb* (`ninja_smoke_bomb` Vanish & Volley combo synergy) across Mode A and Mode B — v1.1
+- ✓ **IDLE-02**: Evocative bilingual (`en` and `pt-BR`) lore blurbs, flavor text, and idle combat tooltips across all 12 Samurai milestones, 13 Ninja milestones, and class identity headers in `samurai.json`, `ninja.json`, `classes-patch.js`, `SAMURAI_SPEC.md`, and `NINJA_SPEC.md` — v1.1
+- ✓ **SIM-04**: Expanded deterministic simulation matrices (`src/sim/`, `tools/sim_balance.ts`) modeling `Iron..Valorite` material-tier progression, Tokuno affix loadouts, and multi-wave spawn transitions while preserving $\pm 5\text{–}8\%$ 5-class parity — v1.1
+- ✓ **SIM-05**: Automated unit test suite (`tools/test_sim.ts`) verifying combat engine edge cases (shieldless 1H/2H Bushido parry math, Mirror Image clone consumption, `<35%` execute boundary, poison stack ticks, Perfection ramp resets, and `0` OOM ticks) — v1.1
+- ✓ **ART-01**: Authentic in-game UO ability gump extraction from `uoidle.com/packs/ability-icons/ability-icons.png` and high-detail AI-generated oil-painted raster icons for custom capstones/badges and thematic Tokuno abilities — `0` procedural `ImageDraw.polygon` icons — v1.1
+- ✓ **ART-02**: Authentic in-game UO equipment & item sprite extraction from `uoidle.com/packs/art/art.png` and `uoidle.com/packs/paperdoll/` for all Samurai & Ninja starter gear, Tokuno weapons, and Ninjitsu tools — v1.1
+- ✓ **UI-01**: Interactive visual paperdoll component (`samurai-skill-tree.html`, `ninja-skill-tree.html`) displaying actual UO gear sprites per slot with rich mouseover tooltips (stats, `Iron..Valorite` material scaling, weapon speed/damage, `WeaponAbility` links, and Tokuno affixes) — v1.1
+- ✓ **UI-02**: Rich visual simulator telemetry dashboard (`class-comparison.html`, guided by `/gsd-ui-phase` `09-UI-SPEC.md`) featuring interactive SVG DPS & EHP progression charts, damage source breakdown bars, `Iron..Valorite` gear-tier scaling explorer, and combat rotation timeline — v1.1
+- ✓ **UI-03**: CV visual audit (`read_file` inspection of Retina Chrome screenshots across `1600px`, `1280px`, `768px`, `500px` + `ui_components.ts` v2.1 component library & live 100ms combat ticker) across all front-facing pages and icon sheets with zero clipping, overlap, or polygonal artifacts — v1.1
+- ✓ **HOST-01**: Lead Developer Review Portal (`index.html` / `mockups/index.html`) with guided executive walkthrough, interactive demo links, and direct repository file navigation, deployed live on GitHub Pages (`https://brbrainerd.github.io/uoIdle/`) — v1.1
 
 ### Active
 
-- [ ] **IDLE-01**: Idle-tuned mechanical refinements for *Confidence* (`samurai_confidence` Inner Calm parry-empowerment), *Evasion* (`samurai_evasion` Spell-Parry Iaido riposte), *Animal Form* (`ninja_animal_form` Kitsune & Wolf 3rd-swing spirit proc), and *Smoke Bomb* (`ninja_smoke_bomb` Vanish & Volley combo synergy) across Mode A and Mode B
-- [ ] **IDLE-02**: Evocative bilingual (`en` and `pt-BR`) lore blurbs, flavor text, and idle combat tooltips across all 12 Samurai milestones, 13 Ninja milestones, and class identity headers in `samurai.json`, `ninja.json`, `classes-patch.js`, `SAMURAI_SPEC.md`, and `NINJA_SPEC.md`
-- [ ] **SIM-04**: Expanded deterministic simulation matrices (`src/sim/`, `tools/sim_balance.ts`) modeling `Iron..Valorite` material-tier progression, Tokuno affix loadouts, and multi-wave spawn transitions while preserving $\pm 5\text{–}8\%$ 5-class parity
-- [ ] **SIM-05**: Automated unit test suite (`tools/test_sim.ts`) verifying combat engine edge cases (shieldless 1H/2H Bushido parry math, Mirror Image clone consumption, `<35%` execute boundary, poison stack ticks, Perfection ramp resets, and `0` OOM ticks)
-- [ ] **ART-01**: Authentic in-game UO ability gump extraction from `uoidle.com/packs/ability-icons/ability-icons.png` (`21536..21540`, `21280..21287`, `20992..21022`, `idle_samurai_way`) and high-detail AI-generated oil-painted raster icons for custom capstones/badges — 0 procedural `ImageDraw.polygon` icons
-- [ ] **ART-02**: Authentic in-game UO equipment & item sprite extraction from `uoidle.com/packs/art/art.png` and `uoidle.com/packs/paperdoll/` for all Samurai & Ninja starter gear, Tokuno weapons, and Ninjitsu tools
-- [ ] **UI-01**: Interactive visual paperdoll component (`samurai-skill-tree.html`, `ninja-skill-tree.html`) displaying actual UO gear sprites per slot with rich mouseover tooltips (stats, `Iron..Valorite` material scaling, weapon speed/damage, `WeaponAbility` links, and Tokuno affixes)
-- [ ] **UI-02**: Rich visual simulator telemetry dashboard (`class-comparison.html`, guided by `/gsd-ui-phase` `UI-SPEC.md`) featuring interactive SVG/Canvas DPS & EHP progression charts, damage source breakdown bars, `Iron..Valorite` gear-tier scaling explorer, and combat rotation timeline
-- [ ] **UI-03**: CV visual audit (`read_file` inspection of Retina Chrome screenshots + DOM/contrast checks) across all front-facing pages and icon sheets with zero clipping, overlap, or polygonal artifacts
-- [ ] **HOST-01**: Lead Developer Review Portal (`index.html` / `mockups/index.html`) with guided executive walkthrough, interactive demo embeds/links, and direct repository file navigation, deployed live on GitHub Pages (`https://brbrainerd.github.io/uoIdle/`)
+(None — Milestones v1.0 and v1.1 complete and shipped)
 
 ### Out of Scope
 
@@ -84,8 +85,9 @@ Deliver mechanically authentic (grounded in ModernUO Bushido/Ninjitsu), numerica
 | Match existing Warrior/Mage/Ranger unlock tiers & active/passive structure | Ensures the lead developer can drop Ninja and Samurai directly into the existing class progression engine | ✓ Good (12 progression milestones at `[1,5,10,15,20,25,30,35,40,45,50,60]` verified) |
 | Dual Implementation Modes (Mode A zero-code-change + Mode B `<20 LOC` C# hooks) | Lets the lead developer ship immediately via config tables or wire native Bushido/Ninjitsu C# hooks in under 20 lines | ✓ Good (Both modes verified within $\pm 5\text{–}8\%$ parity across all 80 scenarios) |
 | Replace generic Rank II L50/L60 abilities with distinct Tokuno/Grandmaster capstones | Gives Samurai and Ninja exciting, lore-authentic L50/L60 unlocks while maintaining 100% backward compatibility with `abilities-catalog.json` IDs | ✓ Good |
-| Switch `brbrainerd/uoIdle` to public & enable GitHub Pages (`v1.1`) | Allows hosting live interactive demos at `https://brbrainerd.github.io/uoIdle/` for immediate review by the UO Idle lead developer | ✓ Good |
-| Extract real UO gump/item sprites from `uoidle.com/packs/` + AI raster art (`v1.1`) | Replaces procedural Pillow polygons with authentic Ultima Online gump/item art and oil-painted dark-fantasy icons | — Pending |
+| Switch `brbrainerd/uoIdle` to public & enable GitHub Pages (`v1.1`) | Allows hosting live interactive demos at `https://brbrainerd.github.io/uoIdle/` for immediate review by the UO Idle lead developer | ✓ Good (Deployed via `_site` staging artifact with HTTP 200 across all 5 surfaces) |
+| Extract real UO gump/item sprites from `uoidle.com/packs/` + AI raster art (`v1.1`) | Replaces procedural Pillow polygons with authentic Ultima Online gump/item art and oil-painted dark-fantasy icons | ✓ Good (`zeroPolygons: true`, 140 ability PNGs + 37 item/paperdoll PNGs verified with `stdDev >= 12.0` and SHA-256) |
+| Consolidate UI into v2.1 Component Architecture (`tools/ui_components.ts`) | Eliminates duplicate ability catalogs, adds progressive-disclosure schema drawers, live Mode A/B interactivity, and a 100ms tick combat preview across all breakpoints (`1600px`..`500px`) | ✓ Good (Verified via multi-resolution CV flywheel) |
 
 ## Evolution
 
@@ -105,4 +107,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-07 after v1.1 milestone initialization*
+*Last updated: 2026-11-07 after v1.1 milestone completion*
