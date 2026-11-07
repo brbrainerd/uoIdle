@@ -3,9 +3,9 @@ id: "ranger"
 title: "Ranger Class Deep-Dive: Ranged Archery, Volleys, and Catalog Drift"
 category: "classes"
 aliases: ["ranger", "arqueiro", "RG", "class-102"]
-status: "bundle-stated"
+status: "verified"
 sources: ["_raw/bundle/abilities-catalog.json", "_raw/bundle/skills-and-progression.js", "_raw/bundle/classes-config.js", "_raw/bundle/abilities-loader-and-hotbar.js", "_raw/bundle/combat-estimators-and-hotbar.js", "_raw/bundle/i18n-en-abilities.js"]
-evidence: ["bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/classes-config.js:5-89", "bundle: _raw/bundle/abilities-loader-and-hotbar.js:864-873", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:85-93,413-453", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792,2473-2497"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/classes-config.js:5-89", "bundle: _raw/bundle/abilities-loader-and-hotbar.js:864-873", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:85-93,413-453", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792,2473-2497"]
 code_refs: ["abilities-catalog.json:ranger_*", "skills-and-progression.js:gE.ranger", "classes-config.js:ZC.ranger", "abilities-loader-and-hotbar.js:cr", "combat-estimators-and-hotbar.js:Cq"]
 updated: "2026-11-07"
 ---
@@ -19,15 +19,15 @@ The Ranger is the dedicated ranged physical marksman of the starter class trio i
 
 ## Claims
 
-- **C1** [bundle-stated] ""id": "ranger_arrow", "class": "ranger", "kind": "Passive", "name": "Arrow", "unlock": 1, "mana": 0, "blurb": "Unlocks at level 1.", "tab": "ability", "map": "UO", "gumpIcon": 21013, "iconKey": "gump_21013"" (raw L567-L577)
-- **C2** [bundle-stated] ""id": "ranger_rapid_shot", "class": "ranger", "kind": "WeaponAbility", "name": "Rapid Shot", "unlock": 5, "mana": 14, "blurb": "Unlocks at level 5.", "tab": "ability", "ref": 22, "map": "UO", "gumpIcon": 21013, "iconKey": "gump_21013"" (raw L580-L591)
-- **C3** [bundle-stated] ""id": "ranger_aimed_shot", "class": "ranger", "kind": "WeaponAbility", "name": "Aimed Shot", "unlock": 10, "mana": 12, "blurb": "Unlocks at level 10.", "tab": "ability", "ref": 11, "map": "UO", "gumpIcon": 21002, "iconKey": "gump_21002"" (raw L594-L605)
-- **C4** [bundle-stated] ""id": "ranger_piercing", "class": "ranger", "kind": "WeaponAbility", "name": "Piercing Arrow", "unlock": 20, "mana": 12, "blurb": "Unlocks at level 20.", "tab": "ability", "ref": 1, "map": "UO", "gumpIcon": 20992, "iconKey": "gump_20992"" (raw L608-L619)
-- **C5** [bundle-stated] ""id": "ranger_moving_shot", "class": "ranger", "kind": "WeaponAbility", "name": "Moving Shot", "unlock": 30, "mana": 12, "blurb": "Unlocks at level 30.", "tab": "ability", "ref": 10, "map": "UO", "gumpIcon": 21001, "iconKey": "gump_21001"" (raw L622-L633)
-- **C6** [bundle-stated] ""id": "ranger_multishot", "class": "ranger", "kind": "Custom", "name": "Multishot", "unlock": 40, "mana": 16, "blurb": "Unlocks at level 40.", "tab": "ability", "map": "New", "gumpIcon": 21013, "iconKey": "idle_ranger_multishot"" (raw L636-L646)
-- **C7** [bundle-stated] ""id": "ranger_charged_shot_r2", "class": "ranger", "kind": "WeaponAbility", "name": "Charged Shot", "unlock": 50, "mana": 14, "blurb": "Unlocks at level 50.", "tab": "ability", "ref": 1, "map": "UO"" (raw L649-L658)
-- **C8** [bundle-stated] ""id": "ranger_bolt_volley", "class": "ranger", "kind": "Custom", "name": "Bolt Volley", "unlock": 60, "mana": 16, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "New", "gumpIcon": 21013, "iconKey": "idle_ranger_bolt_volley"" (raw L661-L671)
-- **C9** [bundle-stated] ""id": "ranger_deadeye", "class": "ranger", "kind": "Custom", "name": "Deadeye", "unlock": 100, "mana": 25, "blurb": "Unlocks at level 100.", "tab": "ability", "map": "New", "gumpIcon": 21001, "iconKey": "idle_ranger_deadeye"" (raw L674-L684)
+- **C1** [verified] ""id": "ranger_arrow", "class": "ranger", "kind": "Passive", "name": "Arrow", "unlock": 1, "mana": 0, "blurb": "Unlocks at level 1.", "tab": "ability", "map": "UO", "gumpIcon": 21013, "iconKey": "gump_21013"" (raw L567-L577)
+- **C2** [verified] ""id": "ranger_rapid_shot", "class": "ranger", "kind": "WeaponAbility", "name": "Rapid Shot", "unlock": 5, "mana": 14, "blurb": "Unlocks at level 5.", "tab": "ability", "ref": 22, "map": "UO", "gumpIcon": 21013, "iconKey": "gump_21013"" (raw L580-L591)
+- **C3** [verified] ""id": "ranger_aimed_shot", "class": "ranger", "kind": "WeaponAbility", "name": "Aimed Shot", "unlock": 10, "mana": 12, "blurb": "Unlocks at level 10.", "tab": "ability", "ref": 11, "map": "UO", "gumpIcon": 21002, "iconKey": "gump_21002"" (raw L594-L605)
+- **C4** [verified] ""id": "ranger_piercing", "class": "ranger", "kind": "WeaponAbility", "name": "Piercing Arrow", "unlock": 20, "mana": 12, "blurb": "Unlocks at level 20.", "tab": "ability", "ref": 1, "map": "UO", "gumpIcon": 20992, "iconKey": "gump_20992"" (raw L608-L619)
+- **C5** [verified] ""id": "ranger_moving_shot", "class": "ranger", "kind": "WeaponAbility", "name": "Moving Shot", "unlock": 30, "mana": 12, "blurb": "Unlocks at level 30.", "tab": "ability", "ref": 10, "map": "UO", "gumpIcon": 21001, "iconKey": "gump_21001"" (raw L622-L633)
+- **C6** [verified] ""id": "ranger_multishot", "class": "ranger", "kind": "Custom", "name": "Multishot", "unlock": 40, "mana": 16, "blurb": "Unlocks at level 40.", "tab": "ability", "map": "New", "gumpIcon": 21013, "iconKey": "idle_ranger_multishot"" (raw L636-L646)
+- **C7** [verified] ""id": "ranger_charged_shot_r2", "class": "ranger", "kind": "WeaponAbility", "name": "Charged Shot", "unlock": 50, "mana": 14, "blurb": "Unlocks at level 50.", "tab": "ability", "ref": 1, "map": "UO"" (raw L649-L658)
+- **C8** [verified] ""id": "ranger_bolt_volley", "class": "ranger", "kind": "Custom", "name": "Bolt Volley", "unlock": 60, "mana": 16, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "New", "gumpIcon": 21013, "iconKey": "idle_ranger_bolt_volley"" (raw L661-L671)
+- **C9** [verified] ""id": "ranger_deadeye", "class": "ranger", "kind": "Custom", "name": "Deadeye", "unlock": 100, "mana": 25, "blurb": "Unlocks at level 100.", "tab": "ability", "map": "New", "gumpIcon": 21001, "iconKey": "idle_ranger_deadeye"" (raw L674-L684)
 
 ## Class Identity, Role, Starter Skills & Starter Kit
 

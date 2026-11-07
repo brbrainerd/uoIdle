@@ -38,7 +38,8 @@
       "sha256": "9e0bd61b8381bf385f2438c23061f7f867d8eeccb5ab63ea0b3dbced95a3f5e7",
       "lines": 1100,
       "category": "dungeons-monsters",
-      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L29306-L30106,L55132-L55425"
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L29306-L30106,L55132-L55425",
+      "requiredPage": "systems/bestiary-and-paragons.md"
     },
     "bundle/character-bonus-and-status.js": {
       "sha256": "e021b973248cf14ec3ce86d6505fd1db5fc76e4fd6c2c8af9deabd276d40316b",
@@ -68,7 +69,8 @@
       "sha256": "e8589cba6e0ee5f509279a9f0be76dd833f48a84d0b20f938c85f8b2e71494ae",
       "lines": 829,
       "category": "combat",
-      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L31584-L32408"
+      "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L31584-L32408",
+      "requiredPage": "systems/hunting-bot-and-dungeons.md"
     },
     "bundle/i18n-en-abilities.js": {
       "sha256": "a09ae695627130f5f74e1371a8cd73b9f6257f4f0e8b208e1306607e9b3d823a",

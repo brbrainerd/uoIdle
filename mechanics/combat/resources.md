@@ -3,9 +3,9 @@ id: "resources"
 title: "Combat Resources, Sustain, and Hunting Energy"
 category: "combat"
 aliases: ["hp", "mana", "stamina", "hunting-energy", "potions", "meditation", "focus"]
-status: "doc-stated"
+status: "verified"
 sources: ["_raw/wiki/changelog-server-dev.md", "_raw/bundle/i18n-en-abilities.js", "_raw/bundle/combat-estimators-and-hotbar.js", "_raw/bundle/progression-tree-ui.js"]
-evidence: ["bundle: _raw/bundle/i18n-en-abilities.js:2616", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:99-117", "bundle: _raw/bundle/progression-tree-ui.js:35"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/i18n-en-abilities.js:2616", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:99-117", "bundle: _raw/bundle/progression-tree-ui.js:35"]
 code_refs: ["changelog-server-dev.md:L17-L1051", "combat-estimators-and-hotbar.js:ok", "progression-tree-ui.js:HI"]
 updated: "2026-11-07"
 ---
@@ -19,28 +19,28 @@ UO Idle governs character survivability and skill throughput through three comba
 
 ## Claims
 
-- **C1** [doc-stated] "- Poder por nível **invertido** vs Ethernul: casters ×80, físico ×60 (cura sem DamageFactor)." (raw L17-L17)
-- **C2** [doc-stated] "- Escada de equipamentos: cada metal, madeira e couro pede um nível — metais aos pares (1, 20, 40, 60, 80, Avarite 100), couros 1, 20, 40 e 80. Cada degrau dá +12% de durabilidade e resistência na armadura e +8% de dano na arma. O material básico sai só por ouro." (raw L58-L58)
-- **C3** [doc-stated] "- Reparo de armas e armaduras no Ferreiro, no Artesão e no Alfaiate: custa 40% do preço da peça, e cada reparo tira 10% da durabilidade máxima." (raw L60-L60)
-- **C4** [doc-stated] "- Recarga de energia de +1 h, +4 h ou completa (cada uma conta como uma das 4 recargas do dia)." (raw L63-L63)
-- **C5** [doc-stated] "- Recarga de energia mais cara: 10 gp × nível × minutos que faltam × nº da recarga do dia." (raw L147-L147)
-- **C6** [doc-stated] "- Tempos em degraus de 5s: Trivial 50s · Fácil 45s · Médio 40s · Desafiador 35s · Difícil 30s · Pesadelo 25s · Inferno 20s." (raw L209-L209)
-- **C7** [doc-stated] "- Energia a zero encerra a caça no mesmo tick (sem farm “de graça” depois do HUD zerar), com avisos no chat (~36 min / ~7 min / acabou)." (raw L215-L215)
-- **C8** [doc-stated] "- Hotbar: gap das poções segue o CD real (não 400 ms); sem pot/bandagem/reags/mana o bot nem tenta o slot (não trava o farm); slot sem condição extra usa a regra base do catálogo (ex. em combate / cura)." (raw L217-L217)
-- **C9** [doc-stated] "- Paragon com 0,1% de chance em todos os níveis (era 0,01%)" (raw L370-L370)
-- **C10** [doc-stated] "- Poções de cura e mana: **15% / 25% / 35%** da vida/mana máxima (lesser / normal / greater)" (raw L499-L499)
-- **C11** [doc-stated] "- Magias Heal / Greater Heal Idle: **15% / 35%** da vida máxima do alvo" (raw L500-L500)
-- **C12** [doc-stated] "- Paladino Idle: Chivalry gasta ouro da conta **1 gp por ponto** (sem refill fantasma de 10k)" (raw L502-L502)
-- **C13** [doc-stated] "- A energia volta fora da caça, online ou offline (12 h do zero ao cheio)" (raw L568-L568)
-- **C14** [doc-stated] "- HabInfo: passives fora da lista; Custom sem CD declarado usa piso de 2 s" (raw L603-L603)
-- **C15** [doc-stated] "- Abilities do guerreiro custam 0 mana (customs + WeaponAbility)" (raw L653-L653)
-- **C16** [doc-stated] "- Meditation cap 0 e zerada no login/create do guerreiro" (raw L654-L654)
-- **C17** [doc-stated] "- Brace / Armor Break deixam de aplicar duas vezes (só em `AOS.Damage`)" (raw L833-L833)
-- **C18** [doc-stated] "- Níveis do bestiário: cada bicho comum tem 5 metas de abates (500 a 10.000), e cada meta dá +0,2% de XP permanente" (raw L1051-L1051)
-- **C19** [doc-stated] "- Mago: Necro (Strangle, Animate Dead, Lich 90s), Cleric (Bless, Arch Protection, Thunderstorm), elementais de Fogo/Ar (90s); summons limpam ao sair da caça." (raw L109-L109)
-- **C20** [doc-stated] "- Spellweaving gasta reagentes (livro + Gift of Renewal / Nature's Fury Idle)." (raw L12-L12)
-- **C21** [doc-stated] "- Contagens de reagentes e flechas para o HUD (`#SUPPLY`)." (raw L270-L270)
-- **C22** [doc-stated] "- Sair da dungeon enche vida, stamina e mana e tira o veneno do golpe que matou" (raw L352-L352)
+- **C1** [verified] "- Poder por nível **invertido** vs Ethernul: casters ×80, físico ×60 (cura sem DamageFactor)." (raw L17-L17)
+- **C2** [verified] "- Escada de equipamentos: cada metal, madeira e couro pede um nível — metais aos pares (1, 20, 40, 60, 80, Avarite 100), couros 1, 20, 40 e 80. Cada degrau dá +12% de durabilidade e resistência na armadura e +8% de dano na arma. O material básico sai só por ouro." (raw L58-L58)
+- **C3** [verified] "- Reparo de armas e armaduras no Ferreiro, no Artesão e no Alfaiate: custa 40% do preço da peça, e cada reparo tira 10% da durabilidade máxima." (raw L60-L60)
+- **C4** [verified] "- Recarga de energia de +1 h, +4 h ou completa (cada uma conta como uma das 4 recargas do dia)." (raw L63-L63)
+- **C5** [verified] "- Recarga de energia mais cara: 10 gp × nível × minutos que faltam × nº da recarga do dia." (raw L147-L147)
+- **C6** [verified] "- Tempos em degraus de 5s: Trivial 50s · Fácil 45s · Médio 40s · Desafiador 35s · Difícil 30s · Pesadelo 25s · Inferno 20s." (raw L209-L209)
+- **C7** [verified] "- Energia a zero encerra a caça no mesmo tick (sem farm “de graça” depois do HUD zerar), com avisos no chat (~36 min / ~7 min / acabou)." (raw L215-L215)
+- **C8** [verified] "- Hotbar: gap das poções segue o CD real (não 400 ms); sem pot/bandagem/reags/mana o bot nem tenta o slot (não trava o farm); slot sem condição extra usa a regra base do catálogo (ex. em combate / cura)." (raw L217-L217)
+- **C9** [verified] "- Paragon com 0,1% de chance em todos os níveis (era 0,01%)" (raw L370-L370)
+- **C10** [verified] "- Poções de cura e mana: **15% / 25% / 35%** da vida/mana máxima (lesser / normal / greater)" (raw L499-L499)
+- **C11** [verified] "- Magias Heal / Greater Heal Idle: **15% / 35%** da vida máxima do alvo" (raw L500-L500)
+- **C12** [verified] "- Paladino Idle: Chivalry gasta ouro da conta **1 gp por ponto** (sem refill fantasma de 10k)" (raw L502-L502)
+- **C13** [verified] "- A energia volta fora da caça, online ou offline (12 h do zero ao cheio)" (raw L568-L568)
+- **C14** [verified] "- HabInfo: passives fora da lista; Custom sem CD declarado usa piso de 2 s" (raw L603-L603)
+- **C15** [verified] "- Abilities do guerreiro custam 0 mana (customs + WeaponAbility)" (raw L653-L653)
+- **C16** [verified] "- Meditation cap 0 e zerada no login/create do guerreiro" (raw L654-L654)
+- **C17** [verified] "- Brace / Armor Break deixam de aplicar duas vezes (só em `AOS.Damage`)" (raw L833-L833)
+- **C18** [verified] "- Níveis do bestiário: cada bicho comum tem 5 metas de abates (500 a 10.000), e cada meta dá +0,2% de XP permanente" (raw L1051-L1051)
+- **C19** [verified] "- Mago: Necro (Strangle, Animate Dead, Lich 90s), Cleric (Bless, Arch Protection, Thunderstorm), elementais de Fogo/Ar (90s); summons limpam ao sair da caça." (raw L109-L109)
+- **C20** [verified] "- Spellweaving gasta reagentes (livro + Gift of Renewal / Nature's Fury Idle)." (raw L12-L12)
+- **C21** [verified] "- Contagens de reagentes e flechas para o HUD (`#SUPPLY`)." (raw L270-L270)
+- **C22** [verified] "- Sair da dungeon enche vida, stamina e mana e tira o veneno do golpe que matou" (raw L352-L352)
 
 ## Vital Pools & Regeneration
 

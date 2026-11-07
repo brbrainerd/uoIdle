@@ -3,9 +3,9 @@ id: "combat-niches"
 title: "Combat Roles, Resource Economies, and Protected Samurai and Ninja Niches"
 category: "classes"
 aliases: ["combat-niches", "class-roles", "samurai-niche", "ninja-niche", "design-space"]
-status: "bundle-stated"
+status: "verified"
 sources: ["_raw/bundle/classes-config.js", "_raw/bundle/skills-and-progression.js", "_raw/bundle/abilities-catalog.json", "_raw/bundle/combat-estimators-and-hotbar.js"]
-evidence: ["bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/abilities-catalog.json:213-1760", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:358-519", "wiki: _raw/wiki/changelog-server-dev.md:17,499-502,653-654"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/abilities-catalog.json:213-1760", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:358-519", "wiki: _raw/wiki/changelog-server-dev.md:17,499-502,653-654"]
 code_refs: ["classes-config.js:Wj", "classes-config.js:Kj", "classes-config.js:ZC", "classes-config.js:e2"]
 updated: "2026-11-07"
 ---
@@ -19,18 +19,18 @@ UO Idle partitions its combat roster across distinct offensive, defensive, susta
 
 ## Claims
 
-- **C1** [bundle-stated] "const Wj = ['warrior', 'ranger', 'mage'], Kj = { warrior: 101, ranger: 102, mage: 103, worker: 104, berserker: 105, duelist: 106, necromancer: 107, mystic: 108, spellweaver: 109, paladin: 110, assassin: 111, ninja: 112, monk: 113, samurai: 114, bard: 115, tamer: 116, }," (raw L5-L23)
-- **C2** [bundle-stated] "QC = { 1: 'warrior', 2: 'ranger', 3: 'mage', 4: 'worker', 5: 'berserker', 6: 'duelist', 7: 'necromancer', 8: 'mystic', 9: 'spellweaver', 10: 'paladin', 11: 'assassin', 12: 'ninja', 13: 'monk', 14: 'samurai', 15: 'bard', 16: 'tamer', }; function Dg(e) { return QC[e] ?? null; }" (raw L24-L44)
-- **C3** [bundle-stated] "const ZC = { warrior: { str: 60, dex: 20, int: 10, skills: [ [40, 40], [27, 30], [1, 20], [5, 10], ], }," (raw L45-L56)
-- **C4** [bundle-stated] "berserker: { str: 55, dex: 25, int: 10, skills: [ [40, 40], [27, 30], [1, 20], [17, 10], ], }, duelist: { str: 40, dex: 40, int: 10, skills: [ [42, 40], [27, 30], [1, 20], [5, 10], ], }," (raw L57-L78)
-- **C5** [bundle-stated] "ranger: { str: 40, dex: 40, int: 10, skills: [ [31, 40], [27, 30], [1, 20], [21, 10], ], }," (raw L79-L89)
-- **C6** [bundle-stated] "mage: { str: 20, dex: 20, int: 50, skills: [ [25, 40], [16, 30], [46, 20], [26, 10], ], }," (raw L90-L100)
-- **C7** [bundle-stated] "necromancer: { str: 20, dex: 20, int: 50, skills: [ [49, 40], [32, 30], [25, 20], [46, 10], ], }, mystic: { str: 20, dex: 20, int: 50, skills: [ [55, 40], [50, 30], [25, 20], [46, 10], ], }, spellweaver: { str: 20, dex: 20, int: 50, skills: [ [54, 40], [46, 30], [16, 20], [25, 10], ], }," (raw L101-L133)
-- **C8** [bundle-stated] "paladin: { str: 50, dex: 25, int: 15, skills: [ [40, 30], [51, 30], [27, 20], [5, 20], ], }," (raw L134-L144)
-- **C9** [bundle-stated] "assassin: { str: 35, dex: 45, int: 10, skills: [ [42, 40], [30, 30], [27, 20], [21, 10], ], }," (raw L145-L155)
-- **C10** [bundle-stated] "ninja: { str: 35, dex: 45, int: 10, skills: [ [42, 30], [53, 30], [21, 20], [47, 20], ], }," (raw L156-L166)
-- **C11** [bundle-stated] "monk: { str: 45, dex: 35, int: 10, skills: [ [43, 40], [50, 30], [27, 20], [1, 10], ], }, samurai: { str: 50, dex: 30, int: 10, skills: [ [40, 30], [52, 30], [27, 20], [1, 20], ], }," (raw L167-L188)
-- **C12** [bundle-stated] "const e2 = { warrior: 'WR', ranger: 'RG', mage: 'MG', worker: 'WK', berserker: 'BK', duelist: 'DL', necromancer: 'NC', mystic: 'MS', spellweaver: 'SW', paladin: 'PL', assassin: 'AS', ninja: 'NJ', monk: 'MK', samurai: 'SM', bard: 'BD', tamer: 'TM', }; function Dc(e) { return !e || !Yj(e) ? '' : e2[e]; }" (raw L226-L246)
+- **C1** [verified] "const Wj = ['warrior', 'ranger', 'mage'], Kj = { warrior: 101, ranger: 102, mage: 103, worker: 104, berserker: 105, duelist: 106, necromancer: 107, mystic: 108, spellweaver: 109, paladin: 110, assassin: 111, ninja: 112, monk: 113, samurai: 114, bard: 115, tamer: 116, }," (raw L5-L23)
+- **C2** [verified] "QC = { 1: 'warrior', 2: 'ranger', 3: 'mage', 4: 'worker', 5: 'berserker', 6: 'duelist', 7: 'necromancer', 8: 'mystic', 9: 'spellweaver', 10: 'paladin', 11: 'assassin', 12: 'ninja', 13: 'monk', 14: 'samurai', 15: 'bard', 16: 'tamer', }; function Dg(e) { return QC[e] ?? null; }" (raw L24-L44)
+- **C3** [verified] "const ZC = { warrior: { str: 60, dex: 20, int: 10, skills: [ [40, 40], [27, 30], [1, 20], [5, 10], ], }," (raw L45-L56)
+- **C4** [verified] "berserker: { str: 55, dex: 25, int: 10, skills: [ [40, 40], [27, 30], [1, 20], [17, 10], ], }, duelist: { str: 40, dex: 40, int: 10, skills: [ [42, 40], [27, 30], [1, 20], [5, 10], ], }," (raw L57-L78)
+- **C5** [verified] "ranger: { str: 40, dex: 40, int: 10, skills: [ [31, 40], [27, 30], [1, 20], [21, 10], ], }," (raw L79-L89)
+- **C6** [verified] "mage: { str: 20, dex: 20, int: 50, skills: [ [25, 40], [16, 30], [46, 20], [26, 10], ], }," (raw L90-L100)
+- **C7** [verified] "necromancer: { str: 20, dex: 20, int: 50, skills: [ [49, 40], [32, 30], [25, 20], [46, 10], ], }, mystic: { str: 20, dex: 20, int: 50, skills: [ [55, 40], [50, 30], [25, 20], [46, 10], ], }, spellweaver: { str: 20, dex: 20, int: 50, skills: [ [54, 40], [46, 30], [16, 20], [25, 10], ], }," (raw L101-L133)
+- **C8** [verified] "paladin: { str: 50, dex: 25, int: 15, skills: [ [40, 30], [51, 30], [27, 20], [5, 20], ], }," (raw L134-L144)
+- **C9** [verified] "assassin: { str: 35, dex: 45, int: 10, skills: [ [42, 40], [30, 30], [27, 20], [21, 10], ], }," (raw L145-L155)
+- **C10** [verified] "ninja: { str: 35, dex: 45, int: 10, skills: [ [42, 30], [53, 30], [21, 20], [47, 20], ], }," (raw L156-L166)
+- **C11** [verified] "monk: { str: 45, dex: 35, int: 10, skills: [ [43, 40], [50, 30], [27, 20], [1, 10], ], }, samurai: { str: 50, dex: 30, int: 10, skills: [ [40, 30], [52, 30], [27, 20], [1, 20], ], }," (raw L167-L188)
+- **C12** [verified] "const e2 = { warrior: 'WR', ranger: 'RG', mage: 'MG', worker: 'WK', berserker: 'BK', duelist: 'DL', necromancer: 'NC', mystic: 'MS', spellweaver: 'SW', paladin: 'PL', assassin: 'AS', ninja: 'NJ', monk: 'MK', samurai: 'SM', bard: 'BD', tamer: 'TM', }; function Dc(e) { return !e || !Yj(e) ? '' : e2[e]; }" (raw L226-L246)
 
 ## Live Class Combat Niche Matrix
 

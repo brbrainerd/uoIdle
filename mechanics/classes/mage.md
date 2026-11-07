@@ -3,9 +3,9 @@ id: "mage"
 title: "Mage Class Deep-Dive: Elemental Magery, Summons, and Reagent Economy"
 category: "classes"
 aliases: ["mage", "mago", "MG", "class-103"]
-status: "bundle-stated"
+status: "verified"
 sources: ["_raw/bundle/abilities-catalog.json", "_raw/bundle/skills-and-progression.js", "_raw/bundle/classes-config.js", "_raw/bundle/combat-estimators-and-hotbar.js", "_raw/bundle/i18n-en-abilities.js", "_raw/wiki/changelog-server-dev.md"]
-evidence: ["bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/classes-config.js:5-100", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:99-117,399-412,454-490", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792,2473-2497", "wiki: _raw/wiki/changelog-server-dev.md:17,109,499-500"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/classes-config.js:5-100", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:99-117,399-412,454-490", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792,2473-2497", "wiki: _raw/wiki/changelog-server-dev.md:17,109,499-500"]
 code_refs: ["abilities-catalog.json:mage_*", "skills-and-progression.js:gE.mage", "classes-config.js:ZC.mage", "combat-estimators-and-hotbar.js:Aq", "combat-estimators-and-hotbar.js:Mq"]
 updated: "2026-11-07"
 ---
@@ -19,21 +19,21 @@ The Mage is the archetypal elemental spellcaster of the starter class trio in UO
 
 ## Claims
 
-- **C1** [bundle-stated] ""id": "mage_magic_arrow", "class": "mage", "kind": "Spell", "name": "Magic Arrow", "unlock": 1, "mana": 5, "blurb": "Unlocks at level 1.", "tab": "spell", "ref": 4, "map": "UO", "gumpIcon": 2244, "iconKey": "gump_2244"" (raw L687-L698)
-- **C2** [bundle-stated] ""id": "mage_harm", "class": "mage", "kind": "Spell", "name": "Harm", "unlock": 5, "mana": 8, "blurb": "Unlocks at level 5.", "tab": "spell", "ref": 11, "map": "UO", "gumpIcon": 2251, "iconKey": "gump_2251"" (raw L701-L712)
-- **C3** [bundle-stated] ""id": "mage_fireball", "class": "mage", "kind": "Spell", "name": "Fireball", "unlock": 5, "mana": 12, "blurb": "Unlocks at level 5.", "tab": "spell", "ref": 17, "map": "UO", "gumpIcon": 2257, "iconKey": "gump_2257"" (raw L715-L726)
-- **C4** [bundle-stated] ""id": "mage_heal", "class": "mage", "kind": "Spell", "name": "Heal", "unlock": 1, "mana": 5, "blurb": "Unlocks at level 1.", "tab": "spell", "ref": 3, "map": "UO", "gumpIcon": 2243, "iconKey": "gump_2243"" (raw L729-L740)
-- **C5** [bundle-stated] ""id": "mage_cure", "class": "mage", "kind": "Spell", "name": "Cure", "unlock": 1, "mana": 8, "blurb": "Unlocks at level 1.", "tab": "spell", "ref": 10, "map": "UO", "gumpIcon": 2250, "iconKey": "gump_2250"" (raw L743-L754)
-- **C6** [bundle-stated] ""id": "mage_lightning", "class": "mage", "kind": "Spell", "name": "Lightning", "unlock": 15, "mana": 14, "blurb": "Unlocks at level 15.", "tab": "spell", "ref": 29, "map": "UO", "gumpIcon": 2269, "iconKey": "gump_2269"" (raw L757-L768)
-- **C7** [bundle-stated] ""id": "mage_energy_bolt", "class": "mage", "kind": "Spell", "name": "Energy Bolt", "unlock": 20, "mana": 25, "blurb": "Unlocks at level 20.", "tab": "spell", "ref": 41, "map": "UO", "gumpIcon": 2281, "iconKey": "gump_2281"" (raw L771-L782)
-- **C8** [bundle-stated] ""id": "mage_magic_reflect", "class": "mage", "kind": "Custom", "name": "Magic Reflect", "unlock": 25, "mana": 14, "blurb": "Unlocks at level 25.", "tab": "ability", "map": "Idle"" (raw L785-L793)
-- **C9** [bundle-stated] ""id": "mage_flamestrike", "class": "mage", "kind": "Spell", "name": "Flame Strike", "unlock": 30, "mana": 40, "blurb": "Unlocks at level 30.", "tab": "spell", "ref": 50, "map": "UO", "gumpIcon": 2290, "iconKey": "gump_2290"" (raw L796-L807)
-- **C10** [bundle-stated] ""id": "mage_chain_lightning", "class": "mage", "kind": "Custom", "name": "Chain Lightning", "unlock": 35, "mana": 26, "blurb": "Unlocks at level 35.", "tab": "ability", "map": "New", "iconKey": "gump_2281"" (raw L810-L819)
-- **C11** [bundle-stated] ""id": "mage_explosion", "class": "mage", "kind": "Spell", "name": "Explosion", "unlock": 40, "mana": 28, "blurb": "Unlocks at level 40.", "tab": "spell", "ref": 42, "map": "UO", "gumpIcon": 2282, "iconKey": "gump_2282"" (raw L822-L833)
-- **C12** [bundle-stated] ""id": "mage_nature_fury", "class": "mage", "kind": "Custom", "name": "Nature's Fury", "unlock": 45, "mana": 24, "blurb": "Unlocks at level 45.", "tab": "ability", "map": "Idle"" (raw L836-L844)
-- **C13** [bundle-stated] ""id": "mage_fire_elemental", "class": "mage", "kind": "Custom", "name": "Fire Elemental", "unlock": 50, "mana": 40, "blurb": "Unlocks at level 50.", "tab": "ability", "map": "Idle", "iconKey": "gump_2290"" (raw L847-L856)
-- **C14** [bundle-stated] ""id": "mage_air_elemental", "class": "mage", "kind": "Custom", "name": "Air Elemental", "unlock": 55, "mana": 40, "blurb": "Unlocks at level 55.", "tab": "ability", "map": "Idle", "iconKey": "gump_2269"" (raw L859-L868)
-- **C15** [bundle-stated] ""id": "mage_meteor", "class": "mage", "kind": "Custom", "name": "Meteor Swarm", "unlock": 60, "mana": 40, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "Idle"" (raw L871-L879)
+- **C1** [verified] ""id": "mage_magic_arrow", "class": "mage", "kind": "Spell", "name": "Magic Arrow", "unlock": 1, "mana": 5, "blurb": "Unlocks at level 1.", "tab": "spell", "ref": 4, "map": "UO", "gumpIcon": 2244, "iconKey": "gump_2244"" (raw L687-L698)
+- **C2** [verified] ""id": "mage_harm", "class": "mage", "kind": "Spell", "name": "Harm", "unlock": 5, "mana": 8, "blurb": "Unlocks at level 5.", "tab": "spell", "ref": 11, "map": "UO", "gumpIcon": 2251, "iconKey": "gump_2251"" (raw L701-L712)
+- **C3** [verified] ""id": "mage_fireball", "class": "mage", "kind": "Spell", "name": "Fireball", "unlock": 5, "mana": 12, "blurb": "Unlocks at level 5.", "tab": "spell", "ref": 17, "map": "UO", "gumpIcon": 2257, "iconKey": "gump_2257"" (raw L715-L726)
+- **C4** [verified] ""id": "mage_heal", "class": "mage", "kind": "Spell", "name": "Heal", "unlock": 1, "mana": 5, "blurb": "Unlocks at level 1.", "tab": "spell", "ref": 3, "map": "UO", "gumpIcon": 2243, "iconKey": "gump_2243"" (raw L729-L740)
+- **C5** [verified] ""id": "mage_cure", "class": "mage", "kind": "Spell", "name": "Cure", "unlock": 1, "mana": 8, "blurb": "Unlocks at level 1.", "tab": "spell", "ref": 10, "map": "UO", "gumpIcon": 2250, "iconKey": "gump_2250"" (raw L743-L754)
+- **C6** [verified] ""id": "mage_lightning", "class": "mage", "kind": "Spell", "name": "Lightning", "unlock": 15, "mana": 14, "blurb": "Unlocks at level 15.", "tab": "spell", "ref": 29, "map": "UO", "gumpIcon": 2269, "iconKey": "gump_2269"" (raw L757-L768)
+- **C7** [verified] ""id": "mage_energy_bolt", "class": "mage", "kind": "Spell", "name": "Energy Bolt", "unlock": 20, "mana": 25, "blurb": "Unlocks at level 20.", "tab": "spell", "ref": 41, "map": "UO", "gumpIcon": 2281, "iconKey": "gump_2281"" (raw L771-L782)
+- **C8** [verified] ""id": "mage_magic_reflect", "class": "mage", "kind": "Custom", "name": "Magic Reflect", "unlock": 25, "mana": 14, "blurb": "Unlocks at level 25.", "tab": "ability", "map": "Idle"" (raw L785-L793)
+- **C9** [verified] ""id": "mage_flamestrike", "class": "mage", "kind": "Spell", "name": "Flame Strike", "unlock": 30, "mana": 40, "blurb": "Unlocks at level 30.", "tab": "spell", "ref": 50, "map": "UO", "gumpIcon": 2290, "iconKey": "gump_2290"" (raw L796-L807)
+- **C10** [verified] ""id": "mage_chain_lightning", "class": "mage", "kind": "Custom", "name": "Chain Lightning", "unlock": 35, "mana": 26, "blurb": "Unlocks at level 35.", "tab": "ability", "map": "New", "iconKey": "gump_2281"" (raw L810-L819)
+- **C11** [verified] ""id": "mage_explosion", "class": "mage", "kind": "Spell", "name": "Explosion", "unlock": 40, "mana": 28, "blurb": "Unlocks at level 40.", "tab": "spell", "ref": 42, "map": "UO", "gumpIcon": 2282, "iconKey": "gump_2282"" (raw L822-L833)
+- **C12** [verified] ""id": "mage_nature_fury", "class": "mage", "kind": "Custom", "name": "Nature's Fury", "unlock": 45, "mana": 24, "blurb": "Unlocks at level 45.", "tab": "ability", "map": "Idle"" (raw L836-L844)
+- **C13** [verified] ""id": "mage_fire_elemental", "class": "mage", "kind": "Custom", "name": "Fire Elemental", "unlock": 50, "mana": 40, "blurb": "Unlocks at level 50.", "tab": "ability", "map": "Idle", "iconKey": "gump_2290"" (raw L847-L856)
+- **C14** [verified] ""id": "mage_air_elemental", "class": "mage", "kind": "Custom", "name": "Air Elemental", "unlock": 55, "mana": 40, "blurb": "Unlocks at level 55.", "tab": "ability", "map": "Idle", "iconKey": "gump_2269"" (raw L859-L868)
+- **C15** [verified] ""id": "mage_meteor", "class": "mage", "kind": "Custom", "name": "Meteor Swarm", "unlock": 60, "mana": 40, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "Idle"" (raw L871-L879)
 
 ## Class Identity, Role, Starter Skills & Starter Kit
 

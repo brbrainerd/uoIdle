@@ -3,9 +3,9 @@ id: "status-effects"
 title: "Status Effects, Ability Dispatch Kinds, and Crowd Control Catalog"
 category: "status-effects"
 aliases: ["buffs", "debuffs", "dots", "crowd-control", "weapon-abilities", "special-moves"]
-status: "bundle-stated"
+status: "verified"
 sources: ["_raw/bundle/abilities-catalog.json", "_raw/bundle/i18n-en-abilities.js", "_raw/bundle/bestiary-and-wiki.js", "_raw/wiki/changelog-server-dev.md"]
-evidence: ["bundle: _raw/bundle/bestiary-and-wiki.js:91-103", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792", "bundle: _raw/bundle/i18n-en-abilities.js:2495-2497", "wiki: _raw/wiki/changelog-server-dev.md:109", "wiki: _raw/wiki/changelog-server-dev.md:833"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/bestiary-and-wiki.js:91-103", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792", "bundle: _raw/bundle/i18n-en-abilities.js:2495-2497", "wiki: _raw/wiki/changelog-server-dev.md:109", "wiki: _raw/wiki/changelog-server-dev.md:833"]
 code_refs: ["abilities-catalog.json:abilities", "bestiary-and-wiki.js:CO", "bestiary-and-wiki.js:MO"]
 updated: "2026-11-07"
 ---
@@ -19,22 +19,22 @@ Every combat action, buff, debuff, damage-over-time effect, crowd-control strike
 
 ## Claims
 
-- **C1** [bundle-stated] ""id": "warrior_slash", "class": "warrior", "kind": "Passive", "name": "Slash", "unlock": 1, "mana": 0, "blurb": "Unlocks at level 1.", "tab": "ability", "map": "UO", "gumpIcon": 20992, "iconKey": "gump_20992"" (raw L214-L224)
-- **C2** [bundle-stated] ""id": "warrior_provoke", "class": "warrior", "kind": "Custom", "name": "Provocar", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "iconKey": "idle_warrior_provoke"" (raw L227-L236)
-- **C3** [bundle-stated] ""id": "warrior_shield_bash", "class": "warrior", "kind": "Custom", "name": "Shield Bash", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "gumpIcon": 21007, "iconKey": "idle_warrior_shield_bash"" (raw L239-L249)
-- **C4** [bundle-stated] ""id": "warrior_armor_break", "class": "warrior", "kind": "Custom", "name": "Armor Break", "unlock": 15, "mana": 15, "blurb": "Unlocks at level 15.", "tab": "ability", "map": "New", "gumpIcon": 21014, "iconKey": "idle_warrior_armor_break"" (raw L252-L262)
-- **C5** [bundle-stated] ""id": "warrior_heavy_strike", "class": "warrior", "kind": "WeaponAbility", "name": "Heavy Strike", "unlock": 20, "mana": 12, "blurb": "Unlocks at level 20.", "tab": "ability", "ref": 4, "map": "UO", "gumpIcon": 20995, "iconKey": "gump_20995"" (raw L265-L276)
-- **C6** [bundle-stated] ""id": "warrior_whirlwind", "class": "warrior", "kind": "WeaponAbility", "name": "Whirlwind", "unlock": 25, "mana": 10, "blurb": "Unlocks at level 25.", "tab": "ability", "ref": 13, "map": "UO", "gumpIcon": 21004, "iconKey": "gump_21004"" (raw L279-L290)
-- **C7** [bundle-stated] ""id": "warrior_brace", "class": "warrior", "kind": "Custom", "name": "Brace", "unlock": 30, "mana": 10, "blurb": "Unlocks at level 30.", "tab": "ability", "map": "New/Eth", "gumpIcon": 21008, "iconKey": "idle_warrior_brace"" (raw L293-L303)
-- **C8** [bundle-stated] ""id": "warrior_execution", "class": "warrior", "kind": "Custom", "name": "Execution", "unlock": 60, "mana": 25, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "New", "gumpIcon": 21000, "iconKey": "idle_warrior_execution"" (raw L333-L343)
-- **C9** [bundle-stated] ""id": "ninja_focus", "class": "ninja", "kind": "SpecialMove", "name": "Focus Attack", "unlock": 1, "mana": 20, "blurb": "Unlocks at level 1.", "tab": "ability", "ref": 500, "map": "UO", "gumpIcon": 21280, "iconKey": "gump_21280"" (raw L1399-L1410)
-- **C10** [bundle-stated] ""id": "ninja_death", "class": "ninja", "kind": "SpecialMove", "name": "Death Strike", "unlock": 5, "mana": 30, "blurb": "Unlocks at level 5.", "tab": "ability", "ref": 501, "map": "UO", "gumpIcon": 21281, "iconKey": "gump_21281"" (raw L1413-L1424)
-- **C11** [bundle-stated] ""id": "ninja_mirror", "class": "ninja", "kind": "SpecialMove", "name": "Mirror Image", "unlock": 10, "mana": 10, "blurb": "Unlocks at level 10.", "tab": "ability", "ref": 507, "map": "UO", "gumpIcon": 21287, "iconKey": "gump_21287"" (raw L1427-L1438)
-- **C12** [bundle-stated] ""id": "ninja_shadowjump", "class": "ninja", "kind": "SpecialMove", "name": "Shadowjump", "unlock": 75, "mana": 15, "blurb": "Unlocks at level 75.", "tab": "ability", "ref": 506, "map": "UO", "gumpIcon": 21286, "iconKey": "gump_21286"" (raw L1441-L1452)
-- **C13** [bundle-stated] ""id": "samurai_lightning", "class": "samurai", "kind": "SpecialMove", "name": "Lightning Strike", "unlock": 1, "mana": 10, "blurb": "Unlocks at level 1.", "tab": "ability", "ref": 404, "map": "UO", "gumpIcon": 21540, "iconKey": "gump_21540"" (raw L1561-L1572)
-- **C14** [bundle-stated] ""id": "samurai_counter", "class": "samurai", "kind": "Spell", "name": "Counter Attack", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "spell", "ref": 403, "map": "UO", "gumpIcon": 21539, "iconKey": "gump_21539"" (raw L1575-L1586)
-- **C15** [bundle-stated] ""id": "samurai_honorable", "class": "samurai", "kind": "SpecialMove", "name": "Honorable Execution", "unlock": 10, "mana": 0, "blurb": "Unlocks at level 10.", "tab": "ability", "ref": 400, "map": "UO", "gumpIcon": 21536, "iconKey": "gump_21536"" (raw L1589-L1600)
-- **C16** [bundle-stated] ""id": "samurai_way", "class": "samurai", "kind": "Passive", "name": "Way of the Blade", "unlock": 75, "mana": 0, "blurb": "Unlocks at level 75.", "tab": "ability", "map": "New", "gumpIcon": 21536, "iconKey": "idle_samurai_way"" (raw L1603-L1613)
+- **C1** [verified] ""id": "warrior_slash", "class": "warrior", "kind": "Passive", "name": "Slash", "unlock": 1, "mana": 0, "blurb": "Unlocks at level 1.", "tab": "ability", "map": "UO", "gumpIcon": 20992, "iconKey": "gump_20992"" (raw L214-L224)
+- **C2** [verified] ""id": "warrior_provoke", "class": "warrior", "kind": "Custom", "name": "Provocar", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "iconKey": "idle_warrior_provoke"" (raw L227-L236)
+- **C3** [verified] ""id": "warrior_shield_bash", "class": "warrior", "kind": "Custom", "name": "Shield Bash", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "gumpIcon": 21007, "iconKey": "idle_warrior_shield_bash"" (raw L239-L249)
+- **C4** [verified] ""id": "warrior_armor_break", "class": "warrior", "kind": "Custom", "name": "Armor Break", "unlock": 15, "mana": 15, "blurb": "Unlocks at level 15.", "tab": "ability", "map": "New", "gumpIcon": 21014, "iconKey": "idle_warrior_armor_break"" (raw L252-L262)
+- **C5** [verified] ""id": "warrior_heavy_strike", "class": "warrior", "kind": "WeaponAbility", "name": "Heavy Strike", "unlock": 20, "mana": 12, "blurb": "Unlocks at level 20.", "tab": "ability", "ref": 4, "map": "UO", "gumpIcon": 20995, "iconKey": "gump_20995"" (raw L265-L276)
+- **C6** [verified] ""id": "warrior_whirlwind", "class": "warrior", "kind": "WeaponAbility", "name": "Whirlwind", "unlock": 25, "mana": 10, "blurb": "Unlocks at level 25.", "tab": "ability", "ref": 13, "map": "UO", "gumpIcon": 21004, "iconKey": "gump_21004"" (raw L279-L290)
+- **C7** [verified] ""id": "warrior_brace", "class": "warrior", "kind": "Custom", "name": "Brace", "unlock": 30, "mana": 10, "blurb": "Unlocks at level 30.", "tab": "ability", "map": "New/Eth", "gumpIcon": 21008, "iconKey": "idle_warrior_brace"" (raw L293-L303)
+- **C8** [verified] ""id": "warrior_execution", "class": "warrior", "kind": "Custom", "name": "Execution", "unlock": 60, "mana": 25, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "New", "gumpIcon": 21000, "iconKey": "idle_warrior_execution"" (raw L333-L343)
+- **C9** [verified] ""id": "ninja_focus", "class": "ninja", "kind": "SpecialMove", "name": "Focus Attack", "unlock": 1, "mana": 20, "blurb": "Unlocks at level 1.", "tab": "ability", "ref": 500, "map": "UO", "gumpIcon": 21280, "iconKey": "gump_21280"" (raw L1399-L1410)
+- **C10** [verified] ""id": "ninja_death", "class": "ninja", "kind": "SpecialMove", "name": "Death Strike", "unlock": 5, "mana": 30, "blurb": "Unlocks at level 5.", "tab": "ability", "ref": 501, "map": "UO", "gumpIcon": 21281, "iconKey": "gump_21281"" (raw L1413-L1424)
+- **C11** [verified] ""id": "ninja_mirror", "class": "ninja", "kind": "SpecialMove", "name": "Mirror Image", "unlock": 10, "mana": 10, "blurb": "Unlocks at level 10.", "tab": "ability", "ref": 507, "map": "UO", "gumpIcon": 21287, "iconKey": "gump_21287"" (raw L1427-L1438)
+- **C12** [verified] ""id": "ninja_shadowjump", "class": "ninja", "kind": "SpecialMove", "name": "Shadowjump", "unlock": 75, "mana": 15, "blurb": "Unlocks at level 75.", "tab": "ability", "ref": 506, "map": "UO", "gumpIcon": 21286, "iconKey": "gump_21286"" (raw L1441-L1452)
+- **C13** [verified] ""id": "samurai_lightning", "class": "samurai", "kind": "SpecialMove", "name": "Lightning Strike", "unlock": 1, "mana": 10, "blurb": "Unlocks at level 1.", "tab": "ability", "ref": 404, "map": "UO", "gumpIcon": 21540, "iconKey": "gump_21540"" (raw L1561-L1572)
+- **C14** [verified] ""id": "samurai_counter", "class": "samurai", "kind": "Spell", "name": "Counter Attack", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "spell", "ref": 403, "map": "UO", "gumpIcon": 21539, "iconKey": "gump_21539"" (raw L1575-L1586)
+- **C15** [verified] ""id": "samurai_honorable", "class": "samurai", "kind": "SpecialMove", "name": "Honorable Execution", "unlock": 10, "mana": 0, "blurb": "Unlocks at level 10.", "tab": "ability", "ref": 400, "map": "UO", "gumpIcon": 21536, "iconKey": "gump_21536"" (raw L1589-L1600)
+- **C16** [verified] ""id": "samurai_way", "class": "samurai", "kind": "Passive", "name": "Way of the Blade", "unlock": 75, "mana": 0, "blurb": "Unlocks at level 75.", "tab": "ability", "map": "New", "gumpIcon": 21536, "iconKey": "idle_samurai_way"" (raw L1603-L1613)
 
 ## Ability Dispatch Kinds (`abilities-catalog.json`, 134 Entries)
 

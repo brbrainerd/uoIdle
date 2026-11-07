@@ -3,9 +3,9 @@ id: "warrior"
 title: "Warrior Class Deep-Dive: Melee Tank, Weapon Abilities, and Stances"
 category: "classes"
 aliases: ["warrior", "guerreiro", "WR", "class-101"]
-status: "bundle-stated"
+status: "verified"
 sources: ["_raw/bundle/abilities-catalog.json", "_raw/bundle/skills-and-progression.js", "_raw/bundle/classes-config.js", "_raw/bundle/combat-estimators-and-hotbar.js", "_raw/bundle/i18n-en-abilities.js", "_raw/wiki/changelog-server-dev.md"]
-evidence: ["bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/classes-config.js:5-56", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:85-93,413-453", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792,2473-2497", "wiki: _raw/wiki/changelog-server-dev.md:653-654,833"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/skills-and-progression.js:68-238", "bundle: _raw/bundle/classes-config.js:5-56", "bundle: _raw/bundle/combat-estimators-and-hotbar.js:85-93,413-453", "bundle: _raw/bundle/i18n-en-abilities.js:1780-1792,2473-2497", "wiki: _raw/wiki/changelog-server-dev.md:653-654,833"]
 code_refs: ["abilities-catalog.json:warrior_*", "skills-and-progression.js:gE.warrior", "classes-config.js:ZC.warrior", "combat-estimators-and-hotbar.js:Cq"]
 updated: "2026-11-07"
 ---
@@ -19,18 +19,18 @@ The Warrior is the foundational melee tank and physical bruiser of the starter c
 
 ## Claims
 
-- **C1** [bundle-stated] ""id": "warrior_slash", "class": "warrior", "kind": "Passive", "name": "Slash", "unlock": 1, "mana": 0, "blurb": "Unlocks at level 1.", "tab": "ability", "map": "UO", "gumpIcon": 20992, "iconKey": "gump_20992"" (raw L214-L224)
-- **C2** [bundle-stated] ""id": "warrior_provoke", "class": "warrior", "kind": "Custom", "name": "Provocar", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "iconKey": "idle_warrior_provoke"" (raw L227-L236)
-- **C3** [bundle-stated] ""id": "warrior_shield_bash", "class": "warrior", "kind": "Custom", "name": "Shield Bash", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "gumpIcon": 21007, "iconKey": "idle_warrior_shield_bash"" (raw L239-L249)
-- **C4** [bundle-stated] ""id": "warrior_armor_break", "class": "warrior", "kind": "Custom", "name": "Armor Break", "unlock": 15, "mana": 15, "blurb": "Unlocks at level 15.", "tab": "ability", "map": "New", "gumpIcon": 21014, "iconKey": "idle_warrior_armor_break"" (raw L252-L262)
-- **C5** [bundle-stated] ""id": "warrior_heavy_strike", "class": "warrior", "kind": "WeaponAbility", "name": "Heavy Strike", "unlock": 20, "mana": 12, "blurb": "Unlocks at level 20.", "tab": "ability", "ref": 4, "map": "UO", "gumpIcon": 20995, "iconKey": "gump_20995"" (raw L265-L276)
-- **C6** [bundle-stated] ""id": "warrior_whirlwind", "class": "warrior", "kind": "WeaponAbility", "name": "Whirlwind", "unlock": 25, "mana": 10, "blurb": "Unlocks at level 25.", "tab": "ability", "ref": 13, "map": "UO", "gumpIcon": 21004, "iconKey": "gump_21004"" (raw L279-L290)
-- **C7** [bundle-stated] ""id": "warrior_brace", "class": "warrior", "kind": "Custom", "name": "Brace", "unlock": 30, "mana": 10, "blurb": "Unlocks at level 30.", "tab": "ability", "map": "New/Eth", "gumpIcon": 21008, "iconKey": "idle_warrior_brace"" (raw L293-L303)
-- **C8** [bundle-stated] ""id": "warrior_disarm", "class": "warrior", "kind": "WeaponAbility", "name": "Dirty Trick", "unlock": 40, "mana": 12, "blurb": "Unlocks at level 40.", "tab": "ability", "ref": 5, "map": "UO", "gumpIcon": 20996, "iconKey": "gump_20996"" (raw L306-L317)
-- **C9** [bundle-stated] ""id": "warrior_bulwark", "class": "warrior", "kind": "Custom", "name": "Bulwark", "unlock": 50, "mana": 20, "blurb": "Unlocks at level 50.", "tab": "ability", "map": "New", "gumpIcon": 21008, "iconKey": "idle_warrior_bulwark"" (raw L320-L330)
-- **C10** [bundle-stated] ""id": "warrior_execution", "class": "warrior", "kind": "Custom", "name": "Execution", "unlock": 60, "mana": 25, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "New", "gumpIcon": 21000, "iconKey": "idle_warrior_execution"" (raw L333-L343)
-- **C11** [bundle-stated] ""id": "bandage", "class": "*", "kind": "ItemUse", "name": "Bandage", "unlock": 1, "mana": 0, "blurb": "Self heal with bandages.", "tab": "item", "icon": 3617, "map": "UO"" (raw L5-L14)
-- **C12** [bundle-stated] ""id": "lesser_heal_potion", "class": "*", "kind": "ItemUse", "name": "Lesser Heal Potion", "unlock": 1, "mana": 0, "blurb": "Drink a lesser heal potion.", "tab": "item", "icon": 3852, "map": "UO"" (raw L17-L26)
+- **C1** [verified] ""id": "warrior_slash", "class": "warrior", "kind": "Passive", "name": "Slash", "unlock": 1, "mana": 0, "blurb": "Unlocks at level 1.", "tab": "ability", "map": "UO", "gumpIcon": 20992, "iconKey": "gump_20992"" (raw L214-L224)
+- **C2** [verified] ""id": "warrior_provoke", "class": "warrior", "kind": "Custom", "name": "Provocar", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "iconKey": "idle_warrior_provoke"" (raw L227-L236)
+- **C3** [verified] ""id": "warrior_shield_bash", "class": "warrior", "kind": "Custom", "name": "Shield Bash", "unlock": 5, "mana": 10, "blurb": "Unlocks at level 5.", "tab": "ability", "map": "New", "gumpIcon": 21007, "iconKey": "idle_warrior_shield_bash"" (raw L239-L249)
+- **C4** [verified] ""id": "warrior_armor_break", "class": "warrior", "kind": "Custom", "name": "Armor Break", "unlock": 15, "mana": 15, "blurb": "Unlocks at level 15.", "tab": "ability", "map": "New", "gumpIcon": 21014, "iconKey": "idle_warrior_armor_break"" (raw L252-L262)
+- **C5** [verified] ""id": "warrior_heavy_strike", "class": "warrior", "kind": "WeaponAbility", "name": "Heavy Strike", "unlock": 20, "mana": 12, "blurb": "Unlocks at level 20.", "tab": "ability", "ref": 4, "map": "UO", "gumpIcon": 20995, "iconKey": "gump_20995"" (raw L265-L276)
+- **C6** [verified] ""id": "warrior_whirlwind", "class": "warrior", "kind": "WeaponAbility", "name": "Whirlwind", "unlock": 25, "mana": 10, "blurb": "Unlocks at level 25.", "tab": "ability", "ref": 13, "map": "UO", "gumpIcon": 21004, "iconKey": "gump_21004"" (raw L279-L290)
+- **C7** [verified] ""id": "warrior_brace", "class": "warrior", "kind": "Custom", "name": "Brace", "unlock": 30, "mana": 10, "blurb": "Unlocks at level 30.", "tab": "ability", "map": "New/Eth", "gumpIcon": 21008, "iconKey": "idle_warrior_brace"" (raw L293-L303)
+- **C8** [verified] ""id": "warrior_disarm", "class": "warrior", "kind": "WeaponAbility", "name": "Dirty Trick", "unlock": 40, "mana": 12, "blurb": "Unlocks at level 40.", "tab": "ability", "ref": 5, "map": "UO", "gumpIcon": 20996, "iconKey": "gump_20996"" (raw L306-L317)
+- **C9** [verified] ""id": "warrior_bulwark", "class": "warrior", "kind": "Custom", "name": "Bulwark", "unlock": 50, "mana": 20, "blurb": "Unlocks at level 50.", "tab": "ability", "map": "New", "gumpIcon": 21008, "iconKey": "idle_warrior_bulwark"" (raw L320-L330)
+- **C10** [verified] ""id": "warrior_execution", "class": "warrior", "kind": "Custom", "name": "Execution", "unlock": 60, "mana": 25, "blurb": "Unlocks at level 60.", "tab": "ability", "map": "New", "gumpIcon": 21000, "iconKey": "idle_warrior_execution"" (raw L333-L343)
+- **C11** [verified] ""id": "bandage", "class": "*", "kind": "ItemUse", "name": "Bandage", "unlock": 1, "mana": 0, "blurb": "Self heal with bandages.", "tab": "item", "icon": 3617, "map": "UO"" (raw L5-L14)
+- **C12** [verified] ""id": "lesser_heal_potion", "class": "*", "kind": "ItemUse", "name": "Lesser Heal Potion", "unlock": 1, "mana": 0, "blurb": "Drink a lesser heal potion.", "tab": "item", "icon": 3852, "map": "UO"" (raw L17-L26)
 
 ## Class Identity, Role, Starter Skills & Starter Kit
 

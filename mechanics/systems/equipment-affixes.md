@@ -3,9 +3,9 @@ id: "equipment-affixes"
 title: "Equipment Slots, Item Affixes, Material Tiers, and Monster Scaling"
 category: "items-equipment"
 aliases: ["affixes", "paperdoll", "rarities", "materials", "personagembonus", "bestiary", "paragon"]
-status: "bundle-stated"
+status: "verified"
 sources: ["_raw/bundle/character-bonus-and-status.js", "_raw/bundle/paperdoll-and-items.js", "_raw/bundle/bestiary-and-wiki.js", "_raw/bundle/i18n-en-abilities.js", "_raw/wiki/changelog-server-dev.md"]
-evidence: ["bundle: _raw/bundle/paperdoll-and-items.js:316-322", "bundle: _raw/bundle/paperdoll-and-items.js:1190-1245", "bundle: _raw/bundle/bestiary-and-wiki.js:91-103", "bundle: _raw/bundle/bestiary-and-wiki.js:809-847", "bundle: _raw/bundle/i18n-en-abilities.js:2616", "wiki: _raw/wiki/changelog-server-dev.md:58-60"]
+evidence: ["live: _evidence/live-bundle-probe.txt L1-L20", "bundle: _raw/bundle/paperdoll-and-items.js:316-322", "bundle: _raw/bundle/paperdoll-and-items.js:1190-1245", "bundle: _raw/bundle/bestiary-and-wiki.js:91-103", "bundle: _raw/bundle/bestiary-and-wiki.js:809-847", "bundle: _raw/bundle/i18n-en-abilities.js:2616", "wiki: _raw/wiki/changelog-server-dev.md:58-60"]
 code_refs: ["character-bonus-and-status.js:vh", "character-bonus-and-status.js:eI", "character-bonus-and-status.js:Bx", "paperdoll-and-items.js:$A", "paperdoll-and-items.js:TE", "bestiary-and-wiki.js:kO", "bestiary-and-wiki.js:MO", "bestiary-and-wiki.js:sk"]
 updated: "2026-11-07"
 ---
@@ -19,16 +19,16 @@ UO Idle aggregates character attributes, elemental resistances, item affixes, pr
 
 ## Claims
 
-- **C1** [bundle-stated] "const wo = (e) => (typeof e == 'number' ? e : Number(e) || 0), vh = (e) => { const a = Array.isArray(e) ? e.map(wo) : []; return { base: a[0] ?? 0, itens: a[1] ?? 0, outros: a[2] ?? 0 }; };" (raw L5-L9)
-- **C2** [bundle-stated] "return e.subscribeSpeech((r) => { const i = it(r); if (!i || i.assunto !== 'PERSONAGEMBONUS') return; const c = i.dado, l = c.atrib ?? {}; o({ atrib: { str: vh(l.str), dex: vh(l.dex), int: vh(l.int) }," (raw L18-L25)
-- **C3** [bundle-stated] "resist: Array.isArray(c.resist) ? c.resist.map((m) => ({ t: String(m.t ?? ''), v: wo(m.v), itens: wo(m.itens), max: wo(m.max), })) : []," (raw L25-L32)
-- **C4** [bundle-stated] "bonus: Array.isArray(c.bonus) ? c.bonus.map((m) => ({ id: String(m.id ?? ''), v: wo(m.v) })) : [], arvore: Array.isArray(c.arvore) ? c.arvore.map((m) => ({ id: String(m.id ?? ''), v: wo(m.v) })) : [], skills: Array.isArray(c.skills) ? c.skills.map((m) => ({ id: wo(m.id), v: wo(m.v) })) : [], });" (raw L33-L42)
-- **C5** [bundle-stated] "d.useEffect(() => { if (!a || !n) return; e.say('[personagembonus'); const r = setInterval(() => e.say('[personagembonus'), 5e3); return () => clearInterval(r); }, [e, a, n])," (raw L45-L50)
-- **C6** [bundle-stated] "const Bx = { combat: { icon: 'swords', keys: [ 'swords', 'macing', 'fencing', 'archery', 'wrestling', 'tactics', 'parry', 'anatomy', 'healing', 'focus', 'bushido', 'ninjitsu', 'chivalry', 'throwing', ], }," (raw L54-L73)
-- **C7** [bundle-stated] "magic: { icon: 'mana', keys: [ 'magery', 'evalInt', 'meditation', 'magicResist', 'necromancy', 'spiritSpeak', 'spellweaving', 'mysticism', 'imbuing', ], }," (raw L74-L87)
-- **C8** [bundle-stated] "craft: { icon: 'wrench', keys: [ 'mining', 'lumberjacking', 'blacksmith', 'carpentry', 'tailoring', 'tinkering', 'fletching', 'alchemy', 'cooking', 'cartography', 'inscribe', 'fishing', ], }," (raw L88-L104)
-- **C9** [bundle-stated] "misc: { icon: 'paw', keys: [ 'animalTaming', 'animalLore', 'veterinary', 'herding', 'tracking', 'hiding', 'stealth', 'stealing', 'snooping', 'lockpicking', 'removeTrap', 'poisoning', 'detectHidden', 'camping', 'begging', 'forensics', 'itemId', 'armsLore', 'tasteId', 'musicianship', 'peacemaking', 'discordance', 'provocation', ], }, };" (raw L105-L133)
-- **C10** [bundle-stated] "function cb(e, a) { return a <= 0 ? 0 : Math.min(100, Math.max(0, Math.round((e / a) * 1e3) / 10)); } function uN(e, a) { return a <= 0 && e <= 0 ? '—' : `${e} / ${a}`; }" (raw L134-L139)
+- **C1** [verified] "const wo = (e) => (typeof e == 'number' ? e : Number(e) || 0), vh = (e) => { const a = Array.isArray(e) ? e.map(wo) : []; return { base: a[0] ?? 0, itens: a[1] ?? 0, outros: a[2] ?? 0 }; };" (raw L5-L9)
+- **C2** [verified] "return e.subscribeSpeech((r) => { const i = it(r); if (!i || i.assunto !== 'PERSONAGEMBONUS') return; const c = i.dado, l = c.atrib ?? {}; o({ atrib: { str: vh(l.str), dex: vh(l.dex), int: vh(l.int) }," (raw L18-L25)
+- **C3** [verified] "resist: Array.isArray(c.resist) ? c.resist.map((m) => ({ t: String(m.t ?? ''), v: wo(m.v), itens: wo(m.itens), max: wo(m.max), })) : []," (raw L25-L32)
+- **C4** [verified] "bonus: Array.isArray(c.bonus) ? c.bonus.map((m) => ({ id: String(m.id ?? ''), v: wo(m.v) })) : [], arvore: Array.isArray(c.arvore) ? c.arvore.map((m) => ({ id: String(m.id ?? ''), v: wo(m.v) })) : [], skills: Array.isArray(c.skills) ? c.skills.map((m) => ({ id: wo(m.id), v: wo(m.v) })) : [], });" (raw L33-L42)
+- **C5** [verified] "d.useEffect(() => { if (!a || !n) return; e.say('[personagembonus'); const r = setInterval(() => e.say('[personagembonus'), 5e3); return () => clearInterval(r); }, [e, a, n])," (raw L45-L50)
+- **C6** [verified] "const Bx = { combat: { icon: 'swords', keys: [ 'swords', 'macing', 'fencing', 'archery', 'wrestling', 'tactics', 'parry', 'anatomy', 'healing', 'focus', 'bushido', 'ninjitsu', 'chivalry', 'throwing', ], }," (raw L54-L73)
+- **C7** [verified] "magic: { icon: 'mana', keys: [ 'magery', 'evalInt', 'meditation', 'magicResist', 'necromancy', 'spiritSpeak', 'spellweaving', 'mysticism', 'imbuing', ], }," (raw L74-L87)
+- **C8** [verified] "craft: { icon: 'wrench', keys: [ 'mining', 'lumberjacking', 'blacksmith', 'carpentry', 'tailoring', 'tinkering', 'fletching', 'alchemy', 'cooking', 'cartography', 'inscribe', 'fishing', ], }," (raw L88-L104)
+- **C9** [verified] "misc: { icon: 'paw', keys: [ 'animalTaming', 'animalLore', 'veterinary', 'herding', 'tracking', 'hiding', 'stealth', 'stealing', 'snooping', 'lockpicking', 'removeTrap', 'poisoning', 'detectHidden', 'camping', 'begging', 'forensics', 'itemId', 'armsLore', 'tasteId', 'musicianship', 'peacemaking', 'discordance', 'provocation', ], }, };" (raw L105-L133)
+- **C10** [verified] "function cb(e, a) { return a <= 0 ? 0 : Math.min(100, Math.max(0, Math.round((e / a) * 1e3) / 10)); } function uN(e, a) { return a <= 0 && e <= 0 ? '—' : `${e} / ${a}`; }" (raw L134-L139)
 
 ## Character Bonus Polling (`[personagembonus` / `eI`, **C1–C5**)
 
