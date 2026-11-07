@@ -36,8 +36,8 @@ Requirements for the v1 deliverable package. Each maps to a roadmap phase.
 
 ### Visual Beta UI Mockups & Iconography (`VISUAL`)
 
-- [ ] **VISUAL-01**: Developer receives custom-generated dark-fantasy Ultima Online / UO Idle-styled class portraits and a full set of crisp $64\times 64$ / $48\times 48$ skill icons for every **Samurai** and **Ninja** active and passive ability (`mockups/assets/icons/{samurai,ninja}/`)
-- [ ] **VISUAL-02**: Developer can open self-contained, pixel-accurate HTML/CSS beta UI mockups (`mockups/samurai-skill-tree.html`, `mockups/ninja-skill-tree.html`, `mockups/class-comparison.html`) and high-resolution DevTools screenshots that render the finalized `samurai.json` and `ninja.json` skills, tooltips, unlock tiers, and icons inside `https://uoidle.com/beta`'s exact visual theme (`#0b0d0a`, `Cinzel` + `IBM Plex Sans`)
+- [x] **VISUAL-01**: Developer receives custom-generated dark-fantasy Ultima Online / UO Idle-styled class portraits and a full set of crisp $64\times 64$ / $48\times 48$ skill icons for every **Samurai** and **Ninja** active and passive ability (`mockups/assets/icons/{samurai,ninja}/`)
+- [x] **VISUAL-02**: Developer can open self-contained, pixel-accurate HTML/CSS beta UI mockups (`mockups/samurai-skill-tree.html`, `mockups/ninja-skill-tree.html`, `mockups/class-comparison.html`) and high-resolution DevTools screenshots that render the finalized `samurai.json` and `ninja.json` skills, tooltips, unlock tiers, and icons inside `https://uoidle.com/beta`'s exact visual theme (`#0b0d0a`, `Cinzel` + `IBM Plex Sans`)
 
 ## v2 Requirements
 
@@ -99,8 +99,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLASS-02 | Phase 5 | Complete |
 | CLASS-03 | Phase 5 | Complete |
 | CLASS-04 | Phase 5 | Complete |
-| VISUAL-01 | Phase 6 | Pending |
-| VISUAL-02 | Phase 6 | Pending |
+| VISUAL-01 | Phase 6 | Complete |
+| VISUAL-02 | Phase 6 | Complete |
 
 **Coverage:**
 

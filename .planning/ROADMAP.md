@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas** - Complete claim-verified KB pages for Warrior, Mage, and Ranger alongside reverse-engineered `zod`/JSON Schemas and structural parity rules. (completed 2026-11-07)
 - [x] **Phase 4: ModernUO Reference KB & Baseline Combat Simulator** - Claim-verified ModernUO Bushido/Ninjitsu KB pages, idle state-machine derivation matrix, and a tick-accurate combat simulator reproducing live class baselines. (completed 2026-11-06)
 - [x] **Phase 5: Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code** - Numerically balanced Samurai and Ninja skill lines, Tokuno equipment affixes, Mode A/Mode B drop-in JSON/JS payloads, formal specs, and automated parity proof. (completed 2026-11-07)
-- [ ] **Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging** - Custom dark-fantasy UO class portraits and skill icons rendered inside self-contained, pixel-accurate `uoidle.com/beta` HTML/CSS skill tree mockups.
+- [x] **Phase 6: Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging** - Custom dark-fantasy UO class portraits and skill icons rendered inside self-contained, pixel-accurate `uoidle.com/beta` HTML/CSS skill tree mockups. (completed 2026-11-07)
 
 ## Phase Details
 
@@ -157,7 +157,7 @@ Plans:
   2. Developer can open self-contained HTML/CSS mockups (`mockups/samurai-skill-tree.html`, `mockups/ninja-skill-tree.html`, `mockups/class-comparison.html`) and inspect high-resolution DevTools screenshots that render the exact skill names, unlock tiers, resource costs, cooldowns, and tooltips from `design/drop-in/{samurai,ninja}.json` inside `https://uoidle.com/beta`'s visual theme (`#0b0d0a`, `Cinzel` + `IBM Plex Sans`).
   3. Final end-to-end verification (`kb.py check`, schema validation, simulator parity check, and git secret audit) exits `0` and all deliverables are synced to the private `brbrainerd/uoIdle` repository.
 
-**Plans**: 1/2 plans executed
+**Plans**: 2/2 plans executed
 
 Plans:
 **Wave 1**
@@ -166,7 +166,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 06-02-PLAN.md — Data-driven `uoidle.com/beta` HTML/CSS mockups (`tools/build_mockups.ts`, `mockups/{samurai-skill-tree,ninja-skill-tree,class-comparison}.html`), headless Chrome verification screenshots (`mockups/screenshots/*.png`), root `README.md` executive handoff index, and 6-command Milestone v1.0 verification gate (`VISUAL-02`)
+- [x] 06-02-PLAN.md — Data-driven `uoidle.com/beta` HTML/CSS mockups (`tools/build_mockups.ts`, `mockups/{samurai-skill-tree,ninja-skill-tree,class-comparison}.html`), headless Chrome verification screenshots (`mockups/screenshots/*.png`), root `README.md` executive handoff index, and 6-command Milestone v1.0 verification gate (`VISUAL-02`)
 
 ## Progress
 
@@ -180,4 +180,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Existing Classes Deep-Dive (`Warrior`, `Mage`, `Ranger`) & Canonical Data Schemas | 2/2 | Complete    | 2026-11-07 |
 | 4. ModernUO Reference KB & Baseline Combat Simulator | 2/2 | Complete    | 2026-11-06 |
 | 5. Samurai (Bushido) & Ninja (Ninjitsu) Skill Line Design, Parity Tuning & Drop-In Code | 3/3 | Complete    | 2026-11-07 |
-| 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 1/2 | In progress | - |
+| 6. Visual Beta UI Mockups, Custom Iconography & Final Deliverable Packaging | 2/2 | Complete    | 2026-11-07 |
