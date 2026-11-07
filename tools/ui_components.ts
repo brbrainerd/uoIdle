@@ -308,7 +308,7 @@ export function buildComponentStyles(): string {
       background-size: 200% 100%;
       box-shadow: 0 0 8px rgba(229, 193, 88, 0.55);
     }
-    .arvore-col:nth-child(6n)::after,
+    .arvore-col:nth-of-type(6n)::after,
     .arvore-col:last-child::after {
       display: none;
     }
@@ -433,12 +433,103 @@ export function buildComponentStyles(): string {
       box-shadow: 0 0 8px rgba(229, 193, 88, 0.28);
     }
     .insp-pane {
+      display: none;
       transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
+    .insp-pane.is-active-pane,
     .insp-pane.is-highlighted-pane {
-      border-color: var(--border-gold-bright) !important;
-      box-shadow: 0 0 14px rgba(229, 193, 88, 0.28);
+      display: block;
       animation: inspectorFadeSlide 0.22s ease-out;
+    }
+
+    /* SVG Constellation Lattice & Compact Horizontal Hotbar / Medallion Strips */
+    .cobra-constellation-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hotbar-icon-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .hotbar-icon-socket {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 5px 4px;
+      border-radius: 5px;
+      border: 1.5px solid #483b22;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.16), #0d100c 78%);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hotbar-icon-socket:hover,
+    .hotbar-icon-socket.is-selected-seal {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.42), inset 0 0 8px rgba(229, 193, 88, 0.18);
+      transform: translateY(-2px);
+    }
+    .hotbar-icon-socket img {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      object-fit: cover;
+      display: block;
+    }
+    .hotbar-key-badge {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      padding: 0 4px;
+      border-radius: 3px;
+      background: #0b0d0a;
+      border: 1px solid var(--border-gold-bright);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .seal-medallion-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 8px 10px;
+    }
+    .seal-medallion-socket {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 4px;
+      border-radius: 6px;
+      border: 1.5px solid #483b22;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.18), #0d100c 80%);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+      text-align: center;
+    }
+    .seal-medallion-socket:hover,
+    .seal-medallion-socket.is-selected-seal {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.45), inset 0 0 10px rgba(229, 193, 88, 0.18);
+      transform: translateY(-2px);
+    }
+    .seal-medallion-socket img {
+      width: 46px;
+      height: 46px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border-gold-bright);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+      object-fit: cover;
+      display: block;
     }
 
     /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
@@ -580,10 +671,10 @@ export function buildComponentStyles(): string {
       margin-bottom: 12px;
     }
     .exec-kpi-card {
-      padding: 9px 11px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 7px;
       background: linear-gradient(180deg, #1b2019 0%, #0f130e 100%);
-      border: 1px solid #353c30;
+      border: 1.5px solid #483b22;
       border-top: 3px solid var(--border-gold);
       display: flex;
       flex-direction: column;
@@ -592,30 +683,52 @@ export function buildComponentStyles(): string {
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 242, 191, 0.08);
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .exec-kpi-card[data-kpi-class="warrior"] {
+      background: radial-gradient(circle at 20% 25%, rgba(217, 119, 6, 0.26), transparent 65%), linear-gradient(180deg, #271d12 0%, #110e0a 100%);
+      border-color: rgba(217, 119, 6, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="mage"] {
+      background: radial-gradient(circle at 20% 25%, rgba(59, 130, 246, 0.26), transparent 65%), linear-gradient(180deg, #111f2c 0%, #0b1016 100%);
+      border-color: rgba(59, 130, 246, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="ranger"] {
+      background: radial-gradient(circle at 20% 25%, rgba(132, 204, 22, 0.24), transparent 65%), linear-gradient(180deg, #152514 0%, #0b120b 100%);
+      border-color: rgba(132, 204, 22, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="samurai"] {
+      background: radial-gradient(circle at 25% 25%, rgba(200, 62, 55, 0.34), transparent 68%), linear-gradient(180deg, #2d1414 0%, #140b0b 100%);
+      border-color: #e5c158;
+      box-shadow: 0 0 18px rgba(200, 62, 55, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+    }
+    .exec-kpi-card[data-kpi-class="ninja"] {
+      background: radial-gradient(circle at 25% 25%, rgba(46, 158, 107, 0.28), transparent 68%), linear-gradient(180deg, #171828 0%, #0c0d15 100%);
+      border-color: rgba(124, 232, 180, 0.55);
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7), 0 0 14px rgba(229, 193, 88, 0.35);
     }
     .exec-kpi-card.is-spotlight-class {
-      border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #2b2414 0%, #151912 100%);
-      box-shadow: 0 0 20px rgba(229, 193, 88, 0.42), inset 0 0 14px rgba(229, 193, 88, 0.16);
+      border-color: #fff2bf !important;
+      box-shadow: 0 0 24px rgba(229, 193, 88, 0.55), inset 0 0 16px rgba(229, 193, 88, 0.22) !important;
       transform: translateY(-2px);
     }
     .kpi-emblem {
-      width: 28px;
-      height: 28px;
-      border-radius: 5px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       display: inline-grid;
       place-items: center;
       font-family: 'Cinzel', serif;
       font-size: 11px;
       font-weight: 700;
       color: #fff2bf;
-      border: 1px solid rgba(255, 242, 191, 0.45);
+      border: 2px solid var(--border-gold-bright);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.65), inset 0 0 6px rgba(255, 242, 191, 0.25);
       flex-shrink: 0;
     }
     tr.is-class-spotlight td {
@@ -879,13 +992,30 @@ export function renderExecutiveClassKpiStrip(
     ninja: 'NJ',
   };
 
+  const crestSvgMap: Record<string, string> = {
+    warrior: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M12 3L4 6v6c0 5.2 3.4 8.9 8 10 4.6-1.1 8-4.8 8-10V6l-8-3z" fill="rgba(217,119,6,0.35)"/><path d="M12 7v10M8 11h8"/></svg>',
+    mage: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" fill="rgba(59,130,246,0.35)"/><circle cx="12" cy="12" r="2.5" fill="#fff2bf"/></svg>',
+    ranger: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M5 19L19 5M19 5h-6M19 5v6" /><path d="M6 6c7 0 12 5 12 12" stroke="#84cc16"/></svg>',
+    samurai: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M4 8l8-5 8 5-3 11H7L4 8z" fill="rgba(200,62,55,0.45)"/><path d="M2 5l6 4M22 5l-6 4M9 14h6"/></svg>',
+    ninja: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 14.8,9.2 22,12 14.8,14.8 12,22 9.2,14.8 2,12 9.2,9.2" fill="rgba(46,158,107,0.4)"/><circle cx="12" cy="12" r="2" fill="#0b0d0a"/></svg>',
+  };
+
+  const sparkPtsMap: Record<string, string> = {
+    warrior: '2,20 16,18 30,19 44,15 58,16 72,12 86,14 100,10 114,11 128,7 142,8 158,4',
+    mage:    '2,20 16,19 30,16 44,17 58,13 72,14 86,10 100,11 114,7 128,8 142,5 158,3',
+    ranger:  '2,20 16,17 30,18 44,14 58,15 72,11 86,12 100,8 114,9 128,6 142,7 158,3',
+    samurai: '2,20 16,18 30,15 44,17 58,12 72,14 86,9 100,11 114,6 128,8 142,4 158,2',
+    ninja:   '2,20 16,17 30,16 44,13 58,15 72,10 86,11 100,7 114,9 128,5 142,6 158,3',
+  };
+
   return `<div class="exec-kpi-strip" id="sim-exec-kpi-strip">
     ${scenarios
       .map((s) => {
         const col = classColors[s.classId] ?? '#c9a227';
         const deltaPct = (((s.sustainedDps - meanDps) / meanDps) * 100).toFixed(1);
         const deltaStr = Number(deltaPct) >= 0 ? `+${deltaPct}%` : `${deltaPct}%`;
-        const bCode = badgeMap[s.classId] ?? 'CL';
+        const crestSvg = crestSvgMap[s.classId] ?? badgeMap[s.classId] ?? 'CL';
+        const sPts = sparkPtsMap[s.classId] ?? sparkPtsMap.samurai;
         const mitLabel =
           s.classId === 'samurai'
             ? `${s.parryCount} Bushido Parries`
@@ -894,24 +1024,24 @@ export function renderExecutiveClassKpiStrip(
               : `${s.parryCount} Shield Parries`;
         return `
           <div class="exec-kpi-card" data-kpi-class="${escapeHtml(s.classId)}" data-spot-class="${escapeHtml(s.classId)}" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:${col};" title="Click to spotlight ${escapeHtml(s.classId.toUpperCase())} across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, ${col}, #0c0f0b 82%);border-color:${col};">${bCode}</span>
-                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">${escapeHtml(s.classId)}</strong>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, ${col}, #090b08 82%);border-color:${col};">${crestSvg}</span>
+                <div style="min-width:0;">
+                  <strong style="font-family:'Cinzel',serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">${escapeHtml(s.classId)}</strong>
+                  <span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">${s.sustainedDps.toFixed(1)} DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">${s.ehpPerSec.toFixed(0)} EHP/s</span></span>
+                </div>
               </div>
-              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS ${deltaStr}</span>
+              <span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS ${deltaStr}</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
-              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">${s.sustainedDps.toFixed(1)} <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">${s.ehpPerSec.toFixed(1)} EHP/s</span>
-            </div>
-            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
-              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="${col}" stroke-width="2" opacity="0.88" />
+            <svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">
+              <polygon points="2,23 ${sPts} 158,23" fill="${col}" opacity="0.18" />
+              <polyline points="${sPts}" fill="none" stroke="${col}" stroke-width="2" />
               <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="${col}" stroke-width="1.5" />
             </svg>
-            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>${escapeHtml(mitLabel)}</span>
-              <span style="color:var(--text-gold);">Spotlight ▸</span>
+              <span style="color:var(--text-gold);">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         `;

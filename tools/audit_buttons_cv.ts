@@ -784,7 +784,12 @@ async function runAudit(phase: 'before' | 'after'): Promise<void> {
         'button[onclick*="stepCombatTicker"]',
         'tree-interaction',
         async () => {
-          await page.evaluate(() => window.scrollTo(0, 300));
+          await page.evaluate(() => {
+            if (typeof (window as any).switchInspectorTab === 'function') {
+              (window as any).switchInspectorTab('ticker');
+            }
+            window.scrollTo(0, 0);
+          });
         }
       )
     );

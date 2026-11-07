@@ -106,3 +106,31 @@ All animations respect `prefers-reduced-motion: reduce` and use hardware-acceler
 - [x] Dimension 7 Playwright + CV Flywheel Verification Contract: PASS
 
 **Approval:** Approved for Concept Art Review & CV Flywheel Execution (2026-11-07)
+
+
+---
+
+## 9. Iteration 2 — Direct Concept-Art Visual Convergence Contract (`/gsd-ui-phase` CV Flywheel)
+
+### 9.1 Skill Tree Workbench (`samurai-skill-tree.html` & `ninja-skill-tree.html` → `concept-skill-tree-workbench.jpg`)
+1. **Ornate Title Banner + Single Unified Command Deck Bar**:
+   - Replace the tall 4-box `.arvore-saldos` header row with an ornate Tokuno crest title banner (`Samurai (Bushido) — [Arvore Progression Workbench`) and a single unified Command Deck strip housing `[Surface: Portal · Samurai · Ninja · Simulator]`, `[Engine: Mode A | Mode B]`, `[Language: EN | PT-BR]`, and `[Kind Filter: All · Passive · Skill · Spell · Special]`.
+2. **Above-the-Fold Left Column (Compact Attributes + 2×4 GM Skill Pills + Elevated Tokuno Paperdoll Alcove)**:
+   - Place `STR / DEX / INT` glowing gradient bars on the left and a compact 2×4 grid of 1-line GM Skill Pills (`Bushido 100`, `Parrying 100`, `Swords 100`, `Tactics 100`, etc.) on the right so the **Full-Body Tokuno Paperdoll Alcove**, **9-Tier Material Segmented Selector**, and **Active Weapon Card** sit directly in the primary above-the-fold viewport (`Y < 900px`), matching the left column of `concept-skill-tree-workbench.jpg`.
+3. **SVG Golden Constellation Lattice Behind 48×48 Beveled Square Level-Line Sockets**:
+   - Add an inline SVG constellation layer (`.cobra-constellation-svg`) behind `.arvore-cobra` with glowing gold energy lines (`stroke="url(#goldBeam)"`, `filter="url(#beamGlow)"`) connecting horizontal progression (`L1→L5→L10→L15→L20→L25` and `L30→L35→L40→L45→L50→L60`) plus diagonal cross-tier synergy links (`L1–L30`, `L5–L35`, `L10–L35`, `L15–L40`, `L20–L45`, `L25–L50`, `L25–L60`) and a radiant capstone halo on `L60`.
+4. **Compact Right Column (True Tab-Switched Inspector + 5-Slot Horizontal Icon Hotbar + 4-Medallion Seal Row)**:
+   - Switch `.insp-pane` visibility cleanly via `[Overview]`, `[Mode A/B]`, `[100ms Sim]`, and `[JSON]` tabs (`display: none` is only disallowed on `section.arvore-secao` and `.milestone-card`, never on internal inspector tab panes).
+   - Render the **5-Slot Seeded Hotbar Queue** as a 5-icon horizontal strip (`54×54` square sockets with hotkey badge `1..5` and active slot detail readout) and the **4 Class Mastery Seals** as a 4-medallion horizontal row (`54×54` circular/gilded seal sockets with active seal detail readout), matching the bottom-right of `concept-skill-tree-workbench.jpg`.
+
+### 9.2 5-Class Simulator Workbench (`class-comparison.html` → `concept-sim-workbench.jpg`)
+1. **Ornate Title Banner + Unified Simulator Command Deck**:
+   - Consolidate the top navigation and simulator filter bars into the ornate Tokuno crest title banner + unified Command Deck bar (`[Surface]`, `[Mode A / Mode B]`, `[Bracket: L10 · L25 · L45 · L60]`, `[Archetype]`, `[Jump: Overview · Charts · Endurance · Matrix · Armaments]`).
+2. **Class-Tinted Gradient Executive KPI Cards with 42×42 Circular SVG Crest Medallions & Multi-Point Area Sparklines**:
+   - Style each `.exec-kpi-card` with a rich class-tinted radial/linear gradient background, a `42×42` circular gilded crest medallion containing an authentic class SVG emblem (Shield for Warrior, Arcane Star for Mage, Bow/Leaf for Ranger, Kabuto Crest for Samurai, Shuriken Lotus for Ninja), large `DPS | EHP/s` headline, `PASS +X.X%` emerald pill, and a 12-point SVG area + line progression sparkline.
+3. **Above-the-Fold 2×2 Visual Telemetry Quadrant Grid**:
+   - Place the **2×2 Visual Telemetry Quadrant Grid** directly below the 5 Executive KPI Cards so the primary viewport (`1600×1000`) matches `concept-sim-workbench.jpg`:
+     - **Top-Left Quadrant**: `Multi-Bracket DPS Progression Curve (L10 → L60)` with glowing vertical golden spotlight band on the active bracket and interactive metric/curve buttons.
+     - **Top-Right Quadrant**: `5-Channel Damage Source Breakdown` horizontal stacked bars with channel labels (`Auto-Attack`, `Skill/Spell`, `Execute`, `DoT/Venom`, `Parry/Spirit`).
+     - **Bottom-Left Quadrant**: `Effective HP/sec & 10-Wave Survival Curve` with multi-bracket EHP/s trajectories.
+     - **Bottom-Right Quadrant**: `Interactive 100ms Combat Spike Timeline & Rotation Strip` with an SVG combat spike/oscilloscope graph + clickable rotation icon timeline, followed below by the full 11-Column Telemetry Table and 10-Wave Endurance Table.

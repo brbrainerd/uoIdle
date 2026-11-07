@@ -1263,7 +1263,7 @@
       background-size: 200% 100%;
       box-shadow: 0 0 8px rgba(229, 193, 88, 0.55);
     }
-    .arvore-col:nth-child(6n)::after,
+    .arvore-col:nth-of-type(6n)::after,
     .arvore-col:last-child::after {
       display: none;
     }
@@ -1388,12 +1388,103 @@
       box-shadow: 0 0 8px rgba(229, 193, 88, 0.28);
     }
     .insp-pane {
+      display: none;
       transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
+    .insp-pane.is-active-pane,
     .insp-pane.is-highlighted-pane {
-      border-color: var(--border-gold-bright) !important;
-      box-shadow: 0 0 14px rgba(229, 193, 88, 0.28);
+      display: block;
       animation: inspectorFadeSlide 0.22s ease-out;
+    }
+
+    /* SVG Constellation Lattice & Compact Horizontal Hotbar / Medallion Strips */
+    .cobra-constellation-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hotbar-icon-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .hotbar-icon-socket {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 5px 4px;
+      border-radius: 5px;
+      border: 1.5px solid #483b22;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.16), #0d100c 78%);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hotbar-icon-socket:hover,
+    .hotbar-icon-socket.is-selected-seal {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.42), inset 0 0 8px rgba(229, 193, 88, 0.18);
+      transform: translateY(-2px);
+    }
+    .hotbar-icon-socket img {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      object-fit: cover;
+      display: block;
+    }
+    .hotbar-key-badge {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      padding: 0 4px;
+      border-radius: 3px;
+      background: #0b0d0a;
+      border: 1px solid var(--border-gold-bright);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .seal-medallion-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 8px 10px;
+    }
+    .seal-medallion-socket {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 4px;
+      border-radius: 6px;
+      border: 1.5px solid #483b22;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.18), #0d100c 80%);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+      text-align: center;
+    }
+    .seal-medallion-socket:hover,
+    .seal-medallion-socket.is-selected-seal {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.45), inset 0 0 10px rgba(229, 193, 88, 0.18);
+      transform: translateY(-2px);
+    }
+    .seal-medallion-socket img {
+      width: 46px;
+      height: 46px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border-gold-bright);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+      object-fit: cover;
+      display: block;
     }
 
     /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
@@ -1535,10 +1626,10 @@
       margin-bottom: 12px;
     }
     .exec-kpi-card {
-      padding: 9px 11px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 7px;
       background: linear-gradient(180deg, #1b2019 0%, #0f130e 100%);
-      border: 1px solid #353c30;
+      border: 1.5px solid #483b22;
       border-top: 3px solid var(--border-gold);
       display: flex;
       flex-direction: column;
@@ -1547,30 +1638,52 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 242, 191, 0.08);
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .exec-kpi-card[data-kpi-class="warrior"] {
+      background: radial-gradient(circle at 20% 25%, rgba(217, 119, 6, 0.26), transparent 65%), linear-gradient(180deg, #271d12 0%, #110e0a 100%);
+      border-color: rgba(217, 119, 6, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="mage"] {
+      background: radial-gradient(circle at 20% 25%, rgba(59, 130, 246, 0.26), transparent 65%), linear-gradient(180deg, #111f2c 0%, #0b1016 100%);
+      border-color: rgba(59, 130, 246, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="ranger"] {
+      background: radial-gradient(circle at 20% 25%, rgba(132, 204, 22, 0.24), transparent 65%), linear-gradient(180deg, #152514 0%, #0b120b 100%);
+      border-color: rgba(132, 204, 22, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="samurai"] {
+      background: radial-gradient(circle at 25% 25%, rgba(200, 62, 55, 0.34), transparent 68%), linear-gradient(180deg, #2d1414 0%, #140b0b 100%);
+      border-color: #e5c158;
+      box-shadow: 0 0 18px rgba(200, 62, 55, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+    }
+    .exec-kpi-card[data-kpi-class="ninja"] {
+      background: radial-gradient(circle at 25% 25%, rgba(46, 158, 107, 0.28), transparent 68%), linear-gradient(180deg, #171828 0%, #0c0d15 100%);
+      border-color: rgba(124, 232, 180, 0.55);
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7), 0 0 14px rgba(229, 193, 88, 0.35);
     }
     .exec-kpi-card.is-spotlight-class {
-      border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #2b2414 0%, #151912 100%);
-      box-shadow: 0 0 20px rgba(229, 193, 88, 0.42), inset 0 0 14px rgba(229, 193, 88, 0.16);
+      border-color: #fff2bf !important;
+      box-shadow: 0 0 24px rgba(229, 193, 88, 0.55), inset 0 0 16px rgba(229, 193, 88, 0.22) !important;
       transform: translateY(-2px);
     }
     .kpi-emblem {
-      width: 28px;
-      height: 28px;
-      border-radius: 5px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       display: inline-grid;
       place-items: center;
       font-family: 'Cinzel', serif;
       font-size: 11px;
       font-weight: 700;
       color: #fff2bf;
-      border: 1px solid rgba(255, 242, 191, 0.45);
+      border: 2px solid var(--border-gold-bright);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.65), inset 0 0 6px rgba(255, 242, 191, 0.25);
       flex-shrink: 0;
     }
     tr.is-class-spotlight td {
@@ -1858,120 +1971,427 @@
           <div class="exec-kpi-strip" id="sim-exec-kpi-strip">
     
           <div class="exec-kpi-card" data-kpi-class="warrior" data-spot-class="warrior" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#d97706;" title="Click to spotlight WARRIOR across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #d97706, #0c0f0b 82%);border-color:#d97706;">WR</span>
-                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">warrior</strong>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #d97706, #090b08 82%);border-color:#d97706;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M12 3L4 6v6c0 5.2 3.4 8.9 8 10 4.6-1.1 8-4.8 8-10V6l-8-3z" fill="rgba(217,119,6,0.35)"/><path d="M12 7v10M8 11h8"/></svg></span>
+                <div style="min-width:0;">
+                  <strong style="font-family:'Cinzel',serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">warrior</strong>
+                  <span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">345.1 DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">222 EHP/s</span></span>
+                </div>
               </div>
-              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS -7.8%</span>
+              <span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS -7.8%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
-              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">345.1 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">222.3 EHP/s</span>
-            </div>
-            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
-              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#d97706" stroke-width="2" opacity="0.88" />
+            <svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">
+              <polygon points="2,23 2,20 16,18 30,19 44,15 58,16 72,12 86,14 100,10 114,11 128,7 142,8 158,4 158,23" fill="#d97706" opacity="0.18" />
+              <polyline points="2,20 16,18 30,19 44,15 58,16 72,12 86,14 100,10 114,11 128,7 142,8 158,4" fill="none" stroke="#d97706" stroke-width="2" />
               <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#d97706" stroke-width="1.5" />
             </svg>
-            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>12 Shield Parries</span>
-              <span style="color:var(--text-gold);">Spotlight ▸</span>
+              <span style="color:var(--text-gold);">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         
 
           <div class="exec-kpi-card" data-kpi-class="mage" data-spot-class="mage" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#3b82f6;" title="Click to spotlight MAGE across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #3b82f6, #0c0f0b 82%);border-color:#3b82f6;">MG</span>
-                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">mage</strong>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #3b82f6, #090b08 82%);border-color:#3b82f6;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" fill="rgba(59,130,246,0.35)"/><circle cx="12" cy="12" r="2.5" fill="#fff2bf"/></svg></span>
+                <div style="min-width:0;">
+                  <strong style="font-family:'Cinzel',serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">mage</strong>
+                  <span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">374.5 DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">249 EHP/s</span></span>
+                </div>
               </div>
-              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS +0.0%</span>
+              <span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS +0.0%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
-              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">374.5 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">248.8 EHP/s</span>
-            </div>
-            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
-              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.88" />
+            <svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">
+              <polygon points="2,23 2,20 16,19 30,16 44,17 58,13 72,14 86,10 100,11 114,7 128,8 142,5 158,3 158,23" fill="#3b82f6" opacity="0.18" />
+              <polyline points="2,20 16,19 30,16 44,17 58,13 72,14 86,10 100,11 114,7 128,8 142,5 158,3" fill="none" stroke="#3b82f6" stroke-width="2" />
               <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#3b82f6" stroke-width="1.5" />
             </svg>
-            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>3 Shield Parries</span>
-              <span style="color:var(--text-gold);">Spotlight ▸</span>
+              <span style="color:var(--text-gold);">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         
 
           <div class="exec-kpi-card" data-kpi-class="ranger" data-spot-class="ranger" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#84cc16;" title="Click to spotlight RANGER across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #84cc16, #0c0f0b 82%);border-color:#84cc16;">RG</span>
-                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">ranger</strong>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #84cc16, #090b08 82%);border-color:#84cc16;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M5 19L19 5M19 5h-6M19 5v6" /><path d="M6 6c7 0 12 5 12 12" stroke="#84cc16"/></svg></span>
+                <div style="min-width:0;">
+                  <strong style="font-family:'Cinzel',serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">ranger</strong>
+                  <span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">403.6 DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">224 EHP/s</span></span>
+                </div>
               </div>
-              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS +7.8%</span>
+              <span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS +7.8%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
-              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">403.6 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">224.2 EHP/s</span>
-            </div>
-            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
-              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#84cc16" stroke-width="2" opacity="0.88" />
+            <svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">
+              <polygon points="2,23 2,20 16,17 30,18 44,14 58,15 72,11 86,12 100,8 114,9 128,6 142,7 158,3 158,23" fill="#84cc16" opacity="0.18" />
+              <polyline points="2,20 16,17 30,18 44,14 58,15 72,11 86,12 100,8 114,9 128,6 142,7 158,3" fill="none" stroke="#84cc16" stroke-width="2" />
               <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#84cc16" stroke-width="1.5" />
             </svg>
-            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>3 Shield Parries</span>
-              <span style="color:var(--text-gold);">Spotlight ▸</span>
+              <span style="color:var(--text-gold);">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         
 
           <div class="exec-kpi-card" data-kpi-class="samurai" data-spot-class="samurai" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#c83e37;" title="Click to spotlight SAMURAI across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #c83e37, #0c0f0b 82%);border-color:#c83e37;">SM</span>
-                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">samurai</strong>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #c83e37, #090b08 82%);border-color:#c83e37;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M4 8l8-5 8 5-3 11H7L4 8z" fill="rgba(200,62,55,0.45)"/><path d="M2 5l6 4M22 5l-6 4M9 14h6"/></svg></span>
+                <div style="min-width:0;">
+                  <strong style="font-family:'Cinzel',serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">samurai</strong>
+                  <span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">369.0 DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">235 EHP/s</span></span>
+                </div>
               </div>
-              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS -1.4%</span>
+              <span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS -1.4%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
-              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">369.0 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">235.4 EHP/s</span>
-            </div>
-            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
-              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#c83e37" stroke-width="2" opacity="0.88" />
+            <svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">
+              <polygon points="2,23 2,20 16,18 30,15 44,17 58,12 72,14 86,9 100,11 114,6 128,8 142,4 158,2 158,23" fill="#c83e37" opacity="0.18" />
+              <polyline points="2,20 16,18 30,15 44,17 58,12 72,14 86,9 100,11 114,6 128,8 142,4 158,2" fill="none" stroke="#c83e37" stroke-width="2" />
               <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#c83e37" stroke-width="1.5" />
             </svg>
-            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>12 Bushido Parries</span>
-              <span style="color:var(--text-gold);">Spotlight ▸</span>
+              <span style="color:var(--text-gold);">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         
 
           <div class="exec-kpi-card" data-kpi-class="ninja" data-spot-class="ninja" onclick="window.spotlightSimClass && window.spotlightSimClass(this.getAttribute('data-spot-class'))" style="border-top-color:#2e9e6b;" title="Click to spotlight NINJA across progression curves, 5-channel breakdown &amp; 100ms rotation timeline">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-              <div style="display:flex;align-items:center;gap:7px;">
-                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #2e9e6b, #0c0f0b 82%);border-color:#2e9e6b;">NJ</span>
-                <strong style="font-family:'Cinzel',serif;font-size:13px;color:#fff2bf;text-transform:uppercase;letter-spacing:0.03em;">ninja</strong>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, #2e9e6b, #090b08 82%);border-color:#2e9e6b;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 14.8,9.2 22,12 14.8,14.8 12,22 9.2,14.8 2,12 9.2,9.2" fill="rgba(46,158,107,0.4)"/><circle cx="12" cy="12" r="2" fill="#0b0d0a"/></svg></span>
+                <div style="min-width:0;">
+                  <strong style="font-family:'Cinzel',serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">ninja</strong>
+                  <span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">370.9 DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">230 EHP/s</span></span>
+                </div>
               </div>
-              <span class="lv-pill" style="color:#82d5b0;border-color:#2e9e6b;font-size:9px;padding:1px 5px;">PASS -1.0%</span>
+              <span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS -1.0%</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:3px;">
-              <span class="mono" style="font-size:16px;font-weight:700;color:#fff2bf;">370.9 <small style="font-size:10px;color:var(--text-secondary);">DPS</small></span>
-              <span class="mono" style="font-size:11.5px;color:#9ec9ff;font-weight:600;">229.6 EHP/s</span>
-            </div>
-            <svg viewBox="0 0 160 22" style="width:100%;height:20px;margin:2px 0;overflow:visible;">
-              <path d="M 2 19 Q 45 15, 85 10 T 158 3" fill="none" stroke="#2e9e6b" stroke-width="2" opacity="0.88" />
+            <svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">
+              <polygon points="2,23 2,20 16,17 30,16 44,13 58,15 72,10 86,11 100,7 114,9 128,5 142,6 158,3 158,23" fill="#2e9e6b" opacity="0.18" />
+              <polyline points="2,20 16,17 30,16 44,13 58,15 72,10 86,11 100,7 114,9 128,5 142,6 158,3" fill="none" stroke="#2e9e6b" stroke-width="2" />
               <circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="#2e9e6b" stroke-width="1.5" />
             </svg>
-            <div class="mono" style="font-size:9.2px;color:var(--text-secondary);display:flex;justify-content:space-between;">
+            <div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">
               <span>Smoke &amp; Clone Veil</span>
-              <span style="color:var(--text-gold);">Spotlight ▸</span>
+              <span style="color:var(--text-gold);">0 OOM · Spotlight ▸</span>
             </div>
           </div>
         
   </div>
+
+          <!-- 2x2 Visual Telemetry Quadrant Grid (Above-the-Fold Concept Art Match) -->
+          <div class="sim-charts-grid" id="sec-charts" data-comp-section="charts" style="margin-bottom:12px;">
+            <!-- Left Column of 2x2 Grid: Quadrant 1 (Multi-Bracket DPS Curve) + Quadrant 3 (Effective HP/s Survival Curve) -->
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0;">
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #252b21;">
+                  <div class="command-cluster">
+                    <span class="cluster-tag">Chart Metric</span>
+                    <button type="button" class="cobra-tier-btn is-active" data-chart-metric="sustainedDps" onclick="setChartMetric('sustainedDps')">Sustained DPS</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-metric="ehpPerSec" onclick="setChartMetric('ehpPerSec')">Effective HP/s</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-metric="trashTtkSec" onclick="setChartMetric('trashTtkSec')">Trash TTK Speed</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-metric="parityDelta" onclick="setChartMetric('parityDelta')">Parity Envelope %</button>
+                  </div>
+                  <div class="command-cluster">
+                    <span class="cluster-tag">Curve Focus</span>
+                    <button type="button" class="cobra-tier-btn is-active" data-chart-class="" onclick="spotlightSimClass('')">All 5</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="warrior" onclick="spotlightSimClass('warrior')">WR</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="mage" onclick="spotlightSimClass('mage')">MG</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="ranger" onclick="spotlightSimClass('ranger')">RG</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="samurai" onclick="spotlightSimClass('samurai')">SM</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="ninja" onclick="spotlightSimClass('ninja')">NJ</button>
+                  </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
+                  <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
+                  </strong>
+                  <div class="chart-legend">
+                    <span><i class="legend-dot" style="background:#d97706;"></i>WR</span>
+                    <span><i class="legend-dot" style="background:#3b82f6;"></i>MG</span>
+                    <span><i class="legend-dot" style="background:#84cc16;"></i>RG</span>
+                    <span><i class="legend-dot" style="background:#c83e37;"></i>SM</span>
+                    <span><i class="legend-dot" style="background:#2e9e6b;"></i>NJ</span>
+                  </div>
+                </div>
+                <div id="svg-dps-wrap"><svg viewBox="0 0 680 136" style="width:100%;height:auto;background:#0c0f0b;border:1px solid #2a3026;border-radius:4px;">
+      <line x1="44" y1="114" x2="660" y2="114" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="117" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">0</text>
+<line x1="44" y1="89" x2="660" y2="89" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="92" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">105</text>
+<line x1="44" y1="64" x2="660" y2="64" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="67" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">210</text>
+<line x1="44" y1="39" x2="660" y2="39" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="42" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">315</text>
+<line x1="44" y1="14" x2="660" y2="14" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="17" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">420</text>
+      
+      <rect x="634" y="14" width="52" height="100" fill="rgba(229,193,88,0.16)" stroke="#e5c158" stroke-width="1" stroke-dasharray="2,2" rx="3" />
+      <rect x="636" y="16" width="48" height="13" rx="2" fill="#e5c158" />
+      <text x="660" y="25" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE L60</text>
+    
+      <line x1="44" y1="14" x2="44" y2="114" stroke="#1e241b" stroke-width="1" />
+                <text x="44" y="126" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L10</text>
+<line x1="249" y1="14" x2="249" y2="114" stroke="#1e241b" stroke-width="1" />
+                <text x="249" y="126" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L25</text>
+<line x1="455" y1="14" x2="455" y2="114" stroke="#1e241b" stroke-width="1" />
+                <text x="455" y="126" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L45</text>
+<line x1="660" y1="14" x2="660" y2="114" stroke="#e5c158" stroke-width="1.5" />
+                <text x="660" y="126" fill="#fff2bf" font-size="11" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L60</text>
+      <polyline fill="none" stroke="#d97706" stroke-width="1.8" points="44,112 249,102 455,72 660,32" /><circle cx="44" cy="112" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 6.7 DPS</title></circle><circle cx="249" cy="102" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 49.0 DPS</title></circle><circle cx="455" cy="72" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 174.7 DPS</title></circle><circle cx="660" cy="32" r="6" fill="#d97706" stroke="#fff2bf" stroke-width="2"><title>WARRIOR: 345.1 DPS</title></circle>
+<polyline fill="none" stroke="#3b82f6" stroke-width="1.8" points="44,108 249,94 455,68 660,25" /><circle cx="44" cy="108" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 24.1 DPS</title></circle><circle cx="249" cy="94" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 82.7 DPS</title></circle><circle cx="455" cy="68" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 192.4 DPS</title></circle><circle cx="660" cy="25" r="6" fill="#3b82f6" stroke="#fff2bf" stroke-width="2"><title>MAGE: 374.5 DPS</title></circle>
+<polyline fill="none" stroke="#84cc16" stroke-width="1.8" points="44,112 249,103 455,71 660,18" /><circle cx="44" cy="112" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 7.9 DPS</title></circle><circle cx="249" cy="103" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 47.3 DPS</title></circle><circle cx="455" cy="71" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 182.5 DPS</title></circle><circle cx="660" cy="18" r="6" fill="#84cc16" stroke="#fff2bf" stroke-width="2"><title>RANGER: 403.6 DPS</title></circle>
+<polyline fill="none" stroke="#c83e37" stroke-width="2.8" points="44,113 249,103 455,75 660,26" /><circle cx="44" cy="113" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 6.2 DPS</title></circle><circle cx="249" cy="103" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 46.1 DPS</title></circle><circle cx="455" cy="75" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 163.2 DPS</title></circle><circle cx="660" cy="26" r="6" fill="#c83e37" stroke="#fff2bf" stroke-width="2"><title>SAMURAI: 369.0 DPS</title></circle>
+<polyline fill="none" stroke="#2e9e6b" stroke-width="2.8" points="44,112 249,102 455,68 660,26" /><circle cx="44" cy="112" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 6.8 DPS</title></circle><circle cx="249" cy="102" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 51.4 DPS</title></circle><circle cx="455" cy="68" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 193.1 DPS</title></circle><circle cx="660" cy="26" r="6" fill="#2e9e6b" stroke="#fff2bf" stroke-width="2"><title>NINJA: 370.9 DPS</title></circle>
+    </svg></div>
+                <div id="chart-bracket-inspector" style="margin:6px 0 0;padding:6px 10px;background:#10140f;border:1px solid #3c3425;border-left:3px solid var(--border-gold-bright);border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <div class="mono" style="font-size:10px;color:#fff2bf;" id="chart-insp-headline">
+                    <strong>[L60 Grandmaster Bracket]</strong> Click any bracket marker (L10 · L25 · L45 · L60) or metric pill above to inspect power-spike deltas.
+                  </div>
+                  <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="chart-insp-delta">SM 369.0 DPS (-1.6%) · NJ 370.9 DPS (-1.1%) · Within ±5% Envelope</span>
+                </div>
+              </div>
+
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
+                  <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    Effective HP / Sec (EHP/s) Survival Curve (L10 → L60 · Mode A · low_def_boss)
+                  </strong>
+                  <span class="mono" style="font-size:10px;color:#82d5b0;">All 5 classes within ±5–8% envelope</span>
+                </div>
+                <div id="svg-ehp-wrap"><svg viewBox="0 0 680 136" style="width:100%;height:auto;background:#0c0f0b;border:1px solid #2a3026;border-radius:4px;">
+      <line x1="44" y1="114" x2="660" y2="114" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="117" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">0</text>
+<line x1="44" y1="89" x2="660" y2="89" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="92" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">88</text>
+<line x1="44" y1="64" x2="660" y2="64" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="67" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">175</text>
+<line x1="44" y1="39" x2="660" y2="39" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="42" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">263</text>
+<line x1="44" y1="14" x2="660" y2="14" stroke="#252b22" stroke-dasharray="3,3" />
+                <text x="38" y="17" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">350</text>
+      
+      <rect x="634" y="14" width="52" height="100" fill="rgba(229,193,88,0.16)" stroke="#e5c158" stroke-width="1" stroke-dasharray="2,2" rx="3" />
+      <rect x="636" y="16" width="48" height="13" rx="2" fill="#e5c158" />
+      <text x="660" y="25" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE L60</text>
+    
+      <line x1="44" y1="14" x2="44" y2="114" stroke="#1e241b" stroke-width="1" />
+                <text x="44" y="126" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L10</text>
+<line x1="249" y1="14" x2="249" y2="114" stroke="#1e241b" stroke-width="1" />
+                <text x="249" y="126" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L25</text>
+<line x1="455" y1="14" x2="455" y2="114" stroke="#1e241b" stroke-width="1" />
+                <text x="455" y="126" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L45</text>
+<line x1="660" y1="14" x2="660" y2="114" stroke="#e5c158" stroke-width="1.5" />
+                <text x="660" y="126" fill="#fff2bf" font-size="11" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L60</text>
+      <polyline fill="none" stroke="#d97706" stroke-width="1.8" points="44,110 249,102 455,82 660,50" /><circle cx="44" cy="110" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 14.1 EHP/s</title></circle><circle cx="249" cy="102" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 41.9 EHP/s</title></circle><circle cx="455" cy="82" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 111.9 EHP/s</title></circle><circle cx="660" cy="50" r="6" fill="#d97706" stroke="#fff2bf" stroke-width="2"><title>WARRIOR: 222.3 EHP/s</title></circle>
+<polyline fill="none" stroke="#3b82f6" stroke-width="1.8" points="44,110 249,103 455,84 660,43" /><circle cx="44" cy="110" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 13.2 EHP/s</title></circle><circle cx="249" cy="103" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 39.2 EHP/s</title></circle><circle cx="455" cy="84" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 104.0 EHP/s</title></circle><circle cx="660" cy="43" r="6" fill="#3b82f6" stroke="#fff2bf" stroke-width="2"><title>MAGE: 248.8 EHP/s</title></circle>
+<polyline fill="none" stroke="#84cc16" stroke-width="1.8" points="44,110 249,104 455,85 660,50" /><circle cx="44" cy="110" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 12.8 EHP/s</title></circle><circle cx="249" cy="104" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 35.5 EHP/s</title></circle><circle cx="455" cy="85" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 103.0 EHP/s</title></circle><circle cx="660" cy="50" r="6" fill="#84cc16" stroke="#fff2bf" stroke-width="2"><title>RANGER: 224.2 EHP/s</title></circle>
+<polyline fill="none" stroke="#c83e37" stroke-width="2.8" points="44,110 249,102 455,83 660,47" /><circle cx="44" cy="110" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 13.6 EHP/s</title></circle><circle cx="249" cy="102" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 40.9 EHP/s</title></circle><circle cx="455" cy="83" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 108.7 EHP/s</title></circle><circle cx="660" cy="47" r="6" fill="#c83e37" stroke="#fff2bf" stroke-width="2"><title>SAMURAI: 235.4 EHP/s</title></circle>
+<polyline fill="none" stroke="#2e9e6b" stroke-width="2.8" points="44,110 249,103 455,83 660,48" /><circle cx="44" cy="110" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 13.6 EHP/s</title></circle><circle cx="249" cy="103" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 37.2 EHP/s</title></circle><circle cx="455" cy="83" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 108.0 EHP/s</title></circle><circle cx="660" cy="48" r="6" fill="#2e9e6b" stroke="#fff2bf" stroke-width="2"><title>NINJA: 229.6 EHP/s</title></circle>
+    </svg></div>
+              </div>
+            </div>
+
+            <!-- Right Column of 2x2 Grid: Quadrant 2 (5-Channel Damage Source Breakdown) + Quadrant 4 (Interactive Telemetry Drawer & 100ms Spike Timeline) -->
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0;">
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
+                  <strong id="breakdown-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    5-Channel Damage Source Breakdown (L60 · low_def_boss · Mode A)
+                  </strong>
+                  <div class="chart-legend">
+                    <span><i class="legend-dot" style="background:#64748b;"></i>Auto</span>
+                    <span><i class="legend-dot" style="background:#3b82f6;"></i>Skill/Spell</span>
+                    <span><i class="legend-dot" style="background:#ef4444;"></i>Execute/Detonate</span>
+                    <span><i class="legend-dot" style="background:#10b981;"></i>DoT/Venom</span>
+                    <span><i class="legend-dot" style="background:#f59e0b;"></i>Parry/Spirit Proc</span>
+                  </div>
+                </div>
+                <div id="breakdown-bars-wrap">
+        <div style="margin-bottom:4px;padding:4px 7px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">
+            <strong style="text-transform:uppercase;color:#d97706;letter-spacing:0.04em;">warrior</strong>
+            <span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: 345.15 DPS</span>
+          </div>
+          <div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">
+            Auto 204.0 (59.1%) · Skill 117.8 (34.1%) · Exec 20.8 (6.0%) · DoT 0.0 (0.0%) · Parry/Proc 2.5 (0.7%)
+          </div>
+          <div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+            <div style="width:59.1%;background:#64748b;" title="Auto-Attack: 203.98 DPS (59.1%)"></div>
+            <div style="width:34.1%;background:#3b82f6;" title="SpecialMove/Spell: 117.84 DPS (34.1%)"></div>
+            <div style="width:6.0%;background:#ef4444;" title="Execute/Detonation: 20.84 DPS (6.0%)"></div>
+            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
+            <div style="width:0.7%;background:#f59e0b;" title="Parry/Spirit Procs: 2.48 DPS (0.7%)"></div>
+          </div>
+        </div>
+      
+
+        <div style="margin-bottom:4px;padding:4px 7px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">
+            <strong style="text-transform:uppercase;color:#3b82f6;letter-spacing:0.04em;">mage</strong>
+            <span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: 374.52 DPS</span>
+          </div>
+          <div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">
+            Auto 236.3 (63.1%) · Skill 134.6 (35.9%) · Exec 0.0 (0.0%) · DoT 0.0 (0.0%) · Parry/Proc 3.6 (1.0%)
+          </div>
+          <div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+            <div style="width:63.1%;background:#64748b;" title="Auto-Attack: 236.32 DPS (63.1%)"></div>
+            <div style="width:35.9%;background:#3b82f6;" title="SpecialMove/Spell: 134.62 DPS (35.9%)"></div>
+            <div style="width:0.0%;background:#ef4444;" title="Execute/Detonation: 0.00 DPS (0.0%)"></div>
+            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
+            <div style="width:1.0%;background:#f59e0b;" title="Parry/Spirit Procs: 3.58 DPS (1.0%)"></div>
+          </div>
+        </div>
+      
+
+        <div style="margin-bottom:4px;padding:4px 7px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">
+            <strong style="text-transform:uppercase;color:#84cc16;letter-spacing:0.04em;">ranger</strong>
+            <span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: 403.59 DPS</span>
+          </div>
+          <div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">
+            Auto 223.8 (55.5%) · Skill 112.8 (28.0%) · Exec 61.2 (15.2%) · DoT 0.0 (0.0%) · Parry/Proc 5.7 (1.4%)
+          </div>
+          <div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+            <div style="width:55.5%;background:#64748b;" title="Auto-Attack: 223.85 DPS (55.5%)"></div>
+            <div style="width:28.0%;background:#3b82f6;" title="SpecialMove/Spell: 112.82 DPS (28.0%)"></div>
+            <div style="width:15.2%;background:#ef4444;" title="Execute/Detonation: 61.20 DPS (15.2%)"></div>
+            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
+            <div style="width:1.4%;background:#f59e0b;" title="Parry/Spirit Procs: 5.72 DPS (1.4%)"></div>
+          </div>
+        </div>
+      
+
+        <div style="margin-bottom:4px;padding:4px 7px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">
+            <strong style="text-transform:uppercase;color:#c83e37;letter-spacing:0.04em;">samurai</strong>
+            <span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: 369.04 DPS</span>
+          </div>
+          <div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">
+            Auto 230.7 (62.5%) · Skill 103.5 (28.0%) · Exec 31.9 (8.6%) · DoT 0.0 (0.0%) · Parry/Proc 3.0 (0.8%)
+          </div>
+          <div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+            <div style="width:62.5%;background:#64748b;" title="Auto-Attack: 230.73 DPS (62.5%)"></div>
+            <div style="width:28.0%;background:#3b82f6;" title="SpecialMove/Spell: 103.45 DPS (28.0%)"></div>
+            <div style="width:8.6%;background:#ef4444;" title="Execute/Detonation: 31.87 DPS (8.6%)"></div>
+            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
+            <div style="width:0.8%;background:#f59e0b;" title="Parry/Spirit Procs: 2.99 DPS (0.8%)"></div>
+          </div>
+        </div>
+      
+
+        <div style="margin-bottom:4px;padding:4px 7px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">
+            <strong style="text-transform:uppercase;color:#2e9e6b;letter-spacing:0.04em;">ninja</strong>
+            <span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: 370.85 DPS</span>
+          </div>
+          <div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">
+            Auto 238.7 (64.4%) · Skill 87.1 (23.5%) · Exec 11.9 (3.2%) · DoT 27.7 (7.5%) · Parry/Proc 5.5 (1.5%)
+          </div>
+          <div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+            <div style="width:64.4%;background:#64748b;" title="Auto-Attack: 238.67 DPS (64.4%)"></div>
+            <div style="width:23.5%;background:#3b82f6;" title="SpecialMove/Spell: 87.13 DPS (23.5%)"></div>
+            <div style="width:3.2%;background:#ef4444;" title="Execute/Detonation: 11.93 DPS (3.2%)"></div>
+            <div style="width:7.5%;background:#10b981;" title="DoT/Venom: 27.66 DPS (7.5%)"></div>
+            <div style="width:1.5%;background:#f59e0b;" title="Parry/Spirit Procs: 5.46 DPS (1.5%)"></div>
+          </div>
+        </div>
+      </div>
+              </div>
+
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
+                  <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    Interactive Telemetry Drawer — Live 100ms Rotation &amp; Spike Timeline
+                  </strong>
+                  <span class="mono" style="font-size:9.5px;color:#82d5b0;">2,000ms Custom Cooldown Cadence</span>
+                </div>
+                <svg viewBox="0 0 640 54" style="width:100%;height:50px;background:#0a0d09;border:1px solid #2a3026;border-radius:4px;margin-bottom:6px;display:block;">
+                  <line x1="0" y1="42" x2="640" y2="42" stroke="#252b21" stroke-width="1" />
+                  <polyline fill="none" stroke="#c9a227" stroke-width="1.4" opacity="0.65" points="8,38 24,22 40,38 56,14 72,38 88,30 104,38 120,8 136,38 152,24 168,38 184,18 200,38 216,6 232,38 248,26 264,38 280,12 296,38 312,28 328,38 344,7 360,38 376,22 392,38 408,15 424,38 440,5 456,38 472,24 488,38 504,14 520,38 536,8 552,38 568,20 584,38 600,10 616,38 632,18" />
+                  <polygon points="120,4 116,10 124,10" fill="#ef4444" />
+                  <polygon points="216,2 212,8 220,8" fill="#ef4444" />
+                  <polygon points="344,3 340,9 348,9" fill="#34b37a" />
+                  <polygon points="440,1 436,7 444,7" fill="#ef4444" />
+                  <polygon points="536,4 532,10 540,10" fill="#34b37a" />
+                  <text x="12" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">0.0s</text>
+                  <text x="160" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">5.0s (Burst)</text>
+                  <text x="320" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">10.0s (Parry/Clone)</text>
+                  <text x="480" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">15.0s (Execute)</text>
+                  <text x="605" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">20.0s</text>
+                </svg>
+                <div id="sim-rotation-wrap"><div style="margin-top:8px;padding:8px 10px;background:#0e120d;border:1px solid #2a3026;border-radius:4px;">
+        <div style="font-family:'Cinzel',serif;font-size:11px;color:#c83e37;font-weight:700;margin-bottom:6px;text-transform:uppercase;">
+          samurai L60 100ms Tick Combat Rotation Log (First 20.0s — ro(e) Hotbar Casts, DoTs &amp; Procs)
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;"><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Armor Ignore (259 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.2s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Evasion (Posture/Buff)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Frenzied Whirlwind (315 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Momentum Strike (418 dmg ★)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=4.0s</strong> · <span style="color:#10b981;text-transform:uppercase;">proc</span> · Iaido Flash Riposte (32 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=8.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Frenzied Whirlwind (286 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=8.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Momentum Strike (Posture/Buff)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=12.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Confidence (Posture/Buff)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=14.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Armor Ignore (268 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=16.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Frenzied Whirlwind (322 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=16.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Momentum Strike (282 dmg)
+          </div></div>
+      </div>
+<div style="margin-top:8px;padding:8px 10px;background:#0e120d;border:1px solid #2a3026;border-radius:4px;">
+        <div style="font-family:'Cinzel',serif;font-size:11px;color:#2e9e6b;font-weight:700;margin-bottom:6px;text-transform:uppercase;">
+          ninja L60 100ms Tick Combat Rotation Log (First 20.0s — ro(e) Hotbar Casts, DoTs &amp; Procs)
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;"><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Surprise Attack (215 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.2s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Fukiya &amp; Egg Bomb Barrage (Posture/Buff)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Ki Attack (361 dmg ★)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Shuriken &amp; Fukiya Volley (205 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=0.5s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Infectious Strike (343 dmg ★)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=2.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (57 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=4.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (57 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=6.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (52 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=10.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Ki Attack (322 dmg ★)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=11.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Shuriken &amp; Fukiya Volley (274 dmg ★)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=12.5s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Infectious Strike (204 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=14.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (51 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=16.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Surprise Attack (215 dmg)
+          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
+            <strong style="color:#fff2bf;">t=16.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (56 dmg)
+          </div></div>
+      </div></div>
+              </div>
+            </div>
+          </div>
 
           <div class="table-scroll-wrap" id="sim-telemetry-table-wrap" style="margin-bottom:12px;">
             <table class="comp-table">
@@ -2088,281 +2508,6 @@
       
               </tbody>
             </table>
-          </div>
-
-          <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
-          <div class="sim-charts-grid" id="sec-charts" data-comp-section="charts">
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #252b21;">
-                <div class="command-cluster">
-                  <span class="cluster-tag">Chart Metric</span>
-                  <button type="button" class="cobra-tier-btn is-active" data-chart-metric="sustainedDps" onclick="setChartMetric('sustainedDps')">Sustained DPS</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-metric="ehpPerSec" onclick="setChartMetric('ehpPerSec')">Effective HP/s</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-metric="trashTtkSec" onclick="setChartMetric('trashTtkSec')">Trash TTK Speed</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-metric="parityDelta" onclick="setChartMetric('parityDelta')">Parity Envelope %</button>
-                </div>
-                <div class="command-cluster">
-                  <span class="cluster-tag">Curve Focus</span>
-                  <button type="button" class="cobra-tier-btn is-active" data-chart-class="" onclick="spotlightSimClass('')">All 5</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="warrior" onclick="spotlightSimClass('warrior')">WR</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="mage" onclick="spotlightSimClass('mage')">MG</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="ranger" onclick="spotlightSimClass('ranger')">RG</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="samurai" onclick="spotlightSimClass('samurai')">SM</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="ninja" onclick="spotlightSimClass('ninja')">NJ</button>
-                </div>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
-                <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
-                </strong>
-                <div class="chart-legend">
-                  <span><i class="legend-dot" style="background:#d97706;"></i>WR</span>
-                  <span><i class="legend-dot" style="background:#3b82f6;"></i>MG</span>
-                  <span><i class="legend-dot" style="background:#84cc16;"></i>RG</span>
-                  <span><i class="legend-dot" style="background:#c83e37;"></i>SM</span>
-                  <span><i class="legend-dot" style="background:#2e9e6b;"></i>NJ</span>
-                </div>
-              </div>
-              <div id="svg-dps-wrap"><svg viewBox="0 0 680 220" style="width:100%;height:auto;background:#0c0f0b;border:1px solid #2a3026;border-radius:4px;">
-      <line x1="48" y1="188" x2="656" y2="188" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="191" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">0</text>
-<line x1="48" y1="146" x2="656" y2="146" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="149" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">105</text>
-<line x1="48" y1="104" x2="656" y2="104" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="107" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">210</text>
-<line x1="48" y1="62" x2="656" y2="62" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="65" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">315</text>
-<line x1="48" y1="20" x2="656" y2="20" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="23" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">420</text>
-      
-      <rect x="630" y="20" width="52" height="168" fill="rgba(229,193,88,0.16)" stroke="#e5c158" stroke-width="1" stroke-dasharray="2,2" rx="3" />
-      <rect x="632" y="22" width="48" height="13" rx="2" fill="#e5c158" />
-      <text x="656" y="31" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE L60</text>
-    
-      <line x1="48" y1="20" x2="48" y2="188" stroke="#1e241b" stroke-width="1" />
-                <text x="48" y="210" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L10</text>
-<line x1="251" y1="20" x2="251" y2="188" stroke="#1e241b" stroke-width="1" />
-                <text x="251" y="210" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L25</text>
-<line x1="453" y1="20" x2="453" y2="188" stroke="#1e241b" stroke-width="1" />
-                <text x="453" y="210" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L45</text>
-<line x1="656" y1="20" x2="656" y2="188" stroke="#e5c158" stroke-width="1.5" />
-                <text x="656" y="210" fill="#fff2bf" font-size="11" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L60</text>
-      <polyline fill="none" stroke="#d97706" stroke-width="1.8" points="48,185 251,168 453,118 656,50" /><circle cx="48" cy="185" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 6.7 DPS</title></circle><circle cx="251" cy="168" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 49.0 DPS</title></circle><circle cx="453" cy="118" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 174.7 DPS</title></circle><circle cx="656" cy="50" r="6" fill="#d97706" stroke="#fff2bf" stroke-width="2"><title>WARRIOR: 345.1 DPS</title></circle>
-<polyline fill="none" stroke="#3b82f6" stroke-width="1.8" points="48,178 251,155 453,111 656,38" /><circle cx="48" cy="178" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 24.1 DPS</title></circle><circle cx="251" cy="155" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 82.7 DPS</title></circle><circle cx="453" cy="111" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 192.4 DPS</title></circle><circle cx="656" cy="38" r="6" fill="#3b82f6" stroke="#fff2bf" stroke-width="2"><title>MAGE: 374.5 DPS</title></circle>
-<polyline fill="none" stroke="#84cc16" stroke-width="1.8" points="48,185 251,169 453,115 656,27" /><circle cx="48" cy="185" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 7.9 DPS</title></circle><circle cx="251" cy="169" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 47.3 DPS</title></circle><circle cx="453" cy="115" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 182.5 DPS</title></circle><circle cx="656" cy="27" r="6" fill="#84cc16" stroke="#fff2bf" stroke-width="2"><title>RANGER: 403.6 DPS</title></circle>
-<polyline fill="none" stroke="#c83e37" stroke-width="2.8" points="48,186 251,170 453,123 656,40" /><circle cx="48" cy="186" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 6.2 DPS</title></circle><circle cx="251" cy="170" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 46.1 DPS</title></circle><circle cx="453" cy="123" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 163.2 DPS</title></circle><circle cx="656" cy="40" r="6" fill="#c83e37" stroke="#fff2bf" stroke-width="2"><title>SAMURAI: 369.0 DPS</title></circle>
-<polyline fill="none" stroke="#2e9e6b" stroke-width="2.8" points="48,185 251,167 453,111 656,40" /><circle cx="48" cy="185" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 6.8 DPS</title></circle><circle cx="251" cy="167" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 51.4 DPS</title></circle><circle cx="453" cy="111" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 193.1 DPS</title></circle><circle cx="656" cy="40" r="6" fill="#2e9e6b" stroke="#fff2bf" stroke-width="2"><title>NINJA: 370.9 DPS</title></circle>
-    </svg></div>
-              <div id="chart-bracket-inspector" style="margin:6px 0 8px;padding:6px 10px;background:#10140f;border:1px solid #3c3425;border-left:3px solid var(--border-gold-bright);border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <div class="mono" style="font-size:10.5px;color:#fff2bf;" id="chart-insp-headline">
-                  <strong>[L60 Grandmaster Bracket]</strong> Click any bracket marker (L10 · L25 · L45 · L60) on the chart or metric pills above to inspect power-spike deltas.
-                </div>
-                <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="chart-insp-delta">SM 363.2 DPS (-3.6%) · NJ 374.5 DPS (-0.6%) · Within ±5% Envelope</span>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:8px 0 6px;">
-                <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60 · Mode A · low_def_boss)
-                </strong>
-                <span class="mono" style="font-size:10px;color:#82d5b0;">All 5 classes within ±5–8% envelope</span>
-              </div>
-              <div id="svg-ehp-wrap"><svg viewBox="0 0 680 220" style="width:100%;height:auto;background:#0c0f0b;border:1px solid #2a3026;border-radius:4px;">
-      <line x1="48" y1="188" x2="656" y2="188" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="191" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">0</text>
-<line x1="48" y1="146" x2="656" y2="146" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="149" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">88</text>
-<line x1="48" y1="104" x2="656" y2="104" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="107" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">175</text>
-<line x1="48" y1="62" x2="656" y2="62" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="65" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">263</text>
-<line x1="48" y1="20" x2="656" y2="20" stroke="#252b22" stroke-dasharray="3,3" />
-                <text x="42" y="23" fill="#a39e90" font-size="9" font-family="IBM Plex Mono" text-anchor="end">350</text>
-      
-      <rect x="630" y="20" width="52" height="168" fill="rgba(229,193,88,0.16)" stroke="#e5c158" stroke-width="1" stroke-dasharray="2,2" rx="3" />
-      <rect x="632" y="22" width="48" height="13" rx="2" fill="#e5c158" />
-      <text x="656" y="31" fill="#0b0d0a" font-size="8" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">ACTIVE L60</text>
-    
-      <line x1="48" y1="20" x2="48" y2="188" stroke="#1e241b" stroke-width="1" />
-                <text x="48" y="210" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L10</text>
-<line x1="251" y1="20" x2="251" y2="188" stroke="#1e241b" stroke-width="1" />
-                <text x="251" y="210" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L25</text>
-<line x1="453" y1="20" x2="453" y2="188" stroke="#1e241b" stroke-width="1" />
-                <text x="453" y="210" fill="#d4af37" font-size="10" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L45</text>
-<line x1="656" y1="20" x2="656" y2="188" stroke="#e5c158" stroke-width="1.5" />
-                <text x="656" y="210" fill="#fff2bf" font-size="11" font-weight="700" font-family="IBM Plex Mono" text-anchor="middle">L60</text>
-      <polyline fill="none" stroke="#d97706" stroke-width="1.8" points="48,181 251,168 453,134 656,81" /><circle cx="48" cy="181" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 14.1 EHP/s</title></circle><circle cx="251" cy="168" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 41.9 EHP/s</title></circle><circle cx="453" cy="134" r="3.8" fill="#d97706" stroke="#0b0d0a" stroke-width="1.5"><title>WARRIOR: 111.9 EHP/s</title></circle><circle cx="656" cy="81" r="6" fill="#d97706" stroke="#fff2bf" stroke-width="2"><title>WARRIOR: 222.3 EHP/s</title></circle>
-<polyline fill="none" stroke="#3b82f6" stroke-width="1.8" points="48,182 251,169 453,138 656,69" /><circle cx="48" cy="182" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 13.2 EHP/s</title></circle><circle cx="251" cy="169" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 39.2 EHP/s</title></circle><circle cx="453" cy="138" r="3.8" fill="#3b82f6" stroke="#0b0d0a" stroke-width="1.5"><title>MAGE: 104.0 EHP/s</title></circle><circle cx="656" cy="69" r="6" fill="#3b82f6" stroke="#fff2bf" stroke-width="2"><title>MAGE: 248.8 EHP/s</title></circle>
-<polyline fill="none" stroke="#84cc16" stroke-width="1.8" points="48,182 251,171 453,139 656,80" /><circle cx="48" cy="182" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 12.8 EHP/s</title></circle><circle cx="251" cy="171" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 35.5 EHP/s</title></circle><circle cx="453" cy="139" r="3.8" fill="#84cc16" stroke="#0b0d0a" stroke-width="1.5"><title>RANGER: 103.0 EHP/s</title></circle><circle cx="656" cy="80" r="6" fill="#84cc16" stroke="#fff2bf" stroke-width="2"><title>RANGER: 224.2 EHP/s</title></circle>
-<polyline fill="none" stroke="#c83e37" stroke-width="2.8" points="48,181 251,168 453,136 656,75" /><circle cx="48" cy="181" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 13.6 EHP/s</title></circle><circle cx="251" cy="168" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 40.9 EHP/s</title></circle><circle cx="453" cy="136" r="3.8" fill="#c83e37" stroke="#0b0d0a" stroke-width="1.5"><title>SAMURAI: 108.7 EHP/s</title></circle><circle cx="656" cy="75" r="6" fill="#c83e37" stroke="#fff2bf" stroke-width="2"><title>SAMURAI: 235.4 EHP/s</title></circle>
-<polyline fill="none" stroke="#2e9e6b" stroke-width="2.8" points="48,181 251,170 453,136 656,78" /><circle cx="48" cy="181" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 13.6 EHP/s</title></circle><circle cx="251" cy="170" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 37.2 EHP/s</title></circle><circle cx="453" cy="136" r="3.8" fill="#2e9e6b" stroke="#0b0d0a" stroke-width="1.5"><title>NINJA: 108.0 EHP/s</title></circle><circle cx="656" cy="78" r="6" fill="#2e9e6b" stroke="#fff2bf" stroke-width="2"><title>NINJA: 229.6 EHP/s</title></circle>
-    </svg></div>
-            </div>
-
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
-                <strong id="breakdown-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  5-Channel Damage Source Breakdown (L60 · low_def_boss · Mode A)
-                </strong>
-                <div class="chart-legend">
-                  <span><i class="legend-dot" style="background:#64748b;"></i>Auto</span>
-                  <span><i class="legend-dot" style="background:#3b82f6;"></i>Skill/Spell</span>
-                  <span><i class="legend-dot" style="background:#ef4444;"></i>Execute/Detonate</span>
-                  <span><i class="legend-dot" style="background:#10b981;"></i>DoT/Venom</span>
-                  <span><i class="legend-dot" style="background:#f59e0b;"></i>Parry/Spirit Proc</span>
-                </div>
-              </div>
-              <div id="breakdown-bars-wrap">
-        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
-            <strong style="text-transform:uppercase;color:#d97706;letter-spacing:0.04em;">warrior</strong>
-            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: 345.15 DPS</span>
-          </div>
-          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
-            Auto 204.0 (59.1%) · Skill 117.8 (34.1%) · Exec 20.8 (6.0%) · DoT 0.0 (0.0%) · Parry/Proc 2.5 (0.7%)
-          </div>
-          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
-            <div style="width:59.1%;background:#64748b;" title="Auto-Attack: 203.98 DPS (59.1%)"></div>
-            <div style="width:34.1%;background:#3b82f6;" title="SpecialMove/Spell: 117.84 DPS (34.1%)"></div>
-            <div style="width:6.0%;background:#ef4444;" title="Execute/Detonation: 20.84 DPS (6.0%)"></div>
-            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
-            <div style="width:0.7%;background:#f59e0b;" title="Parry/Spirit Procs: 2.48 DPS (0.7%)"></div>
-          </div>
-        </div>
-      
-
-        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
-            <strong style="text-transform:uppercase;color:#3b82f6;letter-spacing:0.04em;">mage</strong>
-            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: 374.52 DPS</span>
-          </div>
-          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
-            Auto 236.3 (63.1%) · Skill 134.6 (35.9%) · Exec 0.0 (0.0%) · DoT 0.0 (0.0%) · Parry/Proc 3.6 (1.0%)
-          </div>
-          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
-            <div style="width:63.1%;background:#64748b;" title="Auto-Attack: 236.32 DPS (63.1%)"></div>
-            <div style="width:35.9%;background:#3b82f6;" title="SpecialMove/Spell: 134.62 DPS (35.9%)"></div>
-            <div style="width:0.0%;background:#ef4444;" title="Execute/Detonation: 0.00 DPS (0.0%)"></div>
-            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
-            <div style="width:1.0%;background:#f59e0b;" title="Parry/Spirit Procs: 3.58 DPS (1.0%)"></div>
-          </div>
-        </div>
-      
-
-        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
-            <strong style="text-transform:uppercase;color:#84cc16;letter-spacing:0.04em;">ranger</strong>
-            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: 403.59 DPS</span>
-          </div>
-          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
-            Auto 223.8 (55.5%) · Skill 112.8 (28.0%) · Exec 61.2 (15.2%) · DoT 0.0 (0.0%) · Parry/Proc 5.7 (1.4%)
-          </div>
-          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
-            <div style="width:55.5%;background:#64748b;" title="Auto-Attack: 223.85 DPS (55.5%)"></div>
-            <div style="width:28.0%;background:#3b82f6;" title="SpecialMove/Spell: 112.82 DPS (28.0%)"></div>
-            <div style="width:15.2%;background:#ef4444;" title="Execute/Detonation: 61.20 DPS (15.2%)"></div>
-            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
-            <div style="width:1.4%;background:#f59e0b;" title="Parry/Spirit Procs: 5.72 DPS (1.4%)"></div>
-          </div>
-        </div>
-      
-
-        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
-            <strong style="text-transform:uppercase;color:#c83e37;letter-spacing:0.04em;">samurai</strong>
-            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: 369.04 DPS</span>
-          </div>
-          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
-            Auto 230.7 (62.5%) · Skill 103.5 (28.0%) · Exec 31.9 (8.6%) · DoT 0.0 (0.0%) · Parry/Proc 3.0 (0.8%)
-          </div>
-          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
-            <div style="width:62.5%;background:#64748b;" title="Auto-Attack: 230.73 DPS (62.5%)"></div>
-            <div style="width:28.0%;background:#3b82f6;" title="SpecialMove/Spell: 103.45 DPS (28.0%)"></div>
-            <div style="width:8.6%;background:#ef4444;" title="Execute/Detonation: 31.87 DPS (8.6%)"></div>
-            <div style="width:0.0%;background:#10b981;" title="DoT/Venom: 0.00 DPS (0.0%)"></div>
-            <div style="width:0.8%;background:#f59e0b;" title="Parry/Spirit Procs: 2.99 DPS (0.8%)"></div>
-          </div>
-        </div>
-      
-
-        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
-            <strong style="text-transform:uppercase;color:#2e9e6b;letter-spacing:0.04em;">ninja</strong>
-            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: 370.85 DPS</span>
-          </div>
-          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
-            Auto 238.7 (64.4%) · Skill 87.1 (23.5%) · Exec 11.9 (3.2%) · DoT 27.7 (7.5%) · Parry/Proc 5.5 (1.5%)
-          </div>
-          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
-            <div style="width:64.4%;background:#64748b;" title="Auto-Attack: 238.67 DPS (64.4%)"></div>
-            <div style="width:23.5%;background:#3b82f6;" title="SpecialMove/Spell: 87.13 DPS (23.5%)"></div>
-            <div style="width:3.2%;background:#ef4444;" title="Execute/Detonation: 11.93 DPS (3.2%)"></div>
-            <div style="width:7.5%;background:#10b981;" title="DoT/Venom: 27.66 DPS (7.5%)"></div>
-            <div style="width:1.5%;background:#f59e0b;" title="Parry/Spirit Procs: 5.46 DPS (1.5%)"></div>
-          </div>
-        </div>
-      </div>
-              <div id="sim-rotation-wrap"><div style="margin-top:8px;padding:8px 10px;background:#0e120d;border:1px solid #2a3026;border-radius:4px;">
-        <div style="font-family:'Cinzel',serif;font-size:11px;color:#c83e37;font-weight:700;margin-bottom:6px;text-transform:uppercase;">
-          samurai L60 100ms Tick Combat Rotation Log (First 20.0s — ro(e) Hotbar Casts, DoTs &amp; Procs)
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;"><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Armor Ignore (259 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.2s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Evasion (Posture/Buff)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Frenzied Whirlwind (315 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Momentum Strike (418 dmg ★)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=4.0s</strong> · <span style="color:#10b981;text-transform:uppercase;">proc</span> · Iaido Flash Riposte (32 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=8.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Frenzied Whirlwind (286 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=8.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Momentum Strike (Posture/Buff)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=12.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Confidence (Posture/Buff)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=14.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Armor Ignore (268 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=16.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Frenzied Whirlwind (322 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=16.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Momentum Strike (282 dmg)
-          </div></div>
-      </div>
-<div style="margin-top:8px;padding:8px 10px;background:#0e120d;border:1px solid #2a3026;border-radius:4px;">
-        <div style="font-family:'Cinzel',serif;font-size:11px;color:#2e9e6b;font-weight:700;margin-bottom:6px;text-transform:uppercase;">
-          ninja L60 100ms Tick Combat Rotation Log (First 20.0s — ro(e) Hotbar Casts, DoTs &amp; Procs)
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;"><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Surprise Attack (215 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.2s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Fukiya &amp; Egg Bomb Barrage (Posture/Buff)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Ki Attack (361 dmg ★)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Shuriken &amp; Fukiya Volley (205 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=0.5s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Infectious Strike (343 dmg ★)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=2.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (57 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=4.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (57 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=6.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (52 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=10.3s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Ki Attack (322 dmg ★)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=11.4s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Shuriken &amp; Fukiya Volley (274 dmg ★)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=12.5s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Infectious Strike (204 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=14.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (51 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid var(--border-gold-bright);border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=16.1s</strong> · <span style="color:var(--border-gold-bright);text-transform:uppercase;">cast</span> · Surprise Attack (215 dmg)
-          </div><div style="padding:4px 7px;background:#121611;border:1px solid #10b981;border-radius:3px;font-size:10px;" class="mono">
-            <strong style="color:#fff2bf;">t=16.5s</strong> · <span style="color:#10b981;text-transform:uppercase;">dot</span> · Infectious Venom (56 dmg)
-          </div></div>
-      </div></div>
-            </div>
           </div>
 
           <!-- Consolidated Material Tier (Iron -> Valorite) & 10-Wave Dungeon Endurance -->
@@ -4153,7 +4298,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
       }
 
       function renderProgressionSvg(metricKey, maxVal, unitLabel) {
-        var chartW = 680, chartH = 220, padL = 48, padR = 24, padT = 20, padB = 32;
+        var chartW = 680, chartH = 136, padL = 44, padR = 20, padT = 14, padB = 22;
         var plotW = chartW - padL - padR;
         var plotH = chartH - padT - padB;
         var aTheme = archTheme[state.arch] || archTheme.low_def_boss;
@@ -4325,7 +4470,7 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
 
-        // Also update Executive 5-Class KPI Strip with Class Emblems & Sparklines
+        // Also update Executive 5-Class KPI Strip with Circular SVG Crest Medallions & Area Sparklines
         var kpiStripEl = document.getElementById('sim-exec-kpi-strip');
         if (kpiStripEl && list.length > 0) {
           var baseScens = list.filter(function(s) {
@@ -4334,11 +4479,26 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
           var meanD = baseScens.length > 0
             ? baseScens.reduce(function(a, b) { return a + b.sustainedDps; }, 0) / baseScens.length
             : 375.0;
+          var crestSvgJs = {
+            warrior: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M12 3L4 6v6c0 5.2 3.4 8.9 8 10 4.6-1.1 8-4.8 8-10V6l-8-3z" fill="rgba(217,119,6,0.35)"/><path d="M12 7v10M8 11h8"/></svg>',
+            mage: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" fill="rgba(59,130,246,0.35)"/><circle cx="12" cy="12" r="2.5" fill="#fff2bf"/></svg>',
+            ranger: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M5 19L19 5M19 5h-6M19 5v6" /><path d="M6 6c7 0 12 5 12 12" stroke="#84cc16"/></svg>',
+            samurai: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M4 8l8-5 8 5-3 11H7L4 8z" fill="rgba(200,62,55,0.45)"/><path d="M2 5l6 4M22 5l-6 4M9 14h6"/></svg>',
+            ninja: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 14.8,9.2 22,12 14.8,14.8 12,22 9.2,14.8 2,12 9.2,9.2" fill="rgba(46,158,107,0.4)"/><circle cx="12" cy="12" r="2" fill="#0b0d0a"/></svg>'
+          };
+          var sparkPtsJs = {
+            warrior: '2,20 16,18 30,19 44,15 58,16 72,12 86,14 100,10 114,11 128,7 142,8 158,4',
+            mage:    '2,20 16,19 30,16 44,17 58,13 72,14 86,10 100,11 114,7 128,8 142,5 158,3',
+            ranger:  '2,20 16,17 30,18 44,14 58,15 72,11 86,12 100,8 114,9 128,6 142,7 158,3',
+            samurai: '2,20 16,18 30,15 44,17 58,12 72,14 86,9 100,11 114,6 128,8 142,4 158,2',
+            ninja:   '2,20 16,17 30,16 44,13 58,15 72,10 86,11 100,7 114,9 128,5 142,6 158,3'
+          };
           var kpiHtml = '';
           for (var ki = 0; ki < list.length; ki++) {
             var ks = list[ki];
             var kCol = classCols[ks.classId] || '#c9a227';
-            var kShort = classShort[ks.classId] || ks.classId.slice(0, 2).toUpperCase();
+            var kSvg = crestSvgJs[ks.classId] || (classShort[ks.classId] || 'CL');
+            var kPts = sparkPtsJs[ks.classId] || sparkPtsJs.samurai;
             var isSpotKpi = state.spotlightClass === ks.classId;
             var dPct = (((ks.sustainedDps - meanD) / meanD) * 100).toFixed(1);
             var dStr = parseFloat(dPct) >= 0 ? ('+' + dPct + '%') : (dPct + '%');
@@ -4348,22 +4508,22 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
                 ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
                 : (ks.parryCount + ' Shield Parries'));
             kpiHtml += '<div class="exec-kpi-card ' + (isSpotKpi ? 'is-spotlight-class' : '') + '" data-kpi-class="' + escHtml(ks.classId) + '" data-spot-class="' + escHtml(ks.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="border-top-color:' + escHtml(kCol) + ';">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">' +
-                '<div style="display:flex;align-items:center;gap:6px;">' +
-                  '<span class="kpi-emblem" style="color:' + escHtml(kCol) + ';border-color:' + escHtml(kCol) + ';">' + escHtml(kShort) + '</span>' +
-                  '<strong style="font-family:Cinzel,serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+                '<div style="display:flex;align-items:center;gap:8px;min-width:0;">' +
+                  '<span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, ' + escHtml(kCol) + ', #090b08 82%);border-color:' + escHtml(kCol) + ';">' + kSvg + '</span>' +
+                  '<div style="min-width:0;">' +
+                    '<strong style="font-family:Cinzel,serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
+                    '<span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">' + ks.sustainedDps.toFixed(1) + ' DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">' + ks.ehpPerSec.toFixed(0) + ' EHP/s</span></span>' +
+                  '</div>' +
                 '</div>' +
-                '<span class="mono" style="font-size:9px;color:#82d5b0;background:rgba(46,158,107,0.14);border:1px solid rgba(46,158,107,0.4);padding:1px 5px;border-radius:3px;">PASS ' + escHtml(dStr) + '</span>' +
+                '<span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS ' + escHtml(dStr) + '</span>' +
               '</div>' +
-              '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
-                '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
-                '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
-              '</div>' +
-              '<svg viewBox="0 0 120 16" style="width:100%;height:14px;display:block;opacity:0.9;">' +
-                '<polyline fill="none" stroke="' + escHtml(kCol) + '" stroke-width="1.6" points="4,13 38,10 78,6 116,2" />' +
-                '<circle cx="116" cy="2" r="2.3" fill="#fff2bf" stroke="' + escHtml(kCol) + '" stroke-width="1.2" />' +
+              '<svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">' +
+                '<polygon points="2,23 ' + kPts + ' 158,23" fill="' + escHtml(kCol) + '" opacity="0.18" />' +
+                '<polyline points="' + kPts + '" fill="none" stroke="' + escHtml(kCol) + '" stroke-width="2" />' +
+                '<circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="' + escHtml(kCol) + '" stroke-width="1.5" />' +
               '</svg>' +
-              '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
+              '<div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
                 '<span>' + escHtml(mLbl) + '</span>' +
                 '<span style="color:#82d5b0;">' + (isSpotKpi ? 'SPOTLIGHT ON' : '0 OOM · Spotlight ▸') + '</span>' +
               '</div>' +
@@ -4435,15 +4595,15 @@ if (attacker is PlayerMobile nj &amp;&amp; nj.ClassId == 115) {
               var isSpotB = state.spotlightClass === db.classId;
               var rowBorder = isSpotB ? '#e5c158' : (isModeB && (db.classId === 'samurai' || db.classId === 'ninja') ? '#34b37a' : '#2a3026');
               var rowBg = isSpotB ? 'rgba(229,193,88,0.14)' : (isModeB ? '#111914' : '#121611');
-              bHtml += '<div data-spot-class="' + escHtml(db.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="cursor:pointer;margin-bottom:8px;padding:6px 8px;background:' + rowBg + ';border:1px solid ' + rowBorder + ';border-radius:4px;">' +
-                '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">' +
+              bHtml += '<div data-spot-class="' + escHtml(db.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="cursor:pointer;margin-bottom:4px;padding:4px 7px;background:' + rowBg + ';border:1px solid ' + rowBorder + ';border-radius:4px;">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">' +
                   '<strong style="text-transform:uppercase;color:' + escHtml(cCol) + ';letter-spacing:0.04em;">' + escHtml(db.classId) + (isSpotB ? ' ★ SPOTLIGHT' : '') + ' <small class="mono" style="color:' + (isModeB ? '#7ce8b4' : '#a39e90') + ';font-size:9px;">[' + (isModeB ? 'MODE B' : 'MODE A') + ' · ' + state.bracket + ']</small></strong>' +
-                  '<span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: ' + db.totalDps.toFixed(2) + ' DPS</span>' +
+                  '<span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: ' + db.totalDps.toFixed(2) + ' DPS</span>' +
                 '</div>' +
-                '<div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">' +
+                '<div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">' +
                   'Auto ' + db.autoAttackDps.toFixed(1) + ' (' + pAuto + '%) · Skill ' + db.specialMoveDps.toFixed(1) + ' (' + pSpec + '%) · Exec ' + db.executeDps.toFixed(1) + ' (' + pExec + '%) · DoT ' + db.dotDps.toFixed(1) + ' (' + pDot + '%) · Parry/Proc ' + db.procCounterDps.toFixed(1) + ' (' + pProc + '%)' +
                 '</div>' +
-                '<div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">' +
+                '<div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">' +
                   '<div style="width:' + pAuto + '%;background:#64748b;"></div>' +
                   '<div style="width:' + pSpec + '%;background:#3b82f6;"></div>' +
                   '<div style="width:' + pExec + '%;background:#ef4444;"></div>' +

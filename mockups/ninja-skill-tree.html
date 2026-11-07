@@ -1262,7 +1262,7 @@
       background-size: 200% 100%;
       box-shadow: 0 0 8px rgba(229, 193, 88, 0.55);
     }
-    .arvore-col:nth-child(6n)::after,
+    .arvore-col:nth-of-type(6n)::after,
     .arvore-col:last-child::after {
       display: none;
     }
@@ -1387,12 +1387,103 @@
       box-shadow: 0 0 8px rgba(229, 193, 88, 0.28);
     }
     .insp-pane {
+      display: none;
       transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
+    .insp-pane.is-active-pane,
     .insp-pane.is-highlighted-pane {
-      border-color: var(--border-gold-bright) !important;
-      box-shadow: 0 0 14px rgba(229, 193, 88, 0.28);
+      display: block;
       animation: inspectorFadeSlide 0.22s ease-out;
+    }
+
+    /* SVG Constellation Lattice & Compact Horizontal Hotbar / Medallion Strips */
+    .cobra-constellation-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hotbar-icon-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .hotbar-icon-socket {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 5px 4px;
+      border-radius: 5px;
+      border: 1.5px solid #483b22;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.16), #0d100c 78%);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hotbar-icon-socket:hover,
+    .hotbar-icon-socket.is-selected-seal {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 14px rgba(229, 193, 88, 0.42), inset 0 0 8px rgba(229, 193, 88, 0.18);
+      transform: translateY(-2px);
+    }
+    .hotbar-icon-socket img {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold);
+      object-fit: cover;
+      display: block;
+    }
+    .hotbar-key-badge {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      padding: 0 4px;
+      border-radius: 3px;
+      background: #0b0d0a;
+      border: 1px solid var(--border-gold-bright);
+      color: #fff2bf;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .seal-medallion-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 8px 10px;
+    }
+    .seal-medallion-socket {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 4px;
+      border-radius: 6px;
+      border: 1.5px solid #483b22;
+      background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.18), #0d100c 80%);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+      text-align: center;
+    }
+    .seal-medallion-socket:hover,
+    .seal-medallion-socket.is-selected-seal {
+      border-color: var(--border-gold-bright) !important;
+      box-shadow: 0 0 16px rgba(229, 193, 88, 0.45), inset 0 0 10px rgba(229, 193, 88, 0.18);
+      transform: translateY(-2px);
+    }
+    .seal-medallion-socket img {
+      width: 46px;
+      height: 46px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border-gold-bright);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+      object-fit: cover;
+      display: block;
     }
 
     /* 6. Interactive Live 100ms Tick Combat & Streak Visualizer (<uo-combat-ticker>) */
@@ -1534,10 +1625,10 @@
       margin-bottom: 12px;
     }
     .exec-kpi-card {
-      padding: 9px 11px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 7px;
       background: linear-gradient(180deg, #1b2019 0%, #0f130e 100%);
-      border: 1px solid #353c30;
+      border: 1.5px solid #483b22;
       border-top: 3px solid var(--border-gold);
       display: flex;
       flex-direction: column;
@@ -1546,30 +1637,52 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 242, 191, 0.08);
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .exec-kpi-card[data-kpi-class="warrior"] {
+      background: radial-gradient(circle at 20% 25%, rgba(217, 119, 6, 0.26), transparent 65%), linear-gradient(180deg, #271d12 0%, #110e0a 100%);
+      border-color: rgba(217, 119, 6, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="mage"] {
+      background: radial-gradient(circle at 20% 25%, rgba(59, 130, 246, 0.26), transparent 65%), linear-gradient(180deg, #111f2c 0%, #0b1016 100%);
+      border-color: rgba(59, 130, 246, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="ranger"] {
+      background: radial-gradient(circle at 20% 25%, rgba(132, 204, 22, 0.24), transparent 65%), linear-gradient(180deg, #152514 0%, #0b120b 100%);
+      border-color: rgba(132, 204, 22, 0.55);
+    }
+    .exec-kpi-card[data-kpi-class="samurai"] {
+      background: radial-gradient(circle at 25% 25%, rgba(200, 62, 55, 0.34), transparent 68%), linear-gradient(180deg, #2d1414 0%, #140b0b 100%);
+      border-color: #e5c158;
+      box-shadow: 0 0 18px rgba(200, 62, 55, 0.35), inset 0 0 12px rgba(229, 193, 88, 0.14);
+    }
+    .exec-kpi-card[data-kpi-class="ninja"] {
+      background: radial-gradient(circle at 25% 25%, rgba(46, 158, 107, 0.28), transparent 68%), linear-gradient(180deg, #171828 0%, #0c0d15 100%);
+      border-color: rgba(124, 232, 180, 0.55);
     }
     .exec-kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--border-gold-bright);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7), 0 0 14px rgba(229, 193, 88, 0.35);
     }
     .exec-kpi-card.is-spotlight-class {
-      border-color: var(--border-gold-bright);
-      background: linear-gradient(180deg, #2b2414 0%, #151912 100%);
-      box-shadow: 0 0 20px rgba(229, 193, 88, 0.42), inset 0 0 14px rgba(229, 193, 88, 0.16);
+      border-color: #fff2bf !important;
+      box-shadow: 0 0 24px rgba(229, 193, 88, 0.55), inset 0 0 16px rgba(229, 193, 88, 0.22) !important;
       transform: translateY(-2px);
     }
     .kpi-emblem {
-      width: 28px;
-      height: 28px;
-      border-radius: 5px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       display: inline-grid;
       place-items: center;
       font-family: 'Cinzel', serif;
       font-size: 11px;
       font-weight: 700;
       color: #fff2bf;
-      border: 1px solid rgba(255, 242, 191, 0.45);
+      border: 2px solid var(--border-gold-bright);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.65), inset 0 0 6px rgba(255, 242, 191, 0.25);
       flex-shrink: 0;
     }
     tr.is-class-spotlight td {
@@ -1737,15 +1850,17 @@
               <span class="arvore-secao-sub">_E / WE[115] · 8 GM Skills</span>
             </h2>
             <div class="panel-body">
-              <div class="identity-hero">
-                <div class="portrait-frame">
-                  <img class="main-portrait" src="assets/icons/ninja/portrait-ninja.png" alt="Ninja (Ninjitsu) Portrait" />
-                  <img class="portrait-mini-badge" src="assets/icons/ninja/portrait-ninja-64.png" alt="NJ 64x64 Icon" />
-                </div>
+              <div style="display:grid;grid-template-columns:155px minmax(0,1fr);gap:8px;align-items:start;">
                 <div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
-                    <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">Ninja (Ninjitsu)</div>
-                    <span class="lv-pill">ID 115 · Hue 1175</span>
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+                    <div class="portrait-frame" style="width:46px;height:46px;">
+                      <img class="main-portrait" src="assets/icons/ninja/portrait-ninja.png" alt="Ninja (Ninjitsu) Portrait" />
+                      <img class="portrait-mini-badge" src="assets/icons/ninja/portrait-ninja-64.png" alt="NJ 64x64 Icon" style="width:18px;height:18px;" />
+                    </div>
+                    <div style="min-width:0;">
+                      <div style="font-family:'Cinzel',serif;font-size:12.5px;font-weight:700;color:#fff2bf;line-height:1.15;">Ninja (Ninjitsu)</div>
+                      <span class="lv-pill" style="font-size:8.5px;padding:0 4px;">ID 115 · Hue 1175</span>
+                    </div>
                   </div>
                   
     <div class="stat-ratio-strip">
@@ -1766,12 +1881,12 @@
     </div>
   
                 </div>
-              </div>
-              <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.03em;">
-                Grandmaster Starter Skill Pills (50.0 Base → 100.0 GM Cap):
-              </div>
-              <div class="kv-grid" style="margin-top:4px;">
-                
+                <div style="min-width:0;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:3px;">
+                    Grandmaster Skill Pills (100 GM Cap):
+                  </div>
+                  <div class="kv-grid">
+                    
         <div class="skill-mastery-card" title="Ninjitsu (Skill #53) — Core Scaling &amp; Clones · Starts at 50.0 / 100.0 GM Cap">
           <div class="skill-mastery-top">
             <span style="font-weight:600;color:#fff2bf;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
@@ -1899,8 +2014,10 @@
           </div>
         </div>
       
+                  </div>
+                </div>
               </div>
-              <details class="schema-drawer" style="margin-top:6px;">
+              <details class="schema-drawer" style="margin-top:5px;">
                 <summary>▸ Progressive Disclosure: Legacy Template Weights (FE = 100% Sum)</summary>
                 <div class="kv-grid" style="margin-top:4px;">
                   
@@ -2146,7 +2263,34 @@
                   <button type="button" class="cobra-tier-btn" data-cobra-step="next" onclick="stepCobraMilestone(1)">Next Milestone ▶</button>
                 </div>
               </div>
-              <div class="arvore-cobra">
+              <div class="arvore-cobra" style="position:relative;">
+                <svg class="cobra-constellation-svg" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <filter id="constellationGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="2.2" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <g stroke="#e5c158" stroke-width="1.8" stroke-opacity="0.48" filter="url(#constellationGlow)">
+                    <line x1="50" y1="42" x2="550" y2="42" stroke-width="2.5" stroke="#ffe58f" stroke-opacity="0.72" />
+                    <line x1="50" y1="134" x2="550" y2="134" stroke-width="2.5" stroke="#ffe58f" stroke-opacity="0.72" />
+                    <line x1="50" y1="42" x2="50" y2="134" />
+                    <line x1="50" y1="42" x2="150" y2="134" />
+                    <line x1="150" y1="42" x2="50" y2="134" />
+                    <line x1="150" y1="42" x2="250" y2="134" />
+                    <line x1="250" y1="42" x2="150" y2="134" />
+                    <line x1="250" y1="42" x2="350" y2="134" />
+                    <line x1="350" y1="42" x2="250" y2="134" />
+                    <line x1="350" y1="42" x2="450" y2="134" />
+                    <line x1="450" y1="42" x2="350" y2="134" />
+                    <line x1="450" y1="42" x2="550" y2="134" />
+                    <line x1="550" y1="42" x2="450" y2="134" />
+                    <line x1="550" y1="42" x2="550" y2="134" stroke="#f6e05e" stroke-width="2.4" stroke-opacity="0.85" />
+                  </g>
+                </svg>
                 
         <div class="arvore-col is-path-lit" data-cobra-col="ninja_shadowjump" data-cobra-lv="1" onclick="selectAbility('ninja_shadowjump', false)" title="L1: Shadowjump / Salto das Sombras (Click to inspect milestone on progression chart)">
           <span class="arvore-lv">L1</span>
@@ -2923,7 +3067,7 @@
                 </div>
 
                 <!-- Pane 1: Overview, Full Lore & Formula Breakdown -->
-                <div class="insp-pane" data-insp-pane="overview">
+                <div class="insp-pane is-active-pane" data-insp-pane="overview">
                   <p id="insp-desc" data-en="Melt into the seams of twilight and reappear behind your prey between heartbeats. Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai that primes stealth openers on each new target." data-pt="Dissolva-se nas frestas do crepúsculo e ressurja atrás da presa entre um batimento e outro. Passo das sombras inato de Ninjitsu e maestria de ataque automático veloz de Esgrima com Kryss, Tekagi, Kama e Sai que prepara aberturas furtivas." style="margin:0 0 7px;font-size:11.5px;color:var(--text-primary);line-height:1.45;">Melt into the seams of twilight and reappear behind your prey between heartbeats. Innate Ninjitsu shadow-step footwork and high-speed Fencing auto-attack mastery with Kryss, Tekagi, Kama, and Sai that primes stealth openers on each new target.</p>
                   <div class="cost-badges" id="insp-badges" style="margin-bottom:7px;">
                     <span class="badge-cd">CD: 0ms</span>
@@ -2936,6 +3080,10 @@
                     <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
                     <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] Passive high-speed Fencing auto-attack loop + Ninjitsu (ID 53), Hiding (ID 21) &amp; Stealth (ID 47) scaling.</div>
                     <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
+                  </div>
+                  <div onclick="switchInspectorTab('ticker')" style="cursor:pointer;padding:5px 8px;background:#0e130d;border:1px solid #352d1d;border-left:3px solid #34b37a;border-radius:4px;display:flex;justify-content:space-between;align-items:center;" class="mono" title="Click to open 100ms Combat Loop Simulator tab">
+                    <span style="font-size:9.5px;color:#82d5b0;">● LIVE 100MS TICK COMBAT LOOP READY</span>
+                    <span style="font-size:9px;color:var(--text-gold);">Open 100ms Sim ▸</span>
                   </div>
                 </div>
 
@@ -2970,7 +3118,7 @@
                   </div>
                 </div>
 
-                <!-- Pane 3: Live 100ms Tick Combat Loop Preview -->
+                <!-- Pane 3: Live 100ms Tick Combat Loop Preview (Progressive Disclosure Tab) -->
                 <div class="insp-pane" data-insp-pane="ticker">
                   
     <div class="uo-combat-ticker" id="live-combat-ticker">
@@ -3066,108 +3214,98 @@
               <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
             </h2>
             <div class="panel-body">
-              <div class="hotbar-slots">
-                
-        <div class="hotbar-slot is-selected-seal" data-hotbar-idx="0" style="cursor:pointer;" onclick="selectHotbarSlot(0, 'lesser_heal_potion')" title="Click to inspect &amp; scroll to lesser_heal_potion">
-          <div class="slot-num">1</div>
-          <div>
-            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Heal <code style="color:var(--text-secondary);font-size:10px;">(lesser_heal_potion)</code></div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.hp &lt;= 50%</div>
-          </div>
-          <span class="badge-cd">2,000ms CD Floor</span>
-        </div>
+              
+    <div class="hotbar-icon-strip">
       
+            <div class="hotbar-slot hotbar-icon-socket is-selected-seal" data-hotbar-idx="0" onclick="selectHotbarSlot(0, 'lesser_heal_potion')" title="Slot 1: Lesser Heal (lesser_heal_potion) — 2,000ms CD Floor">
+              <span class="hotbar-key-badge">1</span>
+              <img src="assets/icons/ninja/ninja_focus@64.png" alt="Lesser Heal" />
+              <strong style="font-size:9.5px;color:#fff2bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">Lesser</strong>
+              <span class="mono" style="font-size:8px;color:#82d5b0;">2.0s CD</span>
+            </div>
+          
 
-        <div class="hotbar-slot " data-hotbar-idx="1" style="cursor:pointer;" onclick="selectHotbarSlot(1, 'bandage')" title="Click to inspect &amp; scroll to bandage">
-          <div class="slot-num">2</div>
-          <div>
-            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bandage <code style="color:var(--text-secondary);font-size:10px;">(bandage)</code></div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.hp &lt;= 80% OR self.poisoned == 1</div>
-          </div>
-          <span class="badge-cd">2,000ms CD Floor</span>
-        </div>
-      
+            <div class="hotbar-slot hotbar-icon-socket " data-hotbar-idx="1" onclick="selectHotbarSlot(1, 'bandage')" title="Slot 2: Bandage (bandage) — 2,000ms CD Floor">
+              <span class="hotbar-key-badge">2</span>
+              <img src="assets/icons/ninja/ninja_backstab@64.png" alt="Bandage" />
+              <strong style="font-size:9.5px;color:#fff2bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">Bandage</strong>
+              <span class="mono" style="font-size:8px;color:#82d5b0;">2.0s CD</span>
+            </div>
+          
 
-        <div class="hotbar-slot " data-hotbar-idx="2" style="cursor:pointer;" onclick="selectHotbarSlot(2, 'lesser_cure_potion')" title="Click to inspect &amp; scroll to lesser_cure_potion">
-          <div class="slot-num">3</div>
-          <div>
-            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Cure <code style="color:var(--text-secondary);font-size:10px;">(lesser_cure_potion)</code></div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.poisoned == 1</div>
-          </div>
-          <span class="badge-cd">2,000ms CD Floor</span>
-        </div>
-      
+            <div class="hotbar-slot hotbar-icon-socket " data-hotbar-idx="2" onclick="selectHotbarSlot(2, 'lesser_cure_potion')" title="Slot 3: Lesser Cure (lesser_cure_potion) — 2,000ms CD Floor">
+              <span class="hotbar-key-badge">3</span>
+              <img src="assets/icons/ninja/ninja_death@64.png" alt="Lesser Cure" />
+              <strong style="font-size:9.5px;color:#fff2bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">Lesser</strong>
+              <span class="mono" style="font-size:8px;color:#82d5b0;">2.0s CD</span>
+            </div>
+          
 
-        <div class="hotbar-slot " data-hotbar-idx="3" style="cursor:pointer;" onclick="selectHotbarSlot(3, 'lesser_mana_potion')" title="Click to inspect &amp; scroll to lesser_mana_potion">
-          <div class="slot-num">4</div>
-          <div>
-            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Lesser Mana <code style="color:var(--text-secondary);font-size:10px;">(lesser_mana_potion)</code></div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">self.mana &lt;= 30%</div>
-          </div>
-          <span class="badge-cd">2,000ms CD Floor</span>
-        </div>
-      
+            <div class="hotbar-slot hotbar-icon-socket " data-hotbar-idx="3" onclick="selectHotbarSlot(3, 'lesser_mana_potion')" title="Slot 4: Lesser Mana (lesser_mana_potion) — 2,000ms CD Floor">
+              <span class="hotbar-key-badge">4</span>
+              <img src="assets/icons/ninja/ninja_smoke_bomb@64.png" alt="Lesser Mana" />
+              <strong style="font-size:9.5px;color:#fff2bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">Lesser</strong>
+              <span class="mono" style="font-size:8px;color:#82d5b0;">2.0s CD</span>
+            </div>
+          
 
-        <div class="hotbar-slot " data-hotbar-idx="4" style="cursor:pointer;" onclick="selectHotbarSlot(4, 'ninja_focus')" title="Click to inspect &amp; scroll to ninja_focus">
-          <div class="slot-num">5</div>
-          <div>
-            <div style="font-weight:600;color:#fff2bf;font-size:11px;">Bolt <code style="color:var(--text-secondary);font-size:10px;">(ninja_focus)</code></div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">Unconditional Primary Strike (ro(e) Queue)</div>
-          </div>
-          <span class="badge-cd">2,000ms CD Floor</span>
-        </div>
-      
-              </div>
+            <div class="hotbar-slot hotbar-icon-socket " data-hotbar-idx="4" onclick="selectHotbarSlot(4, 'ninja_focus')" title="Slot 5: Bolt (ninja_focus) — 2,000ms CD Floor">
+              <span class="hotbar-key-badge">5</span>
+              <img src="assets/icons/ninja/ninja_twin_shadow@64.png" alt="Bolt" />
+              <strong style="font-size:9.5px;color:#fff2bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">Bolt</strong>
+              <span class="mono" style="font-size:8px;color:#82d5b0;">2.0s CD</span>
+            </div>
+          
+    </div>
+    <div id="hotbar-active-readout" style="margin-top:6px;padding:5px 8px;background:#10140f;border:1px solid #2a3026;border-left:2px solid var(--border-gold-bright);border-radius:4px;font-size:9.5px;" class="mono">
+      <strong style="color:#fff2bf;">Slot 1 (Lesser Heal):</strong>
+      <span style="color:var(--text-secondary);">self.hp &lt;= 50% · 2,000ms CD Floor · Click any slot 1–5 to inspect</span>
+    </div>
+  
             </div>
           </section>
 
           <section class="arvore-secao" id="sec-mastery-seals">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">Class Mastery &amp; Passive Seals</span>
-              <span class="arvore-secao-sub">Oil-Painted 64×64 Gump Badges · Click to Spotlight</span>
+              <span class="arvore-secao-sub">4 Painted Medallions · Click to Spotlight</span>
             </h2>
-            <div class="passive-badges-row">
-              
-      <div class="passive-badge-item is-selected-seal" data-seal-idx="0" onclick="selectPassiveSeal(0, 'ninja_shadowjump')" title="Click to inspect &amp; scroll to Tier I (L1) milestone">
-        <img src="assets/icons/ninja/ninja_way_of_stealth@64.png" alt="Way of Stealth" />
-        <div>
-          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier I (L1) · <code>ninja_way_of_stealth</code></div>
-          <strong style="font-size:11px;color:#fff2bf;" data-en="Way of Stealth" data-pt="Caminho da Furtividade">Way of Stealth</strong>
-          <div style="font-size:10px;color:var(--text-secondary);" data-en="Innate shadow-step footwork combining Ninjitsu, Hiding, and Stealth in idle combat." data-pt="Movimentação inata das sombras combinando Ninjitsu, Esconder-se e Furtividade.">Innate shadow-step footwork combining Ninjitsu, Hiding, and Stealth in idle combat.</div>
-        </div>
-      </div>
-    
+            
+    <div class="seal-medallion-strip">
+      
+          <div class="passive-badge-item seal-medallion-socket is-selected-seal" data-seal-idx="0" onclick="selectPassiveSeal(0, 'ninja_shadowjump')" title="Tier I (L1) — Way of Stealth: Innate shadow-step footwork combining Ninjitsu, Hiding, and Stealth in idle combat.">
+            <img src="assets/icons/ninja/ninja_way_of_stealth@64.png" alt="Way of Stealth" />
+            <span class="mono" style="font-size:8.5px;color:var(--text-gold);font-weight:700;">Tier I</span>
+            <strong style="font-size:9.5px;color:#fff2bf;line-height:1.15;" data-en="Way of Stealth" data-pt="Caminho da Furtividade">Way of</strong>
+          </div>
+        
 
-      <div class="passive-badge-item " data-seal-idx="1" onclick="selectPassiveSeal(1, 'ninja_death')" title="Click to inspect &amp; scroll to Tier II (L25) milestone">
-        <img src="assets/icons/ninja/ninja_shadow_discipline@64.png" alt="Shadow Discipline" />
-        <div>
-          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier II (L25) · <code>ninja_shadow_discipline</code></div>
-          <strong style="font-size:11px;color:#fff2bf;" data-en="Shadow Discipline" data-pt="Disciplina das Sombras">Shadow Discipline</strong>
-          <div style="font-size:10px;color:var(--text-secondary);" data-en="Sustains Mirror Image decoys and Animal Form attack speed aspect without polymorph lock." data-pt="Sustenta clones de Imagem Espelhada e velocidade de Forma Animal em combate.">Sustains Mirror Image decoys and Animal Form attack speed aspect without polymorph lock.</div>
-        </div>
-      </div>
-    
+          <div class="passive-badge-item seal-medallion-socket " data-seal-idx="1" onclick="selectPassiveSeal(1, 'ninja_death')" title="Tier II (L25) — Shadow Discipline: Sustains Mirror Image decoys and Animal Form attack speed aspect without polymorph lock.">
+            <img src="assets/icons/ninja/ninja_shadow_discipline@64.png" alt="Shadow Discipline" />
+            <span class="mono" style="font-size:8.5px;color:var(--text-gold);font-weight:700;">Tier II</span>
+            <strong style="font-size:9.5px;color:#fff2bf;line-height:1.15;" data-en="Shadow Discipline" data-pt="Disciplina das Sombras">Shadow Discipline</strong>
+          </div>
+        
 
-      <div class="passive-badge-item " data-seal-idx="2" onclick="selectPassiveSeal(2, 'ninja_smoke_bomb')" title="Click to inspect &amp; scroll to Tier III (L30) milestone">
-        <img src="assets/icons/ninja/ninja_lethal_toxins@64.png" alt="Lethal Toxins &amp; Tools" />
-        <div>
-          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier III (L30) · <code>ninja_lethal_toxins</code></div>
-          <strong style="font-size:11px;color:#fff2bf;" data-en="Lethal Toxins &amp; Tools" data-pt="Toxinas e Ferramentas Letais">Lethal Toxins &amp; Tools</strong>
-          <div style="font-size:10px;color:var(--text-secondary);" data-en="Combines Kryss Infectious Strike venom with Smoke Bomb stealth and Shuriken/Fukiya volleys." data-pt="Combina o veneno de Golpe Infeccioso com Bomba de Fumaça e saraivadas de Shuriken/Fukiya.">Combines Kryss Infectious Strike venom with Smoke Bomb stealth and Shuriken/Fukiya volleys.</div>
-        </div>
-      </div>
-    
+          <div class="passive-badge-item seal-medallion-socket " data-seal-idx="2" onclick="selectPassiveSeal(2, 'ninja_smoke_bomb')" title="Tier III (L30) — Lethal Toxins &amp; Tools: Combines Kryss Infectious Strike venom with Smoke Bomb stealth and Shuriken/Fukiya volleys.">
+            <img src="assets/icons/ninja/ninja_lethal_toxins@64.png" alt="Lethal Toxins &amp; Tools" />
+            <span class="mono" style="font-size:8.5px;color:var(--text-gold);font-weight:700;">Tier III</span>
+            <strong style="font-size:9.5px;color:#fff2bf;line-height:1.15;" data-en="Lethal Toxins &amp; Tools" data-pt="Toxinas e Ferramentas Letais">Lethal Toxins</strong>
+          </div>
+        
 
-      <div class="passive-badge-item " data-seal-idx="3" onclick="selectPassiveSeal(3, 'ninja_twin_shadow')" title="Click to inspect &amp; scroll to Tier IV (L60) milestone">
-        <img src="assets/icons/ninja/ninja_master_assassin@64.png" alt="Grandmaster Assassin Seal" />
-        <div>
-          <div class="mono" style="font-size:9px;color:var(--text-gold);">Tier IV (L60) · <code>ninja_master_assassin</code></div>
-          <strong style="font-size:11px;color:#fff2bf;" data-en="Grandmaster Assassin Seal" data-pt="Selo de Mestre Assassino">Grandmaster Assassin Seal</strong>
-          <div style="font-size:10px;color:var(--text-secondary);" data-en="Unlocks Fukiya &amp; Egg Bomb Barrage and Kage Bunshin: Twin Shadow Execution (1.95x Execute)." data-pt="Libera Barragem de Fukiya e Bomba de Ovo e Kage Bunshin: Execução das Sombras Gêmeas (Execução 1.95x).">Unlocks Fukiya &amp; Egg Bomb Barrage and Kage Bunshin: Twin Shadow Execution (1.95x Execute).</div>
-        </div>
-      </div>
-    
-            </div>
+          <div class="passive-badge-item seal-medallion-socket " data-seal-idx="3" onclick="selectPassiveSeal(3, 'ninja_twin_shadow')" title="Tier IV (L60) — Grandmaster Assassin Seal: Unlocks Fukiya &amp; Egg Bomb Barrage and Kage Bunshin: Twin Shadow Execution (1.95x Execute).">
+            <img src="assets/icons/ninja/ninja_master_assassin@64.png" alt="Grandmaster Assassin Seal" />
+            <span class="mono" style="font-size:8.5px;color:var(--text-gold);font-weight:700;">Tier IV</span>
+            <strong style="font-size:9.5px;color:#fff2bf;line-height:1.15;" data-en="Grandmaster Assassin Seal" data-pt="Selo de Mestre Assassino">Grandmaster Assassin</strong>
+          </div>
+        
+    </div>
+    <div id="seal-active-readout" style="margin:0 10px 8px;padding:5px 8px;background:#10140f;border:1px solid #2a3026;border-left:2px solid var(--border-gold-bright);border-radius:4px;font-size:9.5px;">
+      <strong style="color:#fff2bf;">Tier I (L1) — Way of Stealth:</strong>
+      <span style="color:var(--text-secondary);">Innate shadow-step footwork combining Ninjitsu, Hiding, and Stealth in idle combat.</span>
+    </div>
+  
           </section>
         </div>
       </div>
@@ -3228,7 +3366,8 @@
         for (var j = 0; j < panes.length; j++) {
           var pName = panes[j].getAttribute('data-insp-pane');
           var isMatch = pName === tabName;
-          panes[j].classList.toggle('is-highlighted-pane', isMatch);
+          panes[j].classList.toggle('is-active-pane', isMatch);
+          panes[j].classList.toggle('is-highlighted-pane', pName === tabName);
           if (tabName === 'schema' && pName === 'schema') {
             var det = document.getElementById('insp-schema-details');
             if (det) det.setAttribute('open', 'open');

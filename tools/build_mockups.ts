@@ -2071,30 +2071,35 @@ function buildClassSkillTreeHtml(
     )
     .join('');
 
-  const hotbarHtml = cls.seededHotbar
-    .map((slot) => {
-      const condStr =
-        slot.conditions.length === 0
-          ? 'Unconditional Primary Strike (ro(e) Queue)'
-          : slot.conditions
-              .map((c, idx) => {
-                const expr = `${c.target}.${c.attr} ${c.op} ${c.value}${c.percent ? '%' : ''}`;
-                if (idx === slot.conditions.length - 1) return expr;
-                return `${expr} ${(c.join ?? 'or').toUpperCase()} `;
-              })
-              .join('');
-      return `
-        <div class="hotbar-slot ${slot.slotIndex === 0 ? 'is-selected-seal' : ''}" data-hotbar-idx="${slot.slotIndex}" style="cursor:pointer;" onclick="selectHotbarSlot(${slot.slotIndex}, '${escapeHtml(slot.abilityId)}')" title="Click to inspect &amp; scroll to ${escapeHtml(slot.abilityId)}">
-          <div class="slot-num">${slot.slotIndex + 1}</div>
-          <div>
-            <div style="font-weight:600;color:#fff2bf;font-size:11px;">${escapeHtml(slot.label)} <code style="color:var(--text-secondary);font-size:10px;">(${escapeHtml(slot.abilityId)})</code></div>
-            <div class="mono" style="font-size:10px;color:var(--text-secondary);">${escapeHtml(condStr)}</div>
-          </div>
-          <span class="badge-cd">2,000ms CD Floor</span>
-        </div>
-      `;
-    })
-    .join('\n');
+  const hotbarIconMap = [
+    cls.progression[1]?.id ?? cls.abilities[0]!.id,
+    cls.progression[3]?.id ?? cls.abilities[0]!.id,
+    cls.progression[4]?.id ?? cls.abilities[0]!.id,
+    cls.progression[7]?.id ?? cls.abilities[0]!.id,
+    cls.progression[11]?.id ?? cls.abilities[cls.abilities.length - 1]!.id,
+  ];
+  const hotbarHtml = `
+    <div class="hotbar-icon-strip">
+      ${cls.seededHotbar
+        .map((slot, sIdx) => {
+          const iconAbId = hotbarIconMap[sIdx] ?? cls.abilities[0]!.id;
+          const shortLbl = slot.label.split(' ')[0] ?? slot.label;
+          return `
+            <div class="hotbar-slot hotbar-icon-socket ${slot.slotIndex === 0 ? 'is-selected-seal' : ''}" data-hotbar-idx="${slot.slotIndex}" onclick="selectHotbarSlot(${slot.slotIndex}, '${escapeHtml(slot.abilityId)}')" title="Slot ${slot.slotIndex + 1}: ${escapeHtml(slot.label)} (${escapeHtml(slot.abilityId)}) — 2,000ms CD Floor">
+              <span class="hotbar-key-badge">${slot.slotIndex + 1}</span>
+              <img src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(iconAbId)}@64.png" alt="${escapeHtml(slot.label)}" />
+              <strong style="font-size:9.5px;color:#fff2bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${escapeHtml(shortLbl)}</strong>
+              <span class="mono" style="font-size:8px;color:#82d5b0;">2.0s CD</span>
+            </div>
+          `;
+        })
+        .join('\n')}
+    </div>
+    <div id="hotbar-active-readout" style="margin-top:6px;padding:5px 8px;background:#10140f;border:1px solid #2a3026;border-left:2px solid var(--border-gold-bright);border-radius:4px;font-size:9.5px;" class="mono">
+      <strong style="color:#fff2bf;">Slot 1 (${escapeHtml(cls.seededHotbar[0]?.label ?? 'Lesser Heal')}):</strong>
+      <span style="color:var(--text-secondary);">self.hp &lt;= 50% · 2,000ms CD Floor · Click any slot 1–5 to inspect</span>
+    </div>
+  `;
 
   const sealMilestoneTargets = [
     cls.progression[0]?.id ?? cls.abilities[0]!.id,
@@ -2102,20 +2107,25 @@ function buildClassSkillTreeHtml(
     cls.progression[7]?.id ?? cls.abilities[0]!.id,
     cls.progression[11]?.id ?? cls.abilities[cls.abilities.length - 1]!.id,
   ];
-  const passiveBadgesHtml = PASSIVE_BADGES[cls.id as 'samurai' | 'ninja']
-    .map(
-      (b, idx) => `
-      <div class="passive-badge-item ${idx === 0 ? 'is-selected-seal' : ''}" data-seal-idx="${idx}" onclick="selectPassiveSeal(${idx}, '${escapeHtml(sealMilestoneTargets[idx] ?? cls.abilities[0]!.id)}')" title="Click to inspect &amp; scroll to ${escapeHtml(b.tier)} milestone">
-        <img src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(b.id)}@64.png" alt="${escapeHtml(b.nameEn)}" />
-        <div>
-          <div class="mono" style="font-size:9px;color:var(--text-gold);">${escapeHtml(b.tier)} · <code>${escapeHtml(b.id)}</code></div>
-          <strong style="font-size:11px;color:#fff2bf;" data-en="${escapeHtml(b.nameEn)}" data-pt="${escapeHtml(b.namePtBr)}">${escapeHtml(b.nameEn)}</strong>
-          <div style="font-size:10px;color:var(--text-secondary);" data-en="${escapeHtml(b.descEn)}" data-pt="${escapeHtml(b.descPtBr)}">${escapeHtml(b.descEn)}</div>
-        </div>
-      </div>
-    `
-    )
-    .join('\n');
+  const passiveBadgesHtml = `
+    <div class="seal-medallion-strip">
+      ${PASSIVE_BADGES[cls.id as 'samurai' | 'ninja']
+        .map(
+          (b, idx) => `
+          <div class="passive-badge-item seal-medallion-socket ${idx === 0 ? 'is-selected-seal' : ''}" data-seal-idx="${idx}" onclick="selectPassiveSeal(${idx}, '${escapeHtml(sealMilestoneTargets[idx] ?? cls.abilities[0]!.id)}')" title="${escapeHtml(b.tier)} — ${escapeHtml(b.nameEn)}: ${escapeHtml(b.descEn)}">
+            <img src="assets/icons/${escapeHtml(cls.id)}/${escapeHtml(b.id)}@64.png" alt="${escapeHtml(b.nameEn)}" />
+            <span class="mono" style="font-size:8.5px;color:var(--text-gold);font-weight:700;">${escapeHtml(b.tier.split(' ')[0] + ' ' + b.tier.split(' ')[1])}</span>
+            <strong style="font-size:9.5px;color:#fff2bf;line-height:1.15;" data-en="${escapeHtml(b.nameEn)}" data-pt="${escapeHtml(b.namePtBr)}">${escapeHtml(b.nameEn.split(' ').slice(0, 2).join(' '))}</strong>
+          </div>
+        `
+        )
+        .join('\n')}
+    </div>
+    <div id="seal-active-readout" style="margin:0 10px 8px;padding:5px 8px;background:#10140f;border:1px solid #2a3026;border-left:2px solid var(--border-gold-bright);border-radius:4px;font-size:9.5px;">
+      <strong style="color:#fff2bf;">${escapeHtml(PASSIVE_BADGES[cls.id as 'samurai' | 'ninja'][0]!.tier)} — ${escapeHtml(PASSIVE_BADGES[cls.id as 'samurai' | 'ninja'][0]!.nameEn)}:</strong>
+      <span style="color:var(--text-secondary);">${escapeHtml(PASSIVE_BADGES[cls.id as 'samurai' | 'ninja'][0]!.descEn)}</span>
+    </div>
+  `;
 
   const firstAbility = cls.abilities[0]!;
   const firstMilestone = cls.progression[0]!;
@@ -2210,26 +2220,30 @@ function buildClassSkillTreeHtml(
               <span class="arvore-secao-sub">_E / WE[${cls.classNumericId}] · 8 GM Skills</span>
             </h2>
             <div class="panel-body">
-              <div class="identity-hero">
-                <div class="portrait-frame">
-                  <img class="main-portrait" src="${escapeHtml(portraitRel)}" alt="${escapeHtml(classTitle)} Portrait" />
-                  <img class="portrait-mini-badge" src="${escapeHtml(portrait64Rel)}" alt="${escapeHtml(cls.badge)} 64x64 Icon" />
-                </div>
+              <div style="display:grid;grid-template-columns:155px minmax(0,1fr);gap:8px;align-items:start;">
                 <div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
-                    <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:#fff2bf;">${escapeHtml(classTitle)}</div>
-                    <span class="lv-pill">ID ${cls.classNumericId} · Hue ${cls.robeHue}</span>
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+                    <div class="portrait-frame" style="width:46px;height:46px;">
+                      <img class="main-portrait" src="${escapeHtml(portraitRel)}" alt="${escapeHtml(classTitle)} Portrait" />
+                      <img class="portrait-mini-badge" src="${escapeHtml(portrait64Rel)}" alt="${escapeHtml(cls.badge)} 64x64 Icon" style="width:18px;height:18px;" />
+                    </div>
+                    <div style="min-width:0;">
+                      <div style="font-family:'Cinzel',serif;font-size:12.5px;font-weight:700;color:#fff2bf;line-height:1.15;">${escapeHtml(classTitle)}</div>
+                      <span class="lv-pill" style="font-size:8.5px;padding:0 4px;">ID ${cls.classNumericId} · Hue ${cls.robeHue}</span>
+                    </div>
                   </div>
                   ${renderStatDistributionStrip(cls)}
                 </div>
+                <div style="min-width:0;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:3px;">
+                    Grandmaster Skill Pills (100 GM Cap):
+                  </div>
+                  <div class="kv-grid">
+                    ${starterSkillsHtml}
+                  </div>
+                </div>
               </div>
-              <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--text-gold);text-transform:uppercase;letter-spacing:0.03em;">
-                Grandmaster Starter Skill Pills (50.0 Base → 100.0 GM Cap):
-              </div>
-              <div class="kv-grid" style="margin-top:4px;">
-                ${starterSkillsHtml}
-              </div>
-              <details class="schema-drawer" style="margin-top:6px;">
+              <details class="schema-drawer" style="margin-top:5px;">
                 <summary>▸ Progressive Disclosure: Legacy Template Weights (FE = 100% Sum)</summary>
                 <div class="kv-grid" style="margin-top:4px;">
                   ${legacyWeightsHtml}
@@ -2342,7 +2356,34 @@ function buildClassSkillTreeHtml(
                   <button type="button" class="cobra-tier-btn" data-cobra-step="next" onclick="stepCobraMilestone(1)">Next Milestone ▶</button>
                 </div>
               </div>
-              <div class="arvore-cobra">
+              <div class="arvore-cobra" style="position:relative;">
+                <svg class="cobra-constellation-svg" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <filter id="constellationGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="2.2" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <g stroke="#e5c158" stroke-width="1.8" stroke-opacity="0.48" filter="url(#constellationGlow)">
+                    <line x1="50" y1="42" x2="550" y2="42" stroke-width="2.5" stroke="#ffe58f" stroke-opacity="0.72" />
+                    <line x1="50" y1="134" x2="550" y2="134" stroke-width="2.5" stroke="#ffe58f" stroke-opacity="0.72" />
+                    <line x1="50" y1="42" x2="50" y2="134" />
+                    <line x1="50" y1="42" x2="150" y2="134" />
+                    <line x1="150" y1="42" x2="50" y2="134" />
+                    <line x1="150" y1="42" x2="250" y2="134" />
+                    <line x1="250" y1="42" x2="150" y2="134" />
+                    <line x1="250" y1="42" x2="350" y2="134" />
+                    <line x1="350" y1="42" x2="250" y2="134" />
+                    <line x1="350" y1="42" x2="450" y2="134" />
+                    <line x1="450" y1="42" x2="350" y2="134" />
+                    <line x1="450" y1="42" x2="550" y2="134" />
+                    <line x1="550" y1="42" x2="450" y2="134" />
+                    <line x1="550" y1="42" x2="550" y2="134" stroke="#f6e05e" stroke-width="2.4" stroke-opacity="0.85" />
+                  </g>
+                </svg>
                 ${cobraNodesHtml}
               </div>
               <!-- Live Interactive Milestone & Cumulative Build Telemetry Strip inside Progression Chart -->
@@ -2417,7 +2458,7 @@ function buildClassSkillTreeHtml(
                 </div>
 
                 <!-- Pane 1: Overview, Full Lore & Formula Breakdown -->
-                <div class="insp-pane" data-insp-pane="overview">
+                <div class="insp-pane is-active-pane" data-insp-pane="overview">
                   <p id="insp-desc" data-en="${escapeHtml(firstMilestone.descEn)}" data-pt="${escapeHtml(firstMilestone.descPtBr)}" style="margin:0 0 7px;font-size:11.5px;color:var(--text-primary);line-height:1.45;">${escapeHtml(firstMilestone.descEn)}</p>
                   <div class="cost-badges" id="insp-badges" style="margin-bottom:7px;">
                     <span class="badge-cd">CD: ${firstAbility.cooldownMs}ms</span>
@@ -2430,6 +2471,10 @@ function buildClassSkillTreeHtml(
                     <strong style="color:var(--text-gold);display:block;font-size:10px;text-transform:uppercase;" id="insp-formula-heading">Active Mode A Scaling Formula &amp; Status Effect</strong>
                     <div class="mono" id="insp-formula" style="font-size:10px;color:var(--text-primary);">[Mode A — Drop-In JSON] ${escapeHtml(firstMode.modeA)}</div>
                     <div class="mono" id="insp-status" style="font-size:10px;color:var(--text-secondary);margin-top:3px;">StatusEffect: None (Innate Passive)</div>
+                  </div>
+                  <div onclick="switchInspectorTab('ticker')" style="cursor:pointer;padding:5px 8px;background:#0e130d;border:1px solid #352d1d;border-left:3px solid #34b37a;border-radius:4px;display:flex;justify-content:space-between;align-items:center;" class="mono" title="Click to open 100ms Combat Loop Simulator tab">
+                    <span style="font-size:9.5px;color:#82d5b0;">● LIVE 100MS TICK COMBAT LOOP READY</span>
+                    <span style="font-size:9px;color:var(--text-gold);">Open 100ms Sim ▸</span>
                   </div>
                 </div>
 
@@ -2472,7 +2517,7 @@ function buildClassSkillTreeHtml(
                   </div>
                 </div>
 
-                <!-- Pane 3: Live 100ms Tick Combat Loop Preview -->
+                <!-- Pane 3: Live 100ms Tick Combat Loop Preview (Progressive Disclosure Tab) -->
                 <div class="insp-pane" data-insp-pane="ticker">
                   ${renderLiveCombatTickerComponent(cls)}
                 </div>
@@ -2494,20 +2539,16 @@ function buildClassSkillTreeHtml(
               <span class="arvore-secao-sub">mE / gh · ro(e) Priority</span>
             </h2>
             <div class="panel-body">
-              <div class="hotbar-slots">
-                ${hotbarHtml}
-              </div>
+              ${hotbarHtml}
             </div>
           </section>
 
           <section class="arvore-secao" id="sec-mastery-seals">
             <h2 class="arvore-secao-titulo">
               <span class="title-left">Class Mastery &amp; Passive Seals</span>
-              <span class="arvore-secao-sub">Oil-Painted 64×64 Gump Badges · Click to Spotlight</span>
+              <span class="arvore-secao-sub">4 Painted Medallions · Click to Spotlight</span>
             </h2>
-            <div class="passive-badges-row">
-              ${passiveBadgesHtml}
-            </div>
+            ${passiveBadgesHtml}
           </section>
         </div>
       </div>
@@ -2568,7 +2609,8 @@ function buildClassSkillTreeHtml(
         for (var j = 0; j < panes.length; j++) {
           var pName = panes[j].getAttribute('data-insp-pane');
           var isMatch = pName === tabName;
-          panes[j].classList.toggle('is-highlighted-pane', isMatch);
+          panes[j].classList.toggle('is-active-pane', isMatch);
+          panes[j].classList.toggle('is-highlighted-pane', pName === tabName);
           if (tabName === 'schema' && pName === 'schema') {
             var det = document.getElementById('insp-schema-details');
             if (det) det.setAttribute('open', 'open');
@@ -3087,11 +3129,11 @@ function buildClassComparisonHtml(
   // Build SVG Multi-Bracket DPS & EHP/s Progression Chart (L10 -> L25 -> L45 -> L60) for low_def_boss (Mode B)
   const brackets = ['L10', 'L25', 'L45', 'L60'];
   const chartW = 680;
-  const chartH = 220;
-  const padL = 48;
-  const padR = 24;
-  const padT = 20;
-  const padB = 32;
+  const chartH = 136;
+  const padL = 44;
+  const padR = 20;
+  const padT = 14;
+  const padB = 22;
   const plotW = chartW - padL - padR;
   const plotH = chartH - padT - padB;
 
@@ -3173,15 +3215,15 @@ function buildClassComparisonHtml(
       const pDot = ((d.dotDps / tot) * 100).toFixed(1);
       const pProc = ((d.procCounterDps / tot) * 100).toFixed(1);
       return `
-        <div style="margin-bottom:8px;padding:6px 8px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">
+        <div style="margin-bottom:4px;padding:4px 7px;background:#121611;border:1px solid #2a3026;border-radius:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">
             <strong style="text-transform:uppercase;color:${classColors[d.classId] ?? '#fff2bf'};letter-spacing:0.04em;">${escapeHtml(d.classId)}</strong>
-            <span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: ${d.totalDps.toFixed(2)} DPS</span>
+            <span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: ${d.totalDps.toFixed(2)} DPS</span>
           </div>
-          <div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">
+          <div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">
             Auto ${d.autoAttackDps.toFixed(1)} (${pAuto}%) · Skill ${d.specialMoveDps.toFixed(1)} (${pSpec}%) · Exec ${d.executeDps.toFixed(1)} (${pExec}%) · DoT ${d.dotDps.toFixed(1)} (${pDot}%) · Parry/Proc ${d.procCounterDps.toFixed(1)} (${pProc}%)
           </div>
-          <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
+          <div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">
             <div style="width:${pAuto}%;background:#64748b;" title="Auto-Attack: ${d.autoAttackDps.toFixed(2)} DPS (${pAuto}%)"></div>
             <div style="width:${pSpec}%;background:#3b82f6;" title="SpecialMove/Spell: ${d.specialMoveDps.toFixed(2)} DPS (${pSpec}%)"></div>
             <div style="width:${pExec}%;background:#ef4444;" title="Execute/Detonation: ${d.executeDps.toFixed(2)} DPS (${pExec}%)"></div>
@@ -3692,6 +3734,105 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
 
           ${renderExecutiveClassKpiStrip(defaultScenarios, classColors)}
 
+          <!-- 2x2 Visual Telemetry Quadrant Grid (Above-the-Fold Concept Art Match) -->
+          <div class="sim-charts-grid" id="sec-charts" data-comp-section="charts" style="margin-bottom:12px;">
+            <!-- Left Column of 2x2 Grid: Quadrant 1 (Multi-Bracket DPS Curve) + Quadrant 3 (Effective HP/s Survival Curve) -->
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0;">
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #252b21;">
+                  <div class="command-cluster">
+                    <span class="cluster-tag">Chart Metric</span>
+                    <button type="button" class="cobra-tier-btn is-active" data-chart-metric="sustainedDps" onclick="setChartMetric('sustainedDps')">Sustained DPS</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-metric="ehpPerSec" onclick="setChartMetric('ehpPerSec')">Effective HP/s</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-metric="trashTtkSec" onclick="setChartMetric('trashTtkSec')">Trash TTK Speed</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-metric="parityDelta" onclick="setChartMetric('parityDelta')">Parity Envelope %</button>
+                  </div>
+                  <div class="command-cluster">
+                    <span class="cluster-tag">Curve Focus</span>
+                    <button type="button" class="cobra-tier-btn is-active" data-chart-class="" onclick="spotlightSimClass('')">All 5</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="warrior" onclick="spotlightSimClass('warrior')">WR</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="mage" onclick="spotlightSimClass('mage')">MG</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="ranger" onclick="spotlightSimClass('ranger')">RG</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="samurai" onclick="spotlightSimClass('samurai')">SM</button>
+                    <button type="button" class="cobra-tier-btn" data-chart-class="ninja" onclick="spotlightSimClass('ninja')">NJ</button>
+                  </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
+                  <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
+                  </strong>
+                  <div class="chart-legend">
+                    <span><i class="legend-dot" style="background:#d97706;"></i>WR</span>
+                    <span><i class="legend-dot" style="background:#3b82f6;"></i>MG</span>
+                    <span><i class="legend-dot" style="background:#84cc16;"></i>RG</span>
+                    <span><i class="legend-dot" style="background:#c83e37;"></i>SM</span>
+                    <span><i class="legend-dot" style="background:#2e9e6b;"></i>NJ</span>
+                  </div>
+                </div>
+                <div id="svg-dps-wrap">${dpsProgressionSvg}</div>
+                <div id="chart-bracket-inspector" style="margin:6px 0 0;padding:6px 10px;background:#10140f;border:1px solid #3c3425;border-left:3px solid var(--border-gold-bright);border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <div class="mono" style="font-size:10px;color:#fff2bf;" id="chart-insp-headline">
+                    <strong>[L60 Grandmaster Bracket]</strong> Click any bracket marker (L10 · L25 · L45 · L60) or metric pill above to inspect power-spike deltas.
+                  </div>
+                  <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="chart-insp-delta">SM 369.0 DPS (-1.6%) · NJ 370.9 DPS (-1.1%) · Within ±5% Envelope</span>
+                </div>
+              </div>
+
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
+                  <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    Effective HP / Sec (EHP/s) Survival Curve (L10 → L60 · Mode A · low_def_boss)
+                  </strong>
+                  <span class="mono" style="font-size:10px;color:#82d5b0;">All 5 classes within ±5–8% envelope</span>
+                </div>
+                <div id="svg-ehp-wrap">${ehpProgressionSvg}</div>
+              </div>
+            </div>
+
+            <!-- Right Column of 2x2 Grid: Quadrant 2 (5-Channel Damage Source Breakdown) + Quadrant 4 (Interactive Telemetry Drawer & 100ms Spike Timeline) -->
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0;">
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
+                  <strong id="breakdown-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    5-Channel Damage Source Breakdown (L60 · low_def_boss · Mode A)
+                  </strong>
+                  <div class="chart-legend">
+                    <span><i class="legend-dot" style="background:#64748b;"></i>Auto</span>
+                    <span><i class="legend-dot" style="background:#3b82f6;"></i>Skill/Spell</span>
+                    <span><i class="legend-dot" style="background:#ef4444;"></i>Execute/Detonate</span>
+                    <span><i class="legend-dot" style="background:#10b981;"></i>DoT/Venom</span>
+                    <span><i class="legend-dot" style="background:#f59e0b;"></i>Parry/Spirit Proc</span>
+                  </div>
+                </div>
+                <div id="breakdown-bars-wrap">${breakdownBarsHtml}</div>
+              </div>
+
+              <div style="padding:10px;background:#141812;border:1px solid #3c3425;border-radius:5px;min-width:0;">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
+                  <strong style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
+                    Interactive Telemetry Drawer — Live 100ms Rotation &amp; Spike Timeline
+                  </strong>
+                  <span class="mono" style="font-size:9.5px;color:#82d5b0;">2,000ms Custom Cooldown Cadence</span>
+                </div>
+                <svg viewBox="0 0 640 54" style="width:100%;height:50px;background:#0a0d09;border:1px solid #2a3026;border-radius:4px;margin-bottom:6px;display:block;">
+                  <line x1="0" y1="42" x2="640" y2="42" stroke="#252b21" stroke-width="1" />
+                  <polyline fill="none" stroke="#c9a227" stroke-width="1.4" opacity="0.65" points="8,38 24,22 40,38 56,14 72,38 88,30 104,38 120,8 136,38 152,24 168,38 184,18 200,38 216,6 232,38 248,26 264,38 280,12 296,38 312,28 328,38 344,7 360,38 376,22 392,38 408,15 424,38 440,5 456,38 472,24 488,38 504,14 520,38 536,8 552,38 568,20 584,38 600,10 616,38 632,18" />
+                  <polygon points="120,4 116,10 124,10" fill="#ef4444" />
+                  <polygon points="216,2 212,8 220,8" fill="#ef4444" />
+                  <polygon points="344,3 340,9 348,9" fill="#34b37a" />
+                  <polygon points="440,1 436,7 444,7" fill="#ef4444" />
+                  <polygon points="536,4 532,10 540,10" fill="#34b37a" />
+                  <text x="12" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">0.0s</text>
+                  <text x="160" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">5.0s (Burst)</text>
+                  <text x="320" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">10.0s (Parry/Clone)</text>
+                  <text x="480" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">15.0s (Execute)</text>
+                  <text x="605" y="51" fill="#8f8a7c" font-size="8" font-family="IBM Plex Mono">20.0s</text>
+                </svg>
+                <div id="sim-rotation-wrap">${rotationStripsHtml}</div>
+              </div>
+            </div>
+          </div>
+
           <div class="table-scroll-wrap" id="sim-telemetry-table-wrap" style="margin-bottom:12px;">
             <table class="comp-table">
               <thead>
@@ -3713,73 +3854,6 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 ${initialTelemetryRowsHtml}
               </tbody>
             </table>
-          </div>
-
-          <!-- Visual SVG Progression Charts & 5-Channel Damage Breakdown -->
-          <div class="sim-charts-grid" id="sec-charts" data-comp-section="charts">
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #252b21;">
-                <div class="command-cluster">
-                  <span class="cluster-tag">Chart Metric</span>
-                  <button type="button" class="cobra-tier-btn is-active" data-chart-metric="sustainedDps" onclick="setChartMetric('sustainedDps')">Sustained DPS</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-metric="ehpPerSec" onclick="setChartMetric('ehpPerSec')">Effective HP/s</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-metric="trashTtkSec" onclick="setChartMetric('trashTtkSec')">Trash TTK Speed</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-metric="parityDelta" onclick="setChartMetric('parityDelta')">Parity Envelope %</button>
-                </div>
-                <div class="command-cluster">
-                  <span class="cluster-tag">Curve Focus</span>
-                  <button type="button" class="cobra-tier-btn is-active" data-chart-class="" onclick="spotlightSimClass('')">All 5</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="warrior" onclick="spotlightSimClass('warrior')">WR</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="mage" onclick="spotlightSimClass('mage')">MG</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="ranger" onclick="spotlightSimClass('ranger')">RG</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="samurai" onclick="spotlightSimClass('samurai')">SM</button>
-                  <button type="button" class="cobra-tier-btn" data-chart-class="ninja" onclick="spotlightSimClass('ninja')">NJ</button>
-                </div>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:6px;">
-                <strong id="svg-dps-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  Multi-Bracket Sustained DPS Curve (L10 → L60 · Mode A · low_def_boss)
-                </strong>
-                <div class="chart-legend">
-                  <span><i class="legend-dot" style="background:#d97706;"></i>WR</span>
-                  <span><i class="legend-dot" style="background:#3b82f6;"></i>MG</span>
-                  <span><i class="legend-dot" style="background:#84cc16;"></i>RG</span>
-                  <span><i class="legend-dot" style="background:#c83e37;"></i>SM</span>
-                  <span><i class="legend-dot" style="background:#2e9e6b;"></i>NJ</span>
-                </div>
-              </div>
-              <div id="svg-dps-wrap">${dpsProgressionSvg}</div>
-              <div id="chart-bracket-inspector" style="margin:6px 0 8px;padding:6px 10px;background:#10140f;border:1px solid #3c3425;border-left:3px solid var(--border-gold-bright);border-radius:4px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <div class="mono" style="font-size:10.5px;color:#fff2bf;" id="chart-insp-headline">
-                  <strong>[L60 Grandmaster Bracket]</strong> Click any bracket marker (L10 · L25 · L45 · L60) on the chart or metric pills above to inspect power-spike deltas.
-                </div>
-                <span class="mono" style="font-size:9.5px;color:#82d5b0;" id="chart-insp-delta">SM 363.2 DPS (-3.6%) · NJ 374.5 DPS (-0.6%) · Within ±5% Envelope</span>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin:8px 0 6px;">
-                <strong id="svg-ehp-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  Multi-Bracket Effective HP / Sec (EHP/s) Curve (L10 → L60 · Mode A · low_def_boss)
-                </strong>
-                <span class="mono" style="font-size:10px;color:#82d5b0;">All 5 classes within ±5–8% envelope</span>
-              </div>
-              <div id="svg-ehp-wrap">${ehpProgressionSvg}</div>
-            </div>
-
-            <div style="padding:10px;background:#141812;border:1px solid #2a3026;border-radius:4px;min-width:0;">
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px;margin-bottom:8px;">
-                <strong id="breakdown-title" style="font-family:'Cinzel',serif;font-size:12px;color:var(--text-gold);text-transform:uppercase;">
-                  5-Channel Damage Source Breakdown (L60 · low_def_boss · Mode A)
-                </strong>
-                <div class="chart-legend">
-                  <span><i class="legend-dot" style="background:#64748b;"></i>Auto</span>
-                  <span><i class="legend-dot" style="background:#3b82f6;"></i>Skill/Spell</span>
-                  <span><i class="legend-dot" style="background:#ef4444;"></i>Execute/Detonate</span>
-                  <span><i class="legend-dot" style="background:#10b981;"></i>DoT/Venom</span>
-                  <span><i class="legend-dot" style="background:#f59e0b;"></i>Parry/Spirit Proc</span>
-                </div>
-              </div>
-              <div id="breakdown-bars-wrap">${breakdownBarsHtml}</div>
-              <div id="sim-rotation-wrap">${rotationStripsHtml}</div>
-            </div>
           </div>
 
           <!-- Consolidated Material Tier (Iron -> Valorite) & 10-Wave Dungeon Endurance -->
@@ -4013,7 +4087,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
       }
 
       function renderProgressionSvg(metricKey, maxVal, unitLabel) {
-        var chartW = 680, chartH = 220, padL = 48, padR = 24, padT = 20, padB = 32;
+        var chartW = 680, chartH = 136, padL = 44, padR = 20, padT = 14, padB = 22;
         var plotW = chartW - padL - padR;
         var plotH = chartH - padT - padB;
         var aTheme = archTheme[state.arch] || archTheme.low_def_boss;
@@ -4185,7 +4259,7 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
         }
         document.getElementById('sim-telemetry-tbody').innerHTML = html;
 
-        // Also update Executive 5-Class KPI Strip with Class Emblems & Sparklines
+        // Also update Executive 5-Class KPI Strip with Circular SVG Crest Medallions & Area Sparklines
         var kpiStripEl = document.getElementById('sim-exec-kpi-strip');
         if (kpiStripEl && list.length > 0) {
           var baseScens = list.filter(function(s) {
@@ -4194,11 +4268,26 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
           var meanD = baseScens.length > 0
             ? baseScens.reduce(function(a, b) { return a + b.sustainedDps; }, 0) / baseScens.length
             : 375.0;
+          var crestSvgJs = {
+            warrior: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M12 3L4 6v6c0 5.2 3.4 8.9 8 10 4.6-1.1 8-4.8 8-10V6l-8-3z" fill="rgba(217,119,6,0.35)"/><path d="M12 7v10M8 11h8"/></svg>',
+            mage: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" fill="rgba(59,130,246,0.35)"/><circle cx="12" cy="12" r="2.5" fill="#fff2bf"/></svg>',
+            ranger: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M5 19L19 5M19 5h-6M19 5v6" /><path d="M6 6c7 0 12 5 12 12" stroke="#84cc16"/></svg>',
+            samurai: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><path d="M4 8l8-5 8 5-3 11H7L4 8z" fill="rgba(200,62,55,0.45)"/><path d="M2 5l6 4M22 5l-6 4M9 14h6"/></svg>',
+            ninja: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff2bf" stroke-width="1.8"><polygon points="12,2 14.8,9.2 22,12 14.8,14.8 12,22 9.2,14.8 2,12 9.2,9.2" fill="rgba(46,158,107,0.4)"/><circle cx="12" cy="12" r="2" fill="#0b0d0a"/></svg>'
+          };
+          var sparkPtsJs = {
+            warrior: '2,20 16,18 30,19 44,15 58,16 72,12 86,14 100,10 114,11 128,7 142,8 158,4',
+            mage:    '2,20 16,19 30,16 44,17 58,13 72,14 86,10 100,11 114,7 128,8 142,5 158,3',
+            ranger:  '2,20 16,17 30,18 44,14 58,15 72,11 86,12 100,8 114,9 128,6 142,7 158,3',
+            samurai: '2,20 16,18 30,15 44,17 58,12 72,14 86,9 100,11 114,6 128,8 142,4 158,2',
+            ninja:   '2,20 16,17 30,16 44,13 58,15 72,10 86,11 100,7 114,9 128,5 142,6 158,3'
+          };
           var kpiHtml = '';
           for (var ki = 0; ki < list.length; ki++) {
             var ks = list[ki];
             var kCol = classCols[ks.classId] || '#c9a227';
-            var kShort = classShort[ks.classId] || ks.classId.slice(0, 2).toUpperCase();
+            var kSvg = crestSvgJs[ks.classId] || (classShort[ks.classId] || 'CL');
+            var kPts = sparkPtsJs[ks.classId] || sparkPtsJs.samurai;
             var isSpotKpi = state.spotlightClass === ks.classId;
             var dPct = (((ks.sustainedDps - meanD) / meanD) * 100).toFixed(1);
             var dStr = parseFloat(dPct) >= 0 ? ('+' + dPct + '%') : (dPct + '%');
@@ -4208,22 +4297,22 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
                 ? (ks.cloneInterceptions > 0 ? ks.cloneInterceptions + ' Clone Absorbs' : 'Smoke & Clone Veil')
                 : (ks.parryCount + ' Shield Parries'));
             kpiHtml += '<div class="exec-kpi-card ' + (isSpotKpi ? 'is-spotlight-class' : '') + '" data-kpi-class="' + escHtml(ks.classId) + '" data-spot-class="' + escHtml(ks.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="border-top-color:' + escHtml(kCol) + ';">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">' +
-                '<div style="display:flex;align-items:center;gap:6px;">' +
-                  '<span class="kpi-emblem" style="color:' + escHtml(kCol) + ';border-color:' + escHtml(kCol) + ';">' + escHtml(kShort) + '</span>' +
-                  '<strong style="font-family:Cinzel,serif;font-size:12px;color:' + escHtml(kCol) + ';text-transform:uppercase;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+                '<div style="display:flex;align-items:center;gap:8px;min-width:0;">' +
+                  '<span class="kpi-emblem" style="background:radial-gradient(circle at 35% 30%, ' + escHtml(kCol) + ', #090b08 82%);border-color:' + escHtml(kCol) + ';">' + kSvg + '</span>' +
+                  '<div style="min-width:0;">' +
+                    '<strong style="font-family:Cinzel,serif;font-size:14px;color:#fff2bf;text-transform:capitalize;letter-spacing:0.03em;display:block;line-height:1.15;">' + escHtml(ks.classId) + (isSpotKpi ? ' ★' : '') + '</strong>' +
+                    '<span class="mono" style="font-size:10.5px;color:#e8e2d2;font-weight:700;">' + ks.sustainedDps.toFixed(1) + ' DPS <span style="color:#64748b;">|</span> <span style="color:#9ec9ff;">' + ks.ehpPerSec.toFixed(0) + ' EHP/s</span></span>' +
+                  '</div>' +
                 '</div>' +
-                '<span class="mono" style="font-size:9px;color:#82d5b0;background:rgba(46,158,107,0.14);border:1px solid rgba(46,158,107,0.4);padding:1px 5px;border-radius:3px;">PASS ' + escHtml(dStr) + '</span>' +
+                '<span class="lv-pill" style="color:#82d5b0;background:rgba(16,185,129,0.16);border-color:#2e9e6b;font-size:9px;padding:2px 6px;white-space:nowrap;">PASS ' + escHtml(dStr) + '</span>' +
               '</div>' +
-              '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;">' +
-                '<span class="mono" style="font-size:15px;font-weight:700;color:#fff2bf;">' + ks.sustainedDps.toFixed(1) + ' <small style="font-size:9.5px;color:var(--text-secondary);">DPS</small></span>' +
-                '<span class="mono" style="font-size:11px;color:#9ec9ff;">' + ks.ehpPerSec.toFixed(1) + ' EHP/s</span>' +
-              '</div>' +
-              '<svg viewBox="0 0 120 16" style="width:100%;height:14px;display:block;opacity:0.9;">' +
-                '<polyline fill="none" stroke="' + escHtml(kCol) + '" stroke-width="1.6" points="4,13 38,10 78,6 116,2" />' +
-                '<circle cx="116" cy="2" r="2.3" fill="#fff2bf" stroke="' + escHtml(kCol) + '" stroke-width="1.2" />' +
+              '<svg viewBox="0 0 160 24" style="width:100%;height:24px;margin:3px 0 1px;overflow:visible;">' +
+                '<polygon points="2,23 ' + kPts + ' 158,23" fill="' + escHtml(kCol) + '" opacity="0.18" />' +
+                '<polyline points="' + kPts + '" fill="none" stroke="' + escHtml(kCol) + '" stroke-width="2" />' +
+                '<circle cx="158" cy="3" r="3" fill="#fff2bf" stroke="' + escHtml(kCol) + '" stroke-width="1.5" />' +
               '</svg>' +
-              '<div class="mono" style="font-size:9.5px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
+              '<div class="mono" style="font-size:9px;color:var(--text-secondary);display:flex;justify-content:space-between;">' +
                 '<span>' + escHtml(mLbl) + '</span>' +
                 '<span style="color:#82d5b0;">' + (isSpotKpi ? 'SPOTLIGHT ON' : '0 OOM · Spotlight ▸') + '</span>' +
               '</div>' +
@@ -4295,15 +4384,15 @@ if (attacker is PlayerMobile nj && nj.ClassId == 115) {
               var isSpotB = state.spotlightClass === db.classId;
               var rowBorder = isSpotB ? '#e5c158' : (isModeB && (db.classId === 'samurai' || db.classId === 'ninja') ? '#34b37a' : '#2a3026');
               var rowBg = isSpotB ? 'rgba(229,193,88,0.14)' : (isModeB ? '#111914' : '#121611');
-              bHtml += '<div data-spot-class="' + escHtml(db.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="cursor:pointer;margin-bottom:8px;padding:6px 8px;background:' + rowBg + ';border:1px solid ' + rowBorder + ';border-radius:4px;">' +
-                '<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:2px;">' +
+              bHtml += '<div data-spot-class="' + escHtml(db.classId) + '" onclick="window.spotlightSimClass(this.getAttribute(&quot;data-spot-class&quot;))" style="cursor:pointer;margin-bottom:4px;padding:4px 7px;background:' + rowBg + ';border:1px solid ' + rowBorder + ';border-radius:4px;">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:1px;">' +
                   '<strong style="text-transform:uppercase;color:' + escHtml(cCol) + ';letter-spacing:0.04em;">' + escHtml(db.classId) + (isSpotB ? ' ★ SPOTLIGHT' : '') + ' <small class="mono" style="color:' + (isModeB ? '#7ce8b4' : '#a39e90') + ';font-size:9px;">[' + (isModeB ? 'MODE B' : 'MODE A') + ' · ' + state.bracket + ']</small></strong>' +
-                  '<span class="mono" style="font-size:11px;color:#fff2bf;font-weight:700;">Total: ' + db.totalDps.toFixed(2) + ' DPS</span>' +
+                  '<span class="mono" style="font-size:10.5px;color:#fff2bf;font-weight:700;">Total: ' + db.totalDps.toFixed(2) + ' DPS</span>' +
                 '</div>' +
-                '<div class="mono" style="font-size:10px;color:#c9c2b2;margin-bottom:5px;">' +
+                '<div class="mono" style="font-size:9px;color:#c9c2b2;margin-bottom:3px;">' +
                   'Auto ' + db.autoAttackDps.toFixed(1) + ' (' + pAuto + '%) · Skill ' + db.specialMoveDps.toFixed(1) + ' (' + pSpec + '%) · Exec ' + db.executeDps.toFixed(1) + ' (' + pExec + '%) · DoT ' + db.dotDps.toFixed(1) + ' (' + pDot + '%) · Parry/Proc ' + db.procCounterDps.toFixed(1) + ' (' + pProc + '%)' +
                 '</div>' +
-                '<div style="display:flex;height:14px;border-radius:3px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">' +
+                '<div style="display:flex;height:9px;border-radius:2px;overflow:hidden;border:1px solid #2a3026;background:#090b08;">' +
                   '<div style="width:' + pAuto + '%;background:#64748b;"></div>' +
                   '<div style="width:' + pSpec + '%;background:#3b82f6;"></div>' +
                   '<div style="width:' + pExec + '%;background:#ef4444;"></div>' +
