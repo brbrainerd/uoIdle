@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T03:39:34Z",
+  "updatedAt": "2026-11-07T03:42:48Z",
   "bundleVersion": "0.99.0",
   "modernuoCommit": "b0e6b17c5cba3a6944ca25a9676dcdec0022ac38",
   "entries": {
@@ -99,6 +99,150 @@
       "lines": 488,
       "category": "progression",
       "source": "https://uoidle.com/assets/Jogo-D5xEfvfV.js#L7604-L8087"
+    },
+    "modernuo/AnimalForm.cs": {
+      "sha256": "e05cac3d0cc598ab3d7ff709274b0683b6c3ebe9102ee963f4eab04e4cfcd14a",
+      "lines": 619,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/AnimalForm.cs"
+    },
+    "modernuo/AnimalFormTests.cs": {
+      "sha256": "7b1695cd8b427e8b8b67e80df8c9a236757c70874abf1fb05f4727130a47180c",
+      "lines": 62,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent.Tests/Tests/Spells/Ninjitsu/AnimalFormTests.cs"
+    },
+    "modernuo/Backstab.cs": {
+      "sha256": "c074811e329562939b9b2a8dce2cbfb4287c4b1a946318138b9c10f2790efeca",
+      "lines": 70,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/Backstab.cs"
+    },
+    "modernuo/BaseWeapon.cs": {
+      "sha256": "2f643ada6c11b2f8163ff32ffb8f2d4bf94ad4647f0999858571685ab64b095d",
+      "lines": 3623,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Weapons/BaseWeapon.cs"
+    },
+    "modernuo/BookOfBushido.cs": {
+      "sha256": "7e212a1a1efcfd9909650fa07765bc49da5ef8f29a2fe06946d3e092dd605cbc",
+      "lines": 15,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Magical/BookOfBushido.cs"
+    },
+    "modernuo/BookOfNinjitsu.cs": {
+      "sha256": "3186cacea32e58ccd127dacb65fd4d7fbc68edc953716bf9c9919172633ba0ee",
+      "lines": 15,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Items/Skill Items/Magical/BookOfNinjitsu.cs"
+    },
+    "modernuo/Confidence.cs": {
+      "sha256": "aa756e1d8c6bfadd84ce2105b628ccc665a67355ae9005e8ff34262aaa9fea57",
+      "lines": 148,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/Confidence.cs"
+    },
+    "modernuo/CounterAttack.cs": {
+      "sha256": "46f69552330fbecfc4a8eecc6663429a837f7724c065be3116382cccf4ce2390",
+      "lines": 106,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/CounterAttack.cs"
+    },
+    "modernuo/DeathStrike.cs": {
+      "sha256": "df945584f10f23c2c3b35184897152365dc2a646464d8d0e1a43b2496843b6c2",
+      "lines": 177,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/DeathStrike.cs"
+    },
+    "modernuo/Evasion.cs": {
+      "sha256": "5e572da03a30895cfc2bc80a6469704652c5c54cbdcde1c2be25585d3f81ce18",
+      "lines": 242,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/Evasion.cs"
+    },
+    "modernuo/FocusAttack.cs": {
+      "sha256": "2ba59877fbad9dd57726c085025555aabff1cc33c300d7dc6d3f4a4c3121280a",
+      "lines": 63,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/FocusAttack.cs"
+    },
+    "modernuo/HonorContext.cs": {
+      "sha256": "64fed5ad63d240104d32d079aa3fd212e1c196d16bc73d4f5a8b96f336d45873",
+      "lines": 261,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Engines/Virtues/HonorContext.cs"
+    },
+    "modernuo/HonorableExecution.cs": {
+      "sha256": "3d797f06204fd6f9c0950924c2268188a8bf38def651d6170b373eb1b638ba4e",
+      "lines": 144,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/HonorableExecution.cs"
+    },
+    "modernuo/KiAttack.cs": {
+      "sha256": "9ad08a1219a800f6cde18c5cd4457dc2ddb4576a8ea46c8d7b00ebd8e8a18ba6",
+      "lines": 125,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/KiAttack.cs"
+    },
+    "modernuo/LightningStrike.cs": {
+      "sha256": "3bdb7bada07c279f4f88d63e95b4cb4320894e1ba14cf5eaffc1a47cca0c68bc",
+      "lines": 65,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/LightningStrike.cs"
+    },
+    "modernuo/MirrorImage.cs": {
+      "sha256": "41ae006fa41e4227692c9345f8f45c9025b7f63dfe9ff52d9ed770fc1c62f5b5",
+      "lines": 251,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/MirrorImage.cs"
+    },
+    "modernuo/MomentumStrike.cs": {
+      "sha256": "3a1f5dadf348b41c3842a775f37ff5af25a64efa3f1bfebea0e19bb745f9d633",
+      "lines": 70,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/MomentumStrike.cs"
+    },
+    "modernuo/NinjaMove.cs": {
+      "sha256": "47ebedacee2d89a69a5b16d0feaad45ddd331a20f4bd7e4a766c886d31d71a36",
+      "lines": 11,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/NinjaMove.cs"
+    },
+    "modernuo/NinjaSpell.cs": {
+      "sha256": "e96b8089a044b09ff52ee658a1e970b26350c1741578bdeed616abb8f6135cf8",
+      "lines": 97,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/NinjaSpell.cs"
+    },
+    "modernuo/SamuraiMove.cs": {
+      "sha256": "dc293ee7a5013594cbb562660aa8d60e82b9b9440324123f555eb15f8f0cc187",
+      "lines": 12,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/SamuraiMove.cs"
+    },
+    "modernuo/SamuraiSpell.cs": {
+      "sha256": "146c8c9696702ddf826bc835d094364037e8af105c1be372915bd1a7d446f085",
+      "lines": 123,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Bushido/SamuraiSpell.cs"
+    },
+    "modernuo/ShadowJump.cs": {
+      "sha256": "ea2fe7d61d5eb34deb2064b510942f00f732ff9b744fd666bd7f60d959e6a325",
+      "lines": 117,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/ShadowJump.cs"
+    },
+    "modernuo/SpecialMove.cs": {
+      "sha256": "3040b43d925332830d700088bbec0daeea6857844d901086403ad8f0ca06da0f",
+      "lines": 320,
+      "category": "modernuo-bushido",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Base/SpecialMove.cs"
+    },
+    "modernuo/SurpriseAttack.cs": {
+      "sha256": "57753889700da42bfaf4353c0ba2ce86377be7e5b0a8350281082c88bb498a30",
+      "lines": 120,
+      "category": "modernuo-ninjitsu",
+      "source": "https://github.com/modernuo/ModernUO/blob/b0e6b17c5cba3a6944ca25a9676dcdec0022ac38/Projects/UOContent/Spells/Ninjitsu/SurpriseAttack.cs"
     },
     "wiki/changelog-client-dev.md": {
       "sha256": "71858b04c50786d5e7d890fcf1ade46b554e17c89ab4adaa322226691503e30f",
